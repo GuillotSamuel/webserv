@@ -6,8 +6,14 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:31:35 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/05 13:31:37 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/05 13:54:56 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/webserv.hpp"
+#include "webserv.hpp"
+
+int	main()
+{
+	std::cout << "TEST" << std::endl;
+	return (EXIT_SUCCESS);
+}
