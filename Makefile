@@ -6,13 +6,13 @@
 #    By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/05 13:36:24 by sguillot          #+#    #+#              #
-#    Updated: 2024/07/05 14:41:34 by sguillot         ###   ########.fr        #
+#    Updated: 2024/07/05 15:50:58 by sguillot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = webserv
 CC = c++
-CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -I./includes
+CPPFLAGS = -Wall -Wextra -Werror -g -std=c++98 -MMD -MP -I./includes
 SRC =	$(wildcard $(shell find ./srcs -type f -name "*.cpp"))
 OBJDIR = ./obj
 DEPDIR = ./dep
@@ -24,12 +24,19 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CPPFLAGS) $(OBJ) -o $(NAME)
 
-$(OBJDIR)/%.o: ./srcs/%.cpp
+$(OBJDIR)/%.o: ./srcs/%.cpp $(DEPDIR)/%.d | $(OBJDIR)
 	mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) -c $< -o $@
 
-$(DEPDIR)/%.d: ;
-.PRECIOUS: $(DEPDIR)/%.d
+$(DEPDIR)/%.d: ./srcs/%.cpp | $(DEPDIR)
+	mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) -MM -MP -MF $@ -MT '$(OBJDIR)/$(<:./srcs/%.cpp=$(OBJDIR)/%.o)' $<
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+$(DEPDIR):
+	mkdir -p $(DEPDIR)
 
 clean:
 	rm -f $(OBJ) $(DEP)
@@ -43,3 +50,7 @@ re: fclean all
 -include $(DEP)
 
 .PHONY: all clean fclean re
+
+
+
+

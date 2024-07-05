@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:00:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/05 14:42:18 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/05 14:56:00 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,5 @@
 void    register_g(t_data *data)
 {
         (void)data; // TO REMOVE
-    std::cout << "TEST 2" << std::endl;
+    std::cout << "TEST 2" << std::endl; // TO REMOVE
 }
