@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   webserv.hpp                                        :+:      :+:    :+:   */
+/*   exec.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/05 14:35:12 by sguillot         ###   ########.fr       */
+/*   Created: 2024/07/05 14:30:01 by sguillot          #+#    #+#             */
+/*   Updated: 2024/07/05 14:33:54 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WEBSERV_HPP
-# define WEBSERV_HPP
+#ifndef EXEC_HPP
+# define EXEC_HPP
 
-/* -------------------------------------------------------------------------- */
-/*                                    INCLUDES                                */
-/* -------------------------------------------------------------------------- */
-
-#include <iostream>
-#include <cstdlib>
-
-#include "define.hpp"
 #include "struct.hpp"
-#include "exec.hpp"
-#include "parsing.hpp"
-#include "webserv.hpp"
+
+void    exec_g(t_data *data);
 
 #endif

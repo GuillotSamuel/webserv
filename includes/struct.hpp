@@ -6,14 +6,12 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:56:07 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/05 13:58:27 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/05 14:34:22 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_HPP
 # define STRUCT_HPP
-
-
 
 typedef struct s_data
 {
