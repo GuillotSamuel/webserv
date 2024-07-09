@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/05 14:35:12 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/09 13:26:42 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <string>
+#include <vector>
+#include <map>
 
 #include "define.hpp"
 #include "struct.hpp"
