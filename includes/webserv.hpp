@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/09 13:26:42 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:53:20 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,17 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <fstream>
+#include <sstream>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include "define.hpp"
 #include "struct.hpp"
 #include "exec.hpp"
 #include "parsing.hpp"
 #include "webserv.hpp"
+#include "serverConfiguration.hpp"
+#include "utils.hpp"
 
 #endif

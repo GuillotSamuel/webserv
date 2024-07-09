@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.hpp                                        :+:      :+:    :+:   */
+/*   init.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/05 14:30:30 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/09 16:06:41 by sguillot         ###   ########.fr       */
+/*   Created: 2024/07/09 15:45:21 by sguillot          #+#    #+#             */
+/*   Updated: 2024/07/09 16:14:16 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_HPP
-# define PARSING_HPP
+#include "webserv.hpp"
 
-#include "struct.hpp"
+static void    ft_init_parsing(t_data *data)
+{
+    data->parsing.fd = -1;
+}
 
-/* parsing_g.cpp */
-void    parsing_g(t_data *data, int argc, char **argv);
-
-/* serverConfiguration.cpp */
-void    ft_serverConfiguration(t_data *data, char *buffer);
-
-#endif
+void    ft_init(t_data *data)
+{
+    ft_init_parsing(data);
+}

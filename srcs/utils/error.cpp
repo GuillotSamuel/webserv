@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   register_g.cpp                                     :+:      :+:    :+:   */
+/*   error.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/05 14:00:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/05 14:56:00 by sguillot         ###   ########.fr       */
+/*   Created: 2024/07/09 14:44:33 by sguillot          #+#    #+#             */
+/*   Updated: 2024/07/09 15:30:33 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-void    register_g(t_data *data)
+void    ft_error(t_data *data, std::string str)
 {
-        (void)data; // TO REMOVE
-    std::cout << "TEST 2" << std::endl; // TO REMOVE
+    std::cerr << "Error : " << str << std::endl;
+    ft_free_all(data);
+    exit(EXIT_FAILURE);
 }

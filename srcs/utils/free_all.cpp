@@ -1,19 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   controls_g.cpp                                     :+:      :+:    :+:   */
+/*   free_all.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/05 13:59:37 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/05 14:07:55 by sguillot         ###   ########.fr       */
+/*   Created: 2024/07/09 14:46:07 by sguillot          #+#    #+#             */
+/*   Updated: 2024/07/09 16:13:11 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-void    controls_g(t_data *data)
+static void    ft_free_parsing(t_data *data)
 {
-        (void)data; // TO REMOVE
+    if (data->parsing.fd != -1)
+    {
+        close(data->parsing.fd);
+    }
+}
 
+void    ft_free_all(t_data *data)
+{
+    ft_free_parsing(data);
 }

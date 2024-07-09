@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/09 13:26:11 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:39:37 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class ServerConfiguration
         
     public:
         ServerConfiguration(void);
-        ServerConfiguration(const ServerConfig &copy);
+        ServerConfiguration(const ServerConfiguration &copy);
         ~ServerConfiguration(void);
         ServerConfiguration &operator=(const ServerConfiguration &copy);
 
@@ -42,6 +42,6 @@ class ServerConfiguration
 		std::string	getErrorPage(int code) const;
 		int			getClientMaxBodySize() const;
 		
-}
+};
 
 #endif
