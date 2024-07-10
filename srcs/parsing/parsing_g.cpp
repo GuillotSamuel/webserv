@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:00:57 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 11:24:56 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/10 11:31:23 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void    ft_read_configuration_file(t_data *data, const char *arg)
         }
         if (*buffer == '\0' || *buffer == '\n')
         {
+            line += "\0";
             ft_serverConfiguration(data, line);
             line = "";
         }
