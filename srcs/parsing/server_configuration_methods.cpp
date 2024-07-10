@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 11:08:59 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/10 11:23:32 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,7 @@
 ServerConfiguration::ServerConfiguration(void) :
     port(8080), hostName("127.0.0.1"),
     serverName("localHost"), errorPages(),
-    clientMaxBodySize(10)
-{
-    ServerConfiguration::setErrorPage(400, "/errors/400.html");
-    ServerConfiguration::setErrorPage(403, "/errors/403.html");
-    ServerConfiguration::setErrorPage(404, "/errors/404.html");
-    ServerConfiguration::setErrorPage(405, "/errors/405.html");
-    ServerConfiguration::setErrorPage(500, "/errors/500.html");
-    ServerConfiguration::setErrorPage(502, "/errors/502.html");
-    ServerConfiguration::setErrorPage(500, "/errors/403.html");
-}
+    clientMaxBodySize(10) {}
 
 ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
     port(copy.port), hostName(copy.hostName),
