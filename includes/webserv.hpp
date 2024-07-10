@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 15:56:44 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:13:32 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@
 
 typedef struct s_parsing
 {
-    int fd;
+    int     fd;
+    bool    parsing_started;
 }   t_parsing;
 
 typedef struct s_data
@@ -80,11 +81,14 @@ int     ft_strcmp(const char *s1, const char *s2);
 /* parsing_g.cpp */
 bool    parsing_g(t_data *data, int argc, char **argv);
 
+/* read_configuration.cpp */
+bool    ft_read_configuration_file(t_data *data, const char *arg);
+
+/* set_tokens.cpp */
+bool    ft_set_tokens(t_data *data, std::vector<std::string> tokens);
+
 /* tokenizer.cpp */
 bool    ft_tokenizer(t_data *data, const std::string &line);
-
-/* read_configuration */
-bool    ft_read_configuration_file(t_data *data, const char *arg);
 
 /* -------------------------------------------------------------------------- */
 /*                                    EXEC                                    */

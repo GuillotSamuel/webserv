@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.cpp                                           :+:      :+:    :+:   */
+/*   set_tokens.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/09 15:45:21 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 17:13:53 by sguillot         ###   ########.fr       */
+/*   Created: 2024/07/10 16:09:51 by sguillot          #+#    #+#             */
+/*   Updated: 2024/07/10 17:11:44 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-static void    ft_init_parsing(t_data *data)
+bool    ft_set_tokens(t_data *data, std::vector<std::string> tokens)
 {
-    data->parsing.fd = -1;
-    data->parsing.parsing_started = false;
-}
-
-void    ft_init(t_data *data)
-{
-    ServerConfiguration   server_configuration(void);
-    ft_init_parsing(data);
+    (void)data; // TO REMOVE
+    (void)tokens; // TO REMOVE
+    std::string param_array[6] = {"listen", "host_name", "server_name", "error_page",
+        "client_max_body", "location"};
+    
+    
+    
+    return (true);
 }

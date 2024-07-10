@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_configuration_methods.cpp                   :+:      :+:    :+:   */
+/*   server_configuration.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 13:55:20 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:09:18 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
 ServerConfiguration::ServerConfiguration(void) :
-    port(8080), hostName("127.0.0.1"),
-    serverName("localHost"), errorPages(),
-    clientMaxBodySize(10) {}
+    port(-1), hostName(std::string()),
+    serverName(std::string()), errorPages(std::map<int, std::string>()),
+    clientMaxBodySize(-1) {std::cout << "CONSTRUCTOR" << std::endl;}
 
 ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
     port(copy.port), hostName(copy.hostName),
     serverName(copy.serverName), errorPages(copy.errorPages),
     clientMaxBodySize(copy.clientMaxBodySize) {}
 
-ServerConfiguration::~ServerConfiguration(void){}
+ServerConfiguration::~ServerConfiguration(void){std::cout << "DESTRUCTOR" << std::endl;}
 
 ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &copy)
 {

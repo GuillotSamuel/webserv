@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:36:24 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 15:01:17 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:11:29 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 bool    ft_tokenizer(t_data *data, const std::string &line)
 {
-    (void)data; // TO REMOVE
-
     std::vector<std::string>    tokens;
     std::string                 buffer;
     std::string::const_iterator line_copy;
@@ -38,13 +36,7 @@ bool    ft_tokenizer(t_data *data, const std::string &line)
         tokens.push_back(buffer);
     }
 
-    for (std::vector<std::string>::const_iterator it = tokens.begin(); it != tokens.end(); ++it)
-    {
-        const std::string &token = *it;
-
-        std::cout << token << " ";
-    }
-    std::cout << std::endl;
+    ft_set_tokens(data, tokens);
 
     return (true);
 }
