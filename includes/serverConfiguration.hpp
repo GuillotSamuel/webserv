@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/09 14:39:37 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/09 19:35:59 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ class ServerConfiguration
 		void		setErrorPage(int code, std::string str);
 		void		setClientMaxBodySize(std::string str);
 
-		int			getPort() const;
-		std::string	getHostName() const;
-		std::string	getServerName() const;
+		int			getPort(void) const;
+		std::string	getHostName(void) const;
+		std::string	getServerName(void) const;
 		std::string	getErrorPage(int code) const;
-		int			getClientMaxBodySize() const;
+		int			getClientMaxBodySize(void) const;
 		
 };
 

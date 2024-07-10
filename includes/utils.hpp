@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:50:35 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/09 15:50:57 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/09 19:27:40 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ void    ft_free_all(t_data *data);
 void    ft_init(t_data *data);
 
 /* utils.cpp */
-
+int ft_strcmp(const char *s1, const char *s2);
 
 #endif

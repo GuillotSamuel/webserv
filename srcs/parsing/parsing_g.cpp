@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:00:57 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/09 16:22:58 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/09 19:30:01 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,12 @@ void    parsing_g(t_data *data, int argc, char **argv)
 {
     if (argc != 2)
     {
-        ft_error(data, "args required : ./webserv <file.conf>");
+        ft_error(data, "args required : ./webserv <file.conf> (or --help)");
+    }
+
+    if (!ft_strcmp((const char *)argv[1], (const char *)"--help"))
+    {
+        ft_error(data, HELP_INFOS);
     }
     
     int         fd = open(argv[1], O_RDONLY);
@@ -37,7 +42,7 @@ void    parsing_g(t_data *data, int argc, char **argv)
         }
         if (*buffer == '\0' || *buffer == '\n')
         {
-            ft_serverConfiguration(data, buffer);
+            ft_serverConfiguration(data, line);
             line = "";
         }
         else
