@@ -6,14 +6,14 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/09 19:35:59 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/10 15:49:41 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVERCONFIGURATION_HPP
 # define SERVERCONFIGURATION_HPP
 
-#include "webserv.hpp"
+#include	"webserv.hpp"
 
 class ServerConfiguration
 {
@@ -41,7 +41,6 @@ class ServerConfiguration
 		std::string	getServerName(void) const;
 		std::string	getErrorPage(int code) const;
 		int			getClientMaxBodySize(void) const;
-		
 };
 
 #endif
