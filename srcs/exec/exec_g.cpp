@@ -6,14 +6,14 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:00:46 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/05 14:07:49 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/10 14:46:14 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-void    exec_g(t_data *data)
+bool    exec_g(t_data *data)
 {
         (void)data; // TO REMOVE
-
+        return (true);
 }

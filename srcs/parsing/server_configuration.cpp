@@ -6,13 +6,13 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:36:24 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 11:49:18 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/10 14:44:42 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-void ft_serverConfiguration(t_data *data, const std::string &line)
+bool    ft_serverConfiguration(t_data *data, const std::string &line)
 {
     (void)data; // TO REMOVE
 
@@ -37,5 +37,6 @@ void ft_serverConfiguration(t_data *data, const std::string &line)
     {
         tokens.push_back(buffer);
     }
+    return (true);
 }
 
