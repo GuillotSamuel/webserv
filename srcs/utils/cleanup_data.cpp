@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.cpp                                           :+:      :+:    :+:   */
+/*   free_all.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/09 15:45:21 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/11 15:56:15 by sguillot         ###   ########.fr       */
+/*   Created: 2024/07/09 14:46:07 by sguillot          #+#    #+#             */
+/*   Updated: 2024/07/10 18:54:48 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-static void    ft_init_parsing(t_data *data)
+static void    ft_cleanup_parsing(t_data *data)
 {
-    data->parsing.fd = -1;
-    data->parsing.parsing_started_server = false;
-    data->parsing.parsing_started_brace = false;
-    data->parsing.parsing_ended = false;
+    if (data->parsing.fd != -1)
+    {
+        close(data->parsing.fd);
+    }
 }
 
-void    ft_init(t_data *data)
+void    ft_cleanup_data(t_data *data)
 {
-    ServerConfiguration   server_configuration(void);
-    ft_init_parsing(data);
+    ft_cleanup_parsing(data);
 }

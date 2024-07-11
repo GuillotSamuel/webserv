@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 17:13:32 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/11 15:56:28 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@
 typedef struct s_parsing
 {
     int     fd;
-    bool    parsing_started;
+    bool    parsing_started_server;
+    bool    parsing_started_brace;
+    bool    parsing_ended;
 }   t_parsing;
 
 typedef struct s_data
