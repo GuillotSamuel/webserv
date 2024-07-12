@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 16:09:51 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/12 19:04:12 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:05:47 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,22 +131,25 @@ static bool ft_is_ip_address(const std::string& str)
 
 
 static bool ft_set_host_name_param(t_data *data, std::vector<std::string> tokens) {
-    if (tokens.size() != 2) {
-        return ft_invalid_line(data, tokens);
+    if (tokens.size() != 2)
+    {
+        return (ft_invalid_line(data, tokens));
     }
 
     const std::string& str = tokens[1];
 
-    if (str.empty() || str[str.size() - 1] != ';') {
-        return ft_error(data, "invalid argument (listen): " + tokens[1]);
+    if (str.empty() || str[str.size() - 1] != ';')
+    {
+        return (ft_error(data, "invalid argument (listen): " + tokens[1]));
     }
     
-    if (!ft_is_ip_address(tokens[1].substr(0, tokens[1].size() - 1))) {
-        return ft_invalid_line(data, tokens);
+    if (!ft_is_ip_address(tokens[1].substr(0, tokens[1].size() - 1)))
+    {
+        return (ft_invalid_line(data, tokens));
     }
 
     data->p_server_configuration->setHostName(tokens[1].substr(0, tokens[1].size() - 1));
-    return true;
+    return (true);
 }
 
 
