@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/11 15:56:28 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:51:03 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 #include <map>
 #include <fstream>
 #include <sstream>
+#include <cstring>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -57,6 +58,7 @@ typedef struct s_parsing
 
 typedef struct s_data
 {
+    ServerConfiguration *p_server_configuration;
     t_parsing   parsing;
 }   t_data;
 
@@ -71,7 +73,7 @@ bool    ft_error(t_data *data, std::string str);
 void    ft_free_all(t_data *data);
 
 /* init.cpp */
-void    ft_init(t_data *data);
+void    ft_init(t_data *data, ServerConfiguration *server_configuration);
 
 /* utils.cpp */
 int     ft_strcmp(const char *s1, const char *s2);

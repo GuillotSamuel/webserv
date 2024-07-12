@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:01:47 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 15:01:57 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/12 17:19:14 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,8 @@ bool    ft_read_configuration_file(t_data *data, const char *arg)
     
     data->parsing.fd = fd;
     
-    while (bytes_read != '\0')
+    while ((bytes_read = read(data->parsing.fd, buffer, 1)) > 0)
     {
-        bytes_read = read(data->parsing.fd, buffer, 1);
         if (bytes_read == -1)
         {
             return (ft_error(data, "Error while reading from the configuration file"));

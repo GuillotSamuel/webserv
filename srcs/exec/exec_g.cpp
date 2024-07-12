@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:00:46 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 14:46:14 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/12 16:27:14 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,6 @@
 
 bool    exec_g(t_data *data)
 {
-        (void)data; // TO REMOVE
+        (void)data; // TO REMOVE TEST
         return (true);
 }

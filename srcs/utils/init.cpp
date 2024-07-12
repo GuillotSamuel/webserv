@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 15:45:21 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/11 15:56:15 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:48:24 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ static void    ft_init_parsing(t_data *data)
     data->parsing.parsing_ended = false;
 }
 
-void    ft_init(t_data *data)
+void    ft_init(t_data *data, ServerConfiguration *server_configuration)
 {
-    ServerConfiguration   server_configuration(void);
+    data->p_server_configuration = server_configuration;
     ft_init_parsing(data);
 }

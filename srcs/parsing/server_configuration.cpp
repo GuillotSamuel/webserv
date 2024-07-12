@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 17:09:18 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/12 16:27:18 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 ServerConfiguration::ServerConfiguration(void) :
     port(-1), hostName(std::string()),
     serverName(std::string()), errorPages(std::map<int, std::string>()),
-    clientMaxBodySize(-1) {std::cout << "CONSTRUCTOR" << std::endl;}
+    clientMaxBodySize(-1) {}
 
 ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
     port(copy.port), hostName(copy.hostName),
     serverName(copy.serverName), errorPages(copy.errorPages),
     clientMaxBodySize(copy.clientMaxBodySize) {}
 
-ServerConfiguration::~ServerConfiguration(void){std::cout << "DESTRUCTOR" << std::endl;}
+ServerConfiguration::~ServerConfiguration(void){}
 
 ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &copy)
 {
@@ -41,7 +41,7 @@ void	ServerConfiguration::setPort(std::string str)
 {
     int n;
     std::istringstream(str) >> n;
-    this->clientMaxBodySize = n;
+    this->port = n;
 }
 
 void	ServerConfiguration::setHostName(std::string str)
@@ -87,7 +87,7 @@ std::string ServerConfiguration::getErrorPage(int code) const
     if (it != this->errorPages.end()) {
         return it->second;
     }
-    return ""; // TO MODIFY ALL FUNCTION
+    return ""; // TO MODIFY ALL FUNCTION TEST
 }
 
 int	ServerConfiguration::getClientMaxBodySize(void) const
