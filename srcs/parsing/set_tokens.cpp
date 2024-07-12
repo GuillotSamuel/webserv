@@ -6,16 +6,72 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 16:09:51 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/11 16:57:43 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:26:45 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
+static bool ft_invalid_line(t_data *data, std::vector<std::string> tokens)
+{
+    std::string error_message = "invalid line (no lines allowed after server configurations) [./webserv --help]: ";
+    for (int i = 0; (long unsigned int)i < tokens.size(); i++)
+    {
+        error_message += tokens[i];
+        error_message += " ";
+    }
+    return (ft_error(data, error_message));
+}
+
 static bool ft_set_listen_param(t_data *data, std::vector<std::string> tokens)
 {
-    (void)data;
-    (void)tokens;
+    if (tokens.size() != 2)
+    {
+        return (ft_invalid_line(data, tokens));
+    }
+    
+    const std::string& str = tokens[1];
+
+    if (str.empty() || str[str.size() - 1] != ';')
+    {
+        return ft_error(data, "invalid argument (listen): " + tokens[1]);
+    }
+
+    for (size_t i = 0; i < str.size() - 1; ++i)
+    {
+        if (!std::isdigit(str[i]))
+        {
+            return ft_error(data, "non-numeric character in port number: " + str);
+        }
+    }
+
+    const char* num_str = str.substr(0, str.size() - 1).c_str();
+    char* end;
+    long num = std::strtol(num_str, &end, 10);
+    
+    if (*end != '\0')
+    {
+        return ft_error(data, "invalid argument (listen): " + str);
+    }
+    else if (num < 0 || num > 65535)
+    {
+        return ft_error(data, "out of bounds port (listen argument): " + tokens[1]);
+    }
+    else if (num <= 1023 /* Critical system 0-1023 */
+        || num == 1080 /* SOCKS Proxy 1080 */
+        || (num >= 1433 && num <= 1434) /* Microsoft SQL server 1433-1434 */
+        || num == 1521 /* Oracle Database 1521 */
+        || num == 1723 /* PPTP (Point-to-Point Tunneling Protocol) 1723 */
+        || num == 3306 /* MySQL 3306 */
+        || num == 5432 /* PostgreSQL 5432 */
+        || (num >= 5900 && num <= 5901) /* VNC (Virtual Network Computing) 5900-5901 */
+        || num == 6379 /* Redis 6379 */
+        || (num >= 6660 && num <= 6669) /* IRC 6660-6669 */
+        || num == 27017 /* MongoDB 27017 */)
+    {
+        return (ft_error(data, "forbiden port (listen argument): " + tokens[1]));
+    }
+    
     return (true);
 }
 
@@ -56,41 +112,25 @@ static bool ft_set_location_param(t_data *data, std::vector<std::string> tokens)
 
 static bool ft_param_set_tokens(t_data *data, std::vector<std::string> tokens)
 {
-    std::string param_array[6] = {"listen", "host_name", "server_name", "error_page",
+    int nb_param = 6;
+    
+    std::string param_array[nb_param] = {"listen", "host_name", "server_name", "error_page",
         "client_max_body", "location"};
     
-    typedef bool (*param_function)(t_data *, const std::vector<std::string>&);
-
-    param_function param_functions[] = {
-        &set_listen_param,
-        &set_host_name_param,
-        &set_server_name_param,
-        &set_error_page_param,
-        &set_client_max_body_param,
-        &set_location_param
+    bool (*param_functions[nb_param])(t_data *, const std::vector<std::string>) = {
+        &ft_set_listen_param,
+        &ft_set_host_name_param,
+        &ft_set_server_name_param,
+        &ft_set_error_page_param,
+        &ft_set_client_max_body_param,
+        &ft_set_location_param
     };
-    
-    for (int i = 0; i < param_array.size(); i++)
+
+    for (int i = 0; i < nb_param; i++)
     {
         if (tokens[0] == param_array[i])
         {
-            switch(i)
-            {
-                case 0:
-                    return (param_function[0](data, tokens));
-                case 1:
-                    return (param_function[1](data, tokens));
-                case 2:
-                    return (param_function[2](data, tokens));
-                case 3:
-                    return (param_function[3](data, tokens));
-                case 4:
-                    return (param_function[4](data, tokens));
-                case 5:
-                    return (param_function[5](data, tokens));
-                default:
-                    break;
-            }
+            return (param_functions[i](data, tokens));
         }
     }
     std::string error_message = "unknown parameter: " + tokens[0];
@@ -128,6 +168,7 @@ static bool ft_start_set_tokens(t_data *data, std::vector<std::string> tokens)
 
 bool    ft_set_tokens(t_data *data, std::vector<std::string> tokens)
 {
+    /* START OF TEST */
     std::string test;
     for (int i = 0; (long unsigned int)i < tokens.size(); i++)
     {
@@ -135,18 +176,13 @@ bool    ft_set_tokens(t_data *data, std::vector<std::string> tokens)
         test += "|";
     }
     std::cout << test << std::endl;
+    /* END OF TEST */
     
     if (!tokens.empty())
     {
         if (data->parsing.parsing_ended == true)
         {
-            std::string error_message = "invalid line (no lines allowed after server configurations) [./webserv --help]: ";
-            for (int i = 0; (long unsigned int)i < tokens.size(); i++)
-            {
-                error_message += tokens[i];
-                error_message += " ";
-            }
-            return (ft_error(data, error_message));
+            return (ft_invalid_line(data, tokens));
         }
         else if ((data->parsing.parsing_started_server == false || data->parsing.parsing_started_brace == false))
         {
@@ -164,3 +200,4 @@ bool    ft_set_tokens(t_data *data, std::vector<std::string> tokens)
     }
     return (true);
 }
+
