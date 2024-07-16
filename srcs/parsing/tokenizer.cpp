@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 14:36:24 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/11 15:34:11 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/07/16 17:41:39 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ bool    ft_tokenizer(t_data *data, const std::string &line)
         tokens.push_back(buffer);
     }
 
-    ft_set_tokens(data, tokens);
-
-    return (true);
+    return (ft_set_tokens(data, tokens));
 }
 
