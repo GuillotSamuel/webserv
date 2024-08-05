@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 16:09:51 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/15 12:24:03 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:55:18 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@ bool ft_invalid_line(t_data *data, std::vector<std::string> tokens)
 
 bool ft_param_set_tokens(t_data *data, std::vector<std::string> tokens)
 {
-    int nb_param = 6;
+    const int nb_param = 6;
     
-    std::string param_array[nb_param] = {"listen", "host_name", "server_name", "error_page",
-        "client_max_body", "location"};
+    // Use fixed-size arrays and manual initialization
+    const char* param_array[nb_param] = {"listen", "host_name", "server_name", "error_page",
+                                         "client_max_body", "location"};
     
+    // Fixed-size array of function pointers
     bool (*param_functions[nb_param])(t_data *, const std::vector<std::string>) = {
         &ft_set_listen_param,
         &ft_set_host_name_param,
@@ -41,13 +43,14 @@ bool ft_param_set_tokens(t_data *data, std::vector<std::string> tokens)
 
     for (int i = 0; i < nb_param; i++)
     {
-        if (tokens[0] == param_array[i])
+        if (tokens.size() > 0 && std::strcmp(tokens[0].c_str(), param_array[i]) == 0)
         {
-            return (param_functions[i](data, tokens));
+            return param_functions[i](data, tokens);
         }
     }
-    std::string error_message = "unknown parameter: " + tokens[0];
-    return (ft_error(data, error_message));
+
+    std::string error_message = "unknown parameter: " + (tokens.size() > 0 ? tokens[0] : "");
+    return ft_error(data, error_message);
 }
 
 bool ft_start_set_tokens(t_data *data, std::vector<std::string> tokens)

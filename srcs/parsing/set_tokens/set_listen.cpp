@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:41 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/15 12:23:55 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:45:34 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ bool ft_set_listen_param(t_data *data, std::vector<std::string> tokens)
         }
     }
 
-    const char* num_str = str.substr(0, str.size() - 1).c_str();
+    std::string num_str = str.substr(0, str.size() - 1); // A REVOIR
     char* end;
-    long num = std::strtol(num_str, &end, 10);
+    long num = std::strtol(num_str.c_str(), &end, 10);
     
     if (*end != '\0')
     {

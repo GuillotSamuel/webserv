@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/15 12:27:05 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/08/05 13:51:54 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 #include <cstring>
 #include <fcntl.h>
 #include <unistd.h>
+#include <functional>
 
 #include "serverConfiguration.hpp"
 
@@ -88,10 +89,6 @@ bool    parsing_g(t_data *data, int argc, char **argv);
 /* read_configuration.cpp */
 bool    ft_read_configuration_file(t_data *data, const char *arg);
 
-/* set_tokens.cpp */
-bool    ft_set_tokens(t_data *data, std::vector<std::string> tokens);
-bool    ft_invalid_line(t_data *data, std::vector<std::string> tokens);
-
 /* tokenizer.cpp */
 bool    ft_tokenizer(t_data *data, const std::string &line);
 
@@ -105,13 +102,17 @@ bool    ft_set_host_name_param(t_data *data, std::vector<std::string> tokens);
 bool    ft_set_listen_param(t_data *data, std::vector<std::string> tokens);
 
 /* set_location.cpp */
-bool ft_set_location_param(t_data *data, std::vector<std::string> tokens);
+bool    ft_set_location_param(t_data *data, std::vector<std::string> tokens);
 
 /* set_max_body.cpp */
-bool ft_set_client_max_body_param(t_data *data, std::vector<std::string> tokens);
+bool    ft_set_client_max_body_param(t_data *data, std::vector<std::string> tokens);
 
 /* set_server_name.cpp */
-bool ft_set_server_name_param(t_data *data, std::vector<std::string> tokens);
+bool    ft_set_server_name_param(t_data *data, std::vector<std::string> tokens);
+
+/* set_tokens.cpp */
+bool    ft_set_tokens(t_data *data, std::vector<std::string> tokens);
+bool    ft_invalid_line(t_data *data, std::vector<std::string> tokens);
 
 /* -------------------------------------------------------------------------- */
 /*                                    EXEC                                    */
