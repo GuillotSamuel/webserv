@@ -79,7 +79,7 @@ void handle_client(int connfd, t_socket socket_s)
 	std::string	method;
 	std::string	path;
 
-	std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl;
+	// std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl; // TEST
 
 	if (method_end != std::string::npos)
 	{
@@ -91,6 +91,9 @@ void handle_client(int connfd, t_socket socket_s)
 		ft_error("method_end failed");
 	}
 
+
+	/* ----- PATH PARSE ----- */
+
 	size_t		path_start = received_line_cpy.find('/');
 
 	if (path_start == std::string::npos)
@@ -100,8 +103,6 @@ void handle_client(int connfd, t_socket socket_s)
 	}
 
 	size_t		path_end = (received_line_cpy).find(' ', method_end + 1);
-
-	std::cout << "\n\nTEST 2 : -" << received_line_cpy.at(path_end) << "-\n\n" << std::endl;
 
 	if (path_end != std::string::npos)
 	{
@@ -113,11 +114,50 @@ void handle_client(int connfd, t_socket socket_s)
 		ft_error("path_end failed");
 	}
 
+
+	/* ----- PATH CHECK ----- */
+
+	if (path == "/")
+	{
+		path = "index.html";
+	}
+	else
+	{
+		size_t		path_html_start = path.find(".hmtl");
+
+		if (path_html_start == std::string::npos)
+		{
+			close(connfd);
+			ft_error("path_html_start failed");
+		}
+
+		size_t		path_html_end = path.find('\0', path_html_start);
+
+		if (path_html_end != std::string::npos)
+		{
+			std::string	path_html = path.substr(path_html_start, (path_html_end - path_html_start));
+			if (path_html.size() != 5)
+			{
+				close(connfd);
+				exit ;
+			}
+		}
+		else
+		{
+			close(connfd);
+			ft_error("path_html_end failed");
+		}
+	}
+
+
+	/* ----- METHOD ----- */
+
 	std::cout << "\n\nTEST : " << path << "\n\n" << std::endl;
 
 	if (method == "GET")
 	{
-		std::string get_content = ft_get_file_content("../www/html/index.html");
+		std::string get_content;
+		get_content = ft_get_file_content("../www/html" + path);
 		snprintf(socket_buffer, sizeof(socket_buffer),
 				 "HTTP/1.0 200 OK\r\n\r\n%s",
 				 get_content.c_str());
