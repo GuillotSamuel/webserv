@@ -38,8 +38,10 @@ typedef struct s_socket
 	int n;
 } t_socket;
 
-void ft_error(std::string str)
+void ft_error(std::string str, int connfd)
 {
+	if (connfd != -1)
+		close(connfd);
 	std::cerr << "Error: " << str << std::endl;
 	exit(EXIT_FAILURE);
 }
@@ -50,7 +52,7 @@ std::string ft_get_file_content(const std::string &path)
 
 	if (!file.is_open())
 	{
-		ft_error("get file content failed");
+		ft_error("get file content failed", -1);
 	}
 
 	std::ostringstream oss;
@@ -59,102 +61,68 @@ std::string ft_get_file_content(const std::string &path)
 	return (oss.str());
 }
 
-
-
-void handle_client(int connfd, t_socket socket_s)
+std::string	findPath(t_socket socket_s, std::string receivedLine)
 {
-	char received_line[4096];
-	char socket_buffer[4096];
-
-	memset(received_line, 0, sizeof(received_line));
-
-	if (read(connfd, received_line, sizeof(received_line) - 1) < 0)
-	{
-		close(connfd);
-		ft_error("connfd read failed");
-	}
-
-	std::string	received_line_cpy(received_line);
-	size_t		method_end = received_line_cpy.find(' ');
-	std::string	method;
 	std::string	path;
-
-	// std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl; // TEST
-
-	if (method_end != std::string::npos)
-	{
-		method = received_line_cpy.substr(0, method_end);
-	}
-	else
-	{
-		close(connfd);
-		ft_error("method_end failed");
-	}
-
-
-	/* ----- PATH PARSE ----- */
-
-	size_t		path_start = received_line_cpy.find('/');
-
+	size_t		path_start;
+	size_t		path_end;
+	
+	path_start = receivedLine.find('/');
 	if (path_start == std::string::npos)
-	{
-		close(connfd);
-		ft_error("path_start failed");
-	}
-
-	size_t		path_end = (received_line_cpy).find(' ', method_end + 1);
-
-	if (path_end != std::string::npos)
-	{
-		path = received_line_cpy.substr(path_start, (path_end - path_start));
-	}
+		ft_error("path_start failed", socket_s.connfd);
+	path_end = (receivedLine).find(' ', path_start);
+	if (path_end == std::string::npos)
+		ft_error("path_end failed", socket_s.connfd);
 	else
 	{
-		close(connfd);
-		ft_error("path_end failed");
+		path = receivedLine.substr(path_start, (path_end - path_start));
 	}
-
 
 	/* ----- PATH CHECK ----- */
 
 	if (path == "/")
-	{
-		path = "index.html";
-	}
+		return ("/index.html");
 	else
 	{
-		size_t		path_html_start = path.find(".hmtl");
-
-		if (path_html_start == std::string::npos)
+		if (path.compare(path.size()-5, 5, ".html") == 0 ) // Le path finis par .html
 		{
-			close(connfd);
-			ft_error("path_html_start failed");
-		}
-
-		size_t		path_html_end = path.find('\0', path_html_start);
-
-		if (path_html_end != std::string::npos)
-		{
-			std::string	path_html = path.substr(path_html_start, (path_html_end - path_html_start));
-			if (path_html.size() != 5)
-			{
-				close(connfd);
-				exit ;
-			}
-		}
-		else
-		{
-			close(connfd);
-			ft_error("path_html_end failed");
+			std::cout << path << std::endl; //TEST
+			return (path);
 		}
 	}
+	return ("");
+}
 
+void handle_client(int connfd, t_socket socket_s)
+{
+	char		received_line[4096];
+	char		socket_buffer[4096];
+	std::string	path;
+
+	memset(received_line, 0, sizeof(received_line));
+
+	if (read(connfd, received_line, sizeof(received_line) - 1) < 0)
+		ft_error("connfd read failed", connfd);
+
+	std::string	received_line_cpy(received_line);
+	size_t		method_end = received_line_cpy.find(' ');
+	std::string	method;
+
+	// std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl; // TEST
+
+	if (method_end != std::string::npos)
+		method = received_line_cpy.substr(0, method_end);
+	else
+		ft_error("method_end failed", connfd);
+
+
+	/* ----- PATH PARSE ----- */
+
+	path = findPath(socket_s, received_line);
 
 	/* ----- METHOD ----- */
 
-	std::cout << "\n\nTEST : " << path << "\n\n" << std::endl;
-
-	if (method == "GET")
+	if (method == "GET" && path != "")
 	{
 		std::string get_content;
 		get_content = ft_get_file_content("../www/html" + path);
@@ -174,7 +142,7 @@ void handle_client(int connfd, t_socket socket_s)
 				 "HTTP/1.0 200 OK\r\n\r\n"
 				 "Received DELETE request\n");
 	}
-	else
+	else if (path != "")
 	{
 		std::string error_content = ft_get_file_content("../www/html/errors/400.html");
 		snprintf(socket_buffer, sizeof(socket_buffer),
@@ -193,10 +161,10 @@ int main(int argc, char **argv)
 
 	socket_s.port = argv[1];
 	if (argc != 2)
-		ft_error("wrong arguments");
+		ft_error("wrong arguments", -1);
 
 	if ((socket_s.sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-		ft_error("socket creation failed");
+		ft_error("socket creation failed", -1);
 
 	memset(&(socket_s.servaddr), 0, sizeof(socket_s.servaddr));
 
@@ -210,20 +178,20 @@ int main(int argc, char **argv)
 			ft_error("connect error"); */
 
 	if (bind(socket_s.sockfd, (SERVADDR_INFO *)&socket_s.servaddr, sizeof(socket_s.servaddr)) < 0)
-		ft_error("bind error");
+		ft_error("bind error", -1);
 	if (listen(socket_s.sockfd, 10) < 0)
-		ft_error("listen error");
+		ft_error("listen error", -1);
 
 	while (true)
 	{
 		if ((socket_s.connfd = accept(socket_s.sockfd, (SERVADDR_INFO *)NULL, NULL)) < 0)
-			ft_error("accept error");
+			ft_error("accept error", -1);
 
 		pid_t pid = fork();
 
 		if (pid < 0)
 		{
-			ft_error("fork error");
+			ft_error("fork error", -1);
 		}
 		else if (pid == 0)
 		{
