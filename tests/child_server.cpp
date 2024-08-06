@@ -106,19 +106,19 @@ void handle_client(int connfd, t_socket socket_s)
 	std::string method;
 	size_t method_end = request.find(' ');
 
-	std::string page;
+	// std::string page;
 
-	try
-	{
-		size_t method_start = request.find("Referer: http://localhost:" + (std::string)socket_s.port + '/');
-		page = request.substr(method_start + 26, '\n');
-	}
-	catch(const std::exception& e)
-	{
-		page = "../www/html/index.html";
-	}
+	// try
+	// {
+	// 	size_t method_start = request.find("Referer: http://localhost:" + (std::string)socket_s.port + '/');
+	// 	page = request.substr(method_start, '\n');
+	// }
+	// catch(const std::exception& e)
+	// {
+	// 	page = "index.html";
+	// }
 	
-	std::cout << "\n\nTEST : " << page << "\n\n" << std::endl;
+	// std::cout << "\n\nTEST : " << page << "\n\n" << std::endl;
 
 	if (method_end != std::string::npos)
 	{
@@ -127,7 +127,8 @@ void handle_client(int connfd, t_socket socket_s)
 
 	if (method == "GET")
 	{
-		std::string get_content = ft_get_file_content(page);
+		// std::string get_content = ft_get_file_content("../www/html/" + page);
+		std::string get_content = ft_get_file_content("../www/html/index.html");
 		snprintf(socket_buffer, sizeof(socket_buffer),
 				 "HTTP/1.0 200 OK\r\n\r\n%s", get_content.c_str());
 	}
