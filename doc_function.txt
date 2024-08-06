@@ -1,0 +1,429 @@
+/*--------------------------------------------------------------------------------------*/
+
+function : socket
+
+include : 
+		<sys/socket.h>
+
+prototype :
+		int socket(int domain, int type, int protocol);
+
+description :
+		socket creer un point de communication et renvoie un descripteur.
+
+		le parametres domain indique le domaine de communication pour le dialogue ; 
+		ceci selection la famille de protocol a employer.
+		Elles sont definies dans le fichier d'include. Plusieurs formats s'offre a nous.
+		Voir doc pour plus d'infos.
+		http://manpagesfr.free.fr/man/man2/socket.2.html
+
+return value : 
+
+	> 0 = succes;	Renvoie un descripteur de fichier referencant la socket creer
+	-1 = error;
+/*--------------------------------------------------------------------------------------*/
+
+function : socketpair
+
+include :
+		<sys/types.h>
+		<sys/socket.h>
+
+prototype :
+		int socketpair(int domain, int type, int protocol, int sv[2]);
+
+description :
+	creer une paire de socket sans nom
+	dans le domaine specifie, du type specifie, et optionnellement
+	du protocol specifie, du coup on recupere deux files descriptor
+	via sv[0] et sv[1].
+	ATTENTION les deux sockets ne sont pas differenciable.
+
+return value :
+
+	0 = success;
+	1 = fail;
+
+/*--------------------------------------------------------------------------------------*/
+
+function: htons/htonl/nthos/ntohl
+
+include :
+		<arpa/inet.h>
+
+prototypes : 
+		uint32_t htonl(uint32_t hostlong);
+		uint16_t htons(uint16_t hostshort);
+		uint32_t ntohl(uint32_t netlong);
+		uint16_t ntohs(uint16_t netshort);
+
+descrption :
+	ces 4 functions servent a convertit des entier en plusieurs type different, via la manipulation d'octet.
+	ELLES SONT SUR DANS UN CONTEXTES MULTITRADING !
+	Sur les i386, l'ordre des octets de l'hôte est LSB (« Least Significant Byte first »),
+	c'est-à-dire l'octet de poids faible en premier, alors que sur les
+	réseaux, notamment internet, l'ordre est MSB (« Most Significant Byte
+	first ») octet de poids fort en premier. 
+return value : 
+	none.
+
+/*--------------------------------------------------------------------------------------*/
+
+function: select
+
+include :
+		<sys/select.h>
+
+prototype :
+		int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set * exceptfds, struc timeval *timeout);
+
+description: 
+	 Il y a trois ensembles indépendants de descripteurs surveillés
+	 simultanément. Ceux de l'ensemble readfds seront surveillés pour
+	 vérifier si des caractères deviennent disponibles en lecture.
+	 Plus précisément, on vérifie si un appel système de lecture ne
+	 bloquera pas ; en particulier un descripteur en fin de fichier
+	 sera considéré comme prêt. Les descripteurs de l'ensemble writefds
+	 seront surveillés pour vérifier si une écriture ne bloquera pas.
+	 Ceux de exceptfds seront surveillés pour l'occurrence de conditions
+	 exceptionnelles. En sortie, les ensembles sont modifiés pour indiquer
+	 les descripteurs de fichier qui ont changé d'état. Chacun des trois
+	 ensembles de descripteurs de fichier peut être spécifié comme NULL
+	 si aucun descripteur de fichier n'est surveillé pour la classe
+	 correspondante d'événements.
+
+Quatre macros sont disponibles pour la manipulation des
+ensembles FD_ZERO() efface un ensemble. FD_SET() et FD_CLR()
+ajoutent et suppriment, respectivement, un descripteur de fichier
+dans un ensemble. FD_ISSET() vérifie si un descripteur de fichier 
+st contenu dans un ensemble, principalement utile après le retour 
+de select(). 
+
+return value:
+
+	renvoie le nombre de files descriptor dans les trois ensemble de descripteurs retourner;
+	(nombree total de bits a dans readfds writefds exceptfds)
+	return -1 = fail:
+	ne pas se fier au contenu des ense;bles et de time out apres une erreur.
+
+/*--------------------------------------------------------------------------------------*/
+
+function : poll 
+
+include : 
+		<poll.h>
+
+prototype :
+		int poll(struct pollfd *fds, nfds_t nfds, int delai)
+
+description :
+	poll est une variation de select (voir au dessus) : il attend aue l'un des
+	descripteur de fichier parmi plusieurs sois pret pour effectuer des entrees-sorties.
+
+	struct pollfd {
+    	int   fd;         /* Descripteur de fichier */
+    	short events;     /* Événements attendus    */
+    	short revents;    /* Événements détectés    */
+	};
+	le champs fd contient un descripteur de fichier ouvert. 
+	Le champs events est est un parametres d'entrees,
+	(un masque de bits indiquant les events qui interessent l'application).
+	Le champs revents est un parametres de sortie, remplie par le Kernel avec les evenements aui se sont produits.
+	les bits renvoyes dans revents peuvent inclure ceux specifies dans events ou l'une des valeurs POLLERR, POLLHUP, POLLNVAL.
+
+return value :
+
+	> 0 = success; (representes le nombre de structures ayant un champs revent non null)
+	0 indique un depassement du delai d'attente et qu'aucun descripteur de fichier n'etait pret.
+	-1 = fail.
+
+/*--------------------------------------------------------------------------------------*/
+
+function : epoll
+
+include :
+		<sys/epoll.h>  
+
+prototype :
+
+description : 
+		epoll est une variante de poll que l'on peut déclencher par niveau
+		ou par changement d'état, et monte bien en charge pour un grand nombre
+		de descripteurs simultanés. Trois appels système sont fournis pour configurer
+		et commander un ensemble epoll : epoll_create, epoll_ctl, epoll_wait.
+
+	/*--------------------------------------------------------------------------------------*/
+
+	function : epoll_create
+
+	include :
+			<sys/epoll.h>
+
+	prototype :
+			int epoll_create(int nb);
+
+	description :
+		Ouvre un descripteur de fichier epoll en demandant au kernel d'allouer une
+		structure pour surveiller les evenements pour nb descripteurs. la valeur nb
+		n'est pas le nombre maximal absolu, ;ais juste un conseil pour le kernel,
+		afin qu'il dimensionne ses structures internes. Le descripteur de fichier
+		renvoye sera utilise pour tous les appels ulterieurs a l'interface epoll.
+		Dois etre fermer avec close().
+
+	return value :
+		>= 0 success (identifie le descripteur)
+		-1 = fail.
+
+	/*--------------------------------------------------------------------------------------*/
+
+	function : epoll_ctl
+
+	include :
+			<sys/epoll.h>
+
+	prototype :
+			int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
+
+	description : 
+		Controle le descripteur epoll epfd (epoll_file_descriptor), en demandant
+		que l'operation op soit realise sur le descripteur de fichier cible fd.
+		la structure event decrit l'objet lie au fd.
+		
+
+	return value : 
+		0 = success.
+		-1 = failed.
+
+	/*--------------------------------------------------------------------------------------*/
+
+	function : epoll_wait
+
+	include :
+			<sys/epoll.h>
+
+	prototype : 
+		int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);
+
+	description : 
+
+		l'appel systeme epoll_wait attend un evenement sur le descripteur epoll epfd pendant
+		une duree maximale de timeout millisecondes. La zone memoire pointe par events
+		contiendra les evenements disponibles pour l'appelant. Un maximum maxevents evenements
+		sont renvoyes par epoll_wait. Le parametres maxevents DOIT etre superieur a zero. 
+		Em specifiant -1 a timeout, epoll_wait attendra indefiniment, alors qu;un timeout null
+		fera revenir epoll_wait immediatement, meme si aucun evenement n'est disponible.
+
+	return value :
+
+		> 0 renvoie le nombre de descripteur pret pour les E/S (?) demandees.
+		0 si aucun descripteur pret
+		-1 = fail.
+
+	/*--------------------------------------------------------------------------------------*/
+
+		la structure epoll_event est definie ainsi : 
+
+		typedef union epoll_data {
+			void *ptr;
+			int fd;
+			__uint32_t u32;
+			__uint64_t u64;
+		} 		epoll_data_t;
+
+		struct epoll_event {
+			__uint32_t events;    /* Événement epoll      */
+			epoll_data_t data;    /* Variable utilisateur */
+		};
+
+/*--------------------------------------------------------------------------------------*/
+
+function: kqueue
+
+include :
+		 #include	<sys/event.h>
+prototype :
+		int kqueue();
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: kevent
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: accept
+
+include :
+ 		<sys/types.h>
+		<sys/socket.h>
+prototype :
+	int accept(int sockfd, struct sockaddr *adresse, socklen_t *longueur);
+
+description :
+
+	l'appel systeme accept est employe avec les sockets utilisant un protocole en connecte
+	(SOCK_STREAM et SOCK_SEQPACKET). Il extrait la premiere connexions de la file des connexions
+	en attente de la socket sockfd a l'ecoute, cree une nouvelle socket connectee, et 
+	renvoie un nouveau fd qui fait reference a cette socket. La nouvelle socket n'est pas
+	en etat d'ecoute. La socket original sockfd n'es pas modifiee par l'appel systeme.
+
+	L'argument sockfd est un socket qui a ete creee avec la fonction socket, attache a
+	une adresse avec bind, et attend des connexions apres un appel listen. 
+return value :
+	>= 0 constitue un fd pour la nouvelle socket.
+	-1 = fail.
+
+/*--------------------------------------------------------------------------------------*/
+
+function: listen
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: send
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: recv
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: chdir bind
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: connect
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: getaddrinfo
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: freeaddrinfo
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: setsockopt
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: getsockname
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: getprotobyname
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function: fcntl
+
+include :
+
+prototype :
+
+description :
+
+return value :
+
+/*--------------------------------------------------------------------------------------*/
+
+function:
+
+include :
+
+prototype :
+
+description :
+
+return value :
