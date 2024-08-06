@@ -31,6 +31,7 @@ typedef struct s_socket
 {
 	int sockfd;
 	int connfd;
+	char *port;
 	struct sockaddr_in servaddr;
 	char receiveline[4096];
 	char socket_buffer[4096];
@@ -81,7 +82,7 @@ std::string ft_get_file_content(const std::string &path)
 	close(connfd);
 } */
 
-void handle_client(int connfd)
+void handle_client(int connfd, t_socket socket_s)
 {
 	char receiveline[4096];
 	char socket_buffer[4096];
@@ -100,8 +101,25 @@ void handle_client(int connfd)
 
 	std::string request(receiveline);
 
+	std::cout << receiveline << std::endl;
+
 	std::string method;
 	size_t method_end = request.find(' ');
+
+	std::string page;
+
+	try
+	{
+		size_t method_start = request.find("Referer: http://localhost:" + (std::string)socket_s.port + '/');
+		page = request.substr(method_start + 26, '\n');
+	}
+	catch(const std::exception& e)
+	{
+		page = "../www/html/index.html";
+	}
+	
+	std::cout << "\n\nTEST : " << page << "\n\n" << std::endl;
+
 	if (method_end != std::string::npos)
 	{
 		method = request.substr(0, method_end);
@@ -109,9 +127,9 @@ void handle_client(int connfd)
 
 	if (method == "GET")
 	{
+		std::string get_content = ft_get_file_content(page);
 		snprintf(socket_buffer, sizeof(socket_buffer),
-				 "HTTP/1.0 200 OK\r\n\r\n"
-				 "Received GET request\n");
+				 "HTTP/1.0 200 OK\r\n\r\n%s", get_content.c_str());
 	}
 	else if (method == "POST")
 	{
@@ -142,6 +160,7 @@ int main(int argc, char **argv)
 {
 	t_socket socket_s;
 
+	socket_s.port = argv[1];
 	if (argc != 2)
 		ft_error("wrong arguments");
 
@@ -151,7 +170,7 @@ int main(int argc, char **argv)
 	memset(&(socket_s.servaddr), 0, sizeof(socket_s.servaddr));
 
 	socket_s.servaddr.sin_family = AF_INET;
-	socket_s.servaddr.sin_port = htons(std::atoi(argv[1]));
+	socket_s.servaddr.sin_port = htons(std::atoi(socket_s.port));
 	socket_s.servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	/* 	if (inet_pton(AF_INET, argv[1], &(socket_s.servaddr.sin_addr)) <= 0)
@@ -178,7 +197,7 @@ int main(int argc, char **argv)
 		else if (pid == 0)
 		{
 			close(socket_s.sockfd);
-			handle_client(socket_s.connfd);
+			handle_client(socket_s.connfd, socket_s);
 			exit(0);
 		}
 		else
