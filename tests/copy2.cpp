@@ -70,81 +70,11 @@ void handle_client(int connfd, t_socket socket_s)
 
 	if (read(connfd, received_line, sizeof(received_line) - 1) < 0)
 	{
-		close(connfd);
 		ft_error("connfd read failed");
+		return ;
 	}
 
-	std::string	received_line_cpy(received_line);
-	size_t		method_end = received_line_cpy.find(' ');
-	std::string	method;
-	std::string	path;
 
-	std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl;
-
-	if (method_end != std::string::npos)
-	{
-		method = received_line_cpy.substr(0, method_end);
-	}
-	else
-	{
-		close(connfd);
-		ft_error("method_end failed");
-	}
-
-	size_t		path_start = received_line_cpy.find('/');
-
-	if (path_start == std::string::npos)
-	{
-		close(connfd);
-		ft_error("path_start failed");
-	}
-
-	size_t		path_end = (received_line_cpy).find(' ', method_end + 1);
-
-	std::cout << "\n\nTEST 2 : -" << received_line_cpy.at(path_end) << "-\n\n" << std::endl;
-
-	if (path_end != std::string::npos)
-	{
-		path = received_line_cpy.substr(path_start, (path_end - path_start));
-	}
-	else
-	{
-		close(connfd);
-		ft_error("path_end failed");
-	}
-
-	std::cout << "\n\nTEST : " << path << "\n\n" << std::endl;
-
-	if (method == "GET")
-	{
-		std::string get_content = ft_get_file_content("../www/html/index.html");
-		snprintf(socket_buffer, sizeof(socket_buffer),
-				 "HTTP/1.0 200 OK\r\n\r\n%s",
-				 get_content.c_str());
-	}
-	else if (method == "POST")
-	{
-		snprintf(socket_buffer, sizeof(socket_buffer),
-				 "HTTP/1.0 200 OK\r\n\r\n"
-				 "Received POST request\n");
-	}
-	else if (method == "DELETE")
-	{
-		snprintf(socket_buffer, sizeof(socket_buffer),
-				 "HTTP/1.0 200 OK\r\n\r\n"
-				 "Received DELETE request\n");
-	}
-	else
-	{
-		std::string error_content = ft_get_file_content("../www/html/errors/400.html");
-		snprintf(socket_buffer, sizeof(socket_buffer),
-				 "HTTP/1.0 400 Bad Request\r\n\r\n%s",
-				 error_content.c_str());
-	}
-
-	write(connfd, socket_buffer, strlen(socket_buffer));
-
-	close(connfd);
 }
 
 int main(int argc, char **argv)
@@ -201,4 +131,92 @@ int main(int argc, char **argv)
 	close(socket_s.sockfd);
 
 	return (0);
+}
+
+
+void handle_client(int connfd, t_socket socket_s)
+{
+	char receiveline[4096];
+	char socket_buffer[4096];
+	int n;
+
+	memset(receiveline, 0, sizeof(receiveline));
+
+	n = read(connfd, receiveline, sizeof(receiveline) - 1);
+	if (n <= 0)
+	{
+		close(connfd);
+		return;
+	}
+
+	receiveline[n] = '\0';
+
+	std::string request(receiveline);
+
+	std::cout << receiveline << std::endl;
+
+	std::string method;
+	size_t method_end = request.find(' ');
+
+	std::string page;
+
+	/* std::string str_start = "Referer: http://localhost:";
+	std::string str_end = "Referer: http://localhost:" + (std::string)socket_s.port;
+	size_t method_start;
+	size_t method_end2;
+
+	try
+	{
+
+		method_start = request.find(str_start);
+		method_end2 = (request.find(str_end));
+
+	}
+	catch(const std::exception& e)
+	{
+		page = "index.html";
+	}
+
+	if (page != "index.html")
+	{
+		method_start += str_start.size();
+		page = request.substr(method_start, method_end2);
+	}
+
+	std::cout << "\n\nTEST 1: " << page << "\n\n" << std::endl;
+ */
+	if (method_end != std::string::npos)
+	{
+		method = request.substr(0, method_end);
+	}
+
+	if (method == "GET")
+	{
+		std::string get_content = ft_get_file_content("../www/html/" + page);
+		snprintf(socket_buffer, sizeof(socket_buffer),
+				 "HTTP/1.0 200 OK\r\n\r\n%s", get_content.c_str());
+	}
+	else if (method == "POST")
+	{
+		snprintf(socket_buffer, sizeof(socket_buffer),
+				 "HTTP/1.0 200 OK\r\n\r\n"
+				 "Received POST request\n");
+	}
+	else if (method == "DELETE")
+	{
+		snprintf(socket_buffer, sizeof(socket_buffer),
+				 "HTTP/1.0 200 OK\r\n\r\n"
+				 "Received DELETE request\n");
+	}
+	else
+	{
+		std::string error_content = ft_get_file_content("../www/html/errors/400.html");
+		snprintf(socket_buffer, sizeof(socket_buffer),
+				 "HTTP/1.0 400 Bad Request\r\n\r\n%s",
+				 error_content.c_str());
+	}
+
+	write(connfd, socket_buffer, strlen(socket_buffer));
+
+	close(connfd);
 }
