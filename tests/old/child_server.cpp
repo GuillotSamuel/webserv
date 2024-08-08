@@ -17,12 +17,14 @@
 #include <sys/epoll.h>
 #define SERVADDR_INFO struct sockaddr
 #define MAX_EVENTS 10
+
 /*
 ./http_server 8080
 curl -X GET http://localhost:8080
 curl -X POST http://localhost:8080
 curl -X DELETE http://localhost:8080
  */
+
 typedef struct s_socket
 {
 	int sockfd;
@@ -34,13 +36,13 @@ typedef struct s_socket
 	int n;
 } t_socket;
 
-void ft_error(std::string str, int connfd)
-{
-	if (connfd != -1)
-		close(connfd);
-	std::cerr << "Error: " << str << std::endl;
-	exit(EXIT_FAILURE);
-}
+// void ft_error(std::string str, int connfd)
+// {
+// 	if (connfd != -1)
+// 		close(connfd);
+// 	std::cerr << "Error: " << str << std::endl;
+// 	exit(EXIT_FAILURE);
+// }
 std::string ft_get_file_content(const std::string &path)
 {
 	std::ifstream file(path.c_str());
@@ -154,43 +156,43 @@ void handle_client(int connfd, t_socket socket_s)
 
 int main(int argc, char **argv)
 {
-	t_socket socket_s;
+	// t_socket socket_s;
 
-	socket_s.port = argv[1];
-	if (argc != 2)
-		ft_error("wrong arguments", -1);
+	// socket_s.port = argv[1];
+	// if (argc != 2)
+	// 	ft_error("wrong arguments", -1);
 
-	if ((socket_s.sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-		ft_error("socket creation failed", -1);
+	// if ((socket_s.sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+	// 	ft_error("socket creation failed", -1);
 
-	memset(&(socket_s.servaddr), 0, sizeof(socket_s.servaddr));
+	// memset(&(socket_s.servaddr), 0, sizeof(socket_s.servaddr));
 
-	socket_s.servaddr.sin_family = AF_INET;
-	socket_s.servaddr.sin_port = htons(std::atoi(socket_s.port));
-	socket_s.servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	// socket_s.servaddr.sin_family = AF_INET;
+	// socket_s.servaddr.sin_port = htons(std::atoi(socket_s.port));
+	// socket_s.servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	/* 	if (inet_pton(AF_INET, argv[1], &(socket_s.servaddr.sin_addr)) <= 0)
 			ft_error("inet_pton failed");
 		if (connect(socket_s.sockfd, (SERVADDR_INFO *)&socket_s.servaddr, sizeof(socket_s.servaddr)) < 0)
 			ft_error("connect error"); */
 
-	if (bind(socket_s.sockfd, (SERVADDR_INFO *)&socket_s.servaddr, sizeof(socket_s.servaddr)) < 0)
-		ft_error("bind error", -1);
-	if (listen(socket_s.sockfd, 10) < 0)
-		ft_error("listen error", -1);
+	// if (bind(socket_s.sockfd, (SERVADDR_INFO *)&socket_s.servaddr, sizeof(socket_s.servaddr)) < 0)
+	// 	ft_error("bind error", -1);
+	// if (listen(socket_s.sockfd, 10) < 0)
+	// 	ft_error("listen error", -1);
 
-	int	epoll_fd = epoll_create(1);
-	if (epoll_fd == -1)
-		ft_error("epoll_create1 failed", -1);
+	// int	epoll_fd = epoll_create(1);
+	// if (epoll_fd == -1)
+	// 	ft_error("epoll_create1 failed", -1);
 
-	struct epoll_event	ev;
-	ev.events = EPOLLIN;
-	ev.data.fd = socket_s.sockfd;
+	// struct epoll_event	ev;
+	// ev.events = EPOLLIN;
+	// ev.data.fd = socket_s.sockfd;
 	
-	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, socket_s.sockfd, &ev) == -1)
-		ft_error("epoll_ctl failed", -1);
+	// if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, socket_s.sockfd, &ev) == -1)
+	// 	ft_error("epoll_ctl failed", -1);
 	
-	struct epoll_event events[MAX_EVENTS];
+	// struct epoll_event events[MAX_EVENTS];
 
 	while (true)
 	{
@@ -220,7 +222,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	close(socket_s.sockfd);
-	close(epoll_fd);
+	// close(socket_s.sockfd);
+	// close(epoll_fd);
 	return (0);
 }
