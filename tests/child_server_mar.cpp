@@ -30,6 +30,7 @@ curl -X DELETE http://localhost:8080
 
  */
 
+
 typedef struct s_socket
 {
 	int sockfd;
@@ -42,12 +43,60 @@ typedef struct s_socket
 	std::string path;
 }	t_socket;
 
+std::string ft_get_file_content(t_socket socket_s, const std::string &path);
+void ft_error(std::string str, int connfd);
+void ft_bad_request(t_socket socket_s, std::string error_path);
+void ft_delete(t_socket socket_s);
+void ft_post(t_socket socket_s);
+void ft_get(t_socket &socket_s);
+std::string ft_get_file_content(t_socket socket_s, const std::string &path);
+std::string	findPath(t_socket socket_s, std::string receivedLine);
+void handle_client(int connfd, t_socket socket_s);
+
 void ft_error(std::string str, int connfd)
 {
 	if (connfd != -1)
 		close(connfd);
 	std::cerr << "Error: " << str << std::endl;
 	exit(EXIT_FAILURE);
+}
+
+void ft_bad_request(t_socket socket_s, std::string error_path)
+{
+	std::string error_content = ft_get_file_content(socket_s, error_path);
+	snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
+			 "HTTP/1.0 400 Bad Request\r\n\r\n%s",
+			 error_content.c_str());
+}
+
+void ft_delete(t_socket socket_s)
+{
+	snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
+			 "HTTP/1.0 200 OK\r\n\r\n"
+			 "Received DELETE request\n");
+}
+
+void ft_post(t_socket socket_s)
+{
+	snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
+			 "HTTP/1.0 200 OK\r\n\r\n"
+			 "Received POST request\n");
+}
+
+void ft_get(t_socket &socket_s)
+{
+	std::string get_content;
+	get_content = ft_get_file_content(socket_s, "../www/html" + socket_s.path);
+	if (get_content == "")
+	{
+		ft_bad_request(socket_s, "../www/html/errors/400.html");
+	}
+	else
+	{
+		snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
+				"HTTP/1.0 200 OK\r\n\r\n%s",
+				get_content.c_str());
+	}
 }
 
 std::string ft_get_file_content(t_socket socket_s, const std::string &path)
@@ -57,7 +106,7 @@ std::string ft_get_file_content(t_socket socket_s, const std::string &path)
 	if (!file.is_open())
 	{
 		std::cerr << "Error: get file content failed" << std::endl; // TEST
-		ft_bad_request(socket_s, "../www/html/errors/400.html")
+		return ("");
 	}
 
 	std::ostringstream oss;
@@ -98,37 +147,6 @@ std::string	findPath(t_socket socket_s, std::string receivedLine)
 	return ("");
 }
 
-void ft_bad_request(t_socket socket_s)
-{
-	std::string error_content = ft_get_file_content(socket_s, "../www/html/errors/400.html");
-	snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
-			 "HTTP/1.0 400 Bad Request\r\n\r\n%s",
-			 error_content.c_str());
-}
-
-void ft_delete(t_socket socket_s)
-{
-	snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
-			 "HTTP/1.0 200 OK\r\n\r\n"
-			 "Received DELETE request\n");
-}
-
-void ft_post(t_socket socket_s)
-{
-	snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
-			 "HTTP/1.0 200 OK\r\n\r\n"
-			 "Received POST request\n");
-}
-
-void ft_get(t_socket &socket_s)
-{
-	std::string get_content;
-	get_content = ft_get_file_content(socket_s, "../www/html" + socket_s.path);
-	snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
-			 "HTTP/1.0 200 OK\r\n\r\n%s",
-			 get_content.c_str());
-}
-
 void handle_client(int connfd, t_socket socket_s)
 {
 	char		received_line[BUFFER_SIZE];
@@ -142,7 +160,7 @@ void handle_client(int connfd, t_socket socket_s)
 	size_t		method_end = received_line_cpy.find(' ');
 	std::string	method;
 
-	// std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl; // TEST
+	std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl; // TEST
 
 	if (method_end != std::string::npos)
 		method = received_line_cpy.substr(0, method_end);
@@ -156,7 +174,9 @@ void handle_client(int connfd, t_socket socket_s)
 
 	/* ----- METHOD ----- */
 
-	if (method == "GET" && path != "")
+	std::cerr << "\n\nTEST : " << socket_s.path << "\n\n" << std::endl;
+
+	if (method == "GET" && socket_s.path != "")
 	{
 		fprintf(stderr, "TEST 1\n"); // TEST
 		ft_get(socket_s);
@@ -174,10 +194,10 @@ void handle_client(int connfd, t_socket socket_s)
 		ft_delete(socket_s);
 		fprintf(stderr, "TEST 6\n"); // TEST
 	}
-	else /* if (path != "") */
+	else if (socket_s.path != "")
 	{
 		fprintf(stderr, "TEST 7\n"); // TEST
-		ft_bad_request(socket_s);
+		ft_bad_request(socket_s, "../www/html/errors/400.html");
 		fprintf(stderr, "TEST 8\n"); // TEST
 	}
 fprintf(stderr, "TEST 9\n"); // TEST

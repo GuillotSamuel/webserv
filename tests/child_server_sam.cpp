@@ -45,7 +45,7 @@ void ft_error(std::string str, int connfd)
 	if (connfd != -1)
 		close(connfd);
 	std::cerr << "Error: " << str << std::endl;
-	exit(EXIT_FAILURE);
+	// exit(EXIT_FAILURE);
 }
 
 std::string ft_get_file_content(const std::string &path)
@@ -54,7 +54,8 @@ std::string ft_get_file_content(const std::string &path)
 
 	if (!file.is_open())
 	{
-		ft_error("get file content failed", -1);
+		std::cerr << "Error: get file content failed" << std::endl;
+		return ("../www/html/errors/400.html");
 	}
 
 	std::ostringstream oss;
@@ -163,12 +164,15 @@ void handle_client(int connfd, t_socket socket_s)
 	{
 		ft_delete(socket_s);
 	}
-	else if (socket_s.path != "")
+	else/*  if (socket_s.path != "") */
 	{
 		ft_bad_request(socket_s);
 	}
 
-	write(connfd, socket_s.socket_buffer, strlen(socket_s.socket_buffer));
+	// if (socket_s.path != "") // TO CHECK
+	// {
+		write(connfd, socket_s.socket_buffer, strlen(socket_s.socket_buffer));
+	// }
 
 	close(connfd);
 }
