@@ -14,19 +14,15 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <sys/wait.h>
-
+#include <sys/epoll.h>
 #define SERVADDR_INFO struct sockaddr
-
+#define MAX_EVENTS 10
 /*
-
 ./http_server 8080
-
 curl -X GET http://localhost:8080
 curl -X POST http://localhost:8080
 curl -X DELETE http://localhost:8080
-
  */
-
 typedef struct s_socket
 {
 	int sockfd;
@@ -45,28 +41,27 @@ void ft_error(std::string str, int connfd)
 	std::cerr << "Error: " << str << std::endl;
 	exit(EXIT_FAILURE);
 }
-
 std::string ft_get_file_content(const std::string &path)
 {
 	std::ifstream file(path.c_str());
 
 	if (!file.is_open())
 	{
-		ft_error("get file content failed", -1);
+		// ft_error("get file content failed", -1);
+		return (ft_get_file_content("../www/html/errors/400.html"));
 	}
 
 	std::ostringstream oss;
 	oss << file.rdbuf();
-
 	return (oss.str());
 }
 
-std::string	findPath(t_socket socket_s, std::string receivedLine)
+std::string	findContent(t_socket socket_s, std::string receivedLine)
 {
 	std::string	path;
 	size_t		path_start;
 	size_t		path_end;
-	
+
 	path_start = receivedLine.find('/');
 	if (path_start == std::string::npos)
 		ft_error("path_start failed", socket_s.connfd);
@@ -81,23 +76,26 @@ std::string	findPath(t_socket socket_s, std::string receivedLine)
 	/* ----- PATH CHECK ----- */
 
 	if (path == "/")
-		return ("/index.html");
+		return (ft_get_file_content("../www/html/index.html"));
 	else
 	{
 		if (path.compare(path.size()-5, 5, ".html") == 0 ) // Le path finis par .html
 		{
 			std::cout << path << std::endl; //TEST
-			return (path);
+			return (ft_get_file_content("../www/html" + path));
+		}
+		else if (path.compare(path.size()-3, 3, ".css") == 0 )
+		{
+			return (ft_get_file_content("../www/styles" + path));
 		}
 	}
-	return ("");
+	return (ft_get_file_content("../www/html/errors/400.html"));
 }
 
 void handle_client(int connfd, t_socket socket_s)
 {
 	char		received_line[4096];
 	char		socket_buffer[4096];
-	std::string	path;
 
 	memset(received_line, 0, sizeof(received_line));
 
@@ -107,8 +105,9 @@ void handle_client(int connfd, t_socket socket_s)
 	std::string	received_line_cpy(received_line);
 	size_t		method_end = received_line_cpy.find(' ');
 	std::string	method;
+	std::string	path;
 
-	// std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl; // TEST
+	std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl; // TEST
 
 	if (method_end != std::string::npos)
 		method = received_line_cpy.substr(0, method_end);
@@ -118,14 +117,15 @@ void handle_client(int connfd, t_socket socket_s)
 
 	/* ----- PATH PARSE ----- */
 
-	path = findPath(socket_s, received_line);
-
+	std::string get_content = findContent(socket_s, received_line);
+	
 	/* ----- METHOD ----- */
 
-	if (method == "GET" && path != "")
+
+	std::cout << "\n\nTEST : -" << get_content << "-\n\n" << std::endl;
+
+	if (method == "GET")
 	{
-		std::string get_content;
-		get_content = ft_get_file_content("../www/html" + path);
 		snprintf(socket_buffer, sizeof(socket_buffer),
 				 "HTTP/1.0 200 OK\r\n\r\n%s",
 				 get_content.c_str());
@@ -142,16 +142,13 @@ void handle_client(int connfd, t_socket socket_s)
 				 "HTTP/1.0 200 OK\r\n\r\n"
 				 "Received DELETE request\n");
 	}
-	else if (path != "")
+	else
 	{
-		std::string error_content = ft_get_file_content("../www/html/errors/400.html");
 		snprintf(socket_buffer, sizeof(socket_buffer),
 				 "HTTP/1.0 400 Bad Request\r\n\r\n%s",
-				 error_content.c_str());
+				 get_content.c_str());
 	}
-
 	write(connfd, socket_buffer, strlen(socket_buffer));
-
 	close(connfd);
 }
 
@@ -182,31 +179,48 @@ int main(int argc, char **argv)
 	if (listen(socket_s.sockfd, 10) < 0)
 		ft_error("listen error", -1);
 
+	int	epoll_fd = epoll_create(1);
+	if (epoll_fd == -1)
+		ft_error("epoll_create1 failed", -1);
+
+	struct epoll_event	ev;
+	ev.events = EPOLLIN;
+	ev.data.fd = socket_s.sockfd;
+	
+	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, socket_s.sockfd, &ev) == -1)
+		ft_error("epoll_ctl failed", -1);
+	
+	struct epoll_event events[MAX_EVENTS];
+
 	while (true)
 	{
-		if ((socket_s.connfd = accept(socket_s.sockfd, (SERVADDR_INFO *)NULL, NULL)) < 0)
-			ft_error("accept error", -1);
+		int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+		if (nfds == -1)
+			ft_error("epoll_wait, failed", -1);
+		for (int i = 0; i < nfds; ++i)
+		{
+			if (events[i].data.fd == socket_s.sockfd)
+			{
+				socket_s.connfd = accept(socket_s.sockfd, NULL, NULL);
+				if (socket_s.connfd == -1)
+					ft_error("accept failed", -1);
 
-		pid_t pid = fork();
+				ev.events = EPOLLIN | EPOLLET;
+				ev.data.fd = socket_s.connfd;
 
-		if (pid < 0)
-		{
-			ft_error("fork error", -1);
-		}
-		else if (pid == 0)
-		{
-			close(socket_s.sockfd);
-			handle_client(socket_s.connfd, socket_s);
-			exit(0);
-		}
-		else
-		{
-			close(socket_s.connfd);
-			waitpid(-1, NULL, WNOHANG);
+				if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, socket_s.connfd, &ev) == -1)
+					ft_error("epoll_ctl (1) failed", socket_s.connfd);
+			}
+			else
+			{
+				handle_client(events[i].data.fd, socket_s);
+				// if (epoll_ctl(epoll_fd, EPOLL_CTL_DEL, events[i].data.fd, NULL) == -1)
+				// 	ft_error("epoll_ctl (2) failed", socket_s.connfd); // failed a chaque appel
+			}
 		}
 	}
 
 	close(socket_s.sockfd);
-
+	close(epoll_fd);
 	return (0);
 }
