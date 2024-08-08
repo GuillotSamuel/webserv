@@ -16,6 +16,7 @@
 #include <sys/wait.h>
 
 #define SERVADDR_INFO struct sockaddr
+#define BUFFER_SIZE 4096
 
 /*
 
@@ -33,9 +34,10 @@ typedef struct s_socket
 	int connfd;
 	char *port;
 	struct sockaddr_in servaddr;
-	char receiveline[4096];
-	char socket_buffer[4096];
+	char receiveline[BUFFER_SIZE];
+	char socket_buffer[BUFFER_SIZE];
 	int n;
+	std::string path;
 } t_socket;
 
 void ft_error(std::string str, int connfd)
@@ -61,12 +63,12 @@ std::string ft_get_file_content(const std::string &path)
 	return (oss.str());
 }
 
-std::string	findPath(t_socket socket_s, std::string receivedLine)
+std::string findPath(t_socket socket_s, std::string receivedLine)
 {
-	std::string	path;
-	size_t		path_start;
-	size_t		path_end;
-	
+	std::string path;
+	size_t path_start;
+	size_t path_end;
+
 	path_start = receivedLine.find('/');
 	if (path_start == std::string::npos)
 		ft_error("path_start failed", socket_s.connfd);
@@ -84,29 +86,57 @@ std::string	findPath(t_socket socket_s, std::string receivedLine)
 		return ("/index.html");
 	else
 	{
-		if (path.compare(path.size()-5, 5, ".html") == 0 ) // Le path finis par .html
+		if (path.compare(path.size() - 5, 5, ".html") == 0) // Le path finis par .html
 		{
-			std::cout << path << std::endl; //TEST
+			std::cout << path << std::endl; // TEST
 			return (path);
 		}
 	}
 	return ("");
 }
+void ft_bad_request(t_socket socket_s)
+{
+	std::string error_content = ft_get_file_content("../www/html/errors/400.html");
+	snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
+			 "HTTP/1.0 400 Bad Request\r\n\r\n%s",
+			 error_content.c_str());
+}
+
+void ft_delete(t_socket socket_s)
+{
+	snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
+			 "HTTP/1.0 200 OK\r\n\r\n"
+			 "Received DELETE request\n");
+}
+
+void ft_post(t_socket socket_s)
+{
+	snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
+			 "HTTP/1.0 200 OK\r\n\r\n"
+			 "Received POST request\n");
+}
+
+void ft_get(t_socket &socket_s)
+{
+	std::string get_content;
+	get_content = ft_get_file_content("../www/html" + socket_s.path);
+	snprintf(socket_s.socket_buffer, sizeof(socket_s.socket_buffer),
+			 "HTTP/1.0 200 OK\r\n\r\n%s",
+			 get_content.c_str());
+}
 
 void handle_client(int connfd, t_socket socket_s)
 {
-	char		received_line[4096];
-	char		socket_buffer[4096];
-	std::string	path;
+	char received_line[BUFFER_SIZE];
 
 	memset(received_line, 0, sizeof(received_line));
 
 	if (read(connfd, received_line, sizeof(received_line) - 1) < 0)
 		ft_error("connfd read failed", connfd);
 
-	std::string	received_line_cpy(received_line);
-	size_t		method_end = received_line_cpy.find(' ');
-	std::string	method;
+	std::string received_line_cpy(received_line);
+	size_t method_end = received_line_cpy.find(' ');
+	std::string method;
 
 	// std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl; // TEST
 
@@ -115,42 +145,30 @@ void handle_client(int connfd, t_socket socket_s)
 	else
 		ft_error("method_end failed", connfd);
 
-
 	/* ----- PATH PARSE ----- */
 
-	path = findPath(socket_s, received_line);
+	socket_s.path = findPath(socket_s, received_line);
 
 	/* ----- METHOD ----- */
 
-	if (method == "GET" && path != "")
+	if (method == "GET" && socket_s.path != "")
 	{
-		std::string get_content;
-		get_content = ft_get_file_content("../www/html" + path);
-		snprintf(socket_buffer, sizeof(socket_buffer),
-				 "HTTP/1.0 200 OK\r\n\r\n%s",
-				 get_content.c_str());
+		ft_get(socket_s);
 	}
 	else if (method == "POST")
 	{
-		snprintf(socket_buffer, sizeof(socket_buffer),
-				 "HTTP/1.0 200 OK\r\n\r\n"
-				 "Received POST request\n");
+		ft_post(socket_s);
 	}
 	else if (method == "DELETE")
 	{
-		snprintf(socket_buffer, sizeof(socket_buffer),
-				 "HTTP/1.0 200 OK\r\n\r\n"
-				 "Received DELETE request\n");
+		ft_delete(socket_s);
 	}
-	else if (path != "")
+	else if (socket_s.path != "")
 	{
-		std::string error_content = ft_get_file_content("../www/html/errors/400.html");
-		snprintf(socket_buffer, sizeof(socket_buffer),
-				 "HTTP/1.0 400 Bad Request\r\n\r\n%s",
-				 error_content.c_str());
+		ft_bad_request(socket_s);
 	}
 
-	write(connfd, socket_buffer, strlen(socket_buffer));
+	write(connfd, socket_s.socket_buffer, strlen(socket_s.socket_buffer));
 
 	close(connfd);
 }

@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/05 13:51:54 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/08/07 07:26:29 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@
 #include <sstream>
 #include <cstring>
 #include <fcntl.h>
-#include <unistd.h>
 #include <functional>
 
 #include "serverConfiguration.hpp"
