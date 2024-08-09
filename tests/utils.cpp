@@ -1,9 +1,7 @@
 #include "server.hpp"
 
-void ft_error(std::string str, int connfd)
+void ft_error(std::string str)
 {
-	if (connfd != -1)
-		close(connfd);
 	std::cerr << "Error: " << str << std::endl;
 	exit(EXIT_FAILURE);
 }

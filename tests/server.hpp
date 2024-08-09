@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SERVER_HPP
+#define SERVER_HPP
 
 #include <fstream>
 #include <iostream>
@@ -24,4 +25,6 @@
 
 /* FUNCTIONS */
 
-void ft_error(std::string str, int connfd);
+void ft_error(std::string str);
+
+#endif

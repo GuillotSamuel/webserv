@@ -5,11 +5,11 @@
 int main(int argc, char **argv)
 {
     if (argc != 2)
-		ft_error("wrong arguments", -1);
+		ft_error("wrong arguments");
 
     try
     {
-        ListeningSocket socket(argv[1]);
+        ListeningSocket socket1(argv[1]);
 
         ServerExecution server(socket);
     }

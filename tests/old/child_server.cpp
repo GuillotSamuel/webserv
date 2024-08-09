@@ -154,7 +154,7 @@ void handle_client(int connfd, t_socket socket_s)
 	close(connfd);
 }
 
-int main(int argc, char **argv)
+// int main(int argc, char **argv)
 {
 	// t_socket socket_s;
 
@@ -194,33 +194,33 @@ int main(int argc, char **argv)
 	
 	// struct epoll_event events[MAX_EVENTS];
 
-	while (true)
-	{
-		int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
-		if (nfds == -1)
-			ft_error("epoll_wait, failed", -1);
-		for (int i = 0; i < nfds; ++i)
-		{
-			if (events[i].data.fd == socket_s.sockfd)
-			{
-				socket_s.connfd = accept(socket_s.sockfd, NULL, NULL);
-				if (socket_s.connfd == -1)
-					ft_error("accept failed", -1);
+	// while (true)
+	// {
+	// 	int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+	// 	if (nfds == -1)
+	// 		ft_error("epoll_wait, failed", -1);
+	// 	for (int i = 0; i < nfds; ++i)
+	// 	{
+	// 		if (events[i].data.fd == socket_s.sockfd)
+	// 		{
+	// 			socket_s.connfd = accept(socket_s.sockfd, NULL, NULL);
+	// 			if (socket_s.connfd == -1)
+	// 				ft_error("accept failed", -1);
 
-				ev.events = EPOLLIN | EPOLLET;
-				ev.data.fd = socket_s.connfd;
+	// 			ev.events = EPOLLIN | EPOLLET;
+	// 			ev.data.fd = socket_s.connfd;
 
-				if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, socket_s.connfd, &ev) == -1)
-					ft_error("epoll_ctl (1) failed", socket_s.connfd);
-			}
-			else
-			{
-				handle_client(events[i].data.fd, socket_s);
+	// 			if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, socket_s.connfd, &ev) == -1)
+	// 				ft_error("epoll_ctl (1) failed", socket_s.connfd);
+	// 		}
+	// 		else
+	// 		{
+	// 			handle_client(events[i].data.fd, socket_s);
 				// if (epoll_ctl(epoll_fd, EPOLL_CTL_DEL, events[i].data.fd, NULL) == -1)
 				// 	ft_error("epoll_ctl (2) failed", socket_s.connfd); // failed a chaque appel
-			}
-		}
-	}
+	// 		}
+	// 	}
+	// }
 
 	// close(socket_s.sockfd);
 	// close(epoll_fd);
