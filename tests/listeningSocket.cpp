@@ -1,28 +1,4 @@
-#ifndef SOCKET_HPP
-#define SOCKER_HPP
-#include "server.hpp"
-#include "serverExecution.hpp"
-
-class ListeningSocket
-{
-    private : 
-        int     sockfd;
-        struct  sockaddr_in servaddr;
-        char    *port;
-        
-    public :
-        ListeningSocket();
-        ListeningSocket(char *port);
-        ~ListeningSocket();
-
-        //methods
-
-
-		//getters
-		int	getSockFd();
-};
-	
-ListeningSocket::ListeningSocket() {}
+#include "listeningSocket.hpp"
 
 ListeningSocket::ListeningSocket(char *port): port(port)
 {
@@ -48,9 +24,22 @@ ListeningSocket::~ListeningSocket()
     }
 }
 
-int ListeningSocket::getSockFd()
+int ListeningSocket::getSockFd() const
 {
 	return (this->sockfd);
 }
 
-#endif
+// void	ListeningSocket::setSockfd()
+// {
+
+// }
+
+// void	ListeningSocket::setServaddr()
+// {
+
+// }
+
+// void	ListeningSocket::setPort(char *port)
+// {
+
+// }

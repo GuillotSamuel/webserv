@@ -1,6 +1,4 @@
 #include "server.hpp"
-#include "serverExecution.hpp"
-#include "socket.hpp"
 
 int main(int argc, char **argv)
 {
@@ -9,9 +7,10 @@ int main(int argc, char **argv)
 
     try
     {
-        ListeningSocket socket1(argv[1]);
+        // ListeningSocket *c_socket = new ListeningSocket(argv[1]);
 
-        ServerExecution server(socket);
+        ServerExecution c_server(argv[1]);
+
     }
     catch(const std::exception& e)
     {

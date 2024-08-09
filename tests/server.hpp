@@ -1,5 +1,4 @@
-#ifndef SERVER_HPP
-#define SERVER_HPP
+#pragma once
 
 #include <fstream>
 #include <iostream>
@@ -23,8 +22,8 @@
 #define MAX_EVENTS 10
 #define BUFFER_SIZE 4096
 
+#include "serverExecution.hpp"
+
 /* FUNCTIONS */
 
-void ft_error(std::string str);
-
-#endif
+void	ft_error(std::string str);
