@@ -22,15 +22,8 @@
 #define MAX_EVENTS 10
 #define BUFFER_SIZE 4096
 
-typedef struct s_socket
-{
-	int sockfd;
-	int connfd;
-	char *port;
-	struct sockaddr_in servaddr;
-	char receiveline[BUFFER_SIZE];
-	char socket_buffer[BUFFER_SIZE];
-	int n;
-	std::string path;
-}	t_socket;
+#include "serverExecution.hpp"
 
+/* FUNCTIONS */
+
+void	ft_error(std::string str);

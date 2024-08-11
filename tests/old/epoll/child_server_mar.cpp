@@ -136,13 +136,10 @@ std::string	findPath(t_socket socket_s, std::string receivedLine)
 
 	if (path == "/")
 		return ("/index.html");
-	else
+	else if (path.compare(path.size()-5, 5, ".html") == 0 ) // Le path finis par .html
 	{
-		if (path.compare(path.size()-5, 5, ".html") == 0 ) // Le path finis par .html
-		{
-			std::cout << path << std::endl; //TEST
-			return (path);
-		}
+		std::cout << path << std::endl; //TEST
+		return (path);
 	}
 	return ("");
 }
@@ -174,37 +171,27 @@ void handle_client(int connfd, t_socket socket_s)
 
 	/* ----- METHOD ----- */
 
-	std::cerr << "\n\nTEST : " << socket_s.path << "\n\n" << std::endl;
+	std::cerr << "\n\nTEST : -" << socket_s.path << "-\n\n" << std::endl;
 
 	if (method == "GET" && socket_s.path != "")
 	{
-		fprintf(stderr, "TEST 1\n"); // TEST
 		ft_get(socket_s);
-		fprintf(stderr, "TEST 2\n"); // TEST
 	}
 	else if (method == "POST")
 	{
-		fprintf(stderr, "TEST 3\n"); // TEST
 		ft_post(socket_s);
-		fprintf(stderr, "TEST 4\n"); // TEST
 	}
 	else if (method == "DELETE")
 	{
-		fprintf(stderr, "TEST 5\n"); // TEST
 		ft_delete(socket_s);
-		fprintf(stderr, "TEST 6\n"); // TEST
 	}
 	else if (socket_s.path != "")
 	{
-		fprintf(stderr, "TEST 7\n"); // TEST
 		ft_bad_request(socket_s, "../www/html/errors/400.html");
-		fprintf(stderr, "TEST 8\n"); // TEST
 	}
-fprintf(stderr, "TEST 9\n"); // TEST
+
 	write(connfd, socket_s.socket_buffer, strlen(socket_s.socket_buffer));
-fprintf(stderr, "TEST 10\n"); // TEST
 	close(connfd);
-	fprintf(stderr, "TEST 11\n"); // TEST
 }
 
 int main(int argc, char **argv)

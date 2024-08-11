@@ -17,7 +17,7 @@
 #include <sys/epoll.h>
 
 #define SERVADDR_INFO struct sockaddr
-#define MAX_EVENTS 10
+#define MAX_EVENTS 2
 #define BUFFER_SIZE 4096
 
 /*
@@ -42,6 +42,8 @@ typedef struct s_socket
 	std::string path;
 }	t_socket;
 
+void ft_bad_request(t_socket socket_s);
+
 void ft_error(std::string str, int connfd)
 {
 	if (connfd != -1)
@@ -56,8 +58,8 @@ std::string ft_get_file_content(t_socket socket_s, const std::string &path)
 
 	if (!file.is_open())
 	{
-		std::cerr << "Error: get file content failed" << std::endl; // TEST
-		ft_bad_request(socket_s, "../www/html/errors/400.html")
+		std::cerr << "Error: get file content failed" << std::endl;
+		ft_bad_request(socket_s);
 	}
 
 	std::ostringstream oss;
@@ -66,12 +68,12 @@ std::string ft_get_file_content(t_socket socket_s, const std::string &path)
 	return (oss.str());
 }
 
-std::string	findPath(t_socket socket_s, std::string receivedLine)
+std::string findPath(t_socket socket_s, std::string receivedLine)
 {
-	std::string	path;
-	size_t		path_start;
-	size_t		path_end;
-	
+	std::string path;
+	size_t path_start;
+	size_t path_end;
+
 	path_start = receivedLine.find('/');
 	if (path_start == std::string::npos)
 		ft_error("path_start failed", socket_s.connfd);
@@ -89,9 +91,9 @@ std::string	findPath(t_socket socket_s, std::string receivedLine)
 		return ("/index.html");
 	else
 	{
-		if (path.compare(path.size()-5, 5, ".html") == 0 ) // Le path finis par .html
+		if (path.compare(path.size() - 5, 5, ".html") == 0) // Le path finis par .html
 		{
-			std::cout << path << std::endl; //TEST
+			std::cout << path << std::endl; // TEST
 			return (path);
 		}
 	}
@@ -131,60 +133,54 @@ void ft_get(t_socket &socket_s)
 
 void handle_client(int connfd, t_socket socket_s)
 {
-	char		received_line[BUFFER_SIZE];
+	char received_line[BUFFER_SIZE];
 
 	memset(received_line, 0, sizeof(received_line));
 
 	if (read(connfd, received_line, sizeof(received_line) - 1) < 0)
 		ft_error("connfd read failed", connfd);
 
-	std::string	received_line_cpy(received_line);
-	size_t		method_end = received_line_cpy.find(' ');
-	std::string	method;
+	std::string received_line_cpy(received_line);
+	size_t method_end = received_line_cpy.find(' ');
+	std::string method;
 
-	// std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl; // TEST
+	std::cout << "\n\nTEST 1: " << received_line_cpy << "\n\n" << std::endl; // TEST
 
 	if (method_end != std::string::npos)
 		method = received_line_cpy.substr(0, method_end);
 	else
 		ft_error("method_end failed", connfd);
 
-
 	/* ----- PATH PARSE ----- */
 
 	socket_s.path = findPath(socket_s, received_line);
 
 	/* ----- METHOD ----- */
-
-	if (method == "GET" && path != "")
+	std::cout << "-" <<socket_s.path << "-" << std::endl; //TEST
+	if (method == "GET" && socket_s.path != "")
 	{
-		fprintf(stderr, "TEST 1\n"); // TEST
+		printf("1\n");
 		ft_get(socket_s);
-		fprintf(stderr, "TEST 2\n"); // TEST
 	}
 	else if (method == "POST")
 	{
-		fprintf(stderr, "TEST 3\n"); // TEST
+		printf("2\n");
 		ft_post(socket_s);
-		fprintf(stderr, "TEST 4\n"); // TEST
 	}
 	else if (method == "DELETE")
 	{
-		fprintf(stderr, "TEST 5\n"); // TEST
+		printf("3\n");
 		ft_delete(socket_s);
-		fprintf(stderr, "TEST 6\n"); // TEST
 	}
-	else /* if (path != "") */
+	else
 	{
-		fprintf(stderr, "TEST 7\n"); // TEST
+		printf("4\n");
 		ft_bad_request(socket_s);
-		fprintf(stderr, "TEST 8\n"); // TEST
 	}
-fprintf(stderr, "TEST 9\n"); // TEST
+
 	write(connfd, socket_s.socket_buffer, strlen(socket_s.socket_buffer));
-fprintf(stderr, "TEST 10\n"); // TEST
+
 	close(connfd);
-	fprintf(stderr, "TEST 11\n"); // TEST
 }
 
 int main(int argc, char **argv)
@@ -245,7 +241,6 @@ int main(int argc, char **argv)
 
 				if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, socket_s.connfd, &ev) == -1)
 					ft_error("epoll_ctl (1) failed", socket_s.connfd);
-				
 			}
 			else
 			{
