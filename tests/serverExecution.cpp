@@ -3,10 +3,13 @@
 ServerExecution::ServerExecution(char *port)
 {
     this->_socket = new ListeningSocket(port);
-    std::cout << "TEST getSockFd() : " << _socket->getSockFd() << std::endl; // TEST
 	this->epoll_fd = epoll_create(1);
+
 	if (this->epoll_fd == -1)
+	{
 		ft_error("epoll_create failed");
+	}
+
 	this->ev.events = EPOLLIN;
 	this->ev.data.fd = _socket->getSockFd();
 
@@ -14,6 +17,8 @@ ServerExecution::ServerExecution(char *port)
 	{
 		ft_error("epoll_ctl failed");
 	}
+	
+	serverExecutionFunction();
 }
 
 ServerExecution::~ServerExecution()
@@ -31,23 +36,32 @@ void	ServerExecution::serverExecutionFunction()
 		int nfds = epoll_wait(this->epoll_fd, this->events, MAX_EVENTS, -1);
 
 		if (nfds == -1)
+		{
 			ft_error("epoll_wait, failed");
+		}
+
 		for (int i = 0; i < nfds; ++i)
 		{
 			if (this->events[i].data.fd == this->_socket->getSockFd())
 			{
 				this->connfd = accept(this->_socket->getSockFd(), NULL, NULL);
 				if (this->connfd == -1)
+				{
 					ft_error("accept failed");
+				}
 
 				this->ev.events = EPOLLIN | EPOLLET;
 				this->ev.data.fd = this->connfd;
 
 				if (epoll_ctl(this->epoll_fd, EPOLL_CTL_ADD, this->connfd, &ev) == -1)
+				{
 					ft_error("epoll_ctl (1) failed");
+				}
 			}
 			else
+			{
 				handle_client();
+			}
 		}
 	}
 }
@@ -57,7 +71,9 @@ std::string	ServerExecution::getFileContent(const std::string &path)
 	std::ifstream file(path.c_str());
 
 	if (!file.is_open())
+	{
 		return (getFileContent("../www/html/errors/400.html"));
+	}
 
 	std::ostringstream oss;
 	oss << file.rdbuf();
