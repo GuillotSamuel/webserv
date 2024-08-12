@@ -17,7 +17,7 @@ Server::Server(char *port)
 	{
 		close(this->_epoll_fd);
 		close(this->_socket->getSocket_fd());
-		delete(this->_socket);
+		delete (this->_socket);
 		throw(std::runtime_error("Error: epoll_ctl creation failed"));
 	}
 
@@ -77,11 +77,11 @@ std::string Server::getFileContent(const std::string &path)
 
 	if (!file.is_open())
 	{
-		return("");
+		return (getFileContent("../www/html/errors/400.html"));
 	}
 
 	oss << file.rdbuf();
-	return(oss.str());
+	return (oss.str());
 }
 
 std::string Server::findContent(const std::string &receivedLine)
@@ -92,7 +92,7 @@ std::string Server::findContent(const std::string &receivedLine)
 		close(this->_connexion_fd);
 		close(this->_epoll_fd);
 		close(this->_socket->getSocket_fd());
-		delete(this->_socket);
+		delete (this->_socket);
 		throw(std::runtime_error("Error: path_start failed"));
 	}
 
@@ -102,25 +102,25 @@ std::string Server::findContent(const std::string &receivedLine)
 		close(this->_connexion_fd);
 		close(this->_epoll_fd);
 		close(this->_socket->getSocket_fd());
-		delete(this->_socket);
+		delete (this->_socket);
 		throw(std::runtime_error("Error: path_end failed"));
 	}
 	this->_path = receivedLine.substr(path_start, path_end - path_start);
 
 	if (this->_path == "/")
 	{
-		return(getFileContent("../www/html/index.html"));
+		return (getFileContent("../www/html/index.html"));
 	}
 	else if (this->_path.compare(this->_path.size() - 5, 5, ".html") == 0)
 	{
-		return(getFileContent("../www/html" + this->_path));
+		return (getFileContent("../www/html" + this->_path));
 	}
 	else if (this->_path.compare(this->_path.size() - 4, 4, ".css") == 0)
 	{
-		return(getFileContent("../www/styles" + this->_path));
+		return (getFileContent("../www/styles" + this->_path));
 	}
 
-	return(getFileContent("../www/html/errors/400.html"));
+	return (getFileContent("../www/html/errors/400.html"));
 }
 
 std::string Server::findMethod(const std::string &receivedLine)
@@ -135,10 +135,10 @@ std::string Server::findMethod(const std::string &receivedLine)
 		close(this->_connexion_fd);
 		close(this->_epoll_fd);
 		close(this->_socket->getSocket_fd());
-		delete(this->_socket);
+		delete (this->_socket);
 		throw(std::runtime_error("Error: find method failed"));
 	}
-	return(this->_method);
+	return (this->_method);
 }
 
 void Server::handle_client()
@@ -151,7 +151,7 @@ void Server::handle_client()
 		close(this->_connexion_fd);
 		close(this->_epoll_fd);
 		close(this->_socket->getSocket_fd());
-		delete(this->_socket);
+		delete (this->_socket);
 		throw(std::runtime_error("Error: read handle client failed"));
 	}
 
@@ -189,5 +189,5 @@ Server::~Server()
 {
 	close(this->_epoll_fd);
 	close(this->_socket->getSocket_fd());
-	delete(this->_socket);
+	delete (this->_socket);
 }
