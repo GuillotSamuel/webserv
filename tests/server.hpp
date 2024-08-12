@@ -1,29 +1,29 @@
 #pragma once
 
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <cstdlib>
-#include <cstring>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <sys/wait.h>
-#include <sys/epoll.h>
+#include "listeningSocket.hpp"
 
-#define SERVADDR_INFO struct sockaddr
-#define MAX_EVENTS 10
-#define BUFFER_SIZE 4096
+class ListeningSocket;
 
-#include "serverExecution.hpp"
+class Server
+{
+private:
+	ListeningSocket 	*_socket;
+	struct epoll_event	_event;
+	struct epoll_event	_events[MAX_EVENTS];
+	int					_epoll_fd;
+	int					_connexion_fd;
+	std::string			_method;
+	std::string			_path;
+	char				received_line[BUFFER_SIZE];
+	char				socket_buffer[BUFFER_SIZE];
 
-/* FUNCTIONS */
+	void				ServerExecution();
+	std::string			findContent(const std::string &receivedLine);
+	std::string			findMethod(const std::string &receivedLine);
+	void				handle_client();
+	std::string			getFileContent(const std::string &path);
 
-void	ft_error(std::string str);
+public:
+	Server(char *port);
+	~Server();
+};
