@@ -27,6 +27,8 @@ ServerExecution::~ServerExecution()
 	{
 		close(epoll_fd);
 	}
+	if (connfd != -1)
+		close(connfd);
 }
 
 void	ServerExecution::serverExecutionFunction()
@@ -39,12 +41,17 @@ void	ServerExecution::serverExecutionFunction()
 		{
 			ft_error("epoll_wait, failed");
 		}
-
+		std::cout << "TEST : nfds = " << nfds << std::endl; // TEST
 		for (int i = 0; i < nfds; ++i)
 		{
+			std::cout << "\nFOR\n" << std::endl; // TEST
+			std::cout << "TEST 0 : .data.fd = " << this->events[i].data.fd << std::endl; // TEST
+			std::cout << "TEST 1 : sockfd = " << this->_socket->getSockFd() << std::endl; // TEST
 			if (this->events[i].data.fd == this->_socket->getSockFd())
 			{
+				std::cout << "\nIF\n" << std::endl; // TEST
 				this->connfd = accept(this->_socket->getSockFd(), NULL, NULL);
+				std::cout << "TEST 1 : connfd = " << this->connfd << std::endl; // TEST
 				if (this->connfd == -1)
 				{
 					ft_error("accept failed");
@@ -60,10 +67,13 @@ void	ServerExecution::serverExecutionFunction()
 			}
 			else
 			{
+				std::cout << "\nELSE\n" << std::endl; // TEST
+				std::cout << "TEST 2 : connfd = " << this->connfd << std::endl; // TEST
 				handle_client();
 			}
 		}
 	}
+	
 }
 
 std::string	ServerExecution::getFileContent(const std::string &path)
@@ -130,10 +140,16 @@ std::string ServerExecution::findMethod(std::string receivedLine)
 
 void ServerExecution::handle_client()
 {
+	int	n;
 	memset(this->received_line, 0, sizeof(this->received_line));
-	if (read(this->connfd, this->received_line, sizeof(this->received_line) - 1) < 0)
-		ft_error("connfd read failed");
+	n = read(this->connfd, this->received_line, sizeof(this->received_line) - 1);
+	if (n < 0)
+	{
+		std::cout << "TEST : n = " << n << std::endl; // TEST
+		ft_error("read failed");
+	}
 	std::string	received_line_cpy(this->received_line);
+	std::cout << "RECEIVED_LINE :" << received_line << std::endl; // TEST
 	
 	this->method = findMethod(received_line_cpy);
 	this->get_content = findContent(this->received_line);
