@@ -1,22 +1,16 @@
 #pragma once
 
-#include "server.hpp"
-#include "serverExecution.hpp"
+#include "include.hpp"
 
 class ListeningSocket
 {
-    private : 
-        int                 sockfd;
-        struct  sockaddr_in servaddr;
-        char                *port;
-        
-    public :
-        ListeningSocket(char *port);
-        ~ListeningSocket();
+private:
+	struct sockaddr_in	_server_address;
+	int					_socket_fd;
 
-        //methods
+public:
+	ListeningSocket(char *port);
+	~ListeningSocket();
 
-
-		//getters
-		int	getSockFd() const;
+	int	getSocket_fd() const;
 };

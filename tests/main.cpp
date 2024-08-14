@@ -1,21 +1,23 @@
-#include "server.hpp"
+#include "include.hpp"
 
 int main(int argc, char **argv)
 {
-    if (argc != 2)
-		ft_error("wrong arguments");
+	// std::list<FormData> my_list;
+	// std::list<FormData>::iterator it;
+	try
+	{
+		Server server_object(argv[1]);
+		// my_list = server_object.getList(); // TEST
+		// for (int i = 0; i < my_list.size(); ++i)
+		// 	std::cout << "First Name		= " << it->getFirstName() << std::endl;// TEST
+		// 	std::cout << "Last Name		= " << it->getLastName() << std::endl;// TEST
+		// 	std::cout << "Favorite Color = " << it->getFavoriteColor() << std::endl;// TEST
+		// 	std::cout << "Email Address	= " << it->getEmailAdress() << std::endl;// TEST
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 
-    try
-    {
-        // ListeningSocket *c_socket = new ListeningSocket(argv[1]);
-
-        ServerExecution c_server(argv[1]);
-
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-    
-    return (0);
+	return (0);
 }
