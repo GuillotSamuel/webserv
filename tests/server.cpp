@@ -1,13 +1,14 @@
-#include "server.hpp"
+// #include "server.hpp"
+#include "include.hpp"
 
 Server::Server(char *port)
 {
 	this->_socket = new ListeningSocket(port);
-
+	this->_connexion_fd = -1;
+	this->_epoll_fd = -1;
 	if ((this->_epoll_fd = epoll_create1(0)) == -1)
 	{
-		close(this->_socket->getSocket_fd());
-		throw(std::runtime_error("Error: epoll_fd creation failed"));
+		error("Error: epoll_fd creation failed");
 	}
 
 	this->_event.events = EPOLLIN;
@@ -15,10 +16,7 @@ Server::Server(char *port)
 
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_socket->getSocket_fd(), &this->_event) == -1)
 	{
-		close(this->_epoll_fd);
-		close(this->_socket->getSocket_fd());
-		delete (this->_socket);
-		throw(std::runtime_error("Error: epoll_ctl creation failed"));
+		error("Error: epoll_ctl creation failed");
 	}
 
 	ServerExecution();
@@ -31,10 +29,7 @@ void Server::ServerExecution()
 		int nfds = epoll_wait(this->_epoll_fd, this->_events, MAX_EVENTS, -1);
 		if (nfds == -1)
 		{
-			close(this->_epoll_fd);
-			close(this->_socket->getSocket_fd());
-			delete(this->_socket);
-			throw(std::runtime_error("Error: epoll_wait failed"));
+			error("Error: epoll_wait failed");
 		}
 
 		for (int i = 0; i < nfds; ++i)
@@ -44,10 +39,7 @@ void Server::ServerExecution()
 				this->_connexion_fd = accept(this->_socket->getSocket_fd(), NULL, NULL);
 				if (this->_connexion_fd == -1)
 				{
-					close(this->_epoll_fd);
-					close(this->_socket->getSocket_fd());
-					delete(this->_socket);
-					throw(std::runtime_error("Error: accept failed"));
+					error("Error: accept failed");
 				}
 
 				this->_event.events = EPOLLIN | EPOLLET;
@@ -55,16 +47,20 @@ void Server::ServerExecution()
 
 				if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_connexion_fd, &this->_event) == -1)
 				{
-					close(this->_connexion_fd);
-					close(this->_epoll_fd);
-					close(this->_socket->getSocket_fd());
-					delete(this->_socket);
-					throw(std::runtime_error("Error: epoll_ctl failed"));
+					error("Error: epoll_ctl failed");
 				}
 			}
 			else
 			{
-				handle_client();
+				pid_t pid = fork();
+				if (pid == -1)
+					error("fork failed");
+				if (pid == 0)
+				{
+					handle_client();
+					exit(EXIT_SUCCESS);
+				}
+				close(this->_connexion_fd);
 			}
 		}
 	}
@@ -89,21 +85,13 @@ std::string Server::findContent(const std::string &receivedLine)
 	size_t path_start = receivedLine.find('/');
 	if (path_start == std::string::npos)
 	{
-		close(this->_connexion_fd);
-		close(this->_epoll_fd);
-		close(this->_socket->getSocket_fd());
-		delete (this->_socket);
-		throw(std::runtime_error("Error: path_start failed"));
+		error("Error: path_start failed");
 	}
 
 	size_t path_end = receivedLine.find(' ', path_start);
 	if (path_end == std::string::npos)
 	{
-		close(this->_connexion_fd);
-		close(this->_epoll_fd);
-		close(this->_socket->getSocket_fd());
-		delete (this->_socket);
-		throw(std::runtime_error("Error: path_end failed"));
+		error("Error: path_end failed");
 	}
 	this->_path = receivedLine.substr(path_start, path_end - path_start);
 
@@ -119,7 +107,7 @@ std::string Server::findContent(const std::string &receivedLine)
 	{
 		return (getFileContent("../www/styles" + this->_path));
 	}
-
+	
 	return (getFileContent("../www/html/errors/400.html"));
 }
 
@@ -132,13 +120,36 @@ std::string Server::findMethod(const std::string &receivedLine)
 	}
 	else
 	{
-		close(this->_connexion_fd);
-		close(this->_epoll_fd);
-		close(this->_socket->getSocket_fd());
-		delete (this->_socket);
-		throw(std::runtime_error("Error: find method failed"));
+		error("Error: find method failed");
 	}
 	return (this->_method);
+}
+
+void	Server::ft_get(std::string get_content)
+{
+	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
+					"HTTP/1.0 200 OK\r\n\r\n%s",
+					get_content.c_str());
+}
+
+void	Server::ft_post(std::string received_line)
+{
+	setFormData(received_line);
+	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
+				"HTTP/1.0 200 OK\r\n\r\nReceived POST request\n");
+}
+
+void	Server::ft_delete()
+{
+	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
+					"HTTP/1.0 200 OK\r\n\r\nReceived DELETE request\n");
+}
+
+void	Server::ft_badRequest(std::string get_content)
+{
+	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
+					"HTTP/1.0 400 Bad Request\r\n\r\n%s",
+					get_content.c_str());
 }
 
 void Server::handle_client()
@@ -148,11 +159,8 @@ void Server::handle_client()
 	n = read(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1);
 	if (n < 0)
 	{
-		close(this->_connexion_fd);
-		close(this->_epoll_fd);
-		close(this->_socket->getSocket_fd());
-		delete (this->_socket);
-		throw(std::runtime_error("Error: read handle client failed"));
+		error("Error: read handle client failed");
+		exit(EXIT_FAILURE);
 	}
 
 	std::string received_line_cpy(this->received_line);
@@ -161,25 +169,19 @@ void Server::handle_client()
 
 	if (this->_method == "GET")
 	{
-		snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-				 "HTTP/1.0 200 OK\r\n\r\n%s",
-				 get_content.c_str());
+		ft_get(get_content);
 	}
 	else if (this->_method == "POST")
 	{
-		snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-				 "HTTP/1.0 200 OK\r\n\r\nReceived POST request\n");
+		ft_post(received_line);
 	}
 	else if (this->_method == "DELETE")
 	{
-		snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-				 "HTTP/1.0 200 OK\r\n\r\nReceived DELETE request\n");
+		ft_delete();
 	}
 	else
 	{
-		snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-				 "HTTP/1.0 400 Bad Request\r\n\r\n%s",
-				 get_content.c_str());
+		ft_badRequest(get_content);
 	}
 	write(this->_connexion_fd, this->socket_buffer, strlen(this->socket_buffer));
 	close(this->_connexion_fd);
@@ -190,4 +192,91 @@ Server::~Server()
 	close(this->_epoll_fd);
 	close(this->_socket->getSocket_fd());
 	delete (this->_socket);
+}
+
+void	Server::setFormData(std::string receivedLine)
+{
+	FormData	*data = new FormData();
+	std::string	firstName;
+	std::string	lastName;
+	std::string	favoriteColor;
+	std::string	emailAdress;
+
+	// std::cout << "TEST : " << receivedLine << std::endl; // TEST
+
+	size_t	fn = receivedLine.find("first-name=") + 11; // on est sur le char just apres =
+	if (fn == std::string::npos)
+		error("Error: set Form Data failed");
+
+	size_t	endfn = receivedLine.find("&", fn); // on est sur le char &
+	if (endfn == std::string::npos)
+		error("Error: set Form Data failed");
+
+	firstName = receivedLine.substr(fn, (endfn - fn)); // a partir de = + 1 jusqua &
+
+	size_t	ln = receivedLine.find("last-name=", endfn) + 10; // on est sur le char just apres =
+	if (ln == std::string::npos)
+		error("Error: set Form Data failed");
+
+	size_t	endln = receivedLine.find("&", endfn + 1); // on part du &+1 et on est sur le char &
+	if (endln == std::string::npos)
+		error("Error: set Form Data failed");
+
+	lastName = receivedLine.substr(ln, (endln - ln));
+
+	size_t	fc = receivedLine.find("favorite-color=", ln) + 15;
+	if (fc == std::string::npos)
+		error("Error: set Form Data failed");
+
+	size_t	endfc = receivedLine.find("&", endln + 1);
+	if (endfc == std::string::npos)
+		error("Error: set Form Data failed");
+
+	favoriteColor = receivedLine.substr(fc, (endfc - fc));
+
+	size_t	ea = receivedLine.find("email=", fc) + 6;
+	if (ea == std::string::npos)
+		error("Error: set Form Data failed");
+
+	size_t	endea = receivedLine.find("&", endfc + 1);
+	if (endea == std::string::npos)
+		error("Error: set Form Data failed");
+
+	// emailAdress = receivedLine.substr(ea, (endea - ea));
+	// data->setFirstName(firstName);
+	// data->setLastName(lastName);
+	// data->setFavoriteColor(favoriteColor);
+	// data->setEmailAdress(emailAdress);
+	// this->my_list.push_back(*data);
+	
+	std::cout << *data << std::endl; //TEST
+}
+
+void	Server::error(std::string errorType)
+{
+	// if (this->_connexion_fd > 0)
+	// {
+	// 	if (close(this->_connexion_fd) == -1)
+	// 		printf("TEST, un probleme lors de la fermeture du connexion fd\n"); // TEST
+	// }
+	// if (this->_epoll_fd > 0)
+	// {
+	// 	if (close(this->_epoll_fd) == -1)
+	// 		printf("TEST, un probleme lors de la fermeture du epoll fd\n"); // TEST
+	// }
+	// if (this->_socket->getSocket_fd() > 0)
+	// {
+	// 	if (close(this->_socket->getSocket_fd()) == -1)
+	// 		printf("TEST, un probleme lors de la fermeture du socket fd\n"); // TEST
+
+	// }
+	// if (this->_socket)
+	// 	delete (this->_socket);
+	throw(std::runtime_error(errorType));
+}
+
+
+std::list<FormData>				Server::getList()
+{
+	return (this->my_list);
 }
