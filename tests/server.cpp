@@ -1,11 +1,13 @@
 // #include "server.hpp"
 #include "include.hpp"
 
-Server::Server(char *port)
+Server::Server(char *port, char **envp)
 {
 	this->_socket = new ListeningSocket(port);
+	this->_envp = envp;
 	this->_connexion_fd = -1;
 	this->_epoll_fd = -1;
+
 	if ((this->_epoll_fd = epoll_create1(0)) == -1)
 	{
 		error("Error: epoll_fd creation failed");
@@ -52,15 +54,7 @@ void Server::ServerExecution()
 			}
 			else
 			{
-				pid_t pid = fork();
-				if (pid == -1)
-					error("fork failed");
-				if (pid == 0)
-				{
-					handle_client();
-					exit(EXIT_SUCCESS);
-				}
-				close(this->_connexion_fd);
+				handle_client();
 			}
 		}
 	}
@@ -107,7 +101,12 @@ std::string Server::findContent(const std::string &receivedLine)
 	{
 		return (getFileContent("../www/styles" + this->_path));
 	}
-	
+	else if (is_cgi_script(this->_path.c_str()))
+	{
+		execute_cgi_script();
+		return (this->socket_buffer);
+	}
+
 	return (getFileContent("../www/html/errors/400.html"));
 }
 
@@ -125,31 +124,31 @@ std::string Server::findMethod(const std::string &receivedLine)
 	return (this->_method);
 }
 
-void	Server::ft_get(std::string get_content)
+void Server::ft_get(std::string get_content)
 {
 	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-					"HTTP/1.0 200 OK\r\n\r\n%s",
-					get_content.c_str());
+			 "HTTP/1.0 200 OK\r\n\r\n%s",
+			 get_content.c_str());
 }
 
-void	Server::ft_post(std::string received_line)
+void Server::ft_post(std::string received_line)
 {
 	setFormData(received_line);
 	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-				"HTTP/1.0 200 OK\r\n\r\nReceived POST request\n");
+			 "HTTP/1.0 200 OK\r\n\r\nReceived POST request\n");
 }
 
-void	Server::ft_delete()
+void Server::ft_delete()
 {
 	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-					"HTTP/1.0 200 OK\r\n\r\nReceived DELETE request\n");
+			 "HTTP/1.0 200 OK\r\n\r\nReceived DELETE request\n");
 }
 
-void	Server::ft_badRequest(std::string get_content)
+void Server::ft_badRequest(std::string get_content)
 {
 	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-					"HTTP/1.0 400 Bad Request\r\n\r\n%s",
-					get_content.c_str());
+			 "HTTP/1.0 400 Bad Request\r\n\r\n%s",
+			 get_content.c_str());
 }
 
 void Server::handle_client()
@@ -169,22 +168,36 @@ void Server::handle_client()
 
 	if (this->_method == "GET")
 	{
+		/* if (is_cgi_script(this->_path.c_str()))
+		{
+			execute_cgi_script();
+		}
+		else
+		{ */
 		ft_get(get_content);
-	}
-	else if (this->_method == "POST")
+/* 		}
+ */	}
+else if (this->_method == "POST")
+{
+	/* if (is_cgi_script(this->_path.c_str()))
 	{
-		ft_post(received_line);
-	}
-	else if (this->_method == "DELETE")
-	{
-		ft_delete();
+		execute_cgi_script();
 	}
 	else
-	{
-		ft_badRequest(get_content);
-	}
-	write(this->_connexion_fd, this->socket_buffer, strlen(this->socket_buffer));
-	close(this->_connexion_fd);
+	{ */
+	ft_post(received_line);
+/* 		}
+ */	}
+else if (this->_method == "DELETE")
+{
+	ft_delete();
+}
+else
+{
+	ft_badRequest(get_content);
+}
+write(this->_connexion_fd, this->socket_buffer, strlen(this->socket_buffer));
+close(this->_connexion_fd);
 }
 
 Server::~Server()
@@ -194,65 +207,65 @@ Server::~Server()
 	delete (this->_socket);
 }
 
-void	Server::setFormData(std::string receivedLine)
+void Server::setFormData(std::string receivedLine)
 {
-	FormData	*data = new FormData();
-	std::string	firstName;
-	std::string	lastName;
-	std::string	favoriteColor;
-	std::string	emailAdress;
+	FormData *data = new FormData();
+	std::string firstName;
+	std::string lastName;
+	std::string favoriteColor;
+	std::string emailAdress;
 
 	// std::cout << "TEST : " << receivedLine << std::endl; // TEST
 
-	size_t	fn = receivedLine.find("first-name=") + 11; // on est sur le char just apres =
+	size_t fn = receivedLine.find("first-name=") + 11; // on est sur le char just apres =
 	if (fn == std::string::npos)
 		error("Error: set Form Data failed");
 
-	size_t	endfn = receivedLine.find("&", fn); // on est sur le char &
+	size_t endfn = receivedLine.find("&", fn); // on est sur le char &
 	if (endfn == std::string::npos)
 		error("Error: set Form Data failed");
 
 	firstName = receivedLine.substr(fn, (endfn - fn)); // a partir de = + 1 jusqua &
 
-	size_t	ln = receivedLine.find("last-name=", endfn) + 10; // on est sur le char just apres =
+	size_t ln = receivedLine.find("last-name=", endfn) + 10; // on est sur le char just apres =
 	if (ln == std::string::npos)
 		error("Error: set Form Data failed");
 
-	size_t	endln = receivedLine.find("&", endfn + 1); // on part du &+1 et on est sur le char &
+	size_t endln = receivedLine.find("&", endfn + 1); // on part du &+1 et on est sur le char &
 	if (endln == std::string::npos)
 		error("Error: set Form Data failed");
 
 	lastName = receivedLine.substr(ln, (endln - ln));
 
-	size_t	fc = receivedLine.find("favorite-color=", ln) + 15;
+	size_t fc = receivedLine.find("favorite-color=", ln) + 15;
 	if (fc == std::string::npos)
 		error("Error: set Form Data failed");
 
-	size_t	endfc = receivedLine.find("&", endln + 1);
+	size_t endfc = receivedLine.find("&", endln + 1);
 	if (endfc == std::string::npos)
 		error("Error: set Form Data failed");
 
 	favoriteColor = receivedLine.substr(fc, (endfc - fc));
 
-	size_t	ea = receivedLine.find("email=", fc) + 6;
+	size_t ea = receivedLine.find("email=", fc) + 6;
 	if (ea == std::string::npos)
 		error("Error: set Form Data failed");
 
-	size_t	endea = receivedLine.find("&", endfc + 1);
+	size_t endea = receivedLine.find("&", endfc + 1);
 	if (endea == std::string::npos)
 		error("Error: set Form Data failed");
 
-	// emailAdress = receivedLine.substr(ea, (endea - ea));
-	// data->setFirstName(firstName);
-	// data->setLastName(lastName);
-	// data->setFavoriteColor(favoriteColor);
-	// data->setEmailAdress(emailAdress);
-	// this->my_list.push_back(*data);
-	
-	std::cout << *data << std::endl; //TEST
+	emailAdress = receivedLine.substr(ea, (endea - ea));
+	data->setFirstName(firstName);
+	data->setLastName(lastName);
+	data->setFavoriteColor(favoriteColor);
+	data->setEmailAdress(emailAdress);
+	this->my_list.push_back(*data);
+
+	std::cout << *data << std::endl; // TEST
 }
 
-void	Server::error(std::string errorType)
+void Server::error(std::string errorType)
 {
 	// if (this->_connexion_fd > 0)
 	// {
@@ -275,8 +288,67 @@ void	Server::error(std::string errorType)
 	throw(std::runtime_error(errorType));
 }
 
-
-std::list<FormData>				Server::getList()
+std::list<FormData> Server::getList()
 {
 	return (this->my_list);
+}
+
+void Server::execute_cgi_script()
+{
+	int pipefd[2];
+	if (pipe(pipefd) == -1)
+	{
+		error("Error: pipe creation failed");
+	}
+
+	int pid = fork();
+	if (pid == -1)
+	{
+		error("Error: fork cgi failed");
+	}
+	else if (pid == 0)
+	{
+		close(pipefd[0]);
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+
+		char *argv[] = {const_cast<char *>(this->_path.c_str()), NULL};
+		execve(argv[0], argv, this->_envp);
+
+		error("Error: execve cgi failed");
+	}
+	else
+	{
+		close(pipefd[1]);
+
+		char buffer[BUFFER_SIZE];
+		int n = 0;
+
+		while ((n = read(pipefd[0], buffer, sizeof(buffer) - 1)) > 0)
+		{
+			buffer[n] = '\0';
+			strncat(this->socket_buffer, buffer, sizeof(socket_buffer));
+		}
+		close(pipefd[0]);
+		waitpid(pid, NULL, 0);
+	}
+}
+
+bool Server::is_cgi_script(const char *path)
+{
+
+	std::cout << path << std::endl;
+	const char *cgi_extension = ".cgi";
+	size_t path_length = std::strlen(path);
+	size_t extension_length = std::strlen(cgi_extension);
+
+	if (path_length > extension_length)
+	{
+		if (std::strcmp(path + path_length - extension_length, cgi_extension) == 0)
+		{
+			return (true);
+		}
+	}
+
+	return (false);
 }
