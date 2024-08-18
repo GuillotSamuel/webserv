@@ -336,11 +336,11 @@ void Server::execute_cgi_script()
 
 bool Server::is_cgi_script(const char *path)
 {
-
 	std::cout << path << std::endl;
-	const char *cgi_extension = ".cgi";
+	const char *cgi_extension = ".py"; // TEST with python files only  see if wee need a cgi check
 	size_t path_length = std::strlen(path);
 	size_t extension_length = std::strlen(cgi_extension);
+
 
 	if (path_length > extension_length)
 	{
@@ -349,6 +349,5 @@ bool Server::is_cgi_script(const char *path)
 			return (true);
 		}
 	}
-
 	return (false);
 }
