@@ -33,7 +33,7 @@ class Server
 		void				ft_delete();
 		void				ft_badRequest(std::string get_content);
 		bool				is_cgi_script(const char *path);
-		void				execute_cgi_script();
+		std::string			execute_cgi_script();
 	public:
 		Server(char *port, char **envp);
 		~Server();

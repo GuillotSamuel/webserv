@@ -67,9 +67,7 @@ std::string Server::getFileContent(const std::string &path)
 	std::ostringstream oss;
 
 	if (!file.is_open())
-	{
 		return (getFileContent("../www/html/errors/400.html"));
-	}
 
 	oss << file.rdbuf();
 	return (oss.str());
@@ -79,39 +77,21 @@ std::string Server::findContent(const std::string &receivedLine)
 {
 	size_t path_start = receivedLine.find('/');
 	if (path_start == std::string::npos)
-	{
 		error("Error: path_start failed");
-	}
 
 	size_t path_end = receivedLine.find(' ', path_start);
 	if (path_end == std::string::npos)
-	{
 		error("Error: path_end failed");
-	}
 	this->_path = receivedLine.substr(path_start, path_end - path_start);
 
 	if (this->_path == "/")
-	{
 		return (getFileContent("../www/html/index.html"));
-	}
 	else if (this->_path.compare(this->_path.size() - 5, 5, ".html") == 0)
-	{
 		return (getFileContent("../www/html" + this->_path));
-	}
 	else if (this->_path.compare(this->_path.size() - 4, 4, ".css") == 0)
-	{
 		return (getFileContent("../www/styles" + this->_path));
-	}
 	else if (this->_path.compare(this->_path.size() - 4, 4, ".cgi") == 0)
-	{
-		execute_cgi_script();
-		return (this->socket_buffer);
-	}
-	// else if (is_cgi_script(this->_path.c_str()))
-	// {
-	// 	execute_cgi_script();
-	// 	return (this->socket_buffer);
-	// }
+		return (execute_cgi_script());
 
 	return (getFileContent("../www/html/errors/400.html"));
 }
@@ -160,6 +140,8 @@ void Server::ft_badRequest(std::string get_content)
 void Server::handle_client()
 {
 	int n;
+	std::string receivedLine;
+
 	memset(this->received_line, 0, sizeof(this->received_line));
 	n = read(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1);
 	if (n < 0)
@@ -168,44 +150,23 @@ void Server::handle_client()
 		exit(EXIT_FAILURE);
 	}
 
-	std::cout << "TEST : " << received_line << std::endl;
-
 	std::string received_line_cpy(this->received_line);
 	this->_method = findMethod(received_line_cpy);
 	std::string get_content = findContent(received_line_cpy);
 
 	if (this->_method == "GET")
-	{
-		/* if (is_cgi_script(this->_path.c_str()))
-		{
-			execute_cgi_script();
-		}
-		else
-		{ */
 		ft_get(get_content);
-/* 		}
- */	}
-else if (this->_method == "POST")
-{
-	/* if (is_cgi_script(this->_path.c_str()))
+	else if (this->_method == "POST")
 	{
-		execute_cgi_script();
+		setFormData(received_line);
+		ft_post(received_line);
 	}
+	else if (this->_method == "DELETE")
+		ft_delete();
 	else
-	{ */
-	ft_post(received_line);
-/* 		}
- */	}
-else if (this->_method == "DELETE")
-{
-	ft_delete();
-}
-else
-{
-	ft_badRequest(get_content);
-}
-write(this->_connexion_fd, this->socket_buffer, strlen(this->socket_buffer));
-close(this->_connexion_fd);
+		ft_badRequest(get_content);
+	write(this->_connexion_fd, this->socket_buffer, strlen(this->socket_buffer));
+	close(this->_connexion_fd);
 }
 
 Server::~Server()
@@ -223,43 +184,43 @@ void Server::setFormData(std::string receivedLine)
 	std::string favoriteColor;
 	std::string emailAdress;
 
-	// std::cout << "TEST : " << receivedLine << std::endl; // TEST
+	std::cout << "TEST : " << receivedLine << std::endl; // TEST
 
-	size_t fn = receivedLine.find("first-name=") + 11; // on est sur le char just apres =
+	size_t fn = receivedLine.find("first-name") + 11; // on est sur le char just apres =
 	if (fn == std::string::npos)
 		error("Error: set Form Data failed");
 
-	size_t endfn = receivedLine.find("&", fn); // on est sur le char &
+	size_t endfn = receivedLine.find("-", fn); // on est sur le char &
 	if (endfn == std::string::npos)
 		error("Error: set Form Data failed");
 
 	firstName = receivedLine.substr(fn, (endfn - fn)); // a partir de = + 1 jusqua &
 
-	size_t ln = receivedLine.find("last-name=", endfn) + 10; // on est sur le char just apres =
+	size_t ln = receivedLine.find("last-name", endfn) + 10; // on est sur le char just apres =
 	if (ln == std::string::npos)
 		error("Error: set Form Data failed");
 
-	size_t endln = receivedLine.find("&", endfn + 1); // on part du &+1 et on est sur le char &
+	size_t endln = receivedLine.find("-", endfn + 1); // on part du &+1 et on est sur le char &
 	if (endln == std::string::npos)
 		error("Error: set Form Data failed");
 
 	lastName = receivedLine.substr(ln, (endln - ln));
 
-	size_t fc = receivedLine.find("favorite-color=", ln) + 15;
+	size_t fc = receivedLine.find("favorite-color", ln) + 15;
 	if (fc == std::string::npos)
 		error("Error: set Form Data failed");
 
-	size_t endfc = receivedLine.find("&", endln + 1);
+	size_t endfc = receivedLine.find("-", endln + 1);
 	if (endfc == std::string::npos)
 		error("Error: set Form Data failed");
 
 	favoriteColor = receivedLine.substr(fc, (endfc - fc));
 
-	size_t ea = receivedLine.find("email=", fc) + 6;
+	size_t ea = receivedLine.find("email", fc) + 6;
 	if (ea == std::string::npos)
 		error("Error: set Form Data failed");
 
-	size_t endea = receivedLine.find("&", endfc + 1);
+	size_t endea = receivedLine.find("-", endfc + 1);
 	if (endea == std::string::npos)
 		error("Error: set Form Data failed");
 
@@ -301,7 +262,7 @@ std::list<FormData> Server::getList()
 	return (this->my_list);
 }
 
-void Server::execute_cgi_script()
+std::string Server::execute_cgi_script()
 {
 	int pipefd[2];
 	if (pipe(pipefd) == -1)
@@ -322,45 +283,21 @@ void Server::execute_cgi_script()
 
 		this->_path = "/home/user/ecole_42/webserv3/tests" + this->_path;
 		char *argv[] = {const_cast<char *>(this->_path.c_str()), NULL}; //ATTENTION si quelquun rentre une commande dans l'url ca peut l'executer
-		printf("%s\n", argv[0]);
 		execve(argv[0], argv, this->_envp);
 
 		error("Error: execve cgi failed");
 	}
-	else
+	close(pipefd[1]);
+
+	char buffer[BUFFER_SIZE];
+	int n = 0;
+	while ((n = read(pipefd[0], buffer, sizeof(buffer) - 1)) > 0)
 	{
-		close(pipefd[1]);
-
-		char buffer[BUFFER_SIZE];
-		int n = 0;
-
-		while ((n = read(pipefd[0], buffer, sizeof(buffer) - 1)) > 0)
-		{
-			buffer[n] = '\0';
-			printf("buffer = *%s\n", buffer);
-			strncat(this->socket_buffer, buffer, sizeof(socket_buffer));
-		}
-		printf("socket_buffer %s\n", this->socket_buffer);
-		close(pipefd[0]);
-		waitpid(pid, NULL, 0);
+		buffer[n] = '\0';
 	}
+	close(pipefd[0]);
+	waitpid(pid, NULL, 0);
+	std::string getContent(buffer);
+	return (getContent);
 }
 
-bool Server::is_cgi_script(const char *path)
-{
-
-	std::cout << path << std::endl;
-	const char *cgi_extension = ".cgi";
-	size_t path_length = std::strlen(path);
-	size_t extension_length = std::strlen(cgi_extension);
-
-	if (path_length > extension_length)
-	{
-		if (std::strcmp(path + path_length - extension_length, cgi_extension) == 0)
-		{
-			return (true);
-		}
-	}
-
-	return (false);
-}
