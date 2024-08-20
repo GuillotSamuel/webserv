@@ -117,24 +117,23 @@ std::string Server::findPath(const std::string &receivedLine)
 
 	if (this->_path == "/")
 	{
-		return (HTML_FILES + std::string("/index.html"));
+		return (readFileContent(HTML_FILES + std::string("/index.html")));
 	}
 	else if (this->_path.compare(this->_path.size() - 5, 5, ".html") == 0)
 	{
-		return (HTML_FILES + this->_path);
+		return (readFileContent(HTML_FILES + this->_path));
 	}
 	else if (this->_path.compare(this->_path.size() - 4, 4, ".css") == 0)
 	{
-		return (CSS_FILES + this->_path);
+		return (readFileContent(CSS_FILES + this->_path));
 	}
 
-	return (ERROR_400_PAGE);
+	return (readFileContent(ERROR_400_PAGE));
 }
 
 std::string Server::findMethod(const std::string &receivedLine)
 {
 	size_t method_end = receivedLine.find(' ');
-
 	if (method_end != std::string::npos)
 	{
 		this->_method = receivedLine.substr(0, method_end);
@@ -143,7 +142,6 @@ std::string Server::findMethod(const std::string &receivedLine)
 	{
 		error("Error: find method failed");
 	}
-
 	return (this->_method);
 }
 
@@ -194,24 +192,20 @@ void Server::ft_delete()
 
 void Server::ft_badRequest(std::string get_content)
 {
-	std::string content = readFileContent(ERROR_400_PAGE);
-
-	std::string response = "HTTP/1.1 400 Bad Request\r\n";
-	response += "Content-Type: text/html\r\n";
-	response += "Content-Length: " + std::to_string(content.size()) + "\r\n";
-	response += "Connection: close\r\n";
-	response += "Server: webserv/1.0\r\n\r\n";
-	response += content;
-
-	write(this->_connexion_fd, response.c_str(), response.size());
+	/* 	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
+				 "HTTP/1.0 400 Bad Request\r\n\r\n%s",
+				 get_content.c_str()); */
 }
 
 std::string Server::readFileContent(const std::string &path)
 {
 	std::ifstream file(path.c_str()/* , std::ios::binary */);
 
+std::cout << "PATH : " << path << std::endl; // TEST
+
 	if (!file.is_open())
 	{
+		std::cout << "\nERROR\n" << std::endl; // TEST
 		return ("");
 	}
 
