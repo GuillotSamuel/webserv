@@ -235,8 +235,9 @@ void Server::ft_post(std::string received_line)
 
 void Server::ft_delete()
 {
-	/* 	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-				 "HTTP/1.0 200 OK\r\n\r\nReceived DELETE request\n"); */
+	std::string filePath = findPath(this->_path);
+
+	if (access(filePath.c_str(), F_OK))
 }
 
 void Server::ft_badRequest(std::string get_content)
