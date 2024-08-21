@@ -281,7 +281,7 @@ void Server::ft_delete()
 		return;
 	}
 
-	if (remove(filePath.c_str()) == 0)
+	if (unlink(filePath.c_str()) == 0)
 	{
 		std::string response = "HTTP/1.1 204 No Content\r\n";
 		response += "Connection: close\r\n";
