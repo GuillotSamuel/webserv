@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_g.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:00:57 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/10 15:02:09 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/08/20 20:03:03 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ bool    parsing_g(t_data *data, int argc, char **argv)
     }
     else if (argc == 1)
     {
-        return (ft_read_configuration_file(data, "./config/default.conf"));
+        return (readConfigurationFile(data, "./config/default.conf"));
     }
     else if (argc == 2)
     {
-        return (ft_read_configuration_file(data, argv[1]));
+        return (readConfigurationFile(data, argv[1]));
     }
     else
     {

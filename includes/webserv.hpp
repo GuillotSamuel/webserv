@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/05 13:51:54 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/08/21 14:32:45 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,39 @@
 /* -------------------------------------------------------------------------- */
 
 #include <iostream>
-#include <cstdlib>
-#include <string>
 #include <vector>
-#include <map>
-#include <fstream>
-#include <sstream>
 #include <cstring>
 #include <fcntl.h>
 #include <unistd.h>
 #include <functional>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <cstdlib>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/wait.h>
+#include <sys/epoll.h>
+#include <algorithm>
+#include <list>
+#include <netdb.h>
+#include <stdlib.h>
+#include <map>
+#include <string_view>
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
 
-#include "serverConfiguration.hpp"
+#define MAX_EVENTS 10
+#define BUFFER_SIZE 4096
+
+
+#include "ServerConfiguration.hpp"
+#include "Server.hpp"
+#include "Client.hpp"
+#include "Cgi.hpp"
 
 /* -------------------------------------------------------------------------- */
 /*                                    STRUCTURES                              */
@@ -87,7 +108,7 @@ int     ft_strcmp(const char *s1, const char *s2);
 bool    parsing_g(t_data *data, int argc, char **argv);
 
 /* read_configuration.cpp */
-bool    ft_read_configuration_file(t_data *data, const char *arg);
+bool    readConfigurationFile(t_data *data, const char *arg);
 
 /* tokenizer.cpp */
 bool    ft_tokenizer(t_data *data, const std::string &line);
@@ -119,6 +140,6 @@ bool    ft_invalid_line(t_data *data, std::vector<std::string> tokens);
 /* -------------------------------------------------------------------------- */
 
 /* exec_g.cpp */
-bool    exec_g(t_data *data);
+bool    exec_g(t_data *data, ServerConfiguration inf);
 
 #endif

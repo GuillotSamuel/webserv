@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form</title>
+    <title>Submission Form</title>
     <link rel="stylesheet" href="../styles/style.css">
 </head>
 <body>
@@ -11,33 +11,23 @@
         <a class="header-title" href="index.html">Webserv</a>
     </header>
     <main>
-        <h1>POST: Submitting Data</h1>
-        <form action="/submit" method="POST" enctype="multipart/form-data">
-            <div class="form-infos">
-                <label class="form-info-requested" for="first-name">First Name:</label>
-                <input class="form-inputs" type="text" id="first-name" name="first-name" required>
-            </div>
-            <div class="form-infos">
-                <label class="form-info-requested" for="last-name">Last Name:</label>
-                <input class="form-inputs" type="text" id="last-name" name="last-name" required>
-            </div>
-            <div class="form-infos">
-                <label class="form-info-requested" for="favorite-color">Favorite Color:</label>
-                <input class="form-inputs" type="text" id="favorite-color" name="favorite-color" required>
-            </div>
-            <div class="form-infos">
-                <label class="form-info-requested" for="email">Email:</label>
-                <input class="form-inputs" type="email" id="email" name="email" required>
-            </div>
-            <div class="form-infos">
-                <label class="form-info-requested" for="image">Upload Image:</label>
-                <input class="form-inputs" type="file" id="image" name="image" accept="image/*" required>
-            </div>
-            <div>
-                <button type="submit">Submit</button>
-            </div>
+        <h1>Submit Your Information</h1>
+        <!-- Formulaire qui envoie les données au script Python -->
+        <form action="../cgi-bin/test_cgi.py" method="post" enctype="multipart/form-data">
+            <label for="first-name">First Name:</label>
+            <input type="text" id="first-name" name="first-name" required><br><br>
+            
+            <label for="last-name">Last Name:</label>
+            <input type="text" id="last-name" name="last-name" required><br><br>
+            
+            <label for="favorite-color">Favorite Color:</label>
+            <input type="text" id="favorite-color" name="favorite-color"><br><br>
+            
+            <label for="image">Upload an Image:</label>
+            <input type="file" id="image" name="image"><br><br>
+            
+            <input type="submit" value="Submit">
         </form>
-        <button onclick="location.href='index.html';">Go Back to Home</button>
     </main>
     <footer>
         <div class="footer-credits">Project made by sguillot and mmahfoud</div>
