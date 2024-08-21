@@ -1,9 +1,8 @@
 #include "include.hpp"
 
-Server::Server(char *port, char **envp)
+Server::Server(char *port)
 {
 	this->_socket = new ListeningSocket(port);
-	this->_envp = envp;
 	this->_connexion_fd = -1;
 	this->_epoll_fd = -1;
 
@@ -204,9 +203,7 @@ void Server::ft_get(std::string filePath)
 
 		std::string response = "HTTP/1.1 400 Bad Request\r\n";
 		response += "Content-Type: text/html\r\n";
-		std::ostringstream oss;
-		oss << content.size();
-		response += "Content-Length: " + oss.str() + "\r\n";
+		response += "Content-Length: " + std::to_string(content.size()) + "\r\n";
 		response += "Connection: close\r\n";
 		response += "Server: webserv/1.0\r\n\r\n";
 		response += content;
@@ -219,9 +216,7 @@ void Server::ft_get(std::string filePath)
 
 		std::string response = "HTTP/1.1 200 OK\r\n";
 		response += "Content-Type: " + mimeType + "\r\n";
-		std::ostringstream oss;
-		oss << content.size();
-		response += "Content-Length: " + oss.str() + "\r\n";
+		response += "Content-Length: " + std::to_string(content.size()) + "\r\n";
 		response += "Connection: close\r\n";
 		response += "Server: MyCustomServer/1.0\r\n\r\n";
 		response += content;
