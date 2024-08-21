@@ -74,6 +74,8 @@ void Server::handle_client()
 	}
 
 	std::string received_line_cpy(this->received_line);
+
+	std::cout << received_line_cpy << std::endl; // TEST
 	// size_t requestLength = received_line_cpy.find("Content-Length:");
 	// if (requestLength != std::string::npos)
 	// {
@@ -239,7 +241,6 @@ void Server::ft_get(std::string filePath)
 		response += "Connection: close\r\n";
 		response += "Server: MyCustomServer/1.0\r\n\r\n";
 		response += content;
-
 		write(this->_connexion_fd, response.c_str(), response.size());
 	}
 }

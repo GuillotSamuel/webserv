@@ -6,7 +6,7 @@
 #    By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/05 13:36:24 by sguillot          #+#    #+#              #
-#    Updated: 2024/08/21 13:41:07 by mmahfoud         ###   ########.fr        #
+#    Updated: 2024/08/21 15:08:14 by mmahfoud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,28 +22,28 @@ DEP = $(patsubst ./srcs/%.cpp,$(DEPDIR)/%.d,$(SRC))
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CPPFLAGS) $(OBJ) -o $(NAME)
+	@$(CC) $(CPPFLAGS) $(OBJ) -o $(NAME)
 
 $(OBJDIR)/%.o: ./srcs/%.cpp $(DEPDIR)/%.d | $(OBJDIR)
-	mkdir -p $(dir $@)
-	$(CC) $(CPPFLAGS) -c $< -o $@
+	@mkdir -p $(dir $@)
+	@$(CC) $(CPPFLAGS) -c $< -o $@
 
 $(DEPDIR)/%.d: ./srcs/%.cpp | $(DEPDIR)
-	mkdir -p $(dir $@)
-	$(CC) $(CPPFLAGS) -MM -MP -MF $@ -MT '$(OBJDIR)/$(<:./srcs/%.cpp=$(OBJDIR)/%.o)' $<
+	@mkdir -p $(dir $@)
+	@$(CC) $(CPPFLAGS) -MM -MP -MF $@ -MT '$(OBJDIR)/$(<:./srcs/%.cpp=$(OBJDIR)/%.o)' $<
 
 $(OBJDIR):
-	mkdir -p $(OBJDIR)
+	@mkdir -p $(OBJDIR)
 
 $(DEPDIR):
-	mkdir -p $(DEPDIR)
+	@mkdir -p $(DEPDIR)
 
 clean:
-	rm -f $(OBJ) $(DEP)
+	@rm -f $(OBJ) $(DEP)
 
 fclean: clean
-	rm -f $(NAME)
-	rm -rf $(OBJDIR) $(DEPDIR)
+	@rm -f $(NAME)
+	@rm -rf $(OBJDIR) $(DEPDIR)
 
 re: fclean all
 

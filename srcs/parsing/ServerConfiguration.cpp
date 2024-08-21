@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/21 15:02:12 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:23:17 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
 {
 	Cout << i.getClientMaxBodySize() << std::endl;
     Cout << i.getHostName() << std::endl;
-    Cout << i.getPathInfo() << std::endl;
+    // Cout << i.getPathInfo() << std::endl;
     Cout << i.getPort() << std::endl;
     Cout << i.getServerName() << std::endl;
     return (Cout);

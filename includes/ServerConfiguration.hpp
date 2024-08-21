@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/21 15:02:30 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:28:38 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 #include "webserv.hpp"
 
-#define HTML_FILES "../www/html"
-#define CSS_FILES "../www/styles"
-#define JS_FILES "../www/js"
-#define JSON_FILES "../www/data"
-#define IMAGE_FILES "../www/images"
-#define VIDEO_FILES "../www/videos"
-#define AUDIO_FILES "../www/audio"
-#define FONT_FILES "../www/fonts"
-#define PDF_FILES "../www/docs"
-#define XML_FILES "../www/xml"
-#define ICON_FILES "../www/icons"
-#define CSV_FILES "../www/data"
-#define ERROR_400_PAGE "../www/html/errors/400.html"
+#define HTML_FILES "www/html"
+#define CSS_FILES "www/styles"
+#define JS_FILES "www/js"
+#define JSON_FILES "www/data"
+#define IMAGE_FILES "www/images"
+#define VIDEO_FILES "www/videos"
+#define AUDIO_FILES "www/audio"
+#define FONT_FILES "www/fonts"
+#define PDF_FILES "www/docs"
+#define XML_FILES "www/xml"
+#define ICON_FILES "www/icons"
+#define CSV_FILES "www/data"
+#define ERROR_400_PAGE "www/html/errors/400.html"
 
 class ServerConfiguration
 {
@@ -45,17 +45,17 @@ class ServerConfiguration
         ~ServerConfiguration(void);
         ServerConfiguration &operator=(const ServerConfiguration &copy);
 
-		void		setPort(std::string str);
-		void		setHostName(std::string str);
-        void		setServerName(std::string str);
-		void		setErrorPage(int code, std::string str);
-		void		setClientMaxBodySize(std::string str);
+		void								setPort(std::string str);
+		void								setHostName(std::string str);
+        void								setServerName(std::string str);
+		void								setErrorPage(int code, std::string str);
+		void								setClientMaxBodySize(std::string str);
 
-		int			getPort(void) const;
-		std::string	getHostName(void) const;
-		std::string	getServerName(void) const;
-		std::string	getErrorPage(int code) const;
-		int			getClientMaxBodySize(void) const;
+		int									getPort(void) const;
+		std::string							getHostName(void) const;
+		std::string							getServerName(void) const;
+		std::string							getErrorPage(int code) const;
+		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi() const;
 };
 
