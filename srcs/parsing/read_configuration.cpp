@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   read_configuration.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:01:47 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/12 17:19:14 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/08/20 20:03:03 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-bool    ft_read_configuration_file(t_data *data, const char *arg)
+bool    readConfigurationFile(t_data *data, const char *arg)
 {
     int         fd = open(arg, O_RDONLY);
     ssize_t      bytes_read = 1;

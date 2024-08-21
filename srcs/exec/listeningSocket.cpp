@@ -1,9 +1,9 @@
 #include "listeningSocket.hpp"
 
-ListeningSocket::ListeningSocket(char *port)
+ListeningSocket::ListeningSocket(int port)
 {
 	this->_server_address.sin_family = AF_INET;
-	this->_server_address.sin_port = htons(std::atoi(port));
+	this->_server_address.sin_port = htons(port);
 	this->_server_address.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	if ((this->_socket_fd = socket(this->_server_address.sin_family, SOCK_STREAM, 0)) < 0)

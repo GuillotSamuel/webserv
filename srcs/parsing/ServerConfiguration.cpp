@@ -1,21 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_configuration.cpp                           :+:      :+:    :+:   */
+/*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/12 16:27:18 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:23:17 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-ServerConfiguration::ServerConfiguration(void) :
-    port(-1), hostName(std::string()),
-    serverName(std::string()), errorPages(std::map<int, std::string>()),
-    clientMaxBodySize(-1) {}
+// ServerConfiguration::ServerConfiguration(void) :
+//     port(-1), hostName(std::string()),
+//     serverName(std::string()), errorPages(std::map<int, std::string>()),
+//     clientMaxBodySize(-1), _pathInfo(std::string()) {}
+
+ServerConfiguration::ServerConfiguration(void) {
+    this->port = 8080;
+    this->hostName = std::string("127.0.0.1");
+    this->serverName = std::string("localhost");
+    this->errorPages[404] = std::string("404.html");
+    this->_pathInfoCgi[(".py")] = std::string("/usr/bin/python3");
+    this->_pathInfoCgi[(".sh")] = std::string("/bin/bash");
+    this->_pathInfoMime[("HTML_FILES")] = std::string("../www/html");
+    this->_pathInfoMime[("CSS_FILES")] = std::string("../www/styles");
+    this->_pathInfoMime[("JS_FILES")] = std::string("../www/js");
+    this->_pathInfoMime[("JSON_FILES")] = std::string("../www/data");
+    this->_pathInfoMime[("IMAGE_FILES")] = std::string("../www/images");
+    this->_pathInfoMime[("VIDEO_FILES")] = std::string("../www/videos");
+    this->_pathInfoMime[("AUDIO_FILES")] = std::string("../www/audio");
+    this->_pathInfoMime[("FONT_FILES")] = std::string("../www/fonts");
+    this->_pathInfoMime[("PDF_FILES")] = std::string("../www/docs");
+    this->_pathInfoMime[("XML_FILES")] = std::string("../www/xml");
+    this->_pathInfoMime[("ICON_FILES")] = std::string("../www/icons");
+    this->_pathInfoMime[("CSV_FILES")] = std::string("../www/data");
+    this->_pathInfoMime[("ERROR_400_PAGE")] = std::string("../www/html/errors/400.html");
+}
 
 ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
     port(copy.port), hostName(copy.hostName),
@@ -87,10 +109,25 @@ std::string ServerConfiguration::getErrorPage(int code) const
     if (it != this->errorPages.end()) {
         return it->second;
     }
-    return ""; // TO MODIFY ALL FUNCTION TEST
+    return (""); // TO MODIFY ALL FUNCTION TEST
 }
 
 int	ServerConfiguration::getClientMaxBodySize(void) const
 {
     return (this->clientMaxBodySize);
+}
+
+std::map<std::string, std::string>	ServerConfiguration::getPathInfoCgi() const
+{
+    return (this->_pathInfoCgi);
+}
+
+std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
+{
+	Cout << i.getClientMaxBodySize() << std::endl;
+    Cout << i.getHostName() << std::endl;
+    // Cout << i.getPathInfo() << std::endl;
+    Cout << i.getPort() << std::endl;
+    Cout << i.getServerName() << std::endl;
+    return (Cout);
 }

@@ -1,10 +1,9 @@
 #pragma once
 
 #include "listeningSocket.hpp"
-#include "FormData.hpp"
 
 class ListeningSocket;
-class FormData;
+class ServerConfiguration;
 
 class Server
 {
@@ -19,23 +18,20 @@ class Server
 		char				**_envp;
 		char				received_line[BUFFER_SIZE];
 		char				socket_buffer[BUFFER_SIZE];
-		std::list<FormData>	my_list;
 
 		void				ServerExecution();
+		void				error(std::string errorType);
+		void				handle_client();
 		std::string			findPath(const std::string &receivedLine);
 		std::string			findMethod(const std::string &receivedLine);
-		void				handle_client();
-		std::string			getFileContent(const std::string &path);
-		void				setFormData(std::string receivedLine);
-		void				error(std::string errorType);
-		void				ft_get(std::string get_content);
+		void				ft_get(std::string filePath);
 		void				ft_post(std::string received_line);
 		void				ft_delete();
-		void				ft_badRequest(std::string get_content);
-		bool				is_cgi_script(const char *path);
-		void				execute_cgi_script();
+		void				ft_badRequest();
+		std::string			execute_cgi_script();
+		std::string			readFileContent(const std::string &path);
+		std::string 		getMimeType(const std::string &path);
 	public:
-		Server(char *port, char **envp);
+		Server(ServerConfiguration inf);
 		~Server();
-		std::list<FormData>				getList(); //TEST
 };
