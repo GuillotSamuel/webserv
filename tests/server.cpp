@@ -127,6 +127,53 @@ std::string Server::findPath(const std::string &receivedLine)
 	{
 		return (CSS_FILES + this->_path);
 	}
+	else if (this->_path.compare(this->_path.size() - 3, 3, ".js") == 0)
+	{
+		return (JS_FILES + this->_path);
+	}
+	else if (this->_path.compare(this->_path.size() - 5, 5, ".json") == 0)
+	{
+		return (JSON_FILES + this->_path);
+	}
+	else if ((this->_path.compare(this->_path.size() - 4, 4, ".jpg") == 0) ||
+			 (this->_path.compare(this->_path.size() - 5, 5, ".jpeg") == 0) ||
+			 (this->_path.compare(this->_path.size() - 4, 4, ".png") == 0) ||
+			 (this->_path.compare(this->_path.size() - 4, 4, ".gif") == 0) ||
+			 (this->_path.compare(this->_path.size() - 4, 4, ".bmp") == 0) ||
+			 (this->_path.compare(this->_path.size() - 4, 4, ".ico") == 0) ||
+			 (this->_path.compare(this->_path.size() - 5, 5, ".webp") == 0) ||
+			 (this->_path.compare(this->_path.size() - 4, 4, ".svg") == 0))
+	{
+		return (IMAGE_FILES + this->_path);
+	}
+	else if (this->_path.compare(this->_path.size() - 4, 4, ".mp4") == 0 ||
+			 this->_path.compare(this->_path.size() - 4, 4, ".webm") == 0 ||
+			 this->_path.compare(this->_path.size() - 4, 4, ".avi") == 0)
+	{
+		return (VIDEO_FILES + this->_path);
+	}
+	else if (this->_path.compare(this->_path.size() - 3, 3, ".mp3") == 0)
+	{
+		return (AUDIO_FILES + this->_path);
+	}
+	else if (this->_path.compare(this->_path.size() - 4, 4, ".pdf") == 0)
+	{
+		return (PDF_FILES + this->_path);
+	}
+	else if (this->_path.compare(this->_path.size() - 4, 4, ".xml") == 0)
+	{
+		return (XML_FILES + this->_path);
+	}
+	else if (this->_path.compare(this->_path.size() - 3, 3, ".ttf") == 0 ||
+			 this->_path.compare(this->_path.size() - 4, 4, ".woff") == 0 ||
+			 this->_path.compare(this->_path.size() - 5, 5, ".woff2") == 0)
+	{
+		return (FONT_FILES + this->_path);
+	}
+	else if (this->_path.compare(this->_path.size() - 3, 3, ".csv") == 0)
+	{
+		return (CSV_FILES + this->_path);
+	}
 
 	return (ERROR_400_PAGE);
 }
@@ -208,7 +255,7 @@ void Server::ft_badRequest(std::string get_content)
 
 std::string Server::readFileContent(const std::string &path)
 {
-	std::ifstream file(path.c_str()/* , std::ios::binary */);
+	std::ifstream file(path.c_str(), std::ios::binary);
 
 	if (!file.is_open())
 	{
@@ -237,6 +284,34 @@ std::string Server::getMimeType(const std::string &path)
 		return ("image/png");
 	else if (path.size() > 4 && path.substr(path.size() - 4) == ".gif")
 		return ("image/gif");
+	else if (path.size() > 4 && path.substr(path.size() - 4) == ".bmp")
+		return ("image/bmp");
+	else if (path.size() > 4 && path.substr(path.size() - 4) == ".ico")
+		return ("image/x-icon");
+	else if (path.size() > 4 && path.substr(path.size() - 4) == ".svg")
+		return ("image/svg+xml");
+	else if (path.size() > 4 && path.substr(path.size() - 4) == ".xml")
+		return ("application/xml");
+	else if (path.size() > 4 && path.substr(path.size() - 4) == ".pdf")
+		return ("application/pdf");
+	else if (path.size() > 3 && path.substr(path.size() - 3) == ".mp3")
+		return ("audio/mpeg");
+	else if (path.size() > 4 && path.substr(path.size() - 4) == ".mp4")
+		return ("video/mp4");
+	else if (path.size() > 4 && path.substr(path.size() - 4) == ".webm")
+		return ("video/webm");
+	else if (path.size() > 5 && path.substr(path.size() - 5) == ".webp")
+		return ("image/webp");
+	else if (path.size() > 3 && path.substr(path.size() - 3) == ".ttf")
+		return ("font/ttf");
+	else if (path.size() > 4 && path.substr(path.size() - 4) == ".woff")
+		return ("font/woff");
+	else if (path.size() > 5 && path.substr(path.size() - 5) == ".woff2")
+		return ("font/woff2");
+	else if (path.size() > 3 && path.substr(path.size() - 3) == ".csv")
+		return ("text/csv");
+	else if (path.size() > 4 && path.substr(path.size() - 4) == ".avi")
+		return ("video/x-msvideo");
 	else
 		return ("application/octet-stream");
 }
