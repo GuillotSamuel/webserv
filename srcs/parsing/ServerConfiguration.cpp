@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/21 15:23:17 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:06:49 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 //     clientMaxBodySize(-1), _pathInfo(std::string()) {}
 
 ServerConfiguration::ServerConfiguration(void) {
-    this->port = 8080;
+    this->port = 8081;
     this->hostName = std::string("127.0.0.1");
     this->serverName = std::string("localhost");
     this->errorPages[404] = std::string("404.html");

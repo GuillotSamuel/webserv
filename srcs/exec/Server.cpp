@@ -63,7 +63,7 @@ void Server::error(std::string errorType)
 	response += "Content-Type: text/html\r\n";
 	std::ostringstream oss;
 	oss << std::strlen("Internal Server Error");
-    response += "Content-Length: " + oss.str() + "\r\n";
+	response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
 	response += "Server: webserv/1.0\r\n\r\n";
 	response += "Internal Server Error";
@@ -104,6 +104,8 @@ void Server::handle_client()
 
 	this->_method = findMethod(received_line_cpy);
 	std::string filePath = findPath(received_line_cpy);
+
+	std::cout << "\n" << "TEST : " << filePath << "\n" << std::endl;
 
 	if (this->_method == "GET")
 	{
@@ -255,10 +257,69 @@ void Server::ft_get(std::string filePath)
 
 void Server::ft_post(std::string received_line)
 {
-	(void)received_line;
-	std::string content = execute_cgi_script();
-	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-			 "HTTP/1.0 200 OK\r\n\r\n%s", content.c_str());
+	size_t header_end = received_line.find("\r\n\r\n");
+	std::string headers = received_line.substr(0, header_end);
+	std::string body = received_line.substr(header_end + 4);
+
+	size_t content_type_pos = headers.find("Content-Type:");
+	std::string content_type = "application/x-www-form-urlencoded";
+
+	if (content_type_pos != std::string::npos)
+	{
+		size_t start = content_type_pos + 14;
+		size_t end = headers.find("\r\n", start);
+		content_type = headers.substr(start, end - start);
+	}
+
+	if (content_type == "application/x-www-form-urlencoded")
+	{
+		handle_url_encoded(body);
+	}
+	else if (content_type == "multipart/form-data")
+	{
+		handle_multipart_data(headers, body);
+	}
+	else
+	{
+		handle_plain_text(body);
+	}
+
+	std::string response = "HTTP/1.1 204 No Content\r\n";
+	response += "Connection: close\r\n";
+	response += "Server: webserv/1.0\r\n\r\n";
+
+	write(this->_connexion_fd, response.c_str(), response.size());
+}
+
+void Server::handle_url_encoded(const std::string &body)
+{
+	std::ofstream outfile("uploads/form_data.txt", std::ios::app);
+	if (outfile.is_open())
+	{
+		outfile << "Form data: " << body << std::endl;
+		outfile.close();
+	}
+}
+
+void Server::handle_multipart_data(const std::string &headers, const std::string &body)
+{
+	std::ofstream outfile("uploads/multipart_data.txt", std::ios::app);
+	if (outfile.is_open())
+	{
+		outfile << "Multipart data: " << body << std::endl;
+		outfile.close();
+	}
+	(void)headers;
+}
+
+void Server::handle_plain_text(const std::string &body)
+{
+	std::ofstream outfile("uploads/plain_text.txt", std::ios::app);
+	if (outfile.is_open())
+	{
+		outfile << "Plain text data: " << body << std::endl;
+		outfile.close();
+	}
 }
 
 void Server::ft_delete()

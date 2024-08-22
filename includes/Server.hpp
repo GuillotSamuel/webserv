@@ -31,6 +31,11 @@ class Server
 		std::string			execute_cgi_script();
 		std::string			readFileContent(const std::string &path);
 		std::string 		getMimeType(const std::string &path);
+
+		void				handle_plain_text(const std::string &body);
+		void				handle_multipart_data(const std::string &headers, const std::string &body);
+		void				handle_url_encoded(const std::string &body);
+
 	public:
 		Server(ServerConfiguration inf);
 		~Server();

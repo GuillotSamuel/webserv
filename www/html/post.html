@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submission Success</title>
+    <title>Form</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -11,8 +11,13 @@
         <a class="header-title" href="index.html">Webserv</a>
     </header>
     <main>
-        <h1>Submission Successful</h1>
-        <p>Your datas have been submitted successfully!</p>
+        <h1>POST: Submitting a simple message</h1>
+        <form action="/submit" method="POST">
+            <label for="message">Message:</label>
+            <input type="text" id="message" name="message" required>
+            <br><br>
+            <input type="submit" value="Submit">
+        </form>
         <button onclick="location.href='index.html';">Go Back to Home</button>
     </main>
     <footer>
