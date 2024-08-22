@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/21 15:23:17 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:32:11 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,25 @@
 //     clientMaxBodySize(-1), _pathInfo(std::string()) {}
 
 ServerConfiguration::ServerConfiguration(void) {
-    this->port = 8080;
+    this->port = 8090;
     this->hostName = std::string("127.0.0.1");
     this->serverName = std::string("localhost");
     this->errorPages[404] = std::string("404.html");
     this->_pathInfoCgi[(".py")] = std::string("/usr/bin/python3");
     this->_pathInfoCgi[(".sh")] = std::string("/bin/bash");
-    this->_pathInfoMime[("HTML_FILES")] = std::string("../www/html");
-    this->_pathInfoMime[("CSS_FILES")] = std::string("../www/styles");
-    this->_pathInfoMime[("JS_FILES")] = std::string("../www/js");
-    this->_pathInfoMime[("JSON_FILES")] = std::string("../www/data");
-    this->_pathInfoMime[("IMAGE_FILES")] = std::string("../www/images");
-    this->_pathInfoMime[("VIDEO_FILES")] = std::string("../www/videos");
-    this->_pathInfoMime[("AUDIO_FILES")] = std::string("../www/audio");
-    this->_pathInfoMime[("FONT_FILES")] = std::string("../www/fonts");
-    this->_pathInfoMime[("PDF_FILES")] = std::string("../www/docs");
-    this->_pathInfoMime[("XML_FILES")] = std::string("../www/xml");
-    this->_pathInfoMime[("ICON_FILES")] = std::string("../www/icons");
-    this->_pathInfoMime[("CSV_FILES")] = std::string("../www/data");
-    this->_pathInfoMime[("ERROR_400_PAGE")] = std::string("../www/html/errors/400.html");
+    this->_pathInfoMime[("HTML_FILES")] = std::string("www/html");
+    this->_pathInfoMime[("CSS_FILES")] = std::string("www/styles");
+    this->_pathInfoMime[("JS_FILES")] = std::string("www/js");
+    this->_pathInfoMime[("JSON_FILES")] = std::string("www/data");
+    this->_pathInfoMime[("IMAGE_FILES")] = std::string("www/images");
+    this->_pathInfoMime[("VIDEO_FILES")] = std::string("www/videos");
+    this->_pathInfoMime[("AUDIO_FILES")] = std::string("www/audio");
+    this->_pathInfoMime[("FONT_FILES")] = std::string("www/fonts");
+    this->_pathInfoMime[("PDF_FILES")] = std::string("www/docs");
+    this->_pathInfoMime[("XML_FILES")] = std::string("www/xml");
+    this->_pathInfoMime[("ICON_FILES")] = std::string("www/icons");
+    this->_pathInfoMime[("CSV_FILES")] = std::string("www/data");
+    this->_pathInfoMime[("ERROR_400_PAGE")] = std::string("www/html/errors/400.html");
 }
 
 ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :

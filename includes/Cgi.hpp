@@ -3,16 +3,26 @@
 
 #include "webserv.hpp"
 
-// class ServerConfiguration;
 class Client;
 
 class Cgi
 {
 	private:
 		std::map<std::string, std::string>	_env;
+		char								**_myEnvp;
+		const char							*_path;
+		char								**_myArgv;
+		std::map<std::string, std::string>	_pathInfo;
+
 	public:
-		Cgi(ServerConfiguration serv, Client client);
+		Cgi();
 		~Cgi();
+		std::string		executeCgi();
+		char			**conversionEnvFunc();
+		char			**createArgv();
+		void			setEnv(ServerConfiguration server, Client client);
+		void			setPath(const char *path);
+		void			error(std::string errorType);
 };
 
 #endif

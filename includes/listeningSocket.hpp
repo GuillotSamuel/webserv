@@ -7,6 +7,7 @@ class ListeningSocket
 	private:
 		struct sockaddr_in	_server_address;
 		int					_socket_fd;
+		struct protoent		*_proto;
 
 	public:
 		ListeningSocket(int port);

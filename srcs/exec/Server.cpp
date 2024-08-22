@@ -3,6 +3,7 @@
 
 Server::Server(ServerConfiguration info)
 {
+	this->_serv = info;
 	this->_socket = new ListeningSocket(info.getPort());
 	this->_connexion_fd = -1;
 	this->_epoll_fd = -1;
@@ -35,7 +36,8 @@ void Server::ServerExecution()
 		{
 			if (this->_events[i].data.fd == this->_socket->getSocket_fd())
 			{
-				this->_connexion_fd = accept(this->_socket->getSocket_fd(), NULL, NULL);
+				socklen_t client_addrlen = sizeof(this->_clientAdress);
+				this->_connexion_fd = accept(this->_socket->getSocket_fd(), (struct sockaddr *)&this->_clientAdress, &client_addrlen);
 				if (this->_connexion_fd == -1)
 				{
 					error("Error: accept failed");
@@ -51,7 +53,7 @@ void Server::ServerExecution()
 			}
 			else
 			{
-					handle_client();
+				handle_client();
 			}
 		}
 	}
@@ -64,48 +66,50 @@ void Server::error(std::string errorType)
 
 void Server::handle_client()
 {
-	int n;
-	memset(this->received_line, 0, sizeof(this->received_line));
-	n = read(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1);
-	if (n < 0)
-	{
-		error("Error: read handle client failed");
-		exit(EXIT_FAILURE);
-	}
+	Client *client = new Client();
+	char client_ip[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &this->_address.sin_addr, client_ip, INET_ADDRSTRLEN);
+	std::string ipAdress(client_ip);
 
-	std::string received_line_cpy(this->received_line);
+	std::cout << "client ip : " << client_ip << std::endl; // TEST
+	client->setIpAddress(ipAdress);
 
-	std::cout << received_line_cpy << std::endl; // TEST
-	// size_t requestLength = received_line_cpy.find("Content-Length:");
-	// if (requestLength != std::string::npos)
+	// int n;
+	
+	// n = 1;
+	// std::string received_line_cpy = "";
+	// while (n > 0)
 	// {
-	// 	while (n > 0)
-	// 	{
-	// 		memset(this->received_line, 0, sizeof(this->received_line));
-	// 		n = recv(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1, MSG_DONTWAIT);
-	// 		std::string tmp(this->received_line);
-	// 		received_line_cpy += tmp;
-	// 	}
-	// 	std::ofstream file("file.txt");
-	// 	if (!file.fail())
-	// 	{
-	// 		printf("failed\n");
-	// 	}
-	// 	file << received_line_cpy << std::endl;
+	// 	memset(this->received_line, 0, sizeof(this->received_line));
+	// 	n = read(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1);
+	// 	std::string tmp(this->received_line);
+	// 	received_line_cpy += tmp;
+	// }
+	// if (n < 0)
+	// {
+	// 	error("Error: read handle client failed");
+	// 	delete client;
+	// 	exit(EXIT_FAILURE);
 	// }
 
-	this->_method = findMethod(received_line_cpy);
+	if (read(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1) < 0)
+		error("connfd read failed");
+	std::string	received_line_cpy(this->received_line);
+	
+	std::cout << "LIGNE RECUE : " << received_line_cpy << std::endl; // TEST
+
+	client->setInfo(received_line_cpy);
 	std::string filePath = findPath(received_line_cpy);
 
-	if (this->_method == "GET")
+	if (client->getMethod() == "GET")
 	{
 		ft_get(filePath);
 	}
-	else if (this->_method == "POST")
+	else if (client->getMethod() == "POST")
 	{
-		ft_post(received_line);
+		ft_post(*client, filePath);
 	}
-	else if (this->_method == "DELETE")
+	else if (client->getMethod() == "DELETE")
 	{
 		ft_delete();
 	}
@@ -198,6 +202,7 @@ std::string Server::findPath(const std::string &receivedLine)
 
 std::string Server::findMethod(const std::string &receivedLine)
 {
+	std::cout << receivedLine << std::endl; // TEST
 	size_t method_end = receivedLine.find(' ');
 	if (method_end != std::string::npos)
 	{
@@ -221,8 +226,8 @@ void Server::ft_get(std::string filePath)
 		std::string response = "HTTP/1.1 400 Bad Request\r\n";
 		response += "Content-Type: text/html\r\n";
 		std::ostringstream oss;
-        oss << content.size();
-        response += "Content-Length: " + oss.str() + "\r\n";
+		oss << content.size();
+		response += "Content-Length: " + oss.str() + "\r\n";
 		response += "Connection: close\r\n";
 		response += "Server: webserv/1.0\r\n\r\n";
 		response += content;
@@ -236,27 +241,57 @@ void Server::ft_get(std::string filePath)
 		std::string response = "HTTP/1.1 200 OK\r\n";
 		response += "Content-Type: " + mimeType + "\r\n";
 		std::ostringstream oss;
-        oss << content.size();
-        response += "Content-Length: " + oss.str() + "\r\n";
+		oss << content.size();
+		response += "Content-Length: " + oss.str() + "\r\n";
 		response += "Connection: close\r\n";
-		response += "Server: MyCustomServer/1.0\r\n\r\n";
+		response += "Server: webserv/1.0\r\n\r\n";
 		response += content;
 		write(this->_connexion_fd, response.c_str(), response.size());
 	}
 }
 
-void Server::ft_post(std::string received_line)
+void Server::ft_post(Client client, std::string filePath)
 {
-	(void)received_line;
-	std::string content = execute_cgi_script();
-	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-			 "HTTP/1.0 200 OK\r\n\r\n%s", content.c_str());
+	Cgi *cgi = new Cgi();
+	cgi->setEnv(this->_serv, client);
+	cgi->setPath(filePath.c_str());
+	
+	// snprintf(this->socket_buffer, sizeof(this->socket_buffer),
+	// 		 "HTTP/1.0 200 OK\r\n\r\n%s", content.c_str());
 }
 
 void Server::ft_delete()
 {
-	// snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-	// 		 "HTTP/1.0 200 OK\r\n\r\nReceived DELETE request\n");
+	std::string filePath = findPath(this->_path);
+
+	if (access(filePath.c_str(), F_OK) != 0)
+	{
+		std::string response = "HTTP/1.1 404 Not Found\r\n";
+		response += "Content-Type: text/html\r\n";
+		std::string content = "File not found";
+		std::ostringstream oss;
+		oss << content.size();
+		response += "Content-Length: " + oss.str() + "\r\n";
+		response += "Connection: close\r\n";
+		response += "Server: webserv/1.0\r\n\r\n";
+		response += "File not found";
+
+		write(this->_connexion_fd, response.c_str(), response.size());
+		return;
+	}
+
+	if (unlink(filePath.c_str()) == 0)
+	{
+		std::string response = "HTTP/1.1 204 No Content\r\n";
+		response += "Connection: close\r\n";
+		response += "Server: webserv/1.0\r\n\r\n";
+
+		write(this->_connexion_fd, response.c_str(), response.size());
+	}
+	else
+	{
+		error("Error: ft_delete failed");
+	}
 }
 
 void Server::ft_badRequest()
@@ -288,47 +323,6 @@ std::string Server::readFileContent(const std::string &path)
 	oss << file.rdbuf();
 	return (oss.str());
 }
-
-std::string Server::execute_cgi_script()
-{
-	int pipefd[2];
-	if (pipe(pipefd) == -1)
-	{
-		error("Error: pipe creation failed");
-	}
-
-	int pid = fork();
-	if (pid == -1)
-	{
-		error("Error: fork cgi failed");
-	}
-	else if (pid == 0)
-	{
-		close(pipefd[0]);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-
-		this->_path = "../cgi-bin/test_cgi.py";
-		char *argv[] = {const_cast<char *>("/usr/bin/python3"), const_cast<char *>(this->_path.c_str()), NULL};
-		execve(argv[0], argv, this->_envp);
-
-		error("Error: execve cgi failed");
-	}
-	close(pipefd[1]);
-
-	char buffer[BUFFER_SIZE];
-	int n = 0;
-	while ((n = read(pipefd[0], buffer, sizeof(buffer) - 1)) > 0)
-	{
-		buffer[n] = '\0';
-	}
-	close(pipefd[0]);
-	waitpid(pid, NULL, 0);
-	std::string getContent(buffer);
-	std::cout << getContent << std::endl;
-	return (getContent);
-}
-
 
 std::string Server::getMimeType(const std::string &path)
 {

@@ -4,10 +4,13 @@
 
 class ListeningSocket;
 class ServerConfiguration;
+class Client;
 
 class Server
 {
 	private:
+		struct sockaddr		_clientAdress;
+		struct sockaddr_in	_address;
 		ListeningSocket 	*_socket;
 		struct epoll_event	_event;
 		struct epoll_event	_events[MAX_EVENTS];
@@ -18,6 +21,7 @@ class Server
 		char				**_envp;
 		char				received_line[BUFFER_SIZE];
 		char				socket_buffer[BUFFER_SIZE];
+		ServerConfiguration	_serv;
 
 		void				ServerExecution();
 		void				error(std::string errorType);
@@ -25,10 +29,9 @@ class Server
 		std::string			findPath(const std::string &receivedLine);
 		std::string			findMethod(const std::string &receivedLine);
 		void				ft_get(std::string filePath);
-		void				ft_post(std::string received_line);
+		void				ft_post(Client client, std::string filePath);
 		void				ft_delete();
 		void				ft_badRequest();
-		std::string			execute_cgi_script();
 		std::string			readFileContent(const std::string &path);
 		std::string 		getMimeType(const std::string &path);
 	public:
