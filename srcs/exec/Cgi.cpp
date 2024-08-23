@@ -33,15 +33,12 @@ void		Cgi::setEnv(ServerConfiguration server, Client client)
 	this->_env["SERVER_PROTOCOL"] = std::string("TCP/IP");
 	this->_env["SERVER_PORT"] = server.getPort();
 	this->_env["REQUEST_METHOD"] = client.getMethod();
-	// this->_env["PATH_INFO"] = serv.getPathInfoCgi();
-	this->_env["PATH_TRANSLATED"] = (std::string("d"));
-	this->_env["SCRIPT_NAME"] = std::string("e"); //le chemin vers le script executer
+	this->_env["PATH_INFO"] = std::string("test_cgi.py"); // this->_path // TEST
+	this->_env["PATH_TRANSLATED"] = (std::string(""));
+	this->_env["SCRIPT_NAME"] = std::string("/usr/bin/python3"); //le chemin vers le script executer
 	this->_env["QUERY_STRING"] = std::string("f");
-	this->_env["REMOTE_HOST"] = std::string("g"); // laisse vide si inconnu
+	this->_env["REMOTE_HOST"] = std::string(""); // laisse vide si inconnu
 	this->_env["REMOTE_ADDR"] = client.getIpAdress();
-	// this->_env["AUTH_TYPE"] = ;
-	// this->_env["REMOTE_USER"] = ;
-	// this->_env["REMOTE_IDENT"] = ;
 
 	//CLIENT_VAR
 	this->_env["HTTP_ACCEPT"] = std::string("h");
@@ -52,7 +49,7 @@ void		Cgi::setEnv(ServerConfiguration server, Client client)
 }
 
 
-char		**Cgi::conversionEnvFunc()
+char	**Cgi::conversionEnvFunc()
 {
 	this->_myEnvp = (char**)malloc((this->_env.size() + 1) * sizeof(char *));
 
@@ -67,38 +64,40 @@ char		**Cgi::conversionEnvFunc()
 
 std::string	Cgi::executeCgi()
 {
+	printf("1\n"); // TEST
 	int pipefd[2];
 	if (pipe(pipefd) == -1)
 	{
 		error("Error: pipe creation failed");
 	}
-
+	printf("2\n"); // TEST
 	int pid = fork();
 	if (pid == -1)
 	{
+		printf("3\n"); // TEST
 		error("Error: fork cgi failed");
 	}
 	else if (pid == 0)
 	{
+		printf("4\n"); // TEST
 		close(pipefd[0]);
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 
 		char **argv = this->createArgv();
-		if (argv == NULL)
-			exit(EXIT_FAILURE);
 		execve(argv[0], argv, this->conversionEnvFunc());
 
 		error("Error: execve cgi failed");
 	}
 	close(pipefd[1]);
-
+	printf("5\n"); // TEST
 	char buffer[BUFFER_SIZE];
 	int n = 0;
 	while ((n = read(pipefd[0], buffer, sizeof(buffer) - 1)) > 0)
 	{
 		buffer[n] = '\0';
 	}
+	printf("6\n"); // TEST
 	close(pipefd[0]);
 	waitpid(pid, NULL, 0);
 	std::string getContent(buffer);
@@ -107,11 +106,13 @@ std::string	Cgi::executeCgi()
 
 char	**Cgi::createArgv()
 {
-
+	char **argv;
 	std::cout << this->_path << std::endl;
-	// char *argv[] = {const_cast<char *>("/usr/bin/python3"), const_cast<char *>(this->_path), NULL};
-	return (NULL);
-	// return (argv);
+	argv = (char **) malloc(3 * sizeof(char *));
+	argv[0] = strdup("/usr/bin/python3");
+	argv[1] = strdup(this->_path);
+	argv[2] = NULL;
+	return (argv);
 }
 
 /*--------------------------------ERROR MANAGEMENT------------------------------------*/
@@ -119,6 +120,12 @@ char	**Cgi::createArgv()
 void		Cgi::error(std::string errorType)
 {
 	throw(std::runtime_error(errorType));
+}
+
+std::string Cgi::searchPathInfo()
+{
+
+	return std::string();
 }
 
 void Cgi::setPath(const char *path)

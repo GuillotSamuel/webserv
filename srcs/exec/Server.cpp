@@ -67,38 +67,35 @@ void Server::error(std::string errorType)
 void Server::handle_client()
 {
 	Client *client = new Client();
+
 	char client_ip[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &this->_address.sin_addr, client_ip, INET_ADDRSTRLEN);
 	std::string ipAdress(client_ip);
-
-	std::cout << "client ip : " << client_ip << std::endl; // TEST
 	client->setIpAddress(ipAdress);
 
-	// int n;
+	int n;
 	
-	// n = 1;
-	// std::string received_line_cpy = "";
-	// while (n > 0)
-	// {
-	// 	memset(this->received_line, 0, sizeof(this->received_line));
-	// 	n = read(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1);
-	// 	std::string tmp(this->received_line);
-	// 	received_line_cpy += tmp;
-	// }
-	// if (n < 0)
-	// {
-	// 	error("Error: read handle client failed");
-	// 	delete client;
-	// 	exit(EXIT_FAILURE);
-	// }
-
-	if (read(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1) < 0)
-		error("connfd read failed");
-	std::string	received_line_cpy(this->received_line);
-	
-	std::cout << "LIGNE RECUE : " << received_line_cpy << std::endl; // TEST
+	n = 1;
+	std::string received_line_cpy = "";
+	while (n > 0)
+	{
+		memset(this->received_line, 0, sizeof(this->received_line));
+		if ((n = read(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1)) <= 0)
+		{
+			error("Read Failed!");
+			return ;
+		}
+		std::string tmp(this->received_line);
+		if (tmp.size() < sizeof(this->received_line))
+		{
+			received_line_cpy += tmp;
+			break;
+		}
+		received_line_cpy += tmp;
+	}
 
 	client->setInfo(received_line_cpy);
+	std::cout << *client << std::endl; // TEST
 	std::string filePath = findPath(received_line_cpy);
 
 	if (client->getMethod() == "GET")
@@ -202,7 +199,6 @@ std::string Server::findPath(const std::string &receivedLine)
 
 std::string Server::findMethod(const std::string &receivedLine)
 {
-	std::cout << receivedLine << std::endl; // TEST
 	size_t method_end = receivedLine.find(' ');
 	if (method_end != std::string::npos)
 	{
@@ -255,9 +251,10 @@ void Server::ft_post(Client client, std::string filePath)
 	Cgi *cgi = new Cgi();
 	cgi->setEnv(this->_serv, client);
 	cgi->setPath(filePath.c_str());
+	std::string content = cgi->executeCgi();
 	
-	// snprintf(this->socket_buffer, sizeof(this->socket_buffer),
-	// 		 "HTTP/1.0 200 OK\r\n\r\n%s", content.c_str());
+	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
+			 "HTTP/1.0 200 OK\r\n\r\n%s", content.c_str());
 }
 
 void Server::ft_delete()

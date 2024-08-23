@@ -13,9 +13,6 @@ ListeningSocket::ListeningSocket(int port)
 		std::cout << "ERROR : getprotobyname" << std::endl; // TEST
 	}
 
-	std::cout << "Info proto -> p_aliases = " << this->_proto->p_aliases
-	<< " p_name = " << this->_proto->p_name << "p_proto = " << this->_proto->p_proto << std::endl; // TEST
-
 	if ((this->_socket_fd = socket(this->_server_address.sin_family, SOCK_STREAM, this->_proto->p_proto)) < 0)
 	{
 		throw(std::runtime_error("Error: socket_fd creation failed"));
@@ -36,9 +33,6 @@ ListeningSocket::ListeningSocket(int port)
 	{
 		std::cout << "getsocketname" << std::endl; // TEST
 	}
-
-	int assigned_port = ntohs(this->_server_address.sin_port); // TEST
-	std::cout << "Le serveur est lié au port : " << assigned_port << std::endl; // TEST
 
 	if (listen(this->_socket_fd, 256) < 0)
 	{

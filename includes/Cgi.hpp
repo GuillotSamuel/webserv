@@ -12,7 +12,7 @@ class Cgi
 		char								**_myEnvp;
 		const char							*_path;
 		char								**_myArgv;
-		std::map<std::string, std::string>	_pathInfo;
+		std::string							_pathInfo;
 
 	public:
 		Cgi();
@@ -23,6 +23,7 @@ class Cgi
 		void			setEnv(ServerConfiguration server, Client client);
 		void			setPath(const char *path);
 		void			error(std::string errorType);
+		std::string		searchPathInfo();
 };
 
 #endif
