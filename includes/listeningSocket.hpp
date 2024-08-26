@@ -14,4 +14,5 @@ class ListeningSocket
 		~ListeningSocket();
 
 		int	getSocket_fd() const;
+		void set_nonblocking(int sockfd);
 };

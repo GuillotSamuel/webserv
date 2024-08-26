@@ -34,6 +34,8 @@ ListeningSocket::ListeningSocket(int port)
 		std::cout << "getsocketname" << std::endl; // TEST
 	}
 
+	set_nonblocking(this->_socket_fd);
+	
 	if (listen(this->_socket_fd, 256) < 0)
 	{
 		close(this->_socket_fd);
@@ -51,4 +53,18 @@ ListeningSocket::~ListeningSocket()
 int ListeningSocket::getSocket_fd() const
 {
 	return (this->_socket_fd);
+}
+
+void ListeningSocket::set_nonblocking(int sockfd) {
+    int flags = fcntl(sockfd, F_GETFL, 0);
+    if (flags == -1) {
+        perror("fcntl F_GETFL");
+        exit(EXIT_FAILURE);
+    }
+
+    flags |= O_NONBLOCK;
+    if (fcntl(sockfd, F_SETFL, flags) == -1) {
+        perror("fcntl F_SETFL");
+        exit(EXIT_FAILURE);
+    }
 }

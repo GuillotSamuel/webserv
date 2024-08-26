@@ -84,9 +84,11 @@ std::string	Cgi::executeCgi()
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 
+		printf("4.1\n"); // TEST
 		char **argv = this->createArgv();
+		printf("4.2\n"); // TEST
 		execve(argv[0], argv, this->conversionEnvFunc());
-
+		printf("4.3\n"); // TEST
 		error("Error: execve cgi failed");
 	}
 	close(pipefd[1]);

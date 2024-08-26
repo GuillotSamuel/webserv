@@ -34,6 +34,7 @@ class Server
 		void				ft_badRequest();
 		std::string			readFileContent(const std::string &path);
 		std::string 		getMimeType(const std::string &path);
+		void				set_nonblocking(int sockfd);
 	public:
 		Server(ServerConfiguration inf);
 		~Server();

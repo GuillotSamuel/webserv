@@ -1,6 +1,20 @@
 // #include "server.hpp"
 #include "webserv.hpp"
 
+void Server::set_nonblocking(int sockfd) {
+    int flags = fcntl(sockfd, F_GETFL, 0);
+    if (flags == -1) {
+        perror("fcntl F_GETFL");
+        exit(EXIT_FAILURE);
+    }
+
+    flags |= O_NONBLOCK;
+    if (fcntl(sockfd, F_SETFL, flags) == -1) {
+        perror("fcntl F_SETFL");
+        exit(EXIT_FAILURE);
+    }
+}
+
 Server::Server(ServerConfiguration info)
 {
 	this->_serv = info;
@@ -8,7 +22,7 @@ Server::Server(ServerConfiguration info)
 	this->_connexion_fd = -1;
 	this->_epoll_fd = -1;
 
-	if ((this->_epoll_fd = epoll_create1(0)) == -1)
+	if ((this->_epoll_fd = epoll_create(1)) == -1)
 	{
 		error("Error: epoll_fd creation failed");
 	}
@@ -32,7 +46,7 @@ void Server::ServerExecution()
 		{
 			error("Error: epoll_wait failed");
 		}
-		for (int i = 0; i < nfds; ++i)
+		for (int i = 0; i < nfds; i++) // anciennement ++i
 		{
 			if (this->_events[i].data.fd == this->_socket->getSocket_fd())
 			{
@@ -43,17 +57,29 @@ void Server::ServerExecution()
 					error("Error: accept failed");
 				}
 
-				this->_event.events = EPOLLIN | EPOLLET;
-				this->_event.data.fd = this->_connexion_fd;
+				set_nonblocking(this->_connexion_fd);
 
+				this->_event.events = EPOLLIN | EPOLLET | EPOLLRDHUP | EPOLLHUP;
+				this->_event.data.fd = this->_connexion_fd;
 				if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_connexion_fd, &this->_event) == -1)
 				{
 					error("Error: epoll_ctl failed");
 				}
 			}
-			else
+			else if (this->_events[i].events & EPOLLIN)
 			{
 				handle_client();
+			}
+			else
+				std::cout << "inexpected" << std::endl;
+			if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP))
+			{
+				if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_events->data.fd, NULL) == -1)
+				{
+					error("Error: epoll_ctl failed");
+				}
+				close(this->_events->data.fd);
+				continue;
 			}
 		}
 	}
@@ -74,29 +100,31 @@ void Server::handle_client()
 	client->setIpAddress(ipAdress);
 
 	int n;
-	
-	n = 1;
-	std::string received_line_cpy = "";
-	while (n > 0)
+	if ((n = recv(this->_connexion_fd, this->received_line, sizeof(this->received_line - 1), 0)) < 0)
+		std::cout << "read failed !" << std::endl;
+	std::string received_line(this->received_line);
+
+
+	client->setInfo(received_line);
+	if (client->getContentLength() != "")
 	{
-		memset(this->received_line, 0, sizeof(this->received_line));
-		if ((n = read(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1)) <= 0)
+		int	size = atoi((client->getContentLength()).c_str());
+		std::cout << "size = " << size << std::endl;
+		while (size > 0)
 		{
-			error("Read Failed!");
-			return ;
+			size_t n = recv(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1, 0);
+			std::string tmp(this->received_line);
+			received_line += tmp;
+			size -= n;
 		}
-		std::string tmp(this->received_line);
-		if (tmp.size() < sizeof(this->received_line))
-		{
-			received_line_cpy += tmp;
-			break;
-		}
-		received_line_cpy += tmp;
 	}
 
-	client->setInfo(received_line_cpy);
-	std::cout << *client << std::endl; // TEST
-	std::string filePath = findPath(received_line_cpy);
+	std::cout << received_line << std::endl; // TEST	
+	
+	std::string filePath = findPath(received_line);
+	std::ofstream file("tmp.txt");
+
+	file << received_line;
 
 	if (client->getMethod() == "GET")
 	{
@@ -192,6 +220,11 @@ std::string Server::findPath(const std::string &receivedLine)
 	else if (this->_path.compare(this->_path.size() - 3, 3, ".csv") == 0)
 	{
 		return (CSV_FILES + this->_path);
+	}
+	else if (this->_path.compare(this->_path.size() - 3, 3, ".py") == 0 ||
+		this->_path.compare(this->_path.size() - 3, 3, ".sh") == 0)
+	{
+		return (this->_path);
 	}
 
 	return (ERROR_400_PAGE);

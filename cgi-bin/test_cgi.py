@@ -1,36 +1,63 @@
 #!/usr/bin/env python3
 
-import sys
+import cgi
+import cgitb
+import os
 
-def find_boundary_from_stdin():
-    # Lire tout le contenu de stdin
-    input_data = sys.stdin.read()
-    
-    # Chercher l'indice du début de "boundary="
-    boundary_start = input_data.find("boundary=")
-    
-    if boundary_start == -1:
-        # Si "boundary=" n'est pas trouvé, renvoyer une chaîne vide ou un message d'erreur
-        return None
-    
-    # Début du boundary après "boundary="
-    boundary_start += len("boundary=")
-    
-    # Trouver l'indice du prochain "\r\n" après "boundary="
-    boundary_end = input_data.find("\r\n", boundary_start)
-    
-    if boundary_end == -1:
-        # Si "\r\n" n'est pas trouvé, prendre la fin de la chaîne
-        boundary_end = len(input_data)
-    
-    # Extraire et retourner la valeur du boundary
-    boundary_value = input_data[boundary_start:boundary_end]
-    return boundary_value.strip()
+# Activer le mode de débogage CGI pour afficher les erreurs dans le navigateur
+cgitb.enable()
 
-if __name__ == "__main__":
-    boundary = find_boundary_from_stdin()
-    if boundary:
-        print(boundary)
-    else:
-        print("Boundary not found.")
+# Définir le type de contenu renvoyé par le script
+print("Content-Type: text/html\n")
 
+# Récupérer les données du formulaire
+form = cgi.FieldStorage()
+
+# Extraire les valeurs des champs du formulaire
+first_name = form.getvalue("first-name")
+last_name = form.getvalue("last-name")
+favorite_color = form.getvalue("favorite-color")
+fileitem = form['image']
+
+# Vérifier si un fichier a été téléchargé
+if fileitem.filename:
+    # Définir le chemin où l'image téléchargée sera stockée
+    upload_dir = "/home/user/ecole_42/webserv3/uploads/"
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
+    # Extraire le nom du fichier et le stocker
+    filepath = os.path.join(upload_dir, os.path.basename(fileitem.filename))
+    with open(filepath, 'wb') as f:
+        f.write(fileitem.file.read())
+    upload_message = f"File '{fileitem.filename}' uploaded successfully."
+else:
+    upload_message = "No file uploaded."
+
+# Créer une réponse HTML dynamique
+print(f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission Result</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <a class="header-title" href="index.html">Webserv</a>
+    </header>
+    <main>
+        <h1>Form Submission Result</h1>
+        <p>First Name: {first_name}</p>
+        <p>Last Name: {last_name}</p>
+        <p>Favorite Color: {favorite_color}</p>
+        <p>{upload_message}</p>
+        <a href="index.html">Go back to the form</a>
+    </main>
+    <footer>
+        <div class="footer-credits">Project made by sguillot and mmahfoud</div>
+    </footer>
+</body>
+</html>
+""")

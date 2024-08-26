@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/22 18:18:33 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/08/25 22:23:11 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #define ICON_FILES "www/icons"
 #define CSV_FILES "www/data"
 #define ERROR_400_PAGE "www/html/errors/400.html"
+#define CGI_FILES "cgi-bin"
 
 class ServerConfiguration
 {
