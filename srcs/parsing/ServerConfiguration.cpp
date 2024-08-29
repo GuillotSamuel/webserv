@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/22 14:32:11 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/08/29 12:46:32 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 //     clientMaxBodySize(-1), _pathInfo(std::string()) {}
 
 ServerConfiguration::ServerConfiguration(void) {
+    
+    this->_log = new std::ofstream("log.txt");
+    
     this->port = 8090;
     this->hostName = std::string("127.0.0.1");
     this->serverName = std::string("localhost");
@@ -37,6 +40,7 @@ ServerConfiguration::ServerConfiguration(void) {
     this->_pathInfoMime[("ICON_FILES")] = std::string("www/icons");
     this->_pathInfoMime[("CSV_FILES")] = std::string("www/data");
     this->_pathInfoMime[("ERROR_400_PAGE")] = std::string("www/html/errors/400.html");
+    log("configuration of the server finished.", 3);
 }
 
 ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
@@ -126,8 +130,21 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
 {
 	Cout << i.getClientMaxBodySize() << std::endl;
     Cout << i.getHostName() << std::endl;
-    // Cout << i.getPathInfo() << std::endl;
     Cout << i.getPort() << std::endl;
     Cout << i.getServerName() << std::endl;
     return (Cout);
+}
+
+void    ServerConfiguration::log(std::string error, int type)
+{
+    if (this->_log && this->_log->is_open()) {
+        if (type == 1)
+		*this->_log << "\t[INFO] :\n" << error << std::endl;
+	else if (type == 2)
+		*this->_log << "\n\t[ERROR] : \n" << error << std::endl;
+	else if (type == 3)
+		*this->_log << "[INFO] : " << error << std::endl;
+    } else {
+        std::cerr << "Log error: Log stream is null or not open" << std::endl;
+    }
 }

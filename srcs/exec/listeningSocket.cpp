@@ -1,6 +1,6 @@
 #include "listeningSocket.hpp"
 
-ListeningSocket::ListeningSocket(int port)
+ListeningSocket::ListeningSocket(int port, ServerConfiguration &serv): _serv(serv)
 {
 	socklen_t address_len = sizeof(this->_server_address);
 	this->_server_address.sin_family = AF_INET;
@@ -9,38 +9,46 @@ ListeningSocket::ListeningSocket(int port)
 
 	this->_proto = getprotobyname("tcp");
 	if (this->_proto == NULL)
-	{
-		std::cout << "ERROR : getprotobyname" << std::endl; // TEST
-	}
+		this->_serv.log("Getprotobyname didn't worked for some reason", 2);
+
+	this->_serv.log("Getprotobyname Succed", 1);
 
 	if ((this->_socket_fd = socket(this->_server_address.sin_family, SOCK_STREAM, this->_proto->p_proto)) < 0)
-	{
-		throw(std::runtime_error("Error: socket_fd creation failed"));
-	}
+		this->_serv.log("Socket_fd creation failed", 2);
+
+	this->_serv.log("Socket_fd in now created.", 1);
 
 	if (setsockopt(this->_socket_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &this->_proto, sizeof(this->_proto))) {
         close(this->_socket_fd);
-		std::cout << "can't reuse port " << std::endl; // TEST
+		this->_serv.log("Port was not reuse", 2);
     }
+
+	this->_serv.log("Socket_fd in now set.", 1);
 
 	if (bind(this->_socket_fd, (struct sockaddr *)&this->_server_address, sizeof(this->_server_address)) < 0)
 	{
 		close(this->_socket_fd);
-		throw(std::runtime_error("Error: socket bind error"));
+		this->_serv.log("Socket bind error", 2);
 	}
+
+	this->_serv.log("Socket_fd is binded.", 1);
 
 	if (getsockname(this->_socket_fd, (struct sockaddr *)&this->_server_address, &address_len) == -1)
 	{
-		std::cout << "getsocketname" << std::endl; // TEST
+		this->_serv.log("Getsocketname Failed", 2);
 	}
 
 	set_nonblocking(this->_socket_fd);
 	
+	this->_serv.log("Socket_fd is non blocking fd.", 1);
+
 	if (listen(this->_socket_fd, 256) < 0)
 	{
 		close(this->_socket_fd);
-		throw(std::runtime_error("Error: socket listen error"));
+		this->_serv.log("Listen Failed", 2);
 	}
+
+	this->_serv.log("Socket_fd is now listening every attemp of connection.", 1);
 }
 ListeningSocket::~ListeningSocket()
 {

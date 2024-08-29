@@ -1,39 +1,31 @@
 // #include "server.hpp"
 #include "webserv.hpp"
 
-void Server::set_nonblocking(int sockfd) {
-    int flags = fcntl(sockfd, F_GETFL, 0);
-    if (flags == -1) {
-        perror("fcntl F_GETFL");
-        exit(EXIT_FAILURE);
-    }
-
-    flags |= O_NONBLOCK;
-    if (fcntl(sockfd, F_SETFL, flags) == -1) {
-        perror("fcntl F_SETFL");
-        exit(EXIT_FAILURE);
-    }
-}
-
-Server::Server(ServerConfiguration info)
+Server::Server(ServerConfiguration &info): _serv(info)
 {
-	this->_serv = info;
-	this->_socket = new ListeningSocket(info.getPort());
+	this->_socket = new ListeningSocket(this->_serv.getPort(), info);
 	this->_connexion_fd = -1;
 	this->_epoll_fd = -1;
+	this->extpath = createExtPath();
+	this->mimePath = createMimePath();
+	memset(&this->_address, 0, sizeof(struct sockaddr_in));
+	memset(this->socket_buffer, 0, sizeof(this->socket_buffer));
 
 	if ((this->_epoll_fd = epoll_create(1)) == -1)
-	{
-		error("Error: epoll_fd creation failed");
-	}
+		this->_serv.log("Error: epoll_fd creation failed", 2);
+	
+	this->_serv.log("Epoll instance creation done.", 1);
 
 	this->_event.events = EPOLLIN;
 	this->_event.data.fd = this->_socket->getSocket_fd();
 
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_socket->getSocket_fd(), &this->_event) == -1)
 	{
-		error("Error: epoll_ctl creation failed");
+		this->_serv.log("Error: epoll_ctl creation failed", 2);
 	}
+
+	this->_serv.log("Epoll_ctl done.", 1);
+	this->_serv.log("Construcion Of the server is now finish and he's ready to listen", 1);
 	ServerExecution();
 }
 
@@ -44,7 +36,7 @@ void Server::ServerExecution()
 		int nfds = epoll_wait(this->_epoll_fd, this->_events, MAX_EVENTS, -1);
 		if (nfds == -1)
 		{
-			error("Error: epoll_wait failed");
+			this->_serv.log("epoll_wait failed", 2);
 		}
 		for (int i = 0; i < nfds; i++) // anciennement ++i
 		{
@@ -54,8 +46,10 @@ void Server::ServerExecution()
 				this->_connexion_fd = accept(this->_socket->getSocket_fd(), (struct sockaddr *)&this->_clientAdress, &client_addrlen);
 				if (this->_connexion_fd == -1)
 				{
-					error("Error: accept failed");
+					this->_serv.log("Accept failed", 2);
 				}
+				this->_serv.log("NEW REQUEST", 3);
+				this->_serv.log("Server did accept the connection", 1);
 
 				set_nonblocking(this->_connexion_fd);
 
@@ -63,7 +57,7 @@ void Server::ServerExecution()
 				this->_event.data.fd = this->_connexion_fd;
 				if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_connexion_fd, &this->_event) == -1)
 				{
-					error("Error: epoll_ctl failed");
+					this->_serv.log("epoll_ctl failed", 2);
 				}
 			}
 			else if (this->_events[i].events & EPOLLIN)
@@ -71,23 +65,36 @@ void Server::ServerExecution()
 				handle_client();
 			}
 			else
-				std::cout << "inexpected" << std::endl;
+				this->_serv.log("Inexpected event coming", 2);
 			if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP))
 			{
 				if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_events->data.fd, NULL) == -1)
 				{
-					error("Error: epoll_ctl failed");
+					this->_serv.log("epoll_ctl failed.", 2);
 				}
 				close(this->_events->data.fd);
+				this->_serv.log("Client has been successfuly closed.", 1);
 				continue;
 			}
 		}
 	}
 }
 
-void Server::error(std::string errorType)
-{
-	throw(std::runtime_error(errorType));
+void Server::set_nonblocking(int sockfd) {
+    int flags = fcntl(sockfd, F_GETFL, 0);
+    if (flags == -1)
+	{
+		this->_serv.log("fnctl failed.", 2);
+		return ;
+    }
+
+    flags |= O_NONBLOCK;
+    if (fcntl(sockfd, F_SETFL, flags) == -1) 
+	{
+		this->_serv.log("fnctl failed.", 2);
+		return ;
+    }
+	this->_serv.log("Fd is now non-blocking", 1);
 }
 
 void Server::handle_client()
@@ -95,36 +102,53 @@ void Server::handle_client()
 	Client *client = new Client();
 
 	char client_ip[INET_ADDRSTRLEN];
+	
+	memset(client_ip, 0, INET_ADDRSTRLEN);
     inet_ntop(AF_INET, &this->_address.sin_addr, client_ip, INET_ADDRSTRLEN);
 	std::string ipAdress(client_ip);
 	client->setIpAddress(ipAdress);
 
-	int n;
-	if ((n = recv(this->_connexion_fd, this->received_line, sizeof(this->received_line - 1), 0)) < 0)
-		std::cout << "read failed !" << std::endl;
-	std::string received_line(this->received_line);
+	memset(this->received_line, 0, 4096);
+	int n = recv(this->_connexion_fd, this->received_line, 4095, 0);
+	if (n < 0)
+	{
+		this->_serv.log("Recv failed", 2);
+		return ;
+	}
+	if (n == 0)
+	{
+		this->_serv.log("The connexion has been interupted", 3);
+		return ;
+	}
+	std::string receivedLine(this->received_line);
 
+	client->setInfo(receivedLine);
 
-	client->setInfo(received_line);
+	
 	if (client->getContentLength() != "")
 	{
-		int	size = atoi((client->getContentLength()).c_str());
-		std::cout << "size = " << size << std::endl;
-		while (size > 0)
+		int len = atoi(client->getContentLength().c_str());
+
+		char buffer[len + 1];
+		memset(buffer, 0, len + 1);
+		int read = recv(this->_connexion_fd, buffer, len, 0);
+		if (read < 0)
 		{
-			size_t n = recv(this->_connexion_fd, this->received_line, sizeof(this->received_line) - 1, 0);
-			std::string tmp(this->received_line);
-			received_line += tmp;
-			size -= n;
+			this->_serv.log("Recv failed", 2);
 		}
+		if (read == 0)
+		{
+			this->_serv.log("The connexion has been interupted", 2);
+		}
+		std::string tmp(buffer);
+		receivedLine += tmp;
+
+		std::ofstream file("tmp.txt");
+
+		file << receivedLine;
 	}
 
-	std::cout << received_line << std::endl; // TEST	
-	
-	std::string filePath = findPath(received_line);
-	std::ofstream file("tmp.txt");
-
-	file << received_line;
+	std::string filePath = findPath(receivedLine);
 
 	if (client->getMethod() == "GET")
 	{
@@ -147,102 +171,6 @@ void Server::handle_client()
 	close(this->_connexion_fd);
 }
 
-std::string Server::findPath(const std::string &receivedLine)
-{
-	size_t path_start = receivedLine.find('/');
-	if (path_start == std::string::npos)
-	{
-		error("Error: path_start failed");
-	}
-
-	size_t path_end = receivedLine.find(' ', path_start);
-	if (path_end == std::string::npos)
-	{
-		error("Error: path_end failed");
-	}
-	this->_path = receivedLine.substr(path_start, path_end - path_start);
-
-	if (this->_path == "/")
-	{
-		return (HTML_FILES + std::string("/index.html"));
-	}
-	else if (this->_path.compare(this->_path.size() - 5, 5, ".html") == 0)
-	{
-		return (HTML_FILES + this->_path);
-	}
-	else if (this->_path.compare(this->_path.size() - 4, 4, ".css") == 0)
-	{
-		return (CSS_FILES + this->_path);
-	}
-	else if (this->_path.compare(this->_path.size() - 3, 3, ".js") == 0)
-	{
-		return (JS_FILES + this->_path);
-	}
-	else if (this->_path.compare(this->_path.size() - 5, 5, ".json") == 0)
-	{
-		return (JSON_FILES + this->_path);
-	}
-	else if ((this->_path.compare(this->_path.size() - 4, 4, ".jpg") == 0) ||
-			 (this->_path.compare(this->_path.size() - 5, 5, ".jpeg") == 0) ||
-			 (this->_path.compare(this->_path.size() - 4, 4, ".png") == 0) ||
-			 (this->_path.compare(this->_path.size() - 4, 4, ".gif") == 0) ||
-			 (this->_path.compare(this->_path.size() - 4, 4, ".bmp") == 0) ||
-			 (this->_path.compare(this->_path.size() - 4, 4, ".ico") == 0) ||
-			 (this->_path.compare(this->_path.size() - 5, 5, ".webp") == 0) ||
-			 (this->_path.compare(this->_path.size() - 4, 4, ".svg") == 0))
-	{
-		return (IMAGE_FILES + this->_path);
-	}
-	else if (this->_path.compare(this->_path.size() - 4, 4, ".mp4") == 0 ||
-			 this->_path.compare(this->_path.size() - 4, 4, ".webm") == 0 ||
-			 this->_path.compare(this->_path.size() - 4, 4, ".avi") == 0)
-	{
-		return (VIDEO_FILES + this->_path);
-	}
-	else if (this->_path.compare(this->_path.size() - 3, 3, ".mp3") == 0)
-	{
-		return (AUDIO_FILES + this->_path);
-	}
-	else if (this->_path.compare(this->_path.size() - 4, 4, ".pdf") == 0)
-	{
-		return (PDF_FILES + this->_path);
-	}
-	else if (this->_path.compare(this->_path.size() - 4, 4, ".xml") == 0)
-	{
-		return (XML_FILES + this->_path);
-	}
-	else if (this->_path.compare(this->_path.size() - 3, 3, ".ttf") == 0 ||
-			 this->_path.compare(this->_path.size() - 4, 4, ".woff") == 0 ||
-			 this->_path.compare(this->_path.size() - 5, 5, ".woff2") == 0)
-	{
-		return (FONT_FILES + this->_path);
-	}
-	else if (this->_path.compare(this->_path.size() - 3, 3, ".csv") == 0)
-	{
-		return (CSV_FILES + this->_path);
-	}
-	else if (this->_path.compare(this->_path.size() - 3, 3, ".py") == 0 ||
-		this->_path.compare(this->_path.size() - 3, 3, ".sh") == 0)
-	{
-		return (this->_path);
-	}
-
-	return (ERROR_400_PAGE);
-}
-
-std::string Server::findMethod(const std::string &receivedLine)
-{
-	size_t method_end = receivedLine.find(' ');
-	if (method_end != std::string::npos)
-	{
-		this->_method = receivedLine.substr(0, method_end);
-	}
-	else
-	{
-		error("Error: find method failed");
-	}
-	return (this->_method);
-}
 
 void Server::ft_get(std::string filePath)
 {
@@ -250,6 +178,7 @@ void Server::ft_get(std::string filePath)
 
 	if (content.empty())
 	{
+		this->_serv.log("The file requested was found empty, server's ready to response", 1);
 		content = readFileContent(ERROR_400_PAGE);
 
 		std::string response = "HTTP/1.1 400 Bad Request\r\n";
@@ -265,7 +194,8 @@ void Server::ft_get(std::string filePath)
 	}
 	else
 	{
-		std::string mimeType = getMimeType(filePath);
+		this->_serv.log("The file requested was found, server's ready to response", 1);
+		std::string mimeType = getMimeType();
 
 		std::string response = "HTTP/1.1 200 OK\r\n";
 		response += "Content-Type: " + mimeType + "\r\n";
@@ -282,8 +212,9 @@ void Server::ft_get(std::string filePath)
 void Server::ft_post(Client client, std::string filePath)
 {
 	Cgi *cgi = new Cgi();
-	cgi->setEnv(this->_serv, client);
+	cgi->setPathInfoCgi(this->_serv.getPathInfoCgi());
 	cgi->setPath(filePath.c_str());
+	cgi->setEnv(this->_serv, client);
 	std::string content = cgi->executeCgi();
 	
 	snprintf(this->socket_buffer, sizeof(this->socket_buffer),
@@ -306,6 +237,7 @@ void Server::ft_delete()
 		response += "Server: webserv/1.0\r\n\r\n";
 		response += "File not found";
 
+		this->_serv.log("Server's ready to respond", 1);
 		write(this->_connexion_fd, response.c_str(), response.size());
 		return;
 	}
@@ -316,11 +248,12 @@ void Server::ft_delete()
 		response += "Connection: close\r\n";
 		response += "Server: webserv/1.0\r\n\r\n";
 
+		this->_serv.log("Server's ready to respond", 1);
 		write(this->_connexion_fd, response.c_str(), response.size());
 	}
 	else
 	{
-		error("Error: ft_delete failed");
+		this->_serv.log("Ft_delete failed", 2);
 	}
 }
 
@@ -337,6 +270,7 @@ void Server::ft_badRequest()
 	response += "Server: webserv/1.0\r\n\r\n";
 	response += content;
 
+	this->_serv.log("Server's ready to respond", 1);
 	write(this->_connexion_fd, response.c_str(), response.size());
 }
 
@@ -346,6 +280,7 @@ std::string Server::readFileContent(const std::string &path)
 
 	if (!file.is_open())
 	{
+		this->_serv.log("The file given in the request does not exist", 1);
 		return ("");
 	}
 
@@ -354,57 +289,109 @@ std::string Server::readFileContent(const std::string &path)
 	return (oss.str());
 }
 
-std::string Server::getMimeType(const std::string &path)
+std::string Server::getMimeType()
 {
-	if (path.size() > 5 && path.substr(path.size() - 5) == ".html")
+	if (this->_path == "/")
 		return ("text/html");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".css")
-		return ("text/css");
-	else if (path.size() > 3 && path.substr(path.size() - 3) == ".js")
-		return ("application/javascript");
-	else if (path.size() > 5 && path.substr(path.size() - 5) == ".json")
-		return ("application/json");
-	else if ((path.size() > 4 && path.substr(path.size() - 4) == ".jpg") ||
-			 (path.size() > 5 && path.substr(path.size() - 5) == ".jpeg"))
-		return ("image/jpeg");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".png")
-		return ("image/png");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".gif")
-		return ("image/gif");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".bmp")
-		return ("image/bmp");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".ico")
-		return ("image/x-icon");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".svg")
-		return ("image/svg+xml");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".xml")
-		return ("application/xml");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".pdf")
-		return ("application/pdf");
-	else if (path.size() > 3 && path.substr(path.size() - 3) == ".mp3")
-		return ("audio/mpeg");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".mp4")
-		return ("video/mp4");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".webm")
-		return ("video/webm");
-	else if (path.size() > 5 && path.substr(path.size() - 5) == ".webp")
-		return ("image/webp");
-	else if (path.size() > 3 && path.substr(path.size() - 3) == ".ttf")
-		return ("font/ttf");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".woff")
-		return ("font/woff");
-	else if (path.size() > 5 && path.substr(path.size() - 5) == ".woff2")
-		return ("font/woff2");
-	else if (path.size() > 3 && path.substr(path.size() - 3) == ".csv")
-		return ("text/csv");
-	else if (path.size() > 4 && path.substr(path.size() - 4) == ".avi")
-		return ("video/x-msvideo");
-	else
-		return ("application/octet-stream");
+	
+	if (this->mimePath.find(this->_extensionPath) != this->mimePath.end())
+		return (this->mimePath[this->_extensionPath]);
+
+	this->_serv.log("Extension of the files was not recognize.", 1);
+	return ("application/octet-stream");
 }
 Server::~Server()
 {
 	// close(this->_epoll_fd);
 	// close(this->_socket->getSocket_fd());
 	// delete (this->_socket);
+}
+
+/*---------------------------------------------UTILS------------------------------------------------------*/
+
+std::string Server::findPath(const std::string &receivedLine)
+{
+	size_t path_start = receivedLine.find('/');
+	if (path_start == std::string::npos)
+		this->_serv.log("Path_start failed", 2);
+
+	size_t path_end = receivedLine.find(' ', path_start);
+	if (path_end == std::string::npos)
+		this->_serv.log("Path_end failed", 2);
+	this->_path = receivedLine.substr(path_start, path_end - path_start);
+
+	if (this->_path == "/")
+		return (HTML_FILES + std::string("/index.html"));
+
+	size_t ext = this->_path.rfind(".");
+	size_t extend = this->_path.size();
+	std::string extension = this->_path.substr(ext, (extend - ext));
+	if (this->extpath.find(extension) != this->extpath.end())
+	{
+		this->_extensionPath = extension;
+		return (this->extpath[extension] + this->_path);
+	}
+	
+	this->_serv.log("Extension of the files was not recognize.", 1);
+	return (ERROR_400_PAGE);
+}
+
+std::map<std::string, std::string>	Server::createExtPath()
+{
+	std::map<std::string, std::string> extPath;
+
+	extPath[".html"] = HTML_FILES;
+	extPath[".css"] = CSS_FILES;
+	extPath[".js"] = JS_FILES;
+	extPath[".json"] = JSON_FILES;
+	extPath[".jpg"] = IMAGE_FILES;
+	extPath[".jpeg"] = IMAGE_FILES;
+	extPath[".png"] = IMAGE_FILES;
+	extPath[".gif"] = IMAGE_FILES;
+	extPath[".bmp"] = IMAGE_FILES;
+	extPath[".ico"] = IMAGE_FILES;
+	extPath[".webp"] = IMAGE_FILES;
+	extPath[".svg"] = IMAGE_FILES;
+	extPath[".mp4"] = VIDEO_FILES;
+	extPath[".webm"] = VIDEO_FILES;
+	extPath[".avi"] = VIDEO_FILES;
+	extPath[".mp3"] = AUDIO_FILES;
+	extPath[".pdf"] = PDF_FILES;
+	extPath[".xml"] = XML_FILES;
+	extPath[".ttf"] = FONT_FILES;
+	extPath[".woff"] = FONT_FILES;
+	extPath[".woff2"] = FONT_FILES;
+	extPath[".csv"] = CSV_FILES;
+	extPath[".py"] = CGI_FILES;
+	extPath[".sh"] = CGI_FILES;
+	return (extPath);
+}
+
+std::map<std::string, std::string>	Server::createMimePath()
+{
+	std::map<std::string, std::string> mimePath;
+
+	mimePath[".html"] = "text/html";
+	mimePath[".css"] = "text/css";
+	mimePath[".js"] = "application/javascript";
+	mimePath[".json"] = "application/json";
+	mimePath[".jpg"] = "image/jpeg";
+	mimePath[".jpeg"] = "image/jpeg";
+	mimePath[".png"] = "image/png";
+	mimePath[".gif"] = "image/gif";
+	mimePath[".bmp"] = "image/bmp";
+	mimePath[".ico"] = "image/x-icon";
+	mimePath[".webp"] = "image/webp";
+	mimePath[".svg"] = "image/svg+xml";
+	mimePath[".mp4"] = "video/mp4";
+	mimePath[".webm"] = "video/webm";
+	mimePath[".avi"] = "video/x-msvideo";
+	mimePath[".mp3"] = "audio/mpeg";
+	mimePath[".pdf"] = "application/pdf";
+	mimePath[".xml"] = "application/xml";
+	mimePath[".ttf"] = "font/ttf";
+	mimePath[".woff"] = "font/woff";
+	mimePath[".woff2"] = "font/woff2";
+	mimePath[".csv"] = "text/csv";
+	return (mimePath);
 }

@@ -1,63 +1,43 @@
-#!/usr/bin/env python3
+import re
 
-import cgi
-import cgitb
-import os
+# Chemin vers le fichier contenant la requête HTTP
+input_file_path = '/home/user/ecole_42/webserv/tmp.txt'
 
-# Activer le mode de débogage CGI pour afficher les erreurs dans le navigateur
-cgitb.enable()
+# Lire le contenu du fichier
+with open(input_file_path, 'r') as file:
+    content = file.read()
 
-# Définir le type de contenu renvoyé par le script
-print("Content-Type: text/html\n")
+# Définir un dictionnaire pour stocker les données du formulaire
+form_data = {}
 
-# Récupérer les données du formulaire
-form = cgi.FieldStorage()
+# Utiliser des expressions régulières pour extraire les données du formulaire
+pattern = r'Content-Disposition: form-data; name="(.*?)"\r?\n\r?\n(.*?)\r?\n'
+matches = re.findall(pattern, content, re.DOTALL)
 
-# Extraire les valeurs des champs du formulaire
-first_name = form.getvalue("first-name")
-last_name = form.getvalue("last-name")
-favorite_color = form.getvalue("favorite-color")
-fileitem = form['image']
+# Remplir le dictionnaire avec les données extraites
+for match in matches:
+    field_name = match[0]
+    field_value = match[1]
+    form_data[field_name] = field_value.strip()
 
-# Vérifier si un fichier a été téléchargé
-if fileitem.filename:
-    # Définir le chemin où l'image téléchargée sera stockée
-    upload_dir = "/home/user/ecole_42/webserv3/uploads/"
-    if not os.path.exists(upload_dir):
-        os.makedirs(upload_dir)
-    # Extraire le nom du fichier et le stocker
-    filepath = os.path.join(upload_dir, os.path.basename(fileitem.filename))
-    with open(filepath, 'wb') as f:
-        f.write(fileitem.file.read())
-    upload_message = f"File '{fileitem.filename}' uploaded successfully."
-else:
-    upload_message = "No file uploaded."
+# Extraire les valeurs des champs
+first_name = form_data.get('first-name', 'Inconnu')
+last_name = form_data.get('last-name', 'Inconnu')
+favorite_color = form_data.get('favorite-color', 'Inconnu')
 
-# Créer une réponse HTML dynamique
-print(f"""
+# Générer le contenu HTML
+print (f"""
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Submission Result</title>
-    <link rel="stylesheet" href="../style.css">
+    <title>Données du formulaire</title>
 </head>
 <body>
-    <header>
-        <a class="header-title" href="index.html">Webserv</a>
-    </header>
-    <main>
-        <h1>Form Submission Result</h1>
-        <p>First Name: {first_name}</p>
-        <p>Last Name: {last_name}</p>
-        <p>Favorite Color: {favorite_color}</p>
-        <p>{upload_message}</p>
-        <a href="index.html">Go back to the form</a>
-    </main>
-    <footer>
-        <div class="footer-credits">Project made by sguillot and mmahfoud</div>
-    </footer>
+    <h1>Données du formulaire</h1>
+    <p><strong>Prénom :</strong> {first_name}</p>
+    <p><strong>Nom :</strong> {last_name}</p>
+    <p><strong>Couleur préférée :</strong> {favorite_color}</p>
 </body>
 </html>
 """)

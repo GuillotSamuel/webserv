@@ -6,13 +6,13 @@
 #    By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/05 13:36:24 by sguillot          #+#    #+#              #
-#    Updated: 2024/08/21 15:08:14 by mmahfoud         ###   ########.fr        #
+#    Updated: 2024/08/29 12:57:09 by mmahfoud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = webserv
 CC = c++
-CPPFLAGS = -Wall -Wextra -Werror -g -std=c++98 -MMD -MP -I./includes
+CPPFLAGS = -Wall -Wextra -Werror -g3 -std=c++98 -MMD -MP -I./includes
 SRC =	$(wildcard $(shell find ./srcs -type f -name "*.cpp"))
 OBJDIR = ./obj
 DEPDIR = ./dep

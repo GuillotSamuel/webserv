@@ -18,34 +18,39 @@ Cgi::~Cgi()
 
 void		Cgi::setEnv(ServerConfiguration server, Client client)
 {
+	char *actudir = getcwd(NULL, 0);
+	std::string here(actudir);
+	free(actudir);
+	std::string absolutepath = here + this->_path;
+
 	if (client.getMethod() == "POST")
 	{
-		this->_env["CONTENT_TYPE"] = std::string("a"); // only for post
-		this->_env["CONTENT_LENGTH"] = std::string("b"); // only for post
+		this->_env["CONTENT_TYPE"] = client.getContentType(); // only for post
+		this->_env["CONTENT_LENGTH"] = client.getContentLength(); // only for post
 	}
 
 	//SERVEUR_VAR
-	this->_env["SERVER_SOFTWARE"] = std::string("c");
+	this->_env["SERVER_SOFTWARE"] = std::string("Webserv/1.0");
 	this->_env["SERVER_NAME"] = server.getServerName();
 	this->_env["GATEWAY_INTERFACE"] = std::string("CGI/1.1");
 
 	//REQUEST_VAR
-	this->_env["SERVER_PROTOCOL"] = std::string("TCP/IP");
+	this->_env["SERVER_PROTOCOL"] = std::string("HTTP/1.1");
 	this->_env["SERVER_PORT"] = server.getPort();
 	this->_env["REQUEST_METHOD"] = client.getMethod();
-	this->_env["PATH_INFO"] = std::string("test_cgi.py"); // this->_path // TEST
-	this->_env["PATH_TRANSLATED"] = (std::string(""));
-	this->_env["SCRIPT_NAME"] = std::string("/usr/bin/python3"); //le chemin vers le script executer
-	this->_env["QUERY_STRING"] = std::string("f");
+	this->_env["PATH_INFO"] = this->_path;
+	this->_env["PATH_TRANSLATED"] = absolutepath;
+	this->_env["SCRIPT_NAME"] = this->_path; //le chemin vers le script executer
+	this->_env["QUERY_STRING"] = std::string("");
 	this->_env["REMOTE_HOST"] = std::string(""); // laisse vide si inconnu
 	this->_env["REMOTE_ADDR"] = client.getIpAdress();
 
 	//CLIENT_VAR
-	this->_env["HTTP_ACCEPT"] = std::string("h");
-	this->_env["HTTP_ACCEPT_LANGUAGE"] = std::string("i");
-	this->_env["HHTP_USER_AGENT"] = std::string("j");
-	this->_env["HTTP_COOKIE"] = std::string("k");
-	this->_env["HTTP_REFERER"] = std::string("l");
+	this->_env["HTTP_ACCEPT"] = client.getAcceptMime();
+	this->_env["HTTP_ACCEPT_LANGUAGE"] = client.getAcceptLanguage();
+	this->_env["HTTP_USER_AGENT"] = client.getUserAgent();
+	this->_env["HTTP_COOKIE"] = std::string("");
+	this->_env["HTTP_REFERER"] = client.getReferer();
 }
 
 
@@ -59,47 +64,42 @@ char	**Cgi::conversionEnvFunc()
 		std::string tmp = it->first + "=" + it->second;
 		this->_myEnvp[i] = strdup(tmp.c_str());
 	}
+
+	int i = this->_env.size();
+	this->_myEnvp[i] = NULL;
 	return (this->_myEnvp);
 }
 
 std::string	Cgi::executeCgi()
 {
-	printf("1\n"); // TEST
 	int pipefd[2];
 	if (pipe(pipefd) == -1)
 	{
 		error("Error: pipe creation failed");
 	}
-	printf("2\n"); // TEST
 	int pid = fork();
 	if (pid == -1)
 	{
-		printf("3\n"); // TEST
 		error("Error: fork cgi failed");
 	}
 	else if (pid == 0)
 	{
-		printf("4\n"); // TEST
 		close(pipefd[0]);
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 
-		printf("4.1\n"); // TEST
 		char **argv = this->createArgv();
-		printf("4.2\n"); // TEST
-		execve(argv[0], argv, this->conversionEnvFunc());
-		printf("4.3\n"); // TEST
+		char **envp = this->conversionEnvFunc();
+		execve(argv[0], argv, envp);
 		error("Error: execve cgi failed");
 	}
 	close(pipefd[1]);
-	printf("5\n"); // TEST
 	char buffer[BUFFER_SIZE];
 	int n = 0;
 	while ((n = read(pipefd[0], buffer, sizeof(buffer) - 1)) > 0)
 	{
 		buffer[n] = '\0';
 	}
-	printf("6\n"); // TEST
 	close(pipefd[0]);
 	waitpid(pid, NULL, 0);
 	std::string getContent(buffer);
@@ -109,28 +109,39 @@ std::string	Cgi::executeCgi()
 char	**Cgi::createArgv()
 {
 	char **argv;
-	std::cout << this->_path << std::endl;
+	char *here1 = getcwd(NULL, 0);
+	std::string here(here1);
+	std::string path(this->_path);
+	std::string absolutepath = here + path;
+	std::string executer;
+
+
+	size_t ext = path.rfind(".");
+	size_t extend = path.size();
+	std::string extension = path.substr(ext, (extend - ext));
+	if (this->_pathInfoCgi.find(extension) != this->_pathInfoCgi.end())
+		executer = this->_pathInfoCgi[extension];
+
 	argv = (char **) malloc(3 * sizeof(char *));
-	argv[0] = strdup("/usr/bin/python3");
-	argv[1] = strdup(this->_path);
+	argv[0] = strdup(executer.c_str());
+	argv[1] = strdup(absolutepath.c_str());
 	argv[2] = NULL;
 	return (argv);
 }
 
 /*--------------------------------ERROR MANAGEMENT------------------------------------*/
 
-void		Cgi::error(std::string errorType)
+void	Cgi::error(std::string errorType)
 {
 	throw(std::runtime_error(errorType));
 }
 
-std::string Cgi::searchPathInfo()
-{
-
-	return std::string();
-}
-
-void Cgi::setPath(const char *path)
+void	Cgi::setPath(const char *path)
 {
 	this->_path = path;
+}
+
+void	Cgi::setPathInfoCgi(std::map<std::string, std::string> map)
+{
+	this->_pathInfoCgi = map;
 }

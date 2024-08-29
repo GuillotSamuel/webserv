@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/21 14:32:45 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/08/29 12:28:34 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 
 #define MAX_EVENTS 10
 #define BUFFER_SIZE 4096
@@ -140,6 +141,6 @@ bool    ft_invalid_line(t_data *data, std::vector<std::string> tokens);
 /* -------------------------------------------------------------------------- */
 
 /* exec_g.cpp */
-bool    exec_g(t_data *data, ServerConfiguration inf);
+bool    exec_g(ServerConfiguration *inf);
 
 #endif
