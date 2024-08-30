@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/29 12:28:34 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/08/29 18:04:45 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,18 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/time.h>
+#include <signal.h>
 
 #define MAX_EVENTS 10
 #define BUFFER_SIZE 4096
-
 
 #include "ServerConfiguration.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Cgi.hpp"
+
+#define SIGNAL 2
+extern int g_signal;
 
 /* -------------------------------------------------------------------------- */
 /*                                    STRUCTURES                              */

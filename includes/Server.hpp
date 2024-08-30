@@ -9,24 +9,21 @@ class Client;
 class Server
 {
 	private:
+		ServerConfiguration					*_serv;
+		ListeningSocket 					*_socket;
 		struct sockaddr						_clientAdress;
 		struct sockaddr_in					_address;
-		ListeningSocket 					*_socket;
 		struct epoll_event					_event;
 		struct epoll_event					_events[MAX_EVENTS];
 		int									_epoll_fd;
 		int									_connexion_fd;
-		std::string							_method;
 		std::string							_path;
-		char								**_envp;
+		std::string							_extensionPath;
 		char								received_line[BUFFER_SIZE];
 		char								socket_buffer[BUFFER_SIZE];
-		ServerConfiguration					&_serv;
 		std::map<std::string, std::string>	extpath;
 		std::map<std::string, std::string>	mimePath;
-		std::string							_extensionPath;
 
-		void								ServerExecution();
 		std::map<std::string, std::string>	createExtPath();
 		std::map<std::string, std::string>	createMimePath();
 		void								handle_client();
@@ -38,7 +35,10 @@ class Server
 		std::string							readFileContent(const std::string &path);
 		std::string 						getMimeType();
 		void								set_nonblocking(int sockfd);
+
 	public:
-		Server(ServerConfiguration &inf);
+		void								startingServer();
+		void								serverExecution();
+		Server();
 		~Server();
 };

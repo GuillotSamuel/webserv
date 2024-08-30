@@ -16,7 +16,7 @@ Cgi::~Cgi()
 
 /*------------------------------------METHOD----------------------------------------*/
 
-void		Cgi::setEnv(ServerConfiguration server, Client client)
+void		Cgi::setEnv(ServerConfiguration *server, Client client)
 {
 	char *actudir = getcwd(NULL, 0);
 	std::string here(actudir);
@@ -31,12 +31,12 @@ void		Cgi::setEnv(ServerConfiguration server, Client client)
 
 	//SERVEUR_VAR
 	this->_env["SERVER_SOFTWARE"] = std::string("Webserv/1.0");
-	this->_env["SERVER_NAME"] = server.getServerName();
+	this->_env["SERVER_NAME"] = server->getServerName();
 	this->_env["GATEWAY_INTERFACE"] = std::string("CGI/1.1");
 
 	//REQUEST_VAR
 	this->_env["SERVER_PROTOCOL"] = std::string("HTTP/1.1");
-	this->_env["SERVER_PORT"] = server.getPort();
+	this->_env["SERVER_PORT"] = server->getPort();
 	this->_env["REQUEST_METHOD"] = client.getMethod();
 	this->_env["PATH_INFO"] = this->_path;
 	this->_env["PATH_TRANSLATED"] = absolutepath;

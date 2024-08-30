@@ -20,7 +20,7 @@ class Cgi
 		std::string		executeCgi();
 		char			**conversionEnvFunc();
 		char			**createArgv();
-		void			setEnv(ServerConfiguration server, Client client);
+		void			setEnv(ServerConfiguration *server, Client client);
 		void			setPath(const char *path);
 		void			error(std::string errorType);
 		void			setPathInfoCgi(std::map<std::string, std::string> map);

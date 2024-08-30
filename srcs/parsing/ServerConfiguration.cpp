@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/29 12:46:32 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/08/29 18:47:25 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,14 @@ ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
     serverName(copy.serverName), errorPages(copy.errorPages),
     clientMaxBodySize(copy.clientMaxBodySize) {}
 
-ServerConfiguration::~ServerConfiguration(void){}
+ServerConfiguration::~ServerConfiguration(void)
+{
+    this->_pathInfoCgi.clear();
+    this->_pathInfoMime.clear();
+    this->errorPages.clear();
+    this->_log->close();
+    delete this->_log;
+}
 
 ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &copy)
 {
@@ -139,9 +146,9 @@ void    ServerConfiguration::log(std::string error, int type)
 {
     if (this->_log && this->_log->is_open()) {
         if (type == 1)
-		*this->_log << "\t[INFO] :\n" << error << std::endl;
+		*this->_log << "\t[INFO] :" << error << std::endl;
 	else if (type == 2)
-		*this->_log << "\n\t[ERROR] : \n" << error << std::endl;
+		*this->_log << "\t[ERROR] : " << error << std::endl;
 	else if (type == 3)
 		*this->_log << "[INFO] : " << error << std::endl;
     } else {
