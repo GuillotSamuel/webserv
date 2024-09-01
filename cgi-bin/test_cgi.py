@@ -1,36 +1,43 @@
-#!/usr/bin/env python3
+import re
 
-import sys
+# Chemin vers le fichier contenant la requête HTTP
+input_file_path = '/home/user/ecole_42/webserv/tmp.txt'
 
-def find_boundary_from_stdin():
-    # Lire tout le contenu de stdin
-    input_data = sys.stdin.read()
-    
-    # Chercher l'indice du début de "boundary="
-    boundary_start = input_data.find("boundary=")
-    
-    if boundary_start == -1:
-        # Si "boundary=" n'est pas trouvé, renvoyer une chaîne vide ou un message d'erreur
-        return None
-    
-    # Début du boundary après "boundary="
-    boundary_start += len("boundary=")
-    
-    # Trouver l'indice du prochain "\r\n" après "boundary="
-    boundary_end = input_data.find("\r\n", boundary_start)
-    
-    if boundary_end == -1:
-        # Si "\r\n" n'est pas trouvé, prendre la fin de la chaîne
-        boundary_end = len(input_data)
-    
-    # Extraire et retourner la valeur du boundary
-    boundary_value = input_data[boundary_start:boundary_end]
-    return boundary_value.strip()
+# Lire le contenu du fichier
+with open(input_file_path, 'r') as file:
+    content = file.read()
 
-if __name__ == "__main__":
-    boundary = find_boundary_from_stdin()
-    if boundary:
-        print(boundary)
-    else:
-        print("Boundary not found.")
+# Définir un dictionnaire pour stocker les données du formulaire
+form_data = {}
 
+# Utiliser des expressions régulières pour extraire les données du formulaire
+pattern = r'Content-Disposition: form-data; name="(.*?)"\r?\n\r?\n(.*?)\r?\n'
+matches = re.findall(pattern, content, re.DOTALL)
+
+# Remplir le dictionnaire avec les données extraites
+for match in matches:
+    field_name = match[0]
+    field_value = match[1]
+    form_data[field_name] = field_value.strip()
+
+# Extraire les valeurs des champs
+first_name = form_data.get('first-name', 'Inconnu')
+last_name = form_data.get('last-name', 'Inconnu')
+favorite_color = form_data.get('favorite-color', 'Inconnu')
+
+# Générer le contenu HTML
+print (f"""
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Données du formulaire</title>
+</head>
+<body>
+    <h1>Données du formulaire</h1>
+    <p><strong>Prénom :</strong> {first_name}</p>
+    <p><strong>Nom :</strong> {last_name}</p>
+    <p><strong>Couleur préférée :</strong> {favorite_color}</p>
+</body>
+</html>
+""")

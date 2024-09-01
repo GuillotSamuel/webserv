@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submission Form</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
     <header>
@@ -13,7 +13,7 @@
     <main>
         <h1>Submit Your Information</h1>
         <!-- Formulaire qui envoie les données au script Python -->
-        <form action="../cgi-bin/test_cgi.py" method="post" enctype="multipart/form-data">
+        <form action="test_cgi.py" method="post" enctype="multipart/form-data">
             <label for="first-name">First Name:</label>
             <input type="text" id="first-name" name="first-name" required><br><br>
             
@@ -23,8 +23,8 @@
             <label for="favorite-color">Favorite Color:</label>
             <input type="text" id="favorite-color" name="favorite-color"><br><br>
             
-            <label for="image">Upload an Image:</label>
-            <input type="file" id="image" name="image"><br><br>
+            <!-- <label for="image">Upload an Image:</label>
+            <input type="file" id="image" name="image"><br><br> -->
             
             <input type="submit" value="Submit">
         </form>

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/21 15:28:38 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/01 19:52:51 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #define ICON_FILES "www/icons"
 #define CSV_FILES "www/data"
 #define ERROR_400_PAGE "www/html/errors/400.html"
+#define CGI_FILES "/cgi-bin"
 
 class ServerConfiguration
 {
@@ -38,9 +39,9 @@ class ServerConfiguration
 		int									clientMaxBodySize;
 		std::map<std::string, std::string>	_pathInfoCgi;
 		std::map<std::string, std::string>	_pathInfoMime;
-        
     public:
-        ServerConfiguration(void);
+        std::ofstream						*_log;
+        ServerConfiguration(int argc, char **argv);
         ServerConfiguration(const ServerConfiguration &copy);
         ~ServerConfiguration(void);
         ServerConfiguration &operator=(const ServerConfiguration &copy);
@@ -50,13 +51,17 @@ class ServerConfiguration
         void								setServerName(std::string str);
 		void								setErrorPage(int code, std::string str);
 		void								setClientMaxBodySize(std::string str);
-
+		
 		int									getPort(void) const;
 		std::string							getHostName(void) const;
 		std::string							getServerName(void) const;
 		std::string							getErrorPage(int code) const;
 		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi() const;
+		void								log(std::string error, int type);
+
+		void								parsing_g(int argc, char **argv);
+		void								error(std::string errorType);
 };
 
 std::ostream	&operator<<(std::ostream &Cout, ServerConfiguration const &i);

@@ -4,39 +4,41 @@
 
 class ListeningSocket;
 class ServerConfiguration;
+class Client;
 
 class Server
 {
 	private:
-		ListeningSocket 	*_socket;
-		struct epoll_event	_event;
-		struct epoll_event	_events[MAX_EVENTS];
-		int					_epoll_fd;
-		int					_connexion_fd;
-		std::string			_method;
-		std::string			_path;
-		char				**_envp;
-		char				received_line[BUFFER_SIZE];
-		char				socket_buffer[BUFFER_SIZE];
+		ServerConfiguration					*_serv;
+		ListeningSocket 					*_socket;
+		struct sockaddr						_clientAdress;
+		struct sockaddr_in					_address;
+		struct epoll_event					_event;
+		struct epoll_event					_events[MAX_EVENTS];
+		int									_epoll_fd;
+		int									_connexion_fd;
+		std::string							_path;
+		std::string							_extensionPath;
+		char								received_line[BUFFER_SIZE];
+		char								socket_buffer[BUFFER_SIZE];
+		std::map<std::string, std::string>	extpath;
+		std::map<std::string, std::string>	mimePath;
 
-		void				ServerExecution();
-		void				error(std::string errorType);
-		void				handle_client();
-		std::string			findPath(const std::string &receivedLine);
-		std::string			findMethod(const std::string &receivedLine);
-		void				ft_get(std::string filePath);
-		void				ft_post(std::string received_line);
-		void				ft_delete();
-		void				ft_badRequest();
-		std::string			execute_cgi_script();
-		std::string			readFileContent(const std::string &path);
-		std::string 		getMimeType(const std::string &path);
-
-		void				handle_plain_text(const std::string &body);
-		void				handle_multipart_data(const std::string &headers, const std::string &body);
-		void				handle_url_encoded(const std::string &body);
+		std::map<std::string, std::string>	createExtPath();
+		std::map<std::string, std::string>	createMimePath();
+		void								handle_client();
+		std::string							findPath(const std::string &receivedLine);
+		void								ft_get(std::string filePath);
+		void								ft_post(Client client, std::string filePath);
+		void								ft_delete();
+		void								ft_badRequest();
+		std::string							readFileContent(const std::string &path);
+		std::string 						getMimeType();
+		void								set_nonblocking(int sockfd);
 
 	public:
-		Server(ServerConfiguration inf);
+		void								startingServer();
+		void								serverExecution();
+		Server(int argc, char **argv);
 		~Server();
 };

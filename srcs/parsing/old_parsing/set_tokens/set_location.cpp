@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_all.cpp                                       :+:      :+:    :+:   */
+/*   set_location.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/09 14:46:07 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/09 16:13:11 by sguillot         ###   ########.fr       */
+/*   Created: 2024/07/15 12:21:38 by sguillot          #+#    #+#             */
+/*   Updated: 2024/09/01 19:49:15 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-static void    ft_free_parsing(t_data *data)
-{
-    if (data->parsing.fd != -1)
-    {
-        close(data->parsing.fd);
-    }
-}
-
-void    ft_free_all(t_data *data)
-{
-    ft_free_parsing(data);
-}
+// bool ft_set_location_param(t_data *data, std::vector<std::string> tokens)
+// {
+//     (void)data;
+//     (void)tokens;
+//     return (true);
+// }
