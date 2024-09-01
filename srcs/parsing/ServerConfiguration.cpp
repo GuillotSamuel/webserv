@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/01 19:52:19 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/01 21:14:25 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ ServerConfiguration::ServerConfiguration(int argc, char **argv)
 	this->_pathInfoMime[("ICON_FILES")] = std::string("www/icons");
 	this->_pathInfoMime[("CSV_FILES")] = std::string("www/data");
 	this->_pathInfoMime[("ERROR_400_PAGE")] = std::string("www/html/errors/400.html");
-	
+	this->parsing_started_server = false;
+	this->parsing_started_brace = false;
+	this->parsing_ended = false;
+
 	parsing_g(argc, argv);
 	
 	log("configuration of the server finished.", 3);
