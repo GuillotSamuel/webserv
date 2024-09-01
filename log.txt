@@ -73,31 +73,5 @@
 	[INFO] :Fd is now non-blocking
 	[INFO] :The file given in the request does not exist
 	[INFO] :The file requested was found empty, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file given in the request does not exist
-	[INFO] :The file requested was found empty, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file given in the request does not exist
-	[INFO] :The file requested was found empty, server's ready to response
 	[ERROR] : epoll_wait failed
 	[INFO] :Closing the server properly.

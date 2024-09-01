@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/01 19:52:51 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/01 20:12:37 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class ServerConfiguration
 {
     private:
         int        							port;
+		int									fd_config;
         std::string							hostName;
         std::string							serverName;
 		std::map<int, std::string>			errorPages;
@@ -62,6 +63,8 @@ class ServerConfiguration
 
 		void								parsing_g(int argc, char **argv);
 		void								error(std::string errorType);
+		void								readConfigurationFile(const char *str);
+		void								ft_tokenizer(std::string str);
 };
 
 std::ostream	&operator<<(std::ostream &Cout, ServerConfiguration const &i);

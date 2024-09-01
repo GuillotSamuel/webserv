@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:44:12 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/01 19:58:16 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/01 20:06:59 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,14 @@ void ServerConfiguration::parsing_g(int argc, char **argv)
     }
     else if (argc == 1)
     {
-        std::cout << "reading default config file" << std::endl;
-/*         return (readConfigurationFile("./config/default.conf"));
- */    }
+        readConfigurationFile("./config/default.conf");
+    }
     else if (argc == 2)
     {
-        std::cout << "reading config file" << std::endl;
-/*         return (readConfigurationFile(argv[1]));
- */    }
+        readConfigurationFile(argv[1]);
+    }
     else
     {
-        error("args required : [./webserv] [./webserv <file.conf>] [./webserv --help]");
+        error("Error: args required : [./webserv] [./webserv <file.conf>] [./webserv --help]");
     }
 }

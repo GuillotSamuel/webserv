@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/01 19:56:13 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/01 20:07:11 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 /*                                    DEFINE                                  */
 /* -------------------------------------------------------------------------- */
 
-#define HELP_INFOS "usage : ./webserv [<file.conf] [--help]\n\n" \
+#define HELP_INFOS "Error: usage : ./webserv [<file.conf] [--help]\n\n" \
     "informations required in the configuration file (token must be separated by spaces or tabulations):\n\n" \
     "server {\n" \
     "\tlisten <port number>\n\n" \
