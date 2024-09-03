@@ -12,6 +12,7 @@ Client::Client()
 	this->_method = "";
 	this->_contentLength = "";
 	this->_contentType = "";
+	this->_boundary = "";
 }
 
 Client::~Client()
@@ -79,6 +80,15 @@ void Client::setInfo(std::string info)
 		if (endContentLength != std::string::npos)
 			this->setContentLength(info.substr(contentLength, (endContentLength - contentLength)));
 	}
+
+		size_t boundary = info.find("boundary=");
+	if (boundary != std::string::npos)
+	{
+		boundary += 9;
+		size_t endBoundary = info.find("\r\n", boundary);
+		if (endBoundary != std::string::npos)
+			this->setBoundary(info.substr(boundary, (endBoundary - boundary)));
+	}
 }
 
 /*------------------------------------ACCESSOR----------------------------------------*/
@@ -114,6 +124,10 @@ std::string	Client::getContentLength() const {
 	return (this->_contentLength);
 }
 
+std::string	Client::getBoundary() const {
+	return (this->_boundary);
+}
+
 void	Client::setMethod(std::string method) {
 	this->_method = method;
 }
@@ -144,6 +158,10 @@ void	Client::setContentType(std::string contentType) {
 
 void	Client::setContentLength(std::string contentLength) {
 	this->_contentLength = contentLength;
+}
+
+void	Client::setBoundary(std::string boundary) {
+	this->_boundary = boundary;
 }
 
 /*--------------------------------ERROR MANAGEMENT------------------------------------*/

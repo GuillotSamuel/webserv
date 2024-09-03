@@ -13,6 +13,7 @@ class Client
 		std::string	_httpReferer; //Une adresse absolue ou partielle de la page web à partir de laquelle la requête vers la page courante a été émise.
 		std::string	_contentType;
 		std::string _contentLength;
+		std::string	_boundary;
 
 	public:
 		Client();
@@ -25,6 +26,7 @@ class Client
 		std::string getReferer() const;
 		std::string getContentType() const;
 		std::string getContentLength() const;
+		std::string getBoundary() const;
 
 		void	setInfo(std::string info);
 		void	setMethod(std::string method);
@@ -35,6 +37,7 @@ class Client
 		void	setReferer(std::string referer);
 		void	setContentType(std::string contentType);
 		void	setContentLength(std::string contentLength);
+		void	setBoundary(std::string boundary);
 		void	error(std::string errorType);
 };
 

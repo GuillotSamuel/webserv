@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/29 12:26:18 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/02 18:10:58 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ class ServerConfiguration
 		std::map<std::string, std::string>	_pathInfoCgi;
 		std::map<std::string, std::string>	_pathInfoMime;
     public:
-        std::ofstream						*_log;
-        ServerConfiguration(void);
+		ServerConfiguration();
+        ServerConfiguration(std::string port);
         ServerConfiguration(const ServerConfiguration &copy);
         ~ServerConfiguration(void);
         ServerConfiguration &operator=(const ServerConfiguration &copy);
@@ -58,7 +58,6 @@ class ServerConfiguration
 		std::string							getErrorPage(int code) const;
 		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi() const;
-		void								log(std::string error, int type);
 };
 
 std::ostream	&operator<<(std::ostream &Cout, ServerConfiguration const &i);

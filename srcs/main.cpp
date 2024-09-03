@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:31:35 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/29 21:27:56 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/02 18:11:39 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,15 @@ int	main(int argc, char **argv)
 {
 	// t_data 				data;
 	
-
+	ServerConfiguration *serv[2];
 	signal(SIGINT, sighandler);
 	
+
+	serv[0] = new ServerConfiguration("8090");
+	serv[1] = new ServerConfiguration("8091");
 	try
 	{
-		Server server_object;
+		Server server_object(serv, 2);
 		server_object.startingServer();
 		server_object.serverExecution();
 	}

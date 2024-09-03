@@ -17,4 +17,6 @@ class ListeningSocket
 
 		int		getSocket_fd() const;
 		void	set_nonblocking(int sockfd);
+		bool	operator==(const ListeningSocket& other) const;
+		bool	operator<(const ListeningSocket& other) const;
 };

@@ -1,10 +1,11 @@
 // #include "server.hpp"
 #include "webserv.hpp"
 
-Server::Server()
+Server::Server(ServerConfiguration *serv[], int size)
 {
-	this->_serv = new ServerConfiguration();
-	this->_socket = new ListeningSocket(this->_serv->getPort(), *this->_serv);
+	this->tab_serv = serv;
+	this->_log = new std::ofstream("log.txt");
+	creatMultiListenPort(serv, size);
 	this->_connexion_fd = -1;
 	this->_epoll_fd = -1;
 	this->extpath = createExtPath();
@@ -16,23 +17,39 @@ Server::Server()
 	memset(socket_buffer, 0, BUFFER_SIZE);
 }
 
+void	Server::creatMultiListenPort(ServerConfiguration *serv[], int size)
+{
+	for(int i = 0; i < size; i++)
+	{
+		this->tab_list[i] = new ListeningSocket(serv[i]->getPort(), *serv[i]);
+	}
+	for(int i = 0; i < size; i++)
+	{
+		this->_config[*this->tab_list[i]] = *serv[i];
+	}
+}
+
+
+
 void	Server::startingServer()
 {
 	if ((this->_epoll_fd = epoll_create(1)) == -1)
-		this->_serv->log("Error: epoll_fd creation failed", 2);
+		log("Error: epoll_fd creation failed", 2);
 	
-	this->_serv->log("Epoll instance creation done.", 1);
-
-	this->_event.events = EPOLLIN;
-	this->_event.data.fd = this->_socket->getSocket_fd();
-
-	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_socket->getSocket_fd(), &this->_event) == -1)
+	log("Epoll instance creation done.", 1);
+	std::map<ListeningSocket, ServerConfiguration>::iterator it = _config.begin();
+	for (; it != this->_config.end(); it++)
 	{
-		this->_serv->log("Error: epoll_ctl creation failed", 2);
-	}
+		this->_event.events = EPOLLIN;
+		this->_event.data.fd = it->first.getSocket_fd();
 
-	this->_serv->log("Epoll_ctl done.", 1);
-	this->_serv->log("Construcion of the server is now finish and he's ready to listen", 1);
+		if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, it->first.getSocket_fd(), &this->_event) == -1)
+		{
+			log("Error: epoll_ctl creation failed", 2);
+		}
+	}
+	log("Epoll_ctl done.", 1);
+	log("Construcion of the server is now finish and he's ready to listen", 1);
 }
 
 void Server::serverExecution()
@@ -42,15 +59,22 @@ void Server::serverExecution()
 		int nfds = epoll_wait(this->_epoll_fd, this->_events, MAX_EVENTS, -1);
 		if (nfds == -1)
 		{
-			this->_serv->log("epoll_wait failed", 2);
-		}	
+			log("epoll_wait failed", 2);
+		}
 		if (g_signal == SIGNAL)
 		{
-			this->_serv->log("Closing the server properly.", 1);
-			
-			delete this->_serv;
-			close(this->_socket->getSocket_fd());
-			delete this->_socket;
+			log("Closing the server properly.", 1);
+			int i = 0;
+			std::map<ListeningSocket, ServerConfiguration>::iterator it = _config.begin();
+			while (it != this->_config.end())
+			{
+				close(it->first.getSocket_fd());
+				delete (this->tab_list[i]);
+				delete (this->tab_serv[i]);
+				i++;
+				it++;
+			}
+			this->_config.clear();
 			this->mimePath.clear();
 			this->extpath.clear();
 			close(this->_epoll_fd);
@@ -58,41 +82,46 @@ void Server::serverExecution()
 		}
 		for (int i = 0; i < nfds; i++) // anciennement ++i
 		{
-			if (this->_events[i].data.fd == this->_socket->getSocket_fd())
+			for (int i = 0; i < 2; i++)
 			{
-				socklen_t client_addrlen = sizeof(this->_clientAdress);
-				this->_connexion_fd = accept(this->_socket->getSocket_fd(), (struct sockaddr *)&this->_clientAdress, &client_addrlen);
-				if (this->_connexion_fd == -1)
+				if (this->_events[i].data.fd == this->tab_list[i]->getSocket_fd())
 				{
-					this->_serv->log("Accept failed", 2);
-				}
-				this->_serv->log("NEW REQUEST", 3);
-				this->_serv->log("Server did accept the connection", 1);
+					std::map<ListeningSocket, ServerConfiguration>::iterator it = _config.find(*this->tab_list[i]);
+					ServerConfiguration serv = it->second;
+					socklen_t client_addrlen = sizeof(this->_clientAdress);
+					this->_connexion_fd = accept(this->tab_list[i]->getSocket_fd(), (struct sockaddr *)&this->_clientAdress, &client_addrlen);
+					if (this->_connexion_fd == -1)
+					{
+						log("Accept failed", 2);
+					}
+					log("NEW REQUEST", 3);
+					log("Server did accept the connection", 1);
 
-				set_nonblocking(this->_connexion_fd);
+					set_nonblocking(this->_connexion_fd);
 
-				this->_event.events = EPOLLIN | EPOLLET | EPOLLRDHUP | EPOLLHUP;
-				this->_event.data.fd = this->_connexion_fd;
-				if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_connexion_fd, &this->_event) == -1)
-				{
-					this->_serv->log("epoll_ctl failed", 2);
+					this->_event.events = EPOLLIN | EPOLLET | EPOLLRDHUP | EPOLLHUP;
+					this->_event.data.fd = this->_connexion_fd;
+					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_connexion_fd, &this->_event) == -1)
+					{
+						log("epoll_ctl failed", 2);
+					}
+					else if (this->_events[i].events & EPOLLIN)
+					{
+						handle_client(serv);
+					}
+					else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP))
+					{
+						if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, this->_events->data.fd, NULL) == -1)
+						{
+							log("epoll_ctl failed.", 2);
+						}
+						close(this->_events->data.fd);
+						log("Client has been successfuly closed.", 1);
+						continue;
+					}
+					else
+						log("Inexpected event coming", 2);
 				}
-			}
-			else if (this->_events[i].events & EPOLLIN)
-			{
-				handle_client();
-			}
-			else
-				this->_serv->log("Inexpected event coming", 2);
-			if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP))
-			{
-				if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_events->data.fd, NULL) == -1)
-				{
-					this->_serv->log("epoll_ctl failed.", 2);
-				}
-				close(this->_events->data.fd);
-				this->_serv->log("Client has been successfuly closed.", 1);
-				continue;
 			}
 		}
 	}
@@ -102,20 +131,35 @@ void Server::set_nonblocking(int sockfd) {
     int flags = fcntl(sockfd, F_GETFL, 0);
     if (flags == -1)
 	{
-		this->_serv->log("fnctl failed.", 2);
+		log("fnctl failed.", 2);
 		return ;
     }
 
     flags |= O_NONBLOCK;
     if (fcntl(sockfd, F_SETFL, flags) == -1) 
 	{
-		this->_serv->log("fnctl failed.", 2);
+		log("fnctl failed.", 2);
 		return ;
     }
-	this->_serv->log("Fd is now non-blocking", 1);
+	log("Fd is now non-blocking", 1);
 }
 
-void Server::handle_client()
+void Server::saveFile(const std::string &filename, const std::string &data) {
+    std::ofstream file(filename.c_str(), std::ios::binary);
+    if (file.is_open()) 
+	{
+        file.write(data.c_str(), data.size());
+        file.close();
+		log("File " + filename + " saved successfully.", 1);
+    } 
+	else 
+	{
+		log("Failed to open file " + filename, 1);
+    }
+}
+
+
+void Server::handle_client(ServerConfiguration serv)
 {
 	Client *client = new Client();
 
@@ -126,40 +170,49 @@ void Server::handle_client()
 	std::string ipAdress(client_ip);
 	client->setIpAddress(ipAdress);
 	
-	int n = recv(this->_connexion_fd, this->received_line, 4095, 0);
-	if (n < 0)
+	std::string receivedLine = readRequest(client);
+	if (receivedLine == "")
 	{
-		this->_serv->log("Recv failed", 2);
+		delete client;
 		return ;
 	}
-	if (n == 0)
-	{
-		this->_serv->log("The connexion has been interupted", 3);
-		return ;
-	}
-	std::string receivedLine(this->received_line);
-
-	client->setInfo(receivedLine);
-	
+	std::string filePath = findPath(receivedLine);
 	if (client->getContentLength() != "")
 	{
-		int len = atoi(client->getContentLength().c_str());
+		std::string file_name;
+		std::string body_content;
+		size_t filename = receivedLine.find("filename=\"");
+		if (filename != std::string::npos)
+		{
+			filename += 10;
+			size_t endFilename  = receivedLine.find("\"", filename);
+			if (endFilename != std::string::npos)
+			{
+				file_name = receivedLine.substr(filename, (endFilename - filename));
+			
+				size_t body = receivedLine.find("\r\n\r\n", endFilename);
+				if (body != std::string::npos)
+				{
+					body += 4;
+					size_t endbody = receivedLine.find(client->getBoundary(), body);
+					if (endbody != std::string::npos)
+					{
+						body_content = receivedLine.substr(body, (endbody - body));
+						saveFile(file_name, body_content);
+					}
+					else
+						log("bodycontent is not foundable", 2);
+				}
+				else
+					log("bodycontent is not foundable", 2);
 
-		char buffer[len + 1];
-		memset(buffer, 0, len + 1);
-		int read = recv(this->_connexion_fd, buffer, len, 0);
-		if (read < 0)
-			this->_serv->log("Recv failed", 2);
-		if (read == 0)
-			this->_serv->log("The connexion has been interupted", 2);
-		std::string tmp(buffer);
-		receivedLine += tmp;
-
-		std::ofstream file("tmp.txt");
-		file << receivedLine;
+			}
+			else
+				log("Filename is not foundable", 2);
+		}
+		else
+			log("Filename is not foundable", 2);
 	}
-
-	std::string filePath = findPath(receivedLine);
 
 	if (client->getMethod() == "GET")
 	{
@@ -168,7 +221,7 @@ void Server::handle_client()
 	}
 	else if (client->getMethod() == "POST")
 	{
-		ft_post(*client, filePath);
+		ft_post(*client, filePath, serv);
 		delete client;
 	}
 	else if (client->getMethod() == "DELETE")
@@ -193,7 +246,7 @@ void Server::ft_get(std::string filePath)
 
 	if (content.empty())
 	{
-		this->_serv->log("The file requested was found empty, server's ready to response", 1);
+		log("The file requested was found empty, server's ready to response", 1);
 		content = readFileContent(ERROR_400_PAGE);
 
 		std::string response = "HTTP/1.1 400 Bad Request\r\n";
@@ -209,7 +262,7 @@ void Server::ft_get(std::string filePath)
 	}
 	else
 	{
-		this->_serv->log("The file requested was found, server's ready to response", 1);
+		log("The file requested was found, server's ready to response", 1);
 		std::string mimeType = getMimeType();
 
 		std::string response = "HTTP/1.1 200 OK\r\n";
@@ -224,13 +277,13 @@ void Server::ft_get(std::string filePath)
 	}
 }
 
-void Server::ft_post(Client client, std::string filePath)
+void Server::ft_post(Client client, std::string filePath, ServerConfiguration serv)
 {
 	Cgi *cgi = new Cgi();
 
-	cgi->setPathInfoCgi(this->_serv->getPathInfoCgi());
+	cgi->setPathInfoCgi(serv.getPathInfoCgi());
 	cgi->setPath(filePath.c_str());
-	cgi->setEnv(this->_serv, client);
+	cgi->setEnv(&serv, client);
 	std::string content = cgi->executeCgi();
 
 	std::string mimeType = getMimeType();
@@ -264,7 +317,7 @@ void Server::ft_delete()
 		response += "Server: webserv/1.0\r\n\r\n";
 		response += "File not found";
 
-		this->_serv->log("Server's ready to respond", 1);
+		log("Server's ready to respond", 1);
 		write(this->_connexion_fd, response.c_str(), response.size());
 		return;
 	}
@@ -275,12 +328,12 @@ void Server::ft_delete()
 		response += "Connection: close\r\n";
 		response += "Server: webserv/1.0\r\n\r\n";
 
-		this->_serv->log("Server's ready to respond", 1);
+		log("Server's ready to respond", 1);
 		write(this->_connexion_fd, response.c_str(), response.size());
 	}
 	else
 	{
-		this->_serv->log("Ft_delete failed", 2);
+		log("Ft_delete failed", 2);
 	}
 }
 
@@ -297,7 +350,7 @@ void Server::ft_badRequest()
 	response += "Server: webserv/1.0\r\n\r\n";
 	response += content;
 
-	this->_serv->log("Server's ready to respond", 1);
+	log("Server's ready to respond", 1);
 	write(this->_connexion_fd, response.c_str(), response.size());
 }
 
@@ -307,7 +360,7 @@ std::string Server::readFileContent(const std::string &path)
 
 	if (!file.is_open())
 	{
-		this->_serv->log("The file given in the request does not exist", 1);
+		log("The file given in the request does not exist", 1);
 		return ("");
 	}
 
@@ -324,27 +377,78 @@ std::string Server::getMimeType()
 	if (this->mimePath.find(this->_extensionPath) != this->mimePath.end())
 		return (this->mimePath[this->_extensionPath]);
 
-	this->_serv->log("Extension of the files was not recognize.", 1);
+	log("Extension of the files was not recognize.", 1);
 	return ("application/octet-stream");
 }
 Server::~Server()
 {
-	// close(this->_epoll_fd);
-	// close(this->_socket->getSocket_fd());
-	// delete (this->_socket);
 }
 
 /*---------------------------------------------UTILS------------------------------------------------------*/
+
+std::string	Server::readRequest(Client *client)
+{
+	int n = recv(this->_connexion_fd, this->received_line, 4096, 0);
+	if (n < 0)
+	{
+		log("Recv failed", 2);
+		return ("");
+	}
+	if (n == 0)
+	{
+		log("The connexion has been interupted", 3);
+		return ("");
+	}
+	std::string receivedLine(this->received_line, 4096);
+
+	client->setInfo(receivedLine);
+	
+	if (client->getContentLength() != "")
+	{
+		int len = atoi(client->getContentLength().c_str());
+
+        char *buffer = new char[len + 1];
+        memset(buffer, 0, len + 1);
+        int total_read = 0;
+		while (total_read < len)
+        {
+            int read = recv(this->_connexion_fd, buffer + total_read, len - total_read, 0);
+            if (read < 0)
+            {
+                log("Recv failed", 2);
+                break ;
+            }
+            if (read == 0)
+            {
+                log("The connection has been interrupted", 2);
+                break ;
+            }
+            total_read += read;
+        }
+
+		receivedLine.append(buffer, total_read);
+    	delete[] buffer;
+		std::ofstream file("request.txt");
+		if (file.is_open()) {
+			file << receivedLine;
+			file.close();
+			log("File is created.", 1);
+		} else {
+			log("Unable to open file", 2);
+		}
+	}
+	return (receivedLine);
+}
 
 std::string Server::findPath(const std::string &receivedLine)
 {
 	size_t path_start = receivedLine.find('/');
 	if (path_start == std::string::npos)
-		this->_serv->log("Path_start failed", 2);
+		log("Path_start failed", 2);
 
 	size_t path_end = receivedLine.find(' ', path_start);
 	if (path_end == std::string::npos)
-		this->_serv->log("Path_end failed", 2);
+		log("Path_end failed", 2);
 	this->_path = receivedLine.substr(path_start, path_end - path_start);
 
 	if (this->_path == "/")
@@ -359,9 +463,11 @@ std::string Server::findPath(const std::string &receivedLine)
 		return (this->extpath[extension] + this->_path);
 	}
 	
-	this->_serv->log("Extension of the files was not recognize.", 1);
+	log("Extension of the files was not recognize.", 1);
 	return (ERROR_400_PAGE);
 }
+
+/*******************************************INIT*******************************************************/
 
 std::map<std::string, std::string>	Server::createExtPath()
 {
@@ -398,6 +504,8 @@ std::map<std::string, std::string>	Server::createMimePath()
 {
 	std::map<std::string, std::string> mimePath;
 
+	mimePath[".sh"] = "text/html";
+	mimePath[".py"] = "text/html";
 	mimePath[".html"] = "text/html";
 	mimePath[".css"] = "text/css";
 	mimePath[".js"] = "application/javascript";
@@ -421,4 +529,18 @@ std::map<std::string, std::string>	Server::createMimePath()
 	mimePath[".woff2"] = "font/woff2";
 	mimePath[".csv"] = "text/csv";
 	return (mimePath);
+}
+
+void    Server::log(std::string error, int type)
+{
+    if (this->_log && this->_log->is_open()) {
+        if (type == 1)
+		*this->_log << "\t[INFO] :" << error << std::endl;
+	else if (type == 2)
+		*this->_log << "\t[ERROR] : " << error << std::endl;
+	else if (type == 3)
+		*this->_log << "[INFO] : " << error << std::endl;
+    } else {
+        std::cerr << "Log error: Log stream is null or not open" << std::endl;
+    }
 }
