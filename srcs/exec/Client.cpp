@@ -1,6 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Client.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
+/*   Updated: 2024/09/04 13:30:59 by mmahfoud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Client.hpp"
 
-/*------------------------------------CONSTRUCTOR----------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*                               CONSTRUCTOR                                  */
+/*----------------------------------------------------------------------------*/
 
 Client::Client()
 {
@@ -12,13 +26,17 @@ Client::Client()
 	this->_method = "";
 	this->_contentLength = "";
 	this->_contentType = "";
+	this->_boundary = "";
 }
 
 Client::~Client()
 {
 }
 
-/*------------------------------------METHOD----------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*                              METHOD/SERVER                                 */
+/*----------------------------------------------------------------------------*/
+
 
 void Client::setInfo(std::string info)
 {
@@ -79,9 +97,19 @@ void Client::setInfo(std::string info)
 		if (endContentLength != std::string::npos)
 			this->setContentLength(info.substr(contentLength, (endContentLength - contentLength)));
 	}
-}
 
-/*------------------------------------ACCESSOR----------------------------------------*/
+		size_t boundary = info.find("boundary=");
+	if (boundary != std::string::npos)
+	{
+		boundary += 9;
+		size_t endBoundary = info.find("\r\n", boundary);
+		if (endBoundary != std::string::npos)
+			this->setBoundary(info.substr(boundary, (endBoundary - boundary)));
+	}
+}
+/*----------------------------------------------------------------------------*/
+/*                                   ACCESSOR                                 */
+/*----------------------------------------------------------------------------*/
 
 std::string	Client::getMethod() const {
 	return (this->_method);
@@ -112,6 +140,10 @@ std::string	Client::getContentType() const {
 
 std::string	Client::getContentLength() const {
 	return (this->_contentLength);
+}
+
+std::string	Client::getBoundary() const {
+	return (this->_boundary);
 }
 
 void	Client::setMethod(std::string method) {
@@ -146,7 +178,13 @@ void	Client::setContentLength(std::string contentLength) {
 	this->_contentLength = contentLength;
 }
 
-/*--------------------------------ERROR MANAGEMENT------------------------------------*/
+void	Client::setBoundary(std::string boundary) {
+	this->_boundary = boundary;
+}
+
+/*----------------------------------------------------------------------------*/
+/*                                  UTILS                                     */
+/*----------------------------------------------------------------------------*/
 
 void		Client::error(std::string errorType)
 {

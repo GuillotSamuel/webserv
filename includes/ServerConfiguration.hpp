@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/01 21:42:42 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/04 13:32:36 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,52 +32,50 @@
 class ServerConfiguration
 {
     private:
-        int        							port;
-		int									fd_config;
+		/*---------------------------------------------------------------*/
+		/*                            ATTRIBUT                           */
+		/*---------------------------------------------------------------*/	
+		std::map<std::string, std::string>	_pathInfoMime;
+		std::map<std::string, std::string>	_pathInfoCgi;
+		std::map<int, std::string>			errorPages;
         std::string							hostName;
         std::string							serverName;
-		std::map<int, std::string>			errorPages;
+        int        							port;
 		int									clientMaxBodySize;
-		std::map<std::string, std::string>	_pathInfoCgi;
-		std::map<std::string, std::string>	_pathInfoMime;
-		bool								parsing_started_server;
-		bool								parsing_started_brace;
-		bool								parsing_ended;
-	public:
-        std::ofstream						*_log;
-        ServerConfiguration(int argc, char **argv);
+
+    public:
+
+		/*---------------------------------------------------------------*/
+		/*                    CONSTRUCTOR/DESTRUCTOR                     */
+		/*---------------------------------------------------------------*/
+		ServerConfiguration();
+        ServerConfiguration(std::string port);
         ServerConfiguration(const ServerConfiguration &copy);
         ~ServerConfiguration(void);
-        ServerConfiguration &operator=(const ServerConfiguration &copy);
 
+		/*---------------------------------------------------------------*/
+		/*                         OVERLOADED                            */
+		/*---------------------------------------------------------------*/
+        ServerConfiguration &operator=(const ServerConfiguration &copy);
+		
+		/*---------------------------------------------------------------*/
+		/*                            SETTER                             */
+		/*---------------------------------------------------------------*/
 		void								setPort(std::string str);
 		void								setHostName(std::string str);
         void								setServerName(std::string str);
 		void								setErrorPage(int code, std::string str);
 		void								setClientMaxBodySize(std::string str);
 		
+		/*---------------------------------------------------------------*/
+		/*                            GETTER                             */
+		/*---------------------------------------------------------------*/
 		int									getPort(void) const;
 		std::string							getHostName(void) const;
 		std::string							getServerName(void) const;
 		std::string							getErrorPage(int code) const;
 		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi() const;
-		void								log(std::string error, int type);
-
-		void								parsing_g(int argc, char **argv);
-		void								error(std::string errorType);
-		void								readConfigurationFile(const char *arg);
-		void								ft_tokenizer(std::string line);
-		void								ft_set_tokens(std::vector<std::string> tokens);
-		void								ft_start_set_tokens(std::vector<std::string> tokens);
-		void								ft_param_set_tokens(std::vector<std::string> tokens);
-		void								ft_invalid_line(std::vector<std::string> tokens);
-		void								ft_set_error_page_param(std::vector<std::string> tokens);
-		void								ft_set_host_name_param(std::vector<std::string> tokens);
-		void								ft_set_listen_param(std::vector<std::string> tokens);
-		void								ft_set_location_param(std::vector<std::string> tokens);
-		void								ft_set_client_max_body_param(std::vector<std::string> tokens);
-		void								ft_set_server_name_param(std::vector<std::string> tokens);
 };
 
 std::ostream	&operator<<(std::ostream &Cout, ServerConfiguration const &i);

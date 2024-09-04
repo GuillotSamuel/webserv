@@ -3,31 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_g.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/01 19:44:12 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/01 20:06:59 by sguillot         ###   ########.fr       */
+/*   Created: 2024/07/05 14:00:57 by sguillot          #+#    #+#             */
+/*   Updated: 2024/08/20 20:03:03 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-void ServerConfiguration::parsing_g(int argc, char **argv)
+bool    parsing_g(t_data *data, int argc, char **argv)
 {
     if (argc == 2 && !ft_strcmp((const char *)argv[1], (const char *)"--help"))
     {
-        error(HELP_INFOS);
+        return (ft_error(data, HELP_INFOS));
     }
     else if (argc == 1)
     {
-        readConfigurationFile("./config/default.conf");
+        return (readConfigurationFile(data, "./config/default.conf"));
     }
     else if (argc == 2)
     {
-        readConfigurationFile(argv[1]);
+        return (readConfigurationFile(data, argv[1]));
     }
     else
     {
-        error("Error: args required : [./webserv] [./webserv <file.conf>] [./webserv --help]");
+        return (ft_error(data, "args required : [./webserv] [./webserv <file.conf>] [./webserv --help]"));
     }
 }
