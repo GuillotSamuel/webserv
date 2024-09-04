@@ -1,5 +1,9 @@
 #include "listeningSocket.hpp"
 
+/*----------------------------------------------------------------------------*/
+/*                               CONSTRUCTOR                                  */
+/*----------------------------------------------------------------------------*/
+
 ListeningSocket::ListeningSocket(int port, ServerConfiguration &serv): _serv(serv)
 {
 	socklen_t address_len = sizeof(this->_server_address);
@@ -62,6 +66,10 @@ ListeningSocket::~ListeningSocket()
 		close(this->_socket_fd);
 	}
 }
+
+/*----------------------------------------------------------------------------*/
+/*                                  UTILS                                     */
+/*----------------------------------------------------------------------------*/
 
 int ListeningSocket::getSocket_fd() const
 {

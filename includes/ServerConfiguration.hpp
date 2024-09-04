@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/02 18:10:58 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/04 13:32:36 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,44 @@
 class ServerConfiguration
 {
     private:
-        int        							port;
+		/*---------------------------------------------------------------*/
+		/*                            ATTRIBUT                           */
+		/*---------------------------------------------------------------*/	
+		std::map<std::string, std::string>	_pathInfoMime;
+		std::map<std::string, std::string>	_pathInfoCgi;
+		std::map<int, std::string>			errorPages;
         std::string							hostName;
         std::string							serverName;
-		std::map<int, std::string>			errorPages;
+        int        							port;
 		int									clientMaxBodySize;
-		std::map<std::string, std::string>	_pathInfoCgi;
-		std::map<std::string, std::string>	_pathInfoMime;
+
     public:
+
+		/*---------------------------------------------------------------*/
+		/*                    CONSTRUCTOR/DESTRUCTOR                     */
+		/*---------------------------------------------------------------*/
 		ServerConfiguration();
         ServerConfiguration(std::string port);
         ServerConfiguration(const ServerConfiguration &copy);
         ~ServerConfiguration(void);
-        ServerConfiguration &operator=(const ServerConfiguration &copy);
 
+		/*---------------------------------------------------------------*/
+		/*                         OVERLOADED                            */
+		/*---------------------------------------------------------------*/
+        ServerConfiguration &operator=(const ServerConfiguration &copy);
+		
+		/*---------------------------------------------------------------*/
+		/*                            SETTER                             */
+		/*---------------------------------------------------------------*/
 		void								setPort(std::string str);
 		void								setHostName(std::string str);
         void								setServerName(std::string str);
 		void								setErrorPage(int code, std::string str);
 		void								setClientMaxBodySize(std::string str);
 		
+		/*---------------------------------------------------------------*/
+		/*                            GETTER                             */
+		/*---------------------------------------------------------------*/
 		int									getPort(void) const;
 		std::string							getHostName(void) const;
 		std::string							getServerName(void) const;

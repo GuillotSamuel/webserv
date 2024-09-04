@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Client.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/04 13:32:44 by mmahfoud          #+#    #+#             */
+/*   Updated: 2024/09/04 13:32:45 by mmahfoud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef	CLIENT_HPP
 #define CLIENT_HPP
 #include "webserv.hpp"
@@ -5,6 +17,10 @@
 class Client
 {
 	private:
+	
+		/*---------------------------------------------------------------*/
+		/*                            ATTRIBUT                           */
+		/*---------------------------------------------------------------*/	
 		std::string _method;
 		std::string	_ipAdress;
 		std::string _httpAcceptMime; // text/*, image/jpeg, image/png, image/*, */*
@@ -16,8 +32,22 @@ class Client
 		std::string	_boundary;
 
 	public:
+
+		/*---------------------------------------------------------------*/
+		/*                    CONSTRUCTOR/DESTRUCTOR                     */
+		/*---------------------------------------------------------------*/
 		Client();
 		~Client();
+
+		/*---------------------------------------------------------------*/
+		/*                            METHOD                             */
+		/*---------------------------------------------------------------*/
+		void	setInfo(std::string info);
+		void	error(std::string errorType);
+
+		/*---------------------------------------------------------------*/
+		/*                            GETTER                             */
+		/*---------------------------------------------------------------*/
 		std::string getMethod() const;
 		std::string getIpAdress() const;
 		std::string getAcceptMime() const;
@@ -28,7 +58,10 @@ class Client
 		std::string getContentLength() const;
 		std::string getBoundary() const;
 
-		void	setInfo(std::string info);
+
+		/*---------------------------------------------------------------*/
+		/*                            SETTER                             */
+		/*---------------------------------------------------------------*/
 		void	setMethod(std::string method);
 		void	setIpAddress(std::string ipAdress);
 		void	setAcceptMime(std::string httpAcceptMime);
@@ -38,7 +71,7 @@ class Client
 		void	setContentType(std::string contentType);
 		void	setContentLength(std::string contentLength);
 		void	setBoundary(std::string boundary);
-		void	error(std::string errorType);
+
 };
 
 std::ostream	&operator<<(std::ostream &Cout, Client const &i);
