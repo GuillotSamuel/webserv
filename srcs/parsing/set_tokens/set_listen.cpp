@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:41 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/01 21:46:57 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/03 18:10:05 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void ServerConfiguration::ft_set_listen_param(std::vector<std::string> tokens)
 			 || (num >= 5900 && num <= 5901) /* VNC (Virtual Network Computing) 5900-5901 */
 			 || num == 6379					 /* Redis 6379 */
 			 || (num >= 6660 && num <= 6669) /* IRC 6660-6669 */
-			 || num == 27017 /* MongoDB 27017 */)
+			 || num == 27017 				 /* MongoDB 27017 */)
 	{
 		error("forbiden port (listen argument): " + tokens[1]);
 	}

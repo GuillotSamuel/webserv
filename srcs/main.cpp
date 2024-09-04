@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:31:35 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/01 19:55:17 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:36:59 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void sighandler(int type)
 int	main(int argc, char **argv)
 {
 	signal(SIGINT, sighandler);
-	
+
 	try
 	{
 		Server server_object(argc, argv);
