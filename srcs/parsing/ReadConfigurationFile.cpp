@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 20:01:59 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/05 23:30:17 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/05 23:36:17 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void Server::readConfigurationFile(const char *arg)
 	ssize_t bytes_read = 1;
 	char buffer[1];
 	std::string line;
-	this->currentConfig = nullptr;
+	this->currentConfig = NULL;
 
 	this->insideServerBlock = false;
 	this->insideParamBlock = false;
@@ -79,13 +79,13 @@ void Server::readConfigurationFile(const char *arg)
 					this->insideServerBlock = false;
 					this->tab_serv.push_back(*this->currentConfig);
 					delete this->currentConfig;
-					this->currentConfig = nullptr;
+					this->currentConfig = NULL;
 				}
-				else if (this->insideParamBlock == true && line.find("}" != std::string::npos))
+				else if (this->insideParamBlock == true && line.find("}") != std::string::npos)
 				{
 					this->insideParamBlock = false;
 				}
-				else if (this->insideParamBlock == false && line.find("{" != std::string::npos))
+				else if (this->insideParamBlock == false && line.find("{") != std::string::npos)
 				{
 					this->insideParamBlock = true;
 				}
@@ -101,7 +101,7 @@ void Server::readConfigurationFile(const char *arg)
                     this->currentConfig = new ServerConfiguration();
                     if (!this->currentConfig)
 					{
-						error("Error: Unable to allocate memory for ServerConfiguration")
+						error("Error: Unable to allocate memory for ServerConfiguration");
 					}
 					insideServerBlock = true;
                 }
@@ -114,11 +114,11 @@ void Server::readConfigurationFile(const char *arg)
 		}
 	}
 
-	if (insideServerBlock && this->currentConfig != nullptr)
+	if (insideServerBlock && this->currentConfig != NULL)
     {
-        serverConfigurations.push_back(*this->currentConfig);
+        this->tab_serv.push_back(*this->currentConfig);
         delete this->currentConfig;
-		this->currentConfig = nullptr;
+		this->currentConfig = NULL;
     }
 	
 	close(this->fd_config);

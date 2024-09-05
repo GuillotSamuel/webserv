@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/05 13:40:19 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/05 23:53:05 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ class Server
 		int													fd_config;
 		bool												insideServerBlock;
 		bool												insideParamBlock;
+		bool												parsing_started_server;
+		bool												parsing_started_brace;
+		bool												parsing_ended;
 
 		/*---------------------------------------------------------------*/
 		/*                            METHOD                             */
@@ -72,6 +75,16 @@ class Server
 		void												ft_tokenizer(std::string line);
 		void												split_servers(std::vector<std::string> tokens);
 		void												error(std::string errorType);
+		void												ft_param_set_tokens(std::vector<std::string> tokens);
+		void												ft_invalid_line(std::vector<std::string> tokens);
+		void												ft_start_set_tokens(std::vector<std::string> tokens);
+		void 												ft_set_tokens(std::vector<std::string> tokens);
+		void 												ft_set_server_name_param(std::vector<std::string> tokens);
+		void												ft_set_client_max_body_param(std::vector<std::string> tokens);
+		void												ft_set_location_param(std::vector<std::string> tokens);
+		void												ft_set_listen_param(std::vector<std::string> tokens);
+		void												ft_set_host_name_param(std::vector<std::string> tokens);
+		void												ft_set_error_page_param(std::vector<std::string> tokens);
 
 	public:
 		void												startingServer();

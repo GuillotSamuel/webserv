@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 20:07:45 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/04 19:10:40 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/05 23:36:50 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,5 @@ void Server::ft_tokenizer(std::string line)
 		tokens.push_back(buffer);
 	}
 
-	std::cout << "ft_set_tokens" << std::endl; // TEST
-
-	// ft_set_tokens(tokens);
+	ft_set_tokens(tokens);
 }
