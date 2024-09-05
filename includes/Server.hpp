@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/04 13:32:32 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:40:19 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,21 @@ class Server
 		struct epoll_event									_events[MAX_EVENTS];
 		int													_epoll_fd;
 		int													_connexion_fd;
+		int													_n_server;
 		std::string											_path;
 		std::string											_extensionPath;
 		char												received_line[BUFFER_SIZE];
 		char												socket_buffer[BUFFER_SIZE];
  		std::ofstream										*_log;
 		ListeningSocket										**tab_list;
-		ServerConfiguration									**tab_serv;
+		std::vector<ServerConfiguration>					tab_serv;
 		std::map<ListeningSocket *, ServerConfiguration *>	_config;
 		std::map<std::string, std::string>					extpath;
 		std::map<std::string, std::string>					mimePath;
+		ServerConfiguration									*currentConfig;
+		int													fd_config;
+		bool												insideServerBlock;
+		bool												insideParamBlock;
 
 		/*---------------------------------------------------------------*/
 		/*                            METHOD                             */
@@ -58,10 +63,15 @@ class Server
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
 		std::string											readRequest(Client *client);
-		void												creatMultiListenPort(ServerConfiguration *serv[], int size);
+		void												creatMultiListenPort();
 		void												log(std::string error, int type);
 		void												closeServer();
 		void												dlFile(std::string receivedLine, Client *client);
+		void												parsing_g(int argc, char **argv);
+		void 												readConfigurationFile(const char *arg);
+		void												ft_tokenizer(std::string line);
+		void												split_servers(std::vector<std::string> tokens);
+		void												error(std::string errorType);
 
 	public:
 		void												startingServer();
@@ -70,6 +80,6 @@ class Server
 		/*---------------------------------------------------------------*/
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
 		/*---------------------------------------------------------------*/
-		Server(ServerConfiguration *serv[], int size);
+		Server(int argc, char **argv);
 		~Server();
 };

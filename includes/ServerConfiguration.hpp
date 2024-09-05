@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/04 13:32:36 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/04 18:32:51 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ class ServerConfiguration
 		/*---------------------------------------------------------------*/	
 		std::map<std::string, std::string>	_pathInfoMime;
 		std::map<std::string, std::string>	_pathInfoCgi;
-		std::map<int, std::string>			errorPages;
-        std::string							hostName;
-        std::string							serverName;
         int        							port;
+		std::string							hostName;
+        std::string							serverName;
+		std::map<int, std::string>			errorPages;
 		int									clientMaxBodySize;
 
     public:
@@ -76,6 +76,11 @@ class ServerConfiguration
 		std::string							getErrorPage(int code) const;
 		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi() const;
+
+		/*---------------------------------------------------------------*/
+		/*                            UTILS                              */
+		/*---------------------------------------------------------------*/
+		void								error(std::string errorType);
 };
 
 std::ostream	&operator<<(std::ostream &Cout, ServerConfiguration const &i);

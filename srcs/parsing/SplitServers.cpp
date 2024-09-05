@@ -1,26 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_all.cpp                                       :+:      :+:    :+:   */
+/*   SplitServers.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/09 14:46:07 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/09 16:13:11 by sguillot         ###   ########.fr       */
+/*   Created: 2024/09/04 18:49:04 by sguillot          #+#    #+#             */
+/*   Updated: 2024/09/04 18:57:55 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-static void    ft_free_parsing(t_data *data)
+void    Server::split_servers(std::vector<std::string> tokens)
 {
-    if (data->parsing.fd != -1)
-    {
-        close(data->parsing.fd);
-    }
-}
-
-void    ft_free_all(t_data *data)
-{
-    ft_free_parsing(data);
+    (void)tokens;
 }

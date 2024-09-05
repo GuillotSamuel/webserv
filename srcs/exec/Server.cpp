@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/04 13:29:36 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/04 19:10:50 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,35 +17,34 @@
 /*                               CONSTRUCTOR                                  */
 /*----------------------------------------------------------------------------*/
 
-
-Server::Server(ServerConfiguration *serv[], int size)
+Server::Server(int argc, char **argv)
 {
-	this->tab_serv = serv;
-	this->_log = new std::ofstream("log.txt");
-	this->tab_list = new ListeningSocket*[size];
-	creatMultiListenPort(serv, size);
-	this->_connexion_fd = -1;
-	this->_epoll_fd = -1;
-	this->extpath = createExtPath();
-	this->mimePath = createMimePath();
-	memset(&_address, 0, sizeof(struct sockaddr_in));
-	memset(&_clientAdress, 0, sizeof(struct sockaddr));
-	memset(&_event, 0, sizeof(struct epoll_event));
-	memset(received_line, 0, BUFFER_SIZE);
-	memset(socket_buffer, 0, BUFFER_SIZE);
+	parsing_g(argc, argv);
+	// this->_log = new std::ofstream("log.txt");
+	// this->tab_list = new ListeningSocket *[this->_n_server];
+	// creatMultiListenPort();
+	// this->_connexion_fd = -1;
+	// this->_epoll_fd = -1;
+	// this->extpath = createExtPath();
+	// this->mimePath = createMimePath();
+	// memset(&_address, 0, sizeof(struct sockaddr_in));
+	// memset(&_clientAdress, 0, sizeof(struct sockaddr));
+	// memset(&_event, 0, sizeof(struct epoll_event));
+	// memset(received_line, 0, BUFFER_SIZE);
+	// memset(socket_buffer, 0, BUFFER_SIZE);
 }
 
 /*----------------------------------------------------------------------------*/
 /*                              METHOD/SERVER                                 */
 /*----------------------------------------------------------------------------*/
 
-void	Server::startingServer()
+void Server::startingServer()
 {
 	if ((this->_epoll_fd = epoll_create(1)) == -1)
 		log("Error: epoll_fd creation failed", 2);
-	
+
 	log("Epoll instance creation done.", 1);
-	std::map<ListeningSocket*, ServerConfiguration*>::iterator it = _config.begin();
+	std::map<ListeningSocket *, ServerConfiguration *>::iterator it = _config.begin();
 	for (; it != this->_config.end(); it++)
 	{
 		this->_event.events = EPOLLIN;
@@ -88,7 +87,8 @@ void Server::serverExecution()
 				if (this->_events[i].events & EPOLLIN && serv != NULL)
 					handle_client(*serv);
 
-				else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP)) {
+				else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP))
+				{
 					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, this->_events->data.fd, NULL) == -1)
 						log("epoll_ctl failed.", 2);
 
@@ -130,18 +130,18 @@ void Server::handle_client(ServerConfiguration serv)
 	Client *client = new Client();
 
 	char client_ip[INET_ADDRSTRLEN];
-	
+
 	memset(client_ip, 0, INET_ADDRSTRLEN);
-    inet_ntop(AF_INET, &this->_address.sin_addr, client_ip, INET_ADDRSTRLEN);
+	inet_ntop(AF_INET, &this->_address.sin_addr, client_ip, INET_ADDRSTRLEN);
 	std::string ipAdress(client_ip);
 	client->setIpAddress(ipAdress);
-	
+
 	std::string receivedLine = readRequest(client);
 	if (receivedLine == "")
 	{
 		delete client;
 		log("Connection failed!", 2);
-		return ;
+		return;
 	}
 	std::string filePath = findPath(receivedLine);
 	if (client->getContentLength() != "")
@@ -171,7 +171,6 @@ void Server::handle_client(ServerConfiguration serv)
 	write(this->_connexion_fd, this->socket_buffer, strlen(this->socket_buffer));
 	close(this->_connexion_fd);
 }
-
 
 void Server::ft_get(std::string filePath)
 {
@@ -276,8 +275,8 @@ void Server::ft_badRequest()
 	std::string response = "HTTP/1.1 400 Bad Request\r\n";
 	response += "Content-Type: text/html\r\n";
 	std::ostringstream oss;
-    oss << content.size();
-    response += "Content-Length: " + oss.str() + "\r\n";
+	oss << content.size();
+	response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
 	response += "Server: webserv/1.0\r\n\r\n";
 	response += content;
@@ -286,8 +285,8 @@ void Server::ft_badRequest()
 	write(this->_connexion_fd, response.c_str(), response.size());
 }
 
-//Closing The server using key CTRL /C.
-void	Server::closeServer()
+// Closing The server using key CTRL /C.
+void Server::closeServer()
 {
 	log("Closing the server properly.", 1);
 	int i = 0;
@@ -296,7 +295,7 @@ void	Server::closeServer()
 	{
 		close(it->first->getSocket_fd());
 		delete (this->tab_list[i]);
-		delete (this->tab_serv[i]);
+		// delete (this->tab_serv[i]);
 		i++;
 		it++;
 	}
@@ -318,7 +317,7 @@ Server::~Server()
 /*                                  UTILS                                     */
 /*----------------------------------------------------------------------------*/
 
-void	Server::dlFile(std::string receivedLine, Client *client)
+void Server::dlFile(std::string receivedLine, Client *client)
 {
 	std::string file_name;
 	std::string body_content;
@@ -326,11 +325,11 @@ void	Server::dlFile(std::string receivedLine, Client *client)
 	if (filename != std::string::npos)
 	{
 		filename += 10;
-		size_t endFilename  = receivedLine.find("\"", filename);
+		size_t endFilename = receivedLine.find("\"", filename);
 		if (endFilename != std::string::npos)
 		{
 			file_name = receivedLine.substr(filename, (endFilename - filename));
-		
+
 			size_t body = receivedLine.find("\r\n\r\n", endFilename);
 			if (body != std::string::npos)
 			{
@@ -346,7 +345,6 @@ void	Server::dlFile(std::string receivedLine, Client *client)
 			}
 			else
 				log("bodycontent is not foundable", 2);
-
 		}
 		else
 			log("Filename is not foundable", 2);
@@ -355,7 +353,7 @@ void	Server::dlFile(std::string receivedLine, Client *client)
 		log("Filename is not foundable", 2);
 }
 
-std::string	Server::readFileContent(const std::string &path)
+std::string Server::readFileContent(const std::string &path)
 {
 	std::ifstream file(path.c_str(), std::ios::binary);
 
@@ -370,26 +368,26 @@ std::string	Server::readFileContent(const std::string &path)
 	return (oss.str());
 }
 
-void	Server::saveFile(const std::string &filename, const std::string &data)
+void Server::saveFile(const std::string &filename, const std::string &data)
 {
-    std::ofstream file(filename.c_str(), std::ios::binary);
-    if (file.is_open()) 
+	std::ofstream file(filename.c_str(), std::ios::binary);
+	if (file.is_open())
 	{
-        file.write(data.c_str(), data.size());
-        file.close();
+		file.write(data.c_str(), data.size());
+		file.close();
 		log("File " + filename + " saved successfully.", 1);
-    }
-	else 
+	}
+	else
 	{
 		log("Failed to open file " + filename, 1);
-    }
+	}
 }
 
-std::string	Server::getMimeType()
+std::string Server::getMimeType()
 {
 	if (this->_path == "/")
 		return ("text/html");
-	
+
 	if (this->mimePath.find(this->_extensionPath) != this->mimePath.end())
 		return (this->mimePath[this->_extensionPath]);
 
@@ -397,7 +395,7 @@ std::string	Server::getMimeType()
 	return ("application/octet-stream");
 }
 
-std::string	Server::readRequest(Client *client)
+std::string Server::readRequest(Client *client)
 {
 	int n = recv(this->_connexion_fd, this->received_line, 4096, 0);
 	if (n < 0)
@@ -413,38 +411,39 @@ std::string	Server::readRequest(Client *client)
 	std::string receivedLine(this->received_line, 4096);
 
 	client->setInfo(receivedLine);
-	
+
 	if (client->getContentLength() != "")
 	{
 		int len = atoi(client->getContentLength().c_str());
 
-        char *buffer = new char[len + 1];
-        memset(buffer, 0, len + 1);
-        int total_read = 0;
+		char *buffer = new char[len + 1];
+		memset(buffer, 0, len + 1);
+		int total_read = 0;
 		while (total_read < len)
-        {
-            int read = recv(this->_connexion_fd, buffer + total_read, len - total_read, 0);
-            if (read < 0)
-            {
-                log("Recv failed", 2);
-                break ;
-            }
-            if (read == 0)
-            {
-                log("The connection has been interrupted", 2);
-                break ;
-            }
-            total_read += read;
-        }
+		{
+			int read = recv(this->_connexion_fd, buffer + total_read, len - total_read, 0);
+			if (read < 0)
+			{
+				log("Recv failed", 2);
+				break;
+			}
+			if (read == 0)
+			{
+				log("The connection has been interrupted", 2);
+				break;
+			}
+			total_read += read;
+		}
 
 		receivedLine.append(buffer, total_read);
-    	delete[] buffer;
+		delete[] buffer;
 		std::ofstream file("request.txt");
-		if (file.is_open()) {
+		if (file.is_open())
+		{
 			file << receivedLine;
 			file.close();
 			log("File is created.", 1);
-		} 
+		}
 		else
 			log("Unable to open file", 2);
 	}
@@ -473,42 +472,45 @@ std::string Server::findPath(const std::string &receivedLine)
 		this->_extensionPath = extension;
 		return (this->extpath[extension] + this->_path);
 	}
-	
+
 	log("Extension of the files was not recognize.", 1);
 	return (ERROR_400_PAGE);
 }
 
-void   	Server::log(std::string error, int type)
+void Server::log(std::string error, int type)
 {
-    if (this->_log && this->_log->is_open()) {
-        if (type == 1)
-		*this->_log << "\t[INFO] :" << error << std::endl;
-	else if (type == 2)
-		*this->_log << "\t[ERROR] : " << error << std::endl;
-	else if (type == 3)
-		*this->_log << "[INFO] : " << error << std::endl;
-    } else {
-        std::cerr << "Log error: Log stream is null or not open" << std::endl;
-    }
+	if (this->_log && this->_log->is_open())
+	{
+		if (type == 1)
+			*this->_log << "\t[INFO] :" << error << std::endl;
+		else if (type == 2)
+			*this->_log << "\t[ERROR] : " << error << std::endl;
+		else if (type == 3)
+			*this->_log << "[INFO] : " << error << std::endl;
+	}
+	else
+	{
+		std::cerr << "Log error: Log stream is null or not open" << std::endl;
+	}
 }
 
-void 	Server::set_nonblocking(int sockfd) 
+void Server::set_nonblocking(int sockfd)
 {
-    int flags = fcntl(sockfd, F_GETFL, 0);
+	int flags = fcntl(sockfd, F_GETFL, 0);
 
-    if (flags == -1)
+	if (flags == -1)
 	{
 		log("fnctl failed.", 2);
-		return ;
-    }
+		return;
+	}
 
-    flags |= O_NONBLOCK;
+	flags |= O_NONBLOCK;
 
-    if (fcntl(sockfd, F_SETFL, flags) == -1) 
+	if (fcntl(sockfd, F_SETFL, flags) == -1)
 	{
 		log("fnctl failed.", 2);
-		return ;
-    }
+		return;
+	}
 
 	log("Fd is now non-blocking", 1);
 }
@@ -517,19 +519,20 @@ void 	Server::set_nonblocking(int sockfd)
 /*                             INITIALISATION                                 */
 /*----------------------------------------------------------------------------*/
 
-void	Server::creatMultiListenPort(ServerConfiguration *serv[], int size)
+void Server::creatMultiListenPort()
 {
-	for(int i = 0; i < size; i++)
+	for (size_t i = 0; i < this->tab_serv.size(); i++)
 	{
-		this->tab_list[i] = new ListeningSocket(serv[i]->getPort(), *serv[i]);
+		this->tab_list[i] = new ListeningSocket(this->tab_serv[i].getPort(), this->tab_serv[i]);
 	}
-	for(int i = 0; i < size; i++)
+
+	for (size_t i = 0; i < this->tab_serv.size(); i++)
 	{
-		this->_config[this->tab_list[i]] = serv[i];
+		this->_config[this->tab_list[i]] = &this->tab_serv[i];
 	}
 }
 
-std::map<std::string, std::string>	Server::createExtPath()
+std::map<std::string, std::string> Server::createExtPath()
 {
 	std::map<std::string, std::string> extPath;
 
@@ -560,7 +563,7 @@ std::map<std::string, std::string>	Server::createExtPath()
 	return (extPath);
 }
 
-std::map<std::string, std::string>	Server::createMimePath()
+std::map<std::string, std::string> Server::createMimePath()
 {
 	std::map<std::string, std::string> mimePath;
 
@@ -591,3 +594,11 @@ std::map<std::string, std::string>	Server::createMimePath()
 	return (mimePath);
 }
 
+/*----------------------------------------------------------------------------*/
+/*                              UTILS                                         */
+/*----------------------------------------------------------------------------*/
+
+void	Server::error(std::string errorType)
+{
+	throw(std::runtime_error(errorType));
+}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/02 18:11:12 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/04 18:28:25 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,4 +140,9 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
     Cout << i.getPort() << std::endl;
     Cout << i.getServerName() << std::endl;
     return (Cout);
+}
+
+void	ServerConfiguration::error(std::string errorType)
+{
+	throw(std::runtime_error(errorType));
 }
