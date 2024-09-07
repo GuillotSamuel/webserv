@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 20:01:59 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/05 23:36:17 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/06 22:55:14 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void Server::readConfigurationFile(const char *arg)
 				if (this->insideParamBlock == false && line.find("}") != std::string::npos)
 				{
 					this->insideServerBlock = false;
+					ft_tokenizer(line);
 					this->tab_serv.push_back(*this->currentConfig);
 					delete this->currentConfig;
 					this->currentConfig = NULL;
@@ -84,10 +85,12 @@ void Server::readConfigurationFile(const char *arg)
 				else if (this->insideParamBlock == true && line.find("}") != std::string::npos)
 				{
 					this->insideParamBlock = false;
+					ft_tokenizer(line);
 				}
 				else if (this->insideParamBlock == false && line.find("{") != std::string::npos)
 				{
 					this->insideParamBlock = true;
+					ft_tokenizer(line);
 				}
 				else
 				{
@@ -104,6 +107,7 @@ void Server::readConfigurationFile(const char *arg)
 						error("Error: Unable to allocate memory for ServerConfiguration");
 					}
 					insideServerBlock = true;
+					ft_tokenizer(line);
                 }
 			}
 			line.clear();

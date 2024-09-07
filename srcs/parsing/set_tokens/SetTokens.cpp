@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 21:06:16 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/05 23:54:41 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/06 22:56:34 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void Server::ft_param_set_tokens(std::vector<std::string> tokens)
     const int nb_param = 6;
     
     const char* param_array[nb_param] = {"listen", "host_name", "server_name", "error_page",
-                                         "client_max_body", "location"};
+                                         "client_max_body_size", "location"};
     void (Server::*param_functions[nb_param])(std::vector<std::string>) = {
         &Server::ft_set_listen_param,
         &Server::ft_set_host_name_param,

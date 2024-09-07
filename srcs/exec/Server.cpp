@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/04 19:10:50 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/06 23:07:21 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 
 Server::Server(int argc, char **argv)
 {
-	parsing_g(argc, argv);
+	this->parsing_started_server = false; // PARSING
+	this->parsing_started_brace = false; // PARSING
+	this->parsing_ended = false; // PARSING
+	parsing_g(argc, argv); // PARSING
 	// this->_log = new std::ofstream("log.txt");
 	// this->tab_list = new ListeningSocket *[this->_n_server];
 	// creatMultiListenPort();
