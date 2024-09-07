@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:25:35 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/04 13:32:17 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/06 14:54:36 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ Cgi::~Cgi()
 void		Cgi::setEnv(ServerConfiguration *server, Client client)
 {
 	char *actudir = getcwd(NULL, 0);
-	std::string here(actudir);
+	std::string here(actudir, strlen(actudir));
 	free(actudir);
 	std::string absolutepath = here + this->_path;
 
@@ -52,7 +52,7 @@ void		Cgi::setEnv(ServerConfiguration *server, Client client)
 
 	//REQUEST_VAR
 	this->_env["SERVER_PROTOCOL"] = std::string("HTTP/1.1");
-	this->_env["SERVER_PORT"] = server->getPort();
+	this->_env["SERVER_PORT"] = server->getStrPort();
 	this->_env["REQUEST_METHOD"] = client.getMethod();
 	this->_env["PATH_INFO"] = this->_path;
 	this->_env["PATH_TRANSLATED"] = absolutepath;
@@ -106,6 +106,15 @@ std::string	Cgi::executeCgi()
 
 		char **argv = this->createArgv();
 		char **envp = this->conversionEnvFunc();
+		// int i;
+
+		// fprintf(stderr, "%s\n%s\n", argv[0], argv[1]);
+		// i = 0;
+		// while (envp[i])
+		// {
+		// 	fprintf(stderr, "%s\n", envp[i]);
+		// 	i++;
+		// }
 		execve(argv[0], argv, envp);
 		error("Error: execve cgi failed");
 	}
@@ -126,18 +135,23 @@ char	**Cgi::createArgv()
 {
 	char **argv;
 	char *here1 = getcwd(NULL, 0);
-	std::string here(here1);
+	std::string here(here1, strlen(here1));
 	std::string path(this->_path);
 	std::string absolutepath = here + path;
-	std::string executer;
+	std::string executer = "";
 
 
 	size_t ext = path.rfind(".");
 	size_t extend = path.size();
 	std::string extension = path.substr(ext, (extend - ext));
-	if (this->_pathInfoCgi.find(extension) != this->_pathInfoCgi.end())
-		executer = this->_pathInfoCgi[extension];
 
+	if ((this->_pathInfoCgi)->find(extension) != this->_pathInfoCgi->end())
+		executer = (*_pathInfoCgi)[extension];
+	if (executer == "")
+	{
+		fprintf(stderr, "extension of cgi not recognize\n");
+		exit(EXIT_FAILURE);
+	}
 	argv = (char **) malloc(3 * sizeof(char *));
 	argv[0] = strdup(executer.c_str());
 	argv[1] = strdup(absolutepath.c_str());
@@ -158,7 +172,7 @@ void	Cgi::setPath(const char *path)
 	this->_path = path;
 }
 
-void	Cgi::setPathInfoCgi(std::map<std::string, std::string> map)
+void	Cgi::setPathInfoCgi(std::map<std::string, std::string> *map)
 {
 	this->_pathInfoCgi = map;
 }

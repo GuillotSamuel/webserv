@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:31:35 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/02 18:11:39 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/06 11:46:05 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,18 @@ void sighandler(int type)
 int	main(int argc, char **argv)
 {
 	// t_data 				data;
-	
-	ServerConfiguration *serv[2];
 	signal(SIGINT, sighandler);
 	
+	std::vector<ServerConfiguration> _serv;
+	ServerConfiguration *serv1 = new ServerConfiguration("8090");
+	ServerConfiguration *serv2 = new ServerConfiguration("8091");
 
-	serv[0] = new ServerConfiguration("8090");
-	serv[1] = new ServerConfiguration("8091");
+	_serv.push_back(*serv1);
+	_serv.push_back(*serv2);
+
 	try
 	{
-		Server server_object(serv, 2);
+		Server server_object(_serv);
 		server_object.startingServer();
 		server_object.serverExecution();
 	}

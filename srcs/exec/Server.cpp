@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/04 13:29:36 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/06 14:57:46 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 /*----------------------------------------------------------------------------*/
 
 
-Server::Server(ServerConfiguration *serv[], int size)
+Server::Server(std::vector<ServerConfiguration>	serv)
 {
 	this->tab_serv = serv;
 	this->_log = new std::ofstream("log.txt");
-	this->tab_list = new ListeningSocket*[size];
-	creatMultiListenPort(serv, size);
+	this->tab_list = new ListeningSocket*[serv.size()];
+	creatMultiListenPort(serv);
 	this->_connexion_fd = -1;
 	this->_epoll_fd = -1;
 	this->extpath = createExtPath();
@@ -39,6 +39,10 @@ Server::Server(ServerConfiguration *serv[], int size)
 /*                              METHOD/SERVER                                 */
 /*----------------------------------------------------------------------------*/
 
+/*
+Creation of our instance of epoll and add all of our listening socket to the
+instance so epoll_wait can watch all of them.
+*/
 void	Server::startingServer()
 {
 	if ((this->_epoll_fd = epoll_create(1)) == -1)
@@ -60,6 +64,11 @@ void	Server::startingServer()
 	log("Construcion of the server is now finish and he's ready to listen", 1);
 }
 
+/*
+-Waiting for new connexions
+-create disposable socket with accept 
+-handle request
+*/
 void Server::serverExecution()
 {
 	while (true)
@@ -125,6 +134,10 @@ void Server::serverExecution()
 	}
 }
 
+/*
+-Parsing request, download file if needed 
+and chose what method to use
+*/
 void Server::handle_client(ServerConfiguration serv)
 {
 	Client *client = new Client();
@@ -154,7 +167,7 @@ void Server::handle_client(ServerConfiguration serv)
 	}
 	else if (client->getMethod() == "POST")
 	{
-		ft_post(*client, filePath, serv);
+		ft_post(*client, filePath, &serv);
 		delete client;
 	}
 	else if (client->getMethod() == "DELETE")
@@ -172,14 +185,14 @@ void Server::handle_client(ServerConfiguration serv)
 	close(this->_connexion_fd);
 }
 
-
+/*response to a GET request*/
 void Server::ft_get(std::string filePath)
 {
 	std::string content = readFileContent(filePath);
 
 	if (content.empty())
 	{
-		log("The file requested was found empty, server's ready to response", 1);
+		log("The file requested \"" + filePath + "\" was found empty, server's ready to response", 1);
 		content = readFileContent(ERROR_400_PAGE);
 
 		std::string response = "HTTP/1.1 400 Bad Request\r\n";
@@ -195,7 +208,7 @@ void Server::ft_get(std::string filePath)
 	}
 	else
 	{
-		log("The file requested was found, server's ready to response", 1);
+		log("The file requested \"" + filePath + "\" was found, server's ready to response", 1);
 		std::string mimeType = getMimeType();
 
 		std::string response = "HTTP/1.1 200 OK\r\n";
@@ -211,13 +224,16 @@ void Server::ft_get(std::string filePath)
 	}
 }
 
-void Server::ft_post(Client client, std::string filePath, ServerConfiguration serv)
+/*response to a POST request*/
+void Server::ft_post(Client client, std::string filePath, ServerConfiguration *serv)
 {
 	Cgi *cgi = new Cgi();
 
-	cgi->setPathInfoCgi(serv.getPathInfoCgi());
+	std::map<std::string, std::string> tmp = serv->getPathInfoCgi();
+
+	cgi->setPathInfoCgi(&tmp);
 	cgi->setPath(filePath.c_str());
-	cgi->setEnv(&serv, client);
+	cgi->setEnv(serv, client);
 	std::string content = cgi->executeCgi();
 
 	std::string mimeType = getMimeType();
@@ -235,6 +251,7 @@ void Server::ft_post(Client client, std::string filePath, ServerConfiguration se
 	delete cgi;
 }
 
+/*response to a DELETE request*/
 void Server::ft_delete()
 {
 	std::string filePath = findPath(this->_path);
@@ -269,6 +286,7 @@ void Server::ft_delete()
 		log("Ft_delete failed", 2);
 }
 
+/*response to a bad request*/
 void Server::ft_badRequest()
 {
 	std::string content = readFileContent(ERROR_400_PAGE);
@@ -296,10 +314,10 @@ void	Server::closeServer()
 	{
 		close(it->first->getSocket_fd());
 		delete (this->tab_list[i]);
-		delete (this->tab_serv[i]);
 		i++;
 		it++;
 	}
+	this->tab_serv.clear();
 	this->_config.clear();
 	this->mimePath.clear();
 	this->extpath.clear();
@@ -517,16 +535,21 @@ void 	Server::set_nonblocking(int sockfd)
 /*                             INITIALISATION                                 */
 /*----------------------------------------------------------------------------*/
 
-void	Server::creatMultiListenPort(ServerConfiguration *serv[], int size)
+void	Server::creatMultiListenPort(std::vector<ServerConfiguration> serv)
 {
-	for(int i = 0; i < size; i++)
+	std::vector<ServerConfiguration>::iterator it = serv.begin();
+	int i = 0;
+	for(; it != serv.end(); it++)
 	{
-		this->tab_list[i] = new ListeningSocket(serv[i]->getPort(), *serv[i]);
+		this->tab_list[i] = new ListeningSocket(it->getPort(), *it);
+		this->_config[this->tab_list[i]] = &(*it);
+		i++;
 	}
-	for(int i = 0; i < size; i++)
-	{
-		this->_config[this->tab_list[i]] = serv[i];
-	}
+	// std::vector<ServerConfiguration>::iterator it = serv.begin();
+	// for(int i = 0; i !=size; i++)
+	// {
+		
+	// }
 }
 
 std::map<std::string, std::string>	Server::createExtPath()

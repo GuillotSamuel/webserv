@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/02 18:11:12 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/06 14:49:17 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ ServerConfiguration::ServerConfiguration() {}
 
 ServerConfiguration::ServerConfiguration(std::string port) {
     
+    this->strPort = port;
     this->port = atoi(port.c_str());
     this->hostName = std::string("127.0.0.1");
     this->serverName = std::string("localhost");
@@ -43,10 +44,10 @@ ServerConfiguration::ServerConfiguration(std::string port) {
     // log("configuration of the server finished.", 3);
 }
 
-ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
-    port(copy.port), hostName(copy.hostName),
-    serverName(copy.serverName), errorPages(copy.errorPages),
-    clientMaxBodySize(copy.clientMaxBodySize) {}
+// ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
+//     port(copy.port), hostName(copy.hostName),
+//     serverName(copy.serverName), errorPages(copy.errorPages),
+//     clientMaxBodySize(copy.clientMaxBodySize) {}
 
 ServerConfiguration::~ServerConfiguration(void)
 {
@@ -102,6 +103,11 @@ void	ServerConfiguration::setClientMaxBodySize(std::string str)
 int		ServerConfiguration::getPort(void) const
 {
     return (this->port);
+}
+
+std::string	ServerConfiguration::getStrPort(void) const
+{
+    return (this->strPort);   
 }
 
 std::string	ServerConfiguration::getHostName(void) const

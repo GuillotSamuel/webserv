@@ -4,39 +4,6 @@
 [INFO] : NEW REQUEST
 	[INFO] :Server did accept the connection
 	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-[INFO] : The connexion has been interupted
-	[ERROR] : Connection failed!
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested was found, server's ready to response
-	[ERROR] : epoll_wait failed
-	[INFO] :Closing the server properly.
+	[ERROR] : Recv failed
+	[INFO] :File is created.
+	[ERROR] : bodycontent is not foundable
