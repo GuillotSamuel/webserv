@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/06 14:57:46 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/08 12:28:55 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,17 @@
 /*                               CONSTRUCTOR                                  */
 /*----------------------------------------------------------------------------*/
 
-
-Server::Server(std::vector<ServerConfiguration>	serv)
+Server::Server(int argc, char **argv)
 {
-	this->tab_serv = serv;
+	this->parsing_started_server = false;
+	this->parsing_started_brace = false;
+	this->parsing_ended = false;
+	parsing_g(argc, argv);
+	std::vector<ServerConfiguration>::iterator it = tab_serv.begin(); //TEST
+	std::cout << *it << std::endl; //TEST
 	this->_log = new std::ofstream("log.txt");
-	this->tab_list = new ListeningSocket*[serv.size()];
-	creatMultiListenPort(serv);
+	this->tab_list = new ListeningSocket*[tab_serv.size()];
+	creatMultiListenPort();
 	this->_connexion_fd = -1;
 	this->_epoll_fd = -1;
 	this->extpath = createExtPath();
@@ -531,25 +535,25 @@ void 	Server::set_nonblocking(int sockfd)
 	log("Fd is now non-blocking", 1);
 }
 
+void	Server::error(std::string errorType)
+{
+	throw(std::runtime_error(errorType));
+}
+
 /*----------------------------------------------------------------------------*/
 /*                             INITIALISATION                                 */
 /*----------------------------------------------------------------------------*/
 
-void	Server::creatMultiListenPort(std::vector<ServerConfiguration> serv)
+void	Server::creatMultiListenPort()
 {
-	std::vector<ServerConfiguration>::iterator it = serv.begin();
+	std::vector<ServerConfiguration>::iterator it = tab_serv.begin();
 	int i = 0;
-	for(; it != serv.end(); it++)
+	for(; it != tab_serv.end(); it++)
 	{
 		this->tab_list[i] = new ListeningSocket(it->getPort(), *it);
 		this->_config[this->tab_list[i]] = &(*it);
 		i++;
 	}
-	// std::vector<ServerConfiguration>::iterator it = serv.begin();
-	// for(int i = 0; i !=size; i++)
-	// {
-		
-	// }
 }
 
 std::map<std::string, std::string>	Server::createExtPath()
@@ -613,4 +617,3 @@ std::map<std::string, std::string>	Server::createMimePath()
 	mimePath[".csv"] = "text/csv";
 	return (mimePath);
 }
-

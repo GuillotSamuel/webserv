@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/06 14:49:13 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/08 12:12:38 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ class Server
 		struct epoll_event									_events[MAX_EVENTS];
 		int													_epoll_fd;
 		int													_connexion_fd;
-		int													_n_server;
 		std::string											_path;
 		std::string											_extensionPath;
 		char												received_line[BUFFER_SIZE];
@@ -66,14 +65,13 @@ class Server
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
 		std::string											readRequest(Client *client);
-		void												creatMultiListenPort(std::vector<ServerConfiguration> serv);
+		void												creatMultiListenPort();
 		void												log(std::string error, int type);
 		void												closeServer();
 		void												dlFile(std::string receivedLine, Client *client);
 		void												parsing_g(int argc, char **argv);
 		void 												readConfigurationFile(const char *arg);
 		void												ft_tokenizer(std::string line);
-		void												split_servers(std::vector<std::string> tokens);
 		void												error(std::string errorType);
 		void												ft_param_set_tokens(std::vector<std::string> tokens);
 		void												ft_invalid_line(std::vector<std::string> tokens);
@@ -94,6 +92,5 @@ class Server
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
 		/*---------------------------------------------------------------*/
 		Server(int argc, char **argv);
-		Server(std::vector<ServerConfiguration>	serv);
 		~Server();
 };

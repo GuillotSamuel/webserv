@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:44 by sguillot          #+#    #+#             */
-/*   Updated: 2024/07/15 12:28:02 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/05 23:44:54 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,30 +61,29 @@ static bool ft_is_ip_address(const std::string& str)
 }
 
 
-bool ft_set_host_name_param(t_data *data, std::vector<std::string> tokens)
+void Server::ft_set_host_name_param(std::vector<std::string> tokens)
 {
     if (tokens.size() != 2)
     {
-        return (ft_invalid_line(data, tokens));
+        ft_invalid_line(tokens);
     }
-    else if (!data->p_server_configuration->getHostName().empty())
+    /* else if (!this->hostName.empty())
     {
-        return (ft_error(data, "Host name defined many times in configurations : "
+        error("Host name defined many times in configurations : "
             + tokens[0] + " " + tokens[1]));
-    }
+    } */
 
     const std::string& str = tokens[1];
 
     if (str.empty() || str[str.size() - 1] != ';')
     {
-        return (ft_error(data, "invalid argument (listen): " + tokens[1]));
+        error("invalid argument (listen): " + tokens[1]);
     }
     
     if (!ft_is_ip_address(tokens[1].substr(0, tokens[1].size() - 1)))
     {
-        return (ft_invalid_line(data, tokens));
+        ft_invalid_line(tokens);
     }
 
-    data->p_server_configuration->setHostName(tokens[1].substr(0, tokens[1].size() - 1));
-    return (true);
+    this->currentConfig->setHostName(tokens[1].substr(0, tokens[1].size() - 1));
 }

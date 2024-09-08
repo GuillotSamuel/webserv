@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/06 14:49:17 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/08 12:24:18 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,9 @@
 //     serverName(std::string()), errorPages(std::map<int, std::string>()),
 //     clientMaxBodySize(-1), _pathInfo(std::string()) {}
 
-ServerConfiguration::ServerConfiguration() {}
-
-ServerConfiguration::ServerConfiguration(std::string port) {
+ServerConfiguration::ServerConfiguration() {
     
-    this->strPort = port;
-    this->port = atoi(port.c_str());
+    this->port = 8090;
     this->hostName = std::string("127.0.0.1");
     this->serverName = std::string("localhost");
     this->errorPages[404] = std::string("404.html");
@@ -105,11 +102,6 @@ int		ServerConfiguration::getPort(void) const
     return (this->port);
 }
 
-std::string	ServerConfiguration::getStrPort(void) const
-{
-    return (this->strPort);   
-}
-
 std::string	ServerConfiguration::getHostName(void) const
 {
     return (this->hostName);   
@@ -118,6 +110,11 @@ std::string	ServerConfiguration::getHostName(void) const
 std::string	ServerConfiguration::getServerName(void) const
 {
     return (this->serverName);
+}
+
+std::string	ServerConfiguration::getStrPort(void) const
+{
+    return (this->strPort);
 }
 
 std::string ServerConfiguration::getErrorPage(int code) const
@@ -146,4 +143,9 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
     Cout << i.getPort() << std::endl;
     Cout << i.getServerName() << std::endl;
     return (Cout);
+}
+
+void	ServerConfiguration::error(std::string errorType)
+{
+	throw(std::runtime_error(errorType));
 }

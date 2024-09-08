@@ -1,42 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Tokenizer.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/05 13:31:35 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/08 12:10:14 by sguillot         ###   ########.fr       */
+/*   Created: 2024/09/01 20:07:45 by sguillot          #+#    #+#             */
+/*   Updated: 2024/09/06 22:57:12 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-
-int	g_signal = 0;
-
-void sighandler(int type)
+void Server::ft_tokenizer(std::string line)
 {
-	(void)type;
-	g_signal = SIGNAL;
-}
+	std::vector<std::string> tokens;
+	std::string buffer;
+	std::string::const_iterator line_copy;
 
-
-int	main(int argc, char **argv)
-{
-	signal(SIGINT, sighandler);
-
-	try
+	for (line_copy = line.begin(); line_copy != line.end(); ++line_copy)
 	{
-		Server server_object(argc, argv);
-		server_object.startingServer();
-		server_object.serverExecution();
+		if (!std::isspace(*line_copy))
+		{
+			buffer += *line_copy;
+		}
+		else if (!buffer.empty())
+		{
+			tokens.push_back(buffer);
+			buffer.clear();
+		}
 	}
-	catch (const std::exception &e)
+
+	if (!buffer.empty())
 	{
-		std::cerr << e.what() << '\n';
-        return (false);
-    }
-	
-	return (0);
+		tokens.push_back(buffer);
+	}
+
+	ft_set_tokens(tokens);
 }

@@ -4,6 +4,16 @@
 [INFO] : NEW REQUEST
 	[INFO] :Server did accept the connection
 	[INFO] :Fd is now non-blocking
+	[INFO] :The file requested "www/html/form.html" was found, server's ready to response
+[INFO] : NEW REQUEST
+	[INFO] :Server did accept the connection
+	[INFO] :Fd is now non-blocking
+	[INFO] :The file requested "www/styles/styles.css" was found, server's ready to response
+[INFO] : NEW REQUEST
+	[INFO] :Server did accept the connection
+	[INFO] :Fd is now non-blocking
 	[ERROR] : Recv failed
 	[INFO] :File is created.
-	[ERROR] : bodycontent is not foundable
+	[INFO] :File Screenshot from 2024-08-22 15-29-08.png saved successfully.
+	[ERROR] : epoll_wait failed
+	[INFO] :Closing the server properly.
