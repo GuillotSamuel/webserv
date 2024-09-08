@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/04 13:32:36 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/08 12:16:13 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ class ServerConfiguration
 		std::map<int, std::string>			errorPages;
         std::string							hostName;
         std::string							serverName;
-        int        							port;
+		std::string							strPort;
+        int        							port;		
 		int									clientMaxBodySize;
 
     public:
@@ -49,8 +50,8 @@ class ServerConfiguration
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
 		/*---------------------------------------------------------------*/
 		ServerConfiguration();
-        ServerConfiguration(std::string port);
-        ServerConfiguration(const ServerConfiguration &copy);
+        // ServerConfiguration(std::string port);
+        // ServerConfiguration(const ServerConfiguration &copy);
         ~ServerConfiguration(void);
 
 		/*---------------------------------------------------------------*/
@@ -70,12 +71,18 @@ class ServerConfiguration
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
 		/*---------------------------------------------------------------*/
+		std::string							getStrPort(void) const;
 		int									getPort(void) const;
 		std::string							getHostName(void) const;
 		std::string							getServerName(void) const;
 		std::string							getErrorPage(int code) const;
 		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi() const;
+
+		/*---------------------------------------------------------------*/
+		/*                            UTILS                              */
+		/*---------------------------------------------------------------*/
+		void								error(std::string errorType);
 };
 
 std::ostream	&operator<<(std::ostream &Cout, ServerConfiguration const &i);
