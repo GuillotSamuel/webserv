@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/08 12:12:38 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/09 12:43:56 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,6 @@ class Server
 		int													fd_config;
 		bool												insideServerBlock;
 		bool												insideParamBlock;
-		bool												parsing_started_server;
-		bool												parsing_started_brace;
-		bool												parsing_ended;
 
 		/*---------------------------------------------------------------*/
 		/*                            METHOD                             */

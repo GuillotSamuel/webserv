@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/08 12:28:55 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/09 12:46:12 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,15 @@
 
 Server::Server(int argc, char **argv)
 {
-	this->parsing_started_server = false;
-	this->parsing_started_brace = false;
-	this->parsing_ended = false;
-	parsing_g(argc, argv);
-	std::vector<ServerConfiguration>::iterator it = tab_serv.begin(); //TEST
-	std::cout << *it << std::endl; //TEST
+	parsing_g(argc, argv);\
+	
+	// TEST
+	for (std::vector<ServerConfiguration>::iterator it = tab_serv.begin(); it != tab_serv.end(); ++it)
+	{
+		std::cout << *it << std::endl;
+	}
+	// TEST
+	
 	this->_log = new std::ofstream("log.txt");
 	this->tab_list = new ListeningSocket*[tab_serv.size()];
 	creatMultiListenPort();
