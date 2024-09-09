@@ -21,7 +21,7 @@ class ListeningSocket
 		/*---------------------------------------------------------------*/
 		/*                            ATTRIBUT                           */
 		/*---------------------------------------------------------------*/
-		ServerConfiguration	&_serv;
+		// ServerConfiguration	&_serv;
 		struct sockaddr_in	_server_address;
 		struct protoent		*_proto;
 		int					_socket_fd;

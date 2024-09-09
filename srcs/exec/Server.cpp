@@ -99,6 +99,7 @@ void Server::serverExecution()
 					break;
 				}
 			}
+			serv = it->second;
 			if (it == _config.end())
 			{
 				if (this->_events[i].events & EPOLLIN && serv != NULL)

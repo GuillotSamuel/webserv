@@ -4,34 +4,3 @@
 [INFO] : NEW REQUEST
 	[INFO] :Server did accept the connection
 	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested "www/html/index.html" was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested "www/styles/styles.css" was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested "www/html/list.html" was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested "www/styles/styles.css" was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested "www/html/list.html" was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested "www/styles/styles.css" was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested "www/html/index.html" was found, server's ready to response
-[INFO] : NEW REQUEST
-	[INFO] :Server did accept the connection
-	[INFO] :Fd is now non-blocking
-	[INFO] :The file requested "www/styles/styles.css" was found, server's ready to response
-	[ERROR] : epoll_wait failed
-	[INFO] :Closing the server properly.

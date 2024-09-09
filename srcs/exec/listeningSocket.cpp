@@ -4,8 +4,9 @@
 /*                               CONSTRUCTOR                                  */
 /*----------------------------------------------------------------------------*/
 
-ListeningSocket::ListeningSocket(int port, ServerConfiguration &serv): _serv(serv)
+ListeningSocket::ListeningSocket(int port, ServerConfiguration &serv)
 {
+	(void)serv;
 	socklen_t address_len = sizeof(this->_server_address);
 	this->_server_address.sin_family = AF_INET;
 	this->_server_address.sin_port = htons(port);
