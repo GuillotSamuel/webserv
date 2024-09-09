@@ -15,50 +15,47 @@ ListeningSocket::ListeningSocket(int port, ServerConfiguration &serv)
 	this->_proto = getprotobyname("tcp");
 	if (this->_proto == NULL)
 	{
-		// this->_serv.log("Getprotobyname didn't worked for some reason", 2); // TEST
-		std::cout << "Getsocketname Failed" << std::endl;
+		Server::log("Getprotobyname didn't worked for some reason.", 2); // TEST
 	}
 
-	// this->_serv.log("Getprotobyname Succed", 1);
+	Server::log("Getprotobyname Succed.", 1);
 
 	if ((this->_socket_fd = socket(this->_server_address.sin_family, SOCK_STREAM, this->_proto->p_proto)) < 0)
-		// this->_serv.log("Socket_fd creation failed", 2);// TEST
-		std::cout << "Getsocketname Failed" << std::endl;
+		Server::log("Socket_fd creation failed.", 2);// TEST
 
-	// this->_serv.log("Socket_fd in now created.", 1);// TEST
+	Server::log("Socket_fd in now created.", 1);// TEST
 
 	if (setsockopt(this->_socket_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &this->_proto, sizeof(this->_proto))) {
         close(this->_socket_fd);
-		// this->_serv.log("Port was not reuse", 2);// TEST
+		Server::log("Port was not reuse.", 2);// TEST
     }
 
-	// this->_serv.log("Socket_fd in now set.", 1);// TEST
+	Server::log("Socket_fd in now set.", 1);// TEST
 
 	if (bind(this->_socket_fd, (struct sockaddr *)&this->_server_address, sizeof(this->_server_address)) < 0)
 	{
 		close(this->_socket_fd);
-		// this->_serv.log("Socket bind error", 2);// TEST
+		Server::log("Socket bind error.", 2);// TEST
 	}
 
-	// this->_serv.log("Socket_fd is binded.", 1);// TEST
+	Server::log("Socket_fd is binded.", 1);// TEST
 
 	if (getsockname(this->_socket_fd, (struct sockaddr *)&this->_server_address, &address_len) == -1)
 	{
-		std::cout << "Getsocketname Failed" << std::endl;
-		// this->_serv.log("Getsocketname Failed", 2);// TEST
+		Server::log("Getsocketname Failed.", 2);// TEST
 	}
 
 	set_nonblocking(this->_socket_fd);
 	
-	// this->_serv.log("Socket_fd is non blocking fd.", 1);// TEST
+	Server::log("Socket_fd is non blocking fd.", 1);// TEST
 
 	if (listen(this->_socket_fd, 256) < 0)
 	{
 		close(this->_socket_fd);
-		// this->_serv.log("Listen Failed", 2);// TEST
+		Server::log("Listen Failed.", 2);// TEST
 	}
 
-	// this->_serv.log("Socket_fd is now listening every attemp of connection.", 1);
+	Server::log("Socket_fd is now listening every attemp of connection.", 1);
 }
 ListeningSocket::~ListeningSocket()
 {
