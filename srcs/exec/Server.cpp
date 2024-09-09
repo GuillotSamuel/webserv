@@ -86,10 +86,10 @@ void Server::serverExecution()
 
 		if (g_signal == SIGNAL)
 			closeServer();
-
+		ServerConfiguration *serv;
 		for (int i = 0; i < nfds; i++)
 		{
-			ServerConfiguration *serv;
+			
 			std::map<ListeningSocket *, ServerConfiguration *>::iterator it = _config.end();
 			for (int j = 0; j < 2; j++)
 			{
@@ -99,7 +99,6 @@ void Server::serverExecution()
 					break;
 				}
 			}
-			serv = it->second;
 			if (it == _config.end())
 			{
 				if (this->_events[i].events & EPOLLIN && serv != NULL)
@@ -194,7 +193,7 @@ void Server::handle_client(ServerConfiguration serv)
 }
 
 /*response to a GET request*/
-void Server::ft_get(std::string filePath)
+void Server::ft_get(std::string filePath) // a revoir
 {
 	std::string content = readFileContent(filePath);
 
@@ -233,7 +232,7 @@ void Server::ft_get(std::string filePath)
 }
 
 /*response to a POST request*/
-void Server::ft_post(Client client, std::string filePath, ServerConfiguration *serv)
+void Server::ft_post(Client client, std::string filePath, ServerConfiguration *serv) // a revoir surtout au niveau de la requete
 {
 	Cgi *cgi = new Cgi();
 
@@ -260,7 +259,7 @@ void Server::ft_post(Client client, std::string filePath, ServerConfiguration *s
 }
 
 /*response to a DELETE request*/
-void Server::ft_delete()
+void Server::ft_delete() // a revoir
 {
 	std::string filePath = findPath(this->_path);
 
@@ -396,7 +395,7 @@ std::string	Server::readFileContent(const std::string &path)
 	return (oss.str());
 }
 
-void	Server::saveFile(const std::string &filename, const std::string &data)
+void	Server::saveFile(const std::string &filename, const std::string &data) // POST UPLOAD
 {
     std::ofstream file(filename.c_str(), std::ios::binary);
     if (file.is_open()) 
