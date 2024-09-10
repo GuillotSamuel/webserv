@@ -74,6 +74,7 @@ class ServerConfiguration
 		/*                            GETTER                             */
 		/*---------------------------------------------------------------*/
 		std::string							getStrPort(void) const;
+		std::string							getRoot(void) const;
 		int									getPort(void) const;
 		std::string							getHostName(void) const;
 		std::string							getServerName(void) const;

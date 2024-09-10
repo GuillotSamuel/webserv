@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "webserv.hpp"
+#include "ServerConfiguration.hpp"
 
 // ServerConfiguration::ServerConfiguration(void) :
 //     port(-1), hostName(std::string()),
@@ -20,9 +21,11 @@
 ServerConfiguration::ServerConfiguration() {
     
     char *cRoot = getcwd(NULL, 0);// je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0
-    std::string root(cRoot, strlen(cRoot));
+    std::string root_cpy(cRoot, strlen(cRoot));
+    this->root = root_cpy;
+    free(cRoot);
     std::string def_index =  root + "/www/default.html";
-    this->errorPages[404] = root + "/www/error_pages" + "404.html";
+    this->errorPages[404] = root + "/www/error_pages/404.html";
     this->port = -1;
     this->hostName = std::string("");
     this->serverName = std::string("localhost"); // TEST PARSING
@@ -106,13 +109,22 @@ std::string	ServerConfiguration::getStrPort(void) const
     return (this->strPort);
 }
 
+std::string ServerConfiguration::getRoot(void) const
+{
+    return (this->root);
+}
+
 std::string ServerConfiguration::getErrorPage(int code) const
 {
     std::map<int, std::string>::const_iterator it = this->errorPages.find(code);
     if (it != this->errorPages.end()) {
         return it->second;
     }
-    return (""); // TO MODIFY ALL FUNCTION TEST
+    else
+    {
+        it = this->errorPages.find(404);
+        return (it->second);
+    }
 }
 
 int	ServerConfiguration::getClientMaxBodySize(void) const

@@ -24,6 +24,7 @@ Server::Server(int argc, char **argv)
 	{		
     	std::cerr << "Failed to open log file" << std::endl;
 	}
+	this->_status_code = 0;
 	parsing_g(argc, argv);
 	log("Starting Server.", 3);
 	// TEST
@@ -164,7 +165,11 @@ void Server::handle_client(ServerConfiguration serv)
 		log("Server could not read anything from client. The client will be remove.", 2);
 		return ;
 	}
-	std::string filePath = findPath(receivedLine);
+	std::string filePath = findPath(receivedLine, serv.getRoot());
+	if (filePath == "")
+	{
+		filePath = serv.getErrorPage(404);
+	}
 	if (client->getContentLength() != "")
 		dlFile(receivedLine, client);
 
@@ -180,7 +185,7 @@ void Server::handle_client(ServerConfiguration serv)
 	}
 	else if (client->getMethod() == "DELETE")
 	{
-		ft_delete();
+		ft_delete(filePath);
 		delete client;
 	}
 	else
@@ -200,12 +205,15 @@ void Server::ft_get(std::string filePath) // a revoir
 	log("Server's receive a GET request.", 1);
 	std::string content = readFileContent(filePath);
 	std::string response = "";
-	if (content.empty())
+    std::stringstream ss;
+    ss << this->_status_code;
+    std::string _code = ss.str();
+	if (content.empty() || this->_status_code != 0)
 	{
 		log("The file requested \"" + filePath + "\" was found empty.", 1);
-		content = readFileContent(ERROR_400_PAGE);
+		content = readFileContent(filePath);
 
-		response = "HTTP/1.1 400 Bad Request\r\n";
+		response = "HTTP/1.1 " + _code + " Bad Request\r\n";
 		response += "Content-Type: text/html\r\n";
 		std::ostringstream oss;
 		oss << content.size();
@@ -265,10 +273,9 @@ void Server::ft_post(Client client, std::string filePath, ServerConfiguration *s
 }
 
 /*response to a DELETE request*/
-void Server::ft_delete() // a revoir
+void Server::ft_delete(std::string filePath) // a revoir
 {
 	log("Server's receive a DELETE request.", 1);
-	std::string filePath = findPath(this->_path);
 
 	if (access(filePath.c_str(), F_OK) != 0)
 	{
@@ -416,7 +423,7 @@ void	Server::saveFile(const std::string &filename, const std::string &data) // P
     }
 	else 
 	{
-		log("Failed to open file " + filename + ".", 1);
+		log("Failed to open file " + filename + ".", 2);
     }
 }
 
@@ -428,7 +435,7 @@ std::string	Server::getMimeType()
 	if (this->mimePath.find(this->_extensionPath) != this->mimePath.end())
 		return (this->mimePath[this->_extensionPath]);
 
-	log("Extension of the file cannot be found.", 1);
+	log("Extension of the file cannot be found.", 2);
 	return ("application/octet-stream");
 }
 
@@ -487,11 +494,8 @@ std::string	Server::readRequest(Client *client)
 	return (receivedLine);
 }
 
-std::string Server::findPath(const std::string &receivedLine)
+std::string Server::findPath(const std::string &receivedLine, std::string root)
 {
-	char *path_here = getcwd(NULL, 0);
-	std::cout << "path = " << path_here << std::endl; // TEST
-	std::string here(path_here, strlen(path_here));
 	size_t path_start = receivedLine.find('/');
 	if (path_start == std::string::npos)
 		log("Path_start failed.", 2);
@@ -502,21 +506,31 @@ std::string Server::findPath(const std::string &receivedLine)
 	this->_path = receivedLine.substr(path_start, path_end - path_start);
 
 
-	std::cout << this->_path << std::endl;
+	std::cout << this->_path << std::endl; // TEST
 	if (this->_path == "/")
-		return (here + std::string("/www/default.html"));
+	{
+		this->_status_code = 0;
+		return (root + std::string("/www/default.html"));
+	}
 
 	size_t ext = this->_path.rfind(".");
+	if (ext == std::string::npos)
+	{
+		this->_status_code = 400;
+		return ("");
+	}
 	size_t extend = this->_path.size();
 	std::string extension = this->_path.substr(ext, (extend - ext));
 	if (this->extpath.find(extension) != this->extpath.end())
 	{
 		this->_extensionPath = extension;
+		this->_status_code = 0;
 		return (this->extpath[extension] + this->_path);
 	}
 	
 	log("Extension of the files was not recognize.", 1);
-	return (here + "www/error_pages/404.html");
+	this->_status_code = 400;
+	return ("");
 }
 
 void   	Server::log(std::string error, int type)

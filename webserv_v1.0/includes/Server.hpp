@@ -31,6 +31,7 @@ class Server
 		struct epoll_event									_events[MAX_EVENTS];
 		int													_epoll_fd;
 		int													_connexion_fd;
+		int													_status_code;
 		std::string											_path;
 		std::string											_extensionPath;
 		char												received_line[BUFFER_SIZE];
@@ -51,10 +52,10 @@ class Server
 		std::map<std::string, std::string>					createExtPath();
 		std::map<std::string, std::string>					createMimePath();
 		void												handle_client(ServerConfiguration serv);
-		std::string											findPath(const std::string &receivedLine);
+		std::string											findPath(const std::string &receivedLine, std::string root);
 		void												ft_get(std::string filePath);
 		void												ft_post(Client client, std::string filePath, ServerConfiguration *serv);
-		void												ft_delete();
+		void												ft_delete(std::string filePath);
 		void												ft_badRequest();
 		std::string											readFileContent(const std::string &path);
 		std::string 										getMimeType();
