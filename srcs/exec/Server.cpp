@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/09 21:13:30 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/10 11:05:39 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ std::ofstream* Server::_log = NULL;
 
 Server::Server(int argc, char **argv)
 {
-	parsing_g(argc, argv);
 	_log = new std::ofstream("logfile.log", std::ios::out);
 	if (!_log->is_open())
 	{		
     	std::cerr << "Failed to open log file" << std::endl;
 	}
+	parsing_g(argc, argv);
 	log("Starting Server.", 3);
 	// TEST
 	for (std::vector<ServerConfiguration>::iterator it = tab_serv.begin(); it != tab_serv.end(); ++it)
@@ -519,7 +519,20 @@ void   	Server::log(std::string error, int type)
 	std::time_t t = std::time(NULL);
     std::tm* local_time = std::localtime(&t);
 	std::stringstream ss;
-    ss << local_time->tm_hour << ":" << local_time->tm_min << ":" << local_time->tm_sec;
+
+	if (local_time->tm_hour < 10)
+		ss << "0" << local_time->tm_hour << ":";
+	else
+		ss << local_time->tm_hour << ":";
+	if (local_time->tm_min < 10)
+		ss << "0" << local_time->tm_min << ":";
+	else
+		ss << local_time->tm_min << ":";
+	if (local_time->tm_sec < 10)
+		ss << "0" << local_time->tm_sec;
+	else
+    	ss << local_time->tm_sec;
+
 	std::string hour(ss.str());
     if (_log && _log->is_open()) {
         if (type == 1)

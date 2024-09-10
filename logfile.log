@@ -1,0 +1,163 @@
+[INFO][11:09:42] : Starting Server.
+	[INFO][11:09:42] : Getprotobyname Succed.
+	[INFO][11:09:42] : Socket_fd in now created.
+	[INFO][11:09:42] : Socket_fd in now set.
+	[INFO][11:09:42] : Socket_fd is binded.
+	[INFO][11:09:42] : Socket_fd is non blocking fd.
+	[INFO][11:09:42] : Socket_fd is now listening every attemp of connection.
+	[INFO][11:09:42] : Getprotobyname Succed.
+	[INFO][11:09:42] : Socket_fd in now created.
+	[INFO][11:09:42] : Socket_fd in now set.
+	[INFO][11:09:42] : Socket_fd is binded.
+	[INFO][11:09:42] : Socket_fd is non blocking fd.
+	[INFO][11:09:42] : Socket_fd is now listening every attemp of connection.
+	[INFO][11:09:42] : Epoll instance successfully created.
+	[INFO][11:09:42] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][11:09:42] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][11:09:42] : The server construction is now complete. The server is ready to accept incoming connections.
+[INFO][11:09:47] : [NEW REQUEST]
+	[INFO][11:09:47] : Server did accept the connection.
+	[INFO][11:09:47] : Server's receive a GET request.
+	[INFO][11:09:47] : The file requested "www/html/index.html" was found.
+	[INFO][11:09:47] : Server's ready to respond.
+	[INFO][11:09:47] : Closing the connection with the client.
+[INFO][11:09:47] : [NEW REQUEST]
+	[INFO][11:09:47] : Server did accept the connection.
+	[INFO][11:09:47] : Server's receive a GET request.
+	[INFO][11:09:47] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:09:47] : Server's ready to respond.
+	[INFO][11:09:47] : Closing the connection with the client.
+[INFO][11:09:49] : [NEW REQUEST]
+	[INFO][11:09:49] : Server did accept the connection.
+	[INFO][11:09:49] : Server's receive a GET request.
+	[INFO][11:09:49] : The file requested "www/html/index.html" was found.
+	[INFO][11:09:49] : Server's ready to respond.
+	[INFO][11:09:49] : Closing the connection with the client.
+[INFO][11:09:49] : [NEW REQUEST]
+	[INFO][11:09:49] : Server did accept the connection.
+	[INFO][11:09:49] : Server's receive a GET request.
+	[INFO][11:09:49] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:09:49] : Server's ready to respond.
+	[INFO][11:09:49] : Closing the connection with the client.
+[INFO][11:09:50] : [NEW REQUEST]
+	[INFO][11:09:50] : Server did accept the connection.
+	[INFO][11:09:50] : Server's receive a GET request.
+	[INFO][11:09:50] : The file requested "www/html/list.html" was found.
+	[INFO][11:09:50] : Server's ready to respond.
+	[INFO][11:09:50] : Closing the connection with the client.
+[INFO][11:09:50] : [NEW REQUEST]
+	[INFO][11:09:50] : Server did accept the connection.
+	[INFO][11:09:50] : Server's receive a GET request.
+	[INFO][11:09:50] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:09:50] : Server's ready to respond.
+	[INFO][11:09:50] : Closing the connection with the client.
+[INFO][11:09:51] : [NEW REQUEST]
+	[INFO][11:09:51] : Server did accept the connection.
+	[INFO][11:09:51] : Server's receive a GET request.
+	[INFO][11:09:51] : The file requested "www/html/index.html" was found.
+	[INFO][11:09:51] : Server's ready to respond.
+	[INFO][11:09:51] : Closing the connection with the client.
+[INFO][11:09:51] : [NEW REQUEST]
+	[INFO][11:09:51] : Server did accept the connection.
+	[INFO][11:09:51] : Server's receive a GET request.
+	[INFO][11:09:51] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:09:51] : Server's ready to respond.
+	[INFO][11:09:51] : Closing the connection with the client.
+[INFO][11:09:55] : [NEW REQUEST]
+	[INFO][11:09:55] : Server did accept the connection.
+	[INFO][11:09:55] : Server's receive a GET request.
+	[INFO][11:09:55] : The file requested "www/html/form.html" was found.
+	[INFO][11:09:55] : Server's ready to respond.
+	[INFO][11:09:55] : Closing the connection with the client.
+[INFO][11:09:55] : [NEW REQUEST]
+	[INFO][11:09:55] : Server did accept the connection.
+	[INFO][11:09:55] : Server's receive a GET request.
+	[INFO][11:09:55] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:09:55] : Server's ready to respond.
+	[INFO][11:09:55] : Closing the connection with the client.
+[INFO][11:09:56] : [NEW REQUEST]
+	[INFO][11:09:56] : Server did accept the connection.
+	[INFO][11:09:56] : Server's receive a GET request.
+	[INFO][11:09:56] : The file requested "www/html/index.html" was found.
+	[INFO][11:09:56] : Server's ready to respond.
+	[INFO][11:09:56] : Closing the connection with the client.
+[INFO][11:09:56] : [NEW REQUEST]
+	[INFO][11:09:56] : Server did accept the connection.
+	[INFO][11:09:56] : Server's receive a GET request.
+	[INFO][11:09:56] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:09:56] : Server's ready to respond.
+	[INFO][11:09:56] : Closing the connection with the client.
+[INFO][11:11:19] : [NEW REQUEST]
+	[INFO][11:11:19] : Server did accept the connection.
+	[INFO][11:11:19] : Server's receive a GET request.
+	[INFO][11:11:19] : The file requested "www/html/list.html" was found.
+	[INFO][11:11:19] : Server's ready to respond.
+	[INFO][11:11:19] : Closing the connection with the client.
+[INFO][11:11:19] : [NEW REQUEST]
+	[INFO][11:11:19] : Server did accept the connection.
+	[INFO][11:11:19] : Server's receive a GET request.
+	[INFO][11:11:19] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:11:19] : Server's ready to respond.
+	[INFO][11:11:19] : Closing the connection with the client.
+[INFO][11:11:20] : [NEW REQUEST]
+	[INFO][11:11:20] : Server did accept the connection.
+	[INFO][11:11:20] : Server's receive a GET request.
+	[INFO][11:11:20] : The file requested "www/html/delete.html" was found.
+	[INFO][11:11:20] : Server's ready to respond.
+	[INFO][11:11:20] : Closing the connection with the client.
+[INFO][11:11:20] : [NEW REQUEST]
+	[INFO][11:11:20] : Server did accept the connection.
+	[INFO][11:11:20] : Server's receive a GET request.
+	[INFO][11:11:20] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:11:20] : Server's ready to respond.
+	[INFO][11:11:20] : Closing the connection with the client.
+[INFO][11:11:22] : [NEW REQUEST]
+	[INFO][11:11:22] : Server did accept the connection.
+	[INFO][11:11:22] : Server's receive a GET request.
+	[INFO][11:11:22] : The file requested "www/html/index.html" was found.
+	[INFO][11:11:22] : Server's ready to respond.
+	[INFO][11:11:22] : Closing the connection with the client.
+[INFO][11:11:22] : [NEW REQUEST]
+	[INFO][11:11:22] : Server did accept the connection.
+	[INFO][11:11:22] : Server's receive a GET request.
+	[INFO][11:11:22] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:11:22] : Server's ready to respond.
+	[INFO][11:11:22] : Closing the connection with the client.
+[INFO][11:11:24] : [NEW REQUEST]
+	[INFO][11:11:24] : Server did accept the connection.
+	[INFO][11:11:24] : Server's receive a GET request.
+	[INFO][11:11:24] : The file requested "www/html/index.html" was found.
+	[INFO][11:11:24] : Server's ready to respond.
+	[INFO][11:11:24] : Closing the connection with the client.
+[INFO][11:11:24] : [NEW REQUEST]
+	[INFO][11:11:24] : Server did accept the connection.
+	[INFO][11:11:24] : Server's receive a GET request.
+	[INFO][11:11:24] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:11:24] : Server's ready to respond.
+	[INFO][11:11:24] : Closing the connection with the client.
+[INFO][11:11:25] : [NEW REQUEST]
+	[INFO][11:11:25] : Server did accept the connection.
+	[INFO][11:11:25] : Server's receive a GET request.
+	[INFO][11:11:25] : The file requested "www/html/list.html" was found.
+	[INFO][11:11:25] : Server's ready to respond.
+	[INFO][11:11:25] : Closing the connection with the client.
+[INFO][11:11:25] : [NEW REQUEST]
+	[INFO][11:11:25] : Server did accept the connection.
+	[INFO][11:11:25] : Server's receive a GET request.
+	[INFO][11:11:25] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:11:25] : Server's ready to respond.
+	[INFO][11:11:25] : Closing the connection with the client.
+[INFO][11:11:27] : [NEW REQUEST]
+	[INFO][11:11:27] : Server did accept the connection.
+	[INFO][11:11:27] : Server's receive a GET request.
+	[INFO][11:11:27] : The file requested "www/html/form.html" was found.
+	[INFO][11:11:27] : Server's ready to respond.
+	[INFO][11:11:27] : Closing the connection with the client.
+[INFO][11:11:27] : [NEW REQUEST]
+	[INFO][11:11:27] : Server did accept the connection.
+	[INFO][11:11:27] : Server's receive a GET request.
+	[INFO][11:11:27] : The file requested "www/styles/styles.css" was found.
+	[INFO][11:11:27] : Server's ready to respond.
+	[INFO][11:11:27] : Closing the connection with the client.
+	[ERROR][11:23:07] : The call to epoll_wait failed.
+	[INFO][11:23:07] : Shutting down the server properly.
