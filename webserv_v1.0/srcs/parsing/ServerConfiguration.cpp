@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/08 12:24:18 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/09 20:20:13 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ ServerConfiguration::ServerConfiguration() {
     this->_pathInfoMime[("ICON_FILES")] = std::string("www/icons");
     this->_pathInfoMime[("CSV_FILES")] = std::string("www/data");
     this->_pathInfoMime[("ERROR_400_PAGE")] = std::string("www/html/errors/400.html");
-    // log("configuration of the server finished.", 3);
 }
 
 // ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :

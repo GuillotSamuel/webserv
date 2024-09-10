@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:31:35 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/08 12:10:14 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/09 20:39:53 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void sighandler(int type)
 int	main(int argc, char **argv)
 {
 	signal(SIGINT, sighandler);
-
 	try
 	{
 		Server server_object(argc, argv);

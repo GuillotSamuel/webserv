@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/09 12:43:56 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:22:14 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ class Server
 		std::string											_extensionPath;
 		char												received_line[BUFFER_SIZE];
 		char												socket_buffer[BUFFER_SIZE];
- 		std::ofstream										*_log;
 		ListeningSocket										**tab_list;
 		std::vector<ServerConfiguration>					tab_serv;
 		std::map<ListeningSocket *, ServerConfiguration *>	_config;
@@ -63,7 +62,6 @@ class Server
 		void												saveFile(const std::string &filename, const std::string &data);
 		std::string											readRequest(Client *client);
 		void												creatMultiListenPort();
-		void												log(std::string error, int type);
 		void												closeServer();
 		void												dlFile(std::string receivedLine, Client *client);
 		void												parsing_g(int argc, char **argv);
@@ -84,6 +82,9 @@ class Server
 	public:
 		void												startingServer();
 		void												serverExecution();
+		static void											log(std::string error, int type);
+ 		static std::ofstream								*_log;
+
 
 		/*---------------------------------------------------------------*/
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */

@@ -135,6 +135,7 @@ char	**Cgi::createArgv()
 {
 	char **argv;
 	char *here1 = getcwd(NULL, 0);
+	std::cout << here1 << std::endl; // TEST
 	std::string here(here1, strlen(here1));
 	std::string path(this->_path);
 	std::string absolutepath = here + path;
