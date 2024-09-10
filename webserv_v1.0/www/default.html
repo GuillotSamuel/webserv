@@ -1,15 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>index</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Webserv</title>
+	<link rel="stylesheet" href="../styles.css">
+	<link rel="icon" href="./images/icons/favicon.ico" type="image/x-icon">
+	<style>
+		body {
+			font-family: 'Helvetica Neue', Arial, sans-serif;
+			background: linear-gradient(135deg, rgb(0, 5, 71), rgb(81, 0, 87));
+			background-size: 200% 200%;
+			/* Augmentation de la taille pour accentuer le mouvement */
+			margin: 0;
+			padding: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			color: #fff;
+			text-align: center;
+			animation: gradientAnimation 30s ease infinite;
+			/* Animation infinie */
+		}
+
+		@keyframes gradientAnimation {
+			0% {
+				background-position: 0% 50%;
+				/* Départ en haut à gauche */
+			}
+
+			50% {
+				background-position: 100% 50%;
+				/* Milieu en haut à droite */
+			}
+
+			100% {
+				background-position: 0% 50%;
+				/* Retour en haut à gauche */
+			}
+		}
+
+		main {
+			background: rgba(255, 255, 255, 0.15);
+			padding: 40px;
+			border-radius: 15px;
+			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			max-width: 600px;
+			animation: fadeIn 1s ease-in-out;
+		}
+
+		@keyframes fadeIn {
+			0% {
+				opacity: 0;
+				transform: scale(0.8);
+			}
+
+			100% {
+				opacity: 1;
+				transform: scale(1);
+			}
+		}
+
+		h1 {
+			font-size: 2.5rem;
+			margin-bottom: 20px;
+			text-transform: uppercase;
+			letter-spacing: 2px;
+			color: #fefefe;
+			text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+		}
+
+		p {
+			font-size: 1.2rem;
+			line-height: 1.6;
+			margin-bottom: 20px;
+		}
+
+		a {
+			color: #fefefe;
+			text-decoration: none;
+			font-weight: bold;
+			transition: color 0.3s ease;
+		}
+
+		a:hover {
+			color: #ffedc5;
+			text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+		}
+	</style>
 </head>
+
 <body>
-    <main>
-        <title>Welcome to </title>
-    </main>
+	<main>
+		<h1>Welcome to webserv</h1>
+		<p>If you see this page, webserv is successfully installed and working. Further configuration is required.</p>
+		<p>For online support please refer to <a href="https://github.com/GuillotSamuel">Samuel Guillot</a> or <a
+				href="https://github.com/Thebelovedcookie">Marianne Mahfoud</a>.</p>
+		<p>Thank you for using webserv!</p>
+	</main>
 </body>
+
 </html>
