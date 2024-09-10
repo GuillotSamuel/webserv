@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/10 11:05:39 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:04:35 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -471,10 +471,11 @@ std::string	Server::readRequest(Client *client)
             }
             total_read += read;
         }
+		
 
 		receivedLine.append(buffer, total_read);
     	delete[] buffer;
-		std::ofstream file("request.txt");
+		std::ofstream file("request.txt", std::ios::binary);
 		if (file.is_open()) {
 			file << receivedLine;
 			file.close();
