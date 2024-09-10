@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/10 15:06:34 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:53:08 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 #include "webserv.hpp"
 
-#define HTML_FILES "../website_1/html"
-#define CSS_FILES "../website_1/styles"
-#define JS_FILES "../website_1/js"
-#define JSON_FILES "../website_1/data"
-#define IMAGE_FILES "../website_1/images"
-#define VIDEO_FILES "../website_1/videos"
-#define AUDIO_FILES "../website_1/audio"
-#define FONT_FILES "../website_1/fonts"
-#define PDF_FILES "../website_1/docs"
-#define XML_FILES "../website_1/xml"
-#define ICON_FILES "../website_1/icons"
-#define CSV_FILES "../website_1/data"
-#define ERROR_400_PAGE "../website_1/html/errors/400.html"
-#define CGI_FILES "/../website_1/cgi-bin"
+#define HTML_FILES "/html"
+#define CSS_FILES "/styles"
+#define JS_FILES "/js"
+#define JSON_FILES "/data"
+#define IMAGE_FILES "/images"
+#define VIDEO_FILES "/videos"
+#define AUDIO_FILES "/audio"
+#define FONT_FILES "/fonts"
+#define PDF_FILES "/docs"
+#define XML_FILES "/xml"
+#define ICON_FILES "/icons"
+#define CSV_FILES "/data"
+#define ERROR_400_PAGE "/html/errors/400.html"
+#define CGI_FILES "/cgi-bin"
 
 class ServerConfiguration
 {

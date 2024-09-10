@@ -1,20 +1,118 @@
-[INFO][15:04:39] : Starting Server.
-	[INFO][15:04:39] : Getprotobyname Succed.
-	[INFO][15:04:39] : Socket_fd in now created.
-	[INFO][15:04:39] : Socket_fd in now set.
-	[INFO][15:04:39] : Socket_fd is binded.
-	[INFO][15:04:39] : Socket_fd is non blocking fd.
-	[INFO][15:04:39] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:04:39] : Epoll instance successfully created.
-	[INFO][15:04:39] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][15:04:39] : The server construction is now complete. The server is ready to accept incoming connections.
-[INFO][15:04:43] : [NEW REQUEST]
-	[INFO][15:04:43] : Server did accept the connection.
-	[ERROR][15:04:43] : Recv failed.
-	[INFO][15:04:43] : File is created.
-	[INFO][15:04:43] : File Screenshot from 2024-07-25 15-20-24.png saved successfully.
-	[INFO][15:04:43] : Server's receive a POST request.
-	[INFO][15:04:43] : Server's ready to respond.
-	[INFO][15:04:43] : Closing the connection with the client.
-	[ERROR][15:05:06] : The call to epoll_wait failed.
-	[INFO][15:05:06] : Shutting down the server properly.
+[INFO][15:57:47] : Starting Server.
+	[INFO][15:57:47] : Getprotobyname Succed.
+	[INFO][15:57:47] : Socket_fd in now created.
+	[INFO][15:57:47] : Socket_fd in now set.
+	[INFO][15:57:47] : Socket_fd is binded.
+	[INFO][15:57:47] : Socket_fd is non blocking fd.
+	[INFO][15:57:47] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:57:47] : Epoll instance successfully created.
+	[INFO][15:57:47] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][15:57:47] : The server construction is now complete. The server is ready to accept incoming connections.
+[INFO][15:57:50] : [NEW REQUEST]
+	[INFO][15:57:50] : Server did accept the connection.
+	[INFO][15:57:50] : Server's receive a GET request.
+	[INFO][15:57:50] : The file requested "/home/mmahfoud/ecole_42/webserv/webserv_v1.0/www/default.html" was found.
+	[INFO][15:57:50] : Server's ready to respond.
+	[INFO][15:57:50] : Closing the connection with the client.
+[INFO][15:57:50] : [NEW REQUEST]
+	[INFO][15:57:50] : Server did accept the connection.
+	[INFO][15:57:50] : Server's receive a GET request.
+	[INFO][15:57:50] : The file given cannot be found.
+	[INFO][15:57:50] : The file requested "/styles/styles.css" was found empty.
+	[INFO][15:57:50] : The file given cannot be found.
+	[INFO][15:57:50] : Server's ready to respond.
+	[INFO][15:57:50] : Closing the connection with the client.
+[INFO][15:57:50] : [NEW REQUEST]
+	[INFO][15:57:50] : Server did accept the connection.
+	[INFO][15:57:50] : Server's receive a GET request.
+	[INFO][15:57:50] : The file given cannot be found.
+	[INFO][15:57:50] : The file requested "/images/images/icons/favicon.ico" was found empty.
+	[INFO][15:57:50] : The file given cannot be found.
+	[INFO][15:57:50] : Server's ready to respond.
+	[INFO][15:57:50] : Closing the connection with the client.
+[INFO][15:58:01] : [NEW REQUEST]
+	[INFO][15:58:01] : Server did accept the connection.
+	[INFO][15:58:01] : Server's receive a GET request.
+	[INFO][15:58:01] : The file requested "/home/mmahfoud/ecole_42/webserv/webserv_v1.0/www/default.html" was found.
+	[INFO][15:58:01] : Server's ready to respond.
+	[INFO][15:58:01] : Closing the connection with the client.
+[INFO][15:58:01] : [NEW REQUEST]
+	[INFO][15:58:01] : Server did accept the connection.
+	[INFO][15:58:01] : Server's receive a GET request.
+	[INFO][15:58:01] : The file given cannot be found.
+	[INFO][15:58:01] : The file requested "/styles/styles.css" was found empty.
+	[INFO][15:58:01] : The file given cannot be found.
+	[INFO][15:58:01] : Server's ready to respond.
+	[INFO][15:58:01] : Closing the connection with the client.
+[INFO][15:58:04] : [NEW REQUEST]
+	[INFO][15:58:04] : Server did accept the connection.
+	[INFO][15:58:04] : Server's receive a GET request.
+	[INFO][15:58:04] : The file requested "/home/mmahfoud/ecole_42/webserv/webserv_v1.0/www/default.html" was found.
+	[INFO][15:58:04] : Server's ready to respond.
+	[INFO][15:58:04] : Closing the connection with the client.
+[INFO][15:58:04] : [NEW REQUEST]
+	[INFO][15:58:04] : Server did accept the connection.
+	[INFO][15:58:04] : Server's receive a GET request.
+	[INFO][15:58:04] : The file given cannot be found.
+	[INFO][15:58:04] : The file requested "/styles/styles.css" was found empty.
+	[INFO][15:58:04] : The file given cannot be found.
+	[INFO][15:58:04] : Server's ready to respond.
+	[INFO][15:58:04] : Closing the connection with the client.
+[INFO][15:58:05] : [NEW REQUEST]
+	[INFO][15:58:05] : Server did accept the connection.
+	[INFO][15:58:05] : Server's receive a GET request.
+	[INFO][15:58:05] : The file requested "/home/mmahfoud/ecole_42/webserv/webserv_v1.0/www/default.html" was found.
+	[INFO][15:58:05] : Server's ready to respond.
+	[INFO][15:58:05] : Closing the connection with the client.
+[INFO][15:58:05] : [NEW REQUEST]
+	[INFO][15:58:05] : Server did accept the connection.
+	[INFO][15:58:05] : Server's receive a GET request.
+	[INFO][15:58:05] : The file given cannot be found.
+	[INFO][15:58:05] : The file requested "/styles/styles.css" was found empty.
+	[INFO][15:58:05] : The file given cannot be found.
+	[INFO][15:58:05] : Server's ready to respond.
+	[INFO][15:58:05] : Closing the connection with the client.
+[INFO][15:58:06] : [NEW REQUEST]
+	[INFO][15:58:06] : Server did accept the connection.
+	[INFO][15:58:06] : Server's receive a GET request.
+	[INFO][15:58:06] : The file requested "/home/mmahfoud/ecole_42/webserv/webserv_v1.0/www/default.html" was found.
+	[INFO][15:58:06] : Server's ready to respond.
+	[INFO][15:58:06] : Closing the connection with the client.
+[INFO][15:58:06] : [NEW REQUEST]
+	[INFO][15:58:06] : Server did accept the connection.
+	[INFO][15:58:06] : Server's receive a GET request.
+	[INFO][15:58:06] : The file given cannot be found.
+	[INFO][15:58:06] : The file requested "/styles/styles.css" was found empty.
+	[INFO][15:58:06] : The file given cannot be found.
+	[INFO][15:58:06] : Server's ready to respond.
+	[INFO][15:58:06] : Closing the connection with the client.
+[INFO][15:58:07] : [NEW REQUEST]
+	[INFO][15:58:07] : Server did accept the connection.
+	[INFO][15:58:07] : Server's receive a GET request.
+	[INFO][15:58:07] : The file requested "/home/mmahfoud/ecole_42/webserv/webserv_v1.0/www/default.html" was found.
+	[INFO][15:58:07] : Server's ready to respond.
+	[INFO][15:58:07] : Closing the connection with the client.
+[INFO][15:58:07] : [NEW REQUEST]
+	[INFO][15:58:07] : Server did accept the connection.
+	[INFO][15:58:07] : Server's receive a GET request.
+	[INFO][15:58:07] : The file given cannot be found.
+	[INFO][15:58:07] : The file requested "/styles/styles.css" was found empty.
+	[INFO][15:58:07] : The file given cannot be found.
+	[INFO][15:58:07] : Server's ready to respond.
+	[INFO][15:58:07] : Closing the connection with the client.
+[INFO][15:58:08] : [NEW REQUEST]
+	[INFO][15:58:08] : Server did accept the connection.
+	[INFO][15:58:08] : Server's receive a GET request.
+	[INFO][15:58:08] : The file requested "/home/mmahfoud/ecole_42/webserv/webserv_v1.0/www/default.html" was found.
+	[INFO][15:58:08] : Server's ready to respond.
+	[INFO][15:58:08] : Closing the connection with the client.
+[INFO][15:58:08] : [NEW REQUEST]
+	[INFO][15:58:08] : Server did accept the connection.
+	[INFO][15:58:08] : Server's receive a GET request.
+	[INFO][15:58:08] : The file given cannot be found.
+	[INFO][15:58:08] : The file requested "/styles/styles.css" was found empty.
+	[INFO][15:58:08] : The file given cannot be found.
+	[INFO][15:58:08] : Server's ready to respond.
+	[INFO][15:58:08] : Closing the connection with the client.
+	[ERROR][15:58:23] : The call to epoll_wait failed.
+	[INFO][15:58:23] : Shutting down the server properly.

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/10 15:04:35 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:58:19 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -491,6 +491,7 @@ std::string Server::findPath(const std::string &receivedLine)
 {
 	char *path_here = getcwd(NULL, 0);
 	std::cout << "path = " << path_here << std::endl; // TEST
+	std::string here(path_here, strlen(path_here));
 	size_t path_start = receivedLine.find('/');
 	if (path_start == std::string::npos)
 		log("Path_start failed.", 2);
@@ -500,8 +501,10 @@ std::string Server::findPath(const std::string &receivedLine)
 		log("Path_end failed.", 2);
 	this->_path = receivedLine.substr(path_start, path_end - path_start);
 
+
+	std::cout << this->_path << std::endl;
 	if (this->_path == "/")
-		return (HTML_FILES + std::string("/index.html"));
+		return (here + std::string("/www/default.html"));
 
 	size_t ext = this->_path.rfind(".");
 	size_t extend = this->_path.size();
@@ -513,7 +516,7 @@ std::string Server::findPath(const std::string &receivedLine)
 	}
 	
 	log("Extension of the files was not recognize.", 1);
-	return (ERROR_400_PAGE);
+	return (here + "www/error_pages/404.html");
 }
 
 void   	Server::log(std::string error, int type)
