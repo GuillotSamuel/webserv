@@ -1,30 +1,18 @@
-[INFO][17:11:26] : Starting Server.
-	[INFO][17:11:26] : Getprotobyname Succed.
-	[INFO][17:11:26] : Socket_fd in now created.
-	[INFO][17:11:26] : Socket_fd in now set.
-	[INFO][17:11:26] : Socket_fd is binded.
-	[INFO][17:11:26] : Socket_fd is non blocking fd.
-	[INFO][17:11:26] : Socket_fd is now listening every attemp of connection.
-	[INFO][17:11:26] : Epoll instance successfully created.
-	[INFO][17:11:26] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][17:11:26] : The server construction is now complete. The server is ready to accept incoming connections.
-[INFO][17:11:30] : [NEW REQUEST]
-	[INFO][17:11:30] : Server did accept the connection.
-	[INFO][17:11:30] : Server's receive a GET request.
-	[INFO][17:11:30] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/www/default.html" was found.
-	[INFO][17:11:30] : Server's ready to respond.
-	[INFO][17:11:30] : Closing the connection with the client.
-[INFO][17:11:32] : [NEW REQUEST]
-	[INFO][17:11:32] : Server did accept the connection.
-	[INFO][17:11:32] : Server's receive a GET request.
-	[INFO][17:11:32] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/www/error_pages/404.html" was found empty.
-	[INFO][17:11:32] : Server's ready to respond.
-	[INFO][17:11:32] : Closing the connection with the client.
-[INFO][17:11:36] : [NEW REQUEST]
-	[INFO][17:11:36] : Server did accept the connection.
-	[INFO][17:11:36] : Server's receive a GET request.
-	[INFO][17:11:36] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/www/error_pages/404.html" was found empty.
-	[INFO][17:11:36] : Server's ready to respond.
-	[INFO][17:11:36] : Closing the connection with the client.
-	[ERROR][17:11:51] : The call to epoll_wait failed.
-	[INFO][17:11:51] : Shutting down the server properly.
+[INFO][20:40:28] : Starting Server.
+	[INFO][20:40:28] : Getprotobyname Succed.
+	[INFO][20:40:28] : Socket_fd in now created.
+	[INFO][20:40:28] : Socket_fd in now set.
+	[INFO][20:40:28] : Socket_fd is binded.
+	[INFO][20:40:28] : Socket_fd is non blocking fd.
+	[INFO][20:40:28] : Socket_fd is now listening every attemp of connection.
+	[INFO][20:40:28] : Epoll instance successfully created.
+	[INFO][20:40:28] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][20:40:28] : The server construction is now complete. The server is ready to accept incoming connections.
+[INFO][20:40:33] : [NEW REQUEST]
+	[INFO][20:40:33] : Server did accept the connection.
+	[INFO][20:40:33] : Server's receive a GET request.
+	[INFO][20:40:33] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/www/default.html" was found.
+	[INFO][20:40:33] : Server's ready to respond.
+	[INFO][20:40:33] : Closing the connection with the client.
+	[ERROR][21:36:32] : The call to epoll_wait failed.
+	[INFO][21:36:32] : Shutting down the server properly.

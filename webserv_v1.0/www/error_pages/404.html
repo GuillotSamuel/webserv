@@ -9,7 +9,6 @@
 			font-family: 'Helvetica Neue', Arial, sans-serif;
 			background: linear-gradient(135deg, rgb(0, 5, 71), rgb(81, 0, 87));
 			background-size: 200% 200%;
-			/* Augmentation de la taille pour accentuer le mouvement */
 			margin: 0;
 			padding: 0;
 			display: flex;
@@ -18,37 +17,47 @@
 			height: 100vh;
 			color: #fff;
 			text-align: center;
-			animation: gradientAnimation 30s ease infinite;
-			/* Animation infinie */
+			animation: gradientAnimation 20s ease infinite;
 		}
 
 		@keyframes gradientAnimation {
 			0% {
 				background-position: 0% 50%;
-				/* Départ en haut à gauche */
 			}
 
 			50% {
 				background-position: 100% 50%;
-				/* Milieu en haut à droite */
 			}
 
 			100% {
 				background-position: 0% 50%;
-				/* Retour en haut à gauche */
 			}
 		}
 
-		main {
-			background: rgba(255, 255, 255, 0.15);
+		.card {
+			position: relative;
+			background: rgb(0, 5, 71);
 			padding: 40px;
 			border-radius: 15px;
-			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-			backdrop-filter: blur(10px);
-			-webkit-backdrop-filter: blur(10px);
-			border: 1px solid rgba(255, 255, 255, 0.2);
 			max-width: 600px;
 			animation: fadeIn 1s ease-in-out;
+			z-index: 1;
+		}
+
+		.card::before {
+			content: "";
+			position: absolute;
+			width: 104%;
+  			height: 102%;
+			background-image: conic-gradient(rgb(0, 217, 255), rgb(247, 0, 255), rgb(255, 243, 135), rgb(0, 217, 255));
+			top: 50%;
+			left: 50%;
+			translate: -50% -50%;
+			z-index: -1;
+			padding: 15px;
+			border-radius: 15px;
+			filter: blur(1.5rem);
+			opacity: 0.5;
 		}
 
 		@keyframes fadeIn {
@@ -69,13 +78,14 @@
 			text-transform: uppercase;
 			letter-spacing: 2px;
 			color: #fefefe;
-			text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+			text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
 		}
 
 		p {
 			font-size: 1.2rem;
 			line-height: 1.6;
 			margin-bottom: 20px;
+			text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
 		}
 
 		a {
@@ -87,14 +97,16 @@
 
 		a:hover {
 			color: #ffedc5;
-			text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+			text-shadow: 0 0 10px rgba(255, 253, 237, 0.658);
 		}
 	</style>
 </head>
 <body>
     <main>
-        <h1>404 Not Found</h1>
-        <p>The requested resource could not be found on this server.</p>
+		<div class="card">
+			<h1>404 Not Found</h1>
+			<p>The requested resource could not be found on this server.</p>
+		</div>
     </main>
 </body>
 </html>
