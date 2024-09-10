@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/08 12:16:13 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:06:34 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #define ICON_FILES "../website_1/icons"
 #define CSV_FILES "../website_1/data"
 #define ERROR_400_PAGE "../website_1/html/errors/400.html"
-#define CGI_FILES "/cgi-bin"
+#define CGI_FILES "/../website_1/cgi-bin"
 
 class ServerConfiguration
 {
@@ -37,10 +37,12 @@ class ServerConfiguration
 		/*---------------------------------------------------------------*/	
 		std::map<std::string, std::string>	_pathInfoMime;
 		std::map<std::string, std::string>	_pathInfoCgi;
+		std::map<std::string, std::string>	_location;
 		std::map<int, std::string>			errorPages;
         std::string							hostName;
         std::string							serverName;
 		std::string							strPort;
+		std::string							root;
         int        							port;		
 		int									clientMaxBodySize;
 
