@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/09 20:20:13 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:46:54 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,16 @@
 
 ServerConfiguration::ServerConfiguration() {
     
-    this->port = 8090;
-    this->hostName = std::string("127.0.0.1");
-    this->serverName = std::string("localhost");
-    this->errorPages[404] = std::string("404.html");
-    this->_pathInfoCgi[(".py")] = std::string("/usr/bin/python3");
-    this->_pathInfoCgi[(".sh")] = std::string("/bin/bash");
-    this->_pathInfoMime[("HTML_FILES")] = std::string("www/html");
-    this->_pathInfoMime[("CSS_FILES")] = std::string("www/styles");
-    this->_pathInfoMime[("JS_FILES")] = std::string("www/js");
-    this->_pathInfoMime[("JSON_FILES")] = std::string("www/data");
-    this->_pathInfoMime[("IMAGE_FILES")] = std::string("www/images");
-    this->_pathInfoMime[("VIDEO_FILES")] = std::string("www/videos");
-    this->_pathInfoMime[("AUDIO_FILES")] = std::string("www/audio");
-    this->_pathInfoMime[("FONT_FILES")] = std::string("www/fonts");
-    this->_pathInfoMime[("PDF_FILES")] = std::string("www/docs");
-    this->_pathInfoMime[("XML_FILES")] = std::string("www/xml");
-    this->_pathInfoMime[("ICON_FILES")] = std::string("www/icons");
-    this->_pathInfoMime[("CSV_FILES")] = std::string("www/data");
-    this->_pathInfoMime[("ERROR_400_PAGE")] = std::string("www/html/errors/400.html");
+    char *cRoot = getcwd(NULL, 0);// je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0
+    std::string root(cRoot, strlen(cRoot));
+    std::string def_index =  root + "/www/default.html";
+    this->errorPages[404] = root + "/www/error_pages" + "404.html";
+    this->port = -1;
+    this->hostName = std::string("");
+    this->serverName = std::string("localhost"); // TEST PARSING
 }
+
+
 
 // ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
 //     port(copy.port), hostName(copy.hostName),
