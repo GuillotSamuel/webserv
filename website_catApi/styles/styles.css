@@ -2,6 +2,7 @@ html {
     height: 100%;
     padding: 0;
     margin: 0;
+    scrollbar-color: #c700bd #f3c3ff;
 }
 
 body {
@@ -22,8 +23,8 @@ body {
 header {
     padding: 20px;
     background-image: url('../images/panther.webp');
-    text-shadow: 
-        1px 1px 0 #fff,  
+    text-shadow:
+        1px 1px 0 #fff,
         -1px -1px 0 #fff,
         1px -1px 0 #fff,
         -1px 1px 0 #fff;
@@ -40,11 +41,11 @@ main {
     padding: 50px;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(to right, 
-                rgba(255, 105, 180, 0.4),
-                rgba(255, 105, 180, 0),
-                rgba(255, 105, 180, 0),
-                rgba(255, 105, 180, 0.4)); 
+    background: linear-gradient(to right,
+            rgba(255, 105, 180, 0.4),
+            rgba(255, 105, 180, 0),
+            rgba(255, 105, 180, 0),
+            rgba(255, 105, 180, 0.4));
 }
 
 h1 {
@@ -67,7 +68,8 @@ h1 {
 .nav-links a {
     color: #e45aff;
     text-decoration: none;
-    background-color: #ff96fb;
+    background-color: #EFB4D0;
+    border: 1px solid black;
     padding: 5px;
     border-radius: 20px;
 }
@@ -106,15 +108,37 @@ button:hover {
     height: 50vh;
     border-radius: 10px;
     margin: 20px;
-    box-shadow: 0 0 100px rgb(255, 0, 255); /* Ajoute une ombre classique pour l'effet de profondeur */
+    box-shadow: 0 0 100px rgb(255, 0, 255);
+    /* Ajoute une ombre classique pour l'effet de profondeur */
 }
 
 footer {
     padding: 30px;
     background-image: url('../images/hearts.jpg');
-    text-shadow: 
-        1px 1px 0 #fff,  
+    text-shadow:
+        1px 1px 0 #fff,
         -1px -1px 0 #fff,
         1px -1px 0 #fff,
         -1px 1px 0 #fff;
+}
+
+.heart_image {
+    width: 250px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    --_m: radial-gradient(#000 69%, #0000 70%) 84.5%/50%;
+    -webkit-mask-box-image: var(--_m);
+    mask-border: var(--_m);
+    clip-path: polygon(-41% 0, 50% 91%, 141% 0);
+}
+
+@supports not (-webkit-mask-box-image: var(--_m)) {
+    .heart_image {
+        --_m:
+            radial-gradient(at 70% 31%, #000 29%, #0000 30%),
+            radial-gradient(at 30% 31%, #000 29%, #0000 30%),
+            linear-gradient(#000 0 0) bottom/100% 50% no-repeat;
+        -webkit-mask: var(--_m);
+        mask: var(--_m);
+    }
 }
