@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 14:13:49 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 18:45:04 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	ServerConfiguration::setPort(std::string str)
 {
     int n;
     std::istringstream(str) >> n;
-    this->port = n;
+    this->_port.push_back(n);
 }
 
 void	ServerConfiguration::setHostName(std::string str)
@@ -104,6 +104,16 @@ void	ServerConfiguration::setClientMaxBodySize(std::string str)
     int n;
     std::istringstream(str) >> n;
     this->clientMaxBodySize = n;
+}
+
+void    ServerConfiguration::setRoot(std::string str)
+{
+    this->root = str;
+}
+
+void    ServerConfiguration::setIndex(std::string str)
+{
+    this->index = str;
 }
 
 int		ServerConfiguration::getPort(void) const

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 15:39:29 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 18:45:45 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ class ServerConfiguration
         void								setServerName(std::string str);
 		void								setErrorPage(int code, std::string str);
 		void								setClientMaxBodySize(std::string str);
+		void    							setRoot(std::string str);
+		void    							setIndex(std::string str);
 		
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
@@ -91,6 +93,7 @@ class ServerConfiguration
 		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi() const;
 		std::vector<ListeningSocket*>		getTabList() const;
+		std::string							getIndex() const;
 
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */
