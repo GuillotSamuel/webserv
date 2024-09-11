@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/11 14:22:05 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:56:23 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ Server::Server(int argc, char **argv)
 	for (; it < this->tab_serv.end(); it++)
 	{
 		it->creatMultiPort();
+		std::vector<ListeningSocket*> tab = it->getTabList();
+		// std::vector<ListeningSocket*>::iterator itTab = tab.begin(); // TEST
+		// for(; itTab != tab.end(); itTab++)
+		// {
+		// 	std::cout << (*itTab)->getSocket_fd() << std::endl;
+		// } //TEST
 	}
 	log("Starting Server.", 3);
 	this->_connexion_fd = -1;
@@ -87,7 +93,7 @@ void	Server::startingServer()
 */
 void Server::serverExecution()
 {
-	int	sock = 0;
+	int	sock;
 	while (true)
 	{
 		int nfds = epoll_wait(this->_epoll_fd, this->_events, MAX_EVENTS, -1);
@@ -97,38 +103,31 @@ void Server::serverExecution()
 			closeServer();
 		for (int i = 0; i < nfds; i++)
 		{
-			std::cout << "1\n";
+			ServerConfiguration serv;
+			sock = 0;
 			std::vector<ServerConfiguration>::iterator it = tab_serv.begin();
-			std::cout << "2\n";
 			for (;it < tab_serv.end(); it++)
 			{
-				std::cout << "3\n";
 				std::vector<ListeningSocket*> tab = it->getTabList();
-				std::cout << "4\n";
 				std::vector<ListeningSocket*>::iterator itTab = tab.begin();
-				std::cout << "5\n";
-				for(; itTab < it->getTabList().end(); itTab++)
+				
+				for(; itTab < tab.end(); itTab++)
 				{
-					std::cout << "6\n";
 					if (this->_events[i].data.fd == (*itTab)->getSocket_fd())
 					{
-						std::cout << "7\n" << std::endl;
 						sock = (*itTab)->getSocket_fd();
-						std::cout << "8\n" << std::endl;
+						serv = *it;
 						break;
 					}
-				}	
+				}
+				if (sock != 0)
+					break;
 			}
-			
-			if (it == tab_serv.end())
+			if (it == tab_serv.end() && sock == 0)
 			{
-				std::cout << "9\n";
 				if (this->_events[i].events & EPOLLIN)
 				{
-					std::cout << "10\n";
-					ServerConfiguration serv = *it;
 					handle_client(serv);
-					std::cout << "11\n";
 				}
 
 				else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP)) {
@@ -173,7 +172,6 @@ and chose what method to use
 */
 void Server::handle_client(ServerConfiguration serv)
 {
-	std::cout << &serv << std::endl;
 	Client *client = new Client();
 
 	char client_ip[INET_ADDRSTRLEN];
@@ -527,8 +525,6 @@ std::string Server::findPath(const std::string &receivedLine, ServerConfiguratio
 		log("Path_end failed.", 2);
 	this->_path = receivedLine.substr(path_start, path_end - path_start);
 
-
-	std::cout << this->_path << std::endl; // TEST
 	if (this->_path == "/")
 	{
 		this->_status_code = 0;

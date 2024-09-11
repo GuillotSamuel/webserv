@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 15:35:04 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:39:29 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ class ServerConfiguration
 		std::string							root;
 		std::string							root_index;
 		std::string							index;
-        int        							port;		
         int        							port;
 		std::vector<int>					_port;
 		int									clientMaxBodySize;

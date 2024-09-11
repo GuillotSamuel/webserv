@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_root.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 14:06:46 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 14:07:02 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:40:00 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 void Server::ft_set_root_param(std::vector<std::string> tokens)
 {
-    
+    (void)tokens;
 }
