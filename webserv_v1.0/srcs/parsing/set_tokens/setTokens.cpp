@@ -42,17 +42,18 @@ void Server::ft_param_set_tokens(std::vector<std::string> tokens)
     //     std::cout << "[" << *it << "]";
     // }
     // std::cout << std::endl;
-    const int nb_param = 6;
+    const int nb_param = 7;
     
     const char* param_array[nb_param] = {"listen", "host_name", "server_name", "error_page",
-                                         "client_max_body_size", "location"};
+                                         "client_max_body_size", "location", "index"};
     void (Server::*param_functions[nb_param])(std::vector<std::string>) = {
         &Server::ft_set_listen_param,
         &Server::ft_set_host_name_param,
         &Server::ft_set_server_name_param,
         &Server::ft_set_error_page_param,
         &Server::ft_set_client_max_body_param,
-        &Server::ft_set_location_param
+        &Server::ft_set_location_param,
+        &Server::ft_set_index_param
     };
 
     for (int i = 0; i < nb_param; i++)

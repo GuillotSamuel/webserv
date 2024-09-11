@@ -23,7 +23,7 @@ ServerConfiguration::ServerConfiguration() {
     char *cRoot = getcwd(NULL, 0);// je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0/
     std::string root_cpy(cRoot, strlen(cRoot));
 
-    root_cpy += "/../website_1"; // a supprimer
+    root_cpy += "/../website_gallery"; // a supprimer
     
     this->root = root_cpy;
     free(cRoot);

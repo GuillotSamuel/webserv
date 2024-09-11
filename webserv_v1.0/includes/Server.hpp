@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/11 11:05:19 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 14:08:43 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ class Server
 		void												ft_set_listen_param(std::vector<std::string> tokens);
 		void												ft_set_host_name_param(std::vector<std::string> tokens);
 		void												ft_set_error_page_param(std::vector<std::string> tokens);
+		void												ft_set_root_param(std::vector<std::string> tokens);
+		void												ft_set_index_param(std::vector<std::string> tokens);
 
 	public:
 		void												startingServer();

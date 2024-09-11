@@ -44,6 +44,7 @@ class ServerConfiguration
 		std::string							strPort;
 		std::string							root;
 		std::string							root_index;
+		std::string							index;
         int        							port;		
 		int									clientMaxBodySize;
 
