@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/10 15:58:19 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 11:05:32 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,13 +165,11 @@ void Server::handle_client(ServerConfiguration serv)
 		log("Server could not read anything from client. The client will be remove.", 2);
 		return ;
 	}
-	std::string filePath = findPath(receivedLine, serv.getRoot());
+	std::string filePath = findPath(receivedLine, serv);
 	if (filePath == "")
 	{
 		filePath = serv.getErrorPage(404);
 	}
-	if (client->getContentLength() != "")
-		dlFile(receivedLine, client);
 
 	if (client->getMethod() == "GET")
 	{
@@ -360,27 +358,28 @@ Server::~Server()
 /*                                  UTILS                                     */
 /*----------------------------------------------------------------------------*/
 
-void	Server::dlFile(std::string receivedLine, Client *client)
+void	Server::dlFile(std::string *receivedLine, Client *client)
 {
 	std::string file_name;
 	std::string body_content;
-	size_t filename = receivedLine.find("filename=\"");
+	size_t filename = (*receivedLine).find("filename=\"");
 	if (filename != std::string::npos)
 	{
 		filename += 10;
-		size_t endFilename  = receivedLine.find("\"", filename);
+		size_t endFilename  = (*receivedLine).find("\"", filename);
 		if (endFilename != std::string::npos)
 		{
-			file_name = receivedLine.substr(filename, (endFilename - filename));
+			file_name = (*receivedLine).substr(filename, (endFilename - filename));
 		
-			size_t body = receivedLine.find("\r\n\r\n", endFilename);
+			size_t body = (*receivedLine).find("\r\n\r\n", endFilename);
 			if (body != std::string::npos)
 			{
 				body += 4;
-				size_t endbody = receivedLine.find(client->getBoundary(), body);
+				size_t endbody = (*receivedLine).find(client->getBoundary(), body);
 				if (endbody != std::string::npos)
 				{
-					body_content = receivedLine.substr(body, (endbody - body));
+					body_content = (*receivedLine).substr(body, (endbody - body));
+					(*receivedLine).erase(body, (endbody - body));
 					saveFile(file_name, body_content);
 				}
 				else
@@ -478,10 +477,11 @@ std::string	Server::readRequest(Client *client)
             }
             total_read += read;
         }
-		
 
 		receivedLine.append(buffer, total_read);
     	delete[] buffer;
+		dlFile(&receivedLine, client);
+		
 		std::ofstream file("request.txt", std::ios::binary);
 		if (file.is_open()) {
 			file << receivedLine;
@@ -494,7 +494,7 @@ std::string	Server::readRequest(Client *client)
 	return (receivedLine);
 }
 
-std::string Server::findPath(const std::string &receivedLine, std::string root)
+std::string Server::findPath(const std::string &receivedLine, ServerConfiguration serv)
 {
 	size_t path_start = receivedLine.find('/');
 	if (path_start == std::string::npos)
@@ -510,14 +510,14 @@ std::string Server::findPath(const std::string &receivedLine, std::string root)
 	if (this->_path == "/")
 	{
 		this->_status_code = 0;
-		return (root + std::string("/www/default.html"));
+		return (serv.getRootIndex());
 	}
 
 	size_t ext = this->_path.rfind(".");
 	if (ext == std::string::npos)
 	{
 		this->_status_code = 400;
-		return ("");
+		return (serv.getErrorPage(400));
 	}
 	size_t extend = this->_path.size();
 	std::string extension = this->_path.substr(ext, (extend - ext));
@@ -525,7 +525,7 @@ std::string Server::findPath(const std::string &receivedLine, std::string root)
 	{
 		this->_extensionPath = extension;
 		this->_status_code = 0;
-		return (this->extpath[extension] + this->_path);
+		return (serv.getRoot() + this->extpath[extension] + this->_path);
 	}
 	
 	log("Extension of the files was not recognize.", 1);

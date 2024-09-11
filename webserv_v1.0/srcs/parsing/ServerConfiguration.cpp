@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/10 15:46:54 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 11:30:18 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,17 @@
 
 ServerConfiguration::ServerConfiguration() {
     
-    char *cRoot = getcwd(NULL, 0);// je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0
+    char *cRoot = getcwd(NULL, 0);// je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0/
     std::string root_cpy(cRoot, strlen(cRoot));
+
+    root_cpy += "/../website_1"; // a supprimer
+    
     this->root = root_cpy;
     free(cRoot);
-    std::string def_index =  root + "/www/default.html";
+    // this->_index =  root + "/www/default.html";
+
+    this->root_index = root + "/html/index.html"; // a supprimer
+    this->_pathInfoCgi[".py"] = "/usr/bin/python3";
     this->errorPages[404] = root + "/www/error_pages/404.html";
     this->port = -1;
     this->hostName = std::string("");
@@ -112,6 +118,11 @@ std::string	ServerConfiguration::getStrPort(void) const
 std::string ServerConfiguration::getRoot(void) const
 {
     return (this->root);
+}
+
+std::string ServerConfiguration::getRootIndex(void) const
+{
+	return (this->root_index);
 }
 
 std::string ServerConfiguration::getErrorPage(int code) const
