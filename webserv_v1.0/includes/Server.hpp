@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/11 11:05:19 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 12:37:19 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ class Server
 		std::string											_extensionPath;
 		char												received_line[BUFFER_SIZE];
 		char												socket_buffer[BUFFER_SIZE];
-		ListeningSocket										**tab_list;
 		std::vector<ServerConfiguration>					tab_serv;
-		std::map<ListeningSocket *, ServerConfiguration *>	_config;
 		std::map<std::string, std::string>					extpath;
 		std::map<std::string, std::string>					mimePath;
 		ServerConfiguration									*currentConfig;
@@ -62,7 +60,6 @@ class Server
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
 		std::string											readRequest(Client *client);
-		void												creatMultiListenPort();
 		void												closeServer();
 		void												dlFile(std::string *receivedLine, Client *client);
 		void												parsing_g(int argc, char **argv);
@@ -79,7 +76,7 @@ class Server
 		void												ft_set_listen_param(std::vector<std::string> tokens);
 		void												ft_set_host_name_param(std::vector<std::string> tokens);
 		void												ft_set_error_page_param(std::vector<std::string> tokens);
-
+		void												creatAllSocket();
 	public:
 		void												startingServer();
 		void												serverExecution();

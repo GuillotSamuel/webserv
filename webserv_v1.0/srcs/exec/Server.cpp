@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/11 11:05:32 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 14:22:05 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,12 @@ Server::Server(int argc, char **argv)
 	}
 	this->_status_code = 0;
 	parsing_g(argc, argv);
-	log("Starting Server.", 3);
-	// TEST
-	for (std::vector<ServerConfiguration>::iterator it = tab_serv.begin(); it != tab_serv.end(); ++it)
+	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
+	for (; it < this->tab_serv.end(); it++)
 	{
-		std::cout << *it << std::endl;
+		it->creatMultiPort();
 	}
-	// TEST
-	this->tab_list = new ListeningSocket*[tab_serv.size()];
-	creatMultiListenPort();
+	log("Starting Server.", 3);
 	this->_connexion_fd = -1;
 	this->_epoll_fd = -1;
 	this->extpath = createExtPath();
@@ -42,9 +39,10 @@ Server::Server(int argc, char **argv)
 	memset(&_address, 0, sizeof(struct sockaddr_in));
 	memset(&_clientAdress, 0, sizeof(struct sockaddr));
 	memset(&_event, 0, sizeof(struct epoll_event));
-	memset(received_line, 0, BUFFER_SIZE);
+ 	memset(received_line, 0, BUFFER_SIZE);
 	memset(socket_buffer, 0, BUFFER_SIZE);
 }
+
 
 /*----------------------------------------------------------------------------*/
 /*                              METHOD/SERVER                                 */
@@ -60,16 +58,23 @@ void	Server::startingServer()
 		log("Epoll instance creation failed.", 2);
 	
 	log("Epoll instance successfully created.", 1);
-	std::map<ListeningSocket*, ServerConfiguration*>::iterator it = _config.begin();
-	for (; it != this->_config.end(); it++)
+	std::vector<ServerConfiguration>::iterator it = tab_serv.begin();
+	for (; it != this->tab_serv.end(); it++)
 	{
-		this->_event.events = EPOLLIN;
-		this->_event.data.fd = it->first->getSocket_fd();
-
-		if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, it->first->getSocket_fd(), &this->_event) == -1)
+		std::vector<ListeningSocket*> tab = it->getTabList();
+		std::vector<ListeningSocket*>::iterator itTab = tab.begin();
+		for(; itTab != tab.end(); itTab++)
 		{
-			log("Server failed to add the socket file descriptor to his instance of Epoll.", 2);
+			this->_event.events = EPOLLIN;
+			this->_event.data.fd = (*itTab)->getSocket_fd();
+
+			if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, (*itTab)->getSocket_fd(), &this->_event) == -1)
+			{
+				log("Server failed to add the socket file descriptor to his instance of Epoll.", 2);
+				exit(EXIT_FAILURE);
+			}
 		}
+		
 		log("Epoll_ctl successfully add the socket file descriptor to Epoll instance.", 1);
 	}
 	log("The server construction is now complete. The server is ready to accept incoming connections.", 1);
@@ -82,6 +87,7 @@ void	Server::startingServer()
 */
 void Server::serverExecution()
 {
+	int	sock = 0;
 	while (true)
 	{
 		int nfds = epoll_wait(this->_epoll_fd, this->_events, MAX_EVENTS, -1);
@@ -89,22 +95,41 @@ void Server::serverExecution()
 			log("The call to epoll_wait failed.", 2);
 		if (g_signal == SIGNAL)
 			closeServer();
-		ServerConfiguration *serv;
 		for (int i = 0; i < nfds; i++)
 		{
-			std::map<ListeningSocket *, ServerConfiguration *>::iterator it = _config.end();
-			for (int j = 0; j < (int)_config.size(); j++)
+			std::cout << "1\n";
+			std::vector<ServerConfiguration>::iterator it = tab_serv.begin();
+			std::cout << "2\n";
+			for (;it < tab_serv.end(); it++)
 			{
-				if (this->_events[i].data.fd == this->tab_list[j]->getSocket_fd())
+				std::cout << "3\n";
+				std::vector<ListeningSocket*> tab = it->getTabList();
+				std::cout << "4\n";
+				std::vector<ListeningSocket*>::iterator itTab = tab.begin();
+				std::cout << "5\n";
+				for(; itTab < it->getTabList().end(); itTab++)
 				{
-					it = _config.find(this->tab_list[j]);
-					break;
-				}
+					std::cout << "6\n";
+					if (this->_events[i].data.fd == (*itTab)->getSocket_fd())
+					{
+						std::cout << "7\n" << std::endl;
+						sock = (*itTab)->getSocket_fd();
+						std::cout << "8\n" << std::endl;
+						break;
+					}
+				}	
 			}
-			if (it == _config.end())
+			
+			if (it == tab_serv.end())
 			{
-				if (this->_events[i].events & EPOLLIN && serv != NULL)
-					handle_client(*serv);
+				std::cout << "9\n";
+				if (this->_events[i].events & EPOLLIN)
+				{
+					std::cout << "10\n";
+					ServerConfiguration serv = *it;
+					handle_client(serv);
+					std::cout << "11\n";
+				}
 
 				else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP)) {
 					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, this->_events->data.fd, NULL) == -1)
@@ -119,11 +144,10 @@ void Server::serverExecution()
 			}
 			else
 			{
-				if (this->_events[i].data.fd == it->first->getSocket_fd())
+				if (this->_events[i].data.fd == sock)
 				{
-					serv = it->second;
 					socklen_t client_addrlen = sizeof(this->_clientAdress);
-					this->_connexion_fd = accept(it->first->getSocket_fd(), (struct sockaddr *)&this->_clientAdress, &client_addrlen);
+					this->_connexion_fd = accept(sock, (struct sockaddr *)&this->_clientAdress, &client_addrlen);
 					if (this->_connexion_fd == -1)
 					{
 						log("The call to accept function failed for unknown reason.", 2);
@@ -149,6 +173,7 @@ and chose what method to use
 */
 void Server::handle_client(ServerConfiguration serv)
 {
+	std::cout << &serv << std::endl;
 	Client *client = new Client();
 
 	char client_ip[INET_ADDRSTRLEN];
@@ -330,17 +355,14 @@ void Server::ft_badRequest()
 void	Server::closeServer()
 {
 	log("Shutting down the server properly.", 1);
-	int i = 0;
-	std::map<ListeningSocket *, ServerConfiguration *>::iterator it = _config.begin();
-	while (it != this->_config.end())
+	std::vector<ServerConfiguration>::iterator it = tab_serv.begin();
+	while (it != tab_serv.end())
 	{
-		close(it->first->getSocket_fd());
-		delete (this->tab_list[i]);
-		i++;
+		it->getTabList().clear();
 		it++;
 	}
 	this->tab_serv.clear();
-	this->_config.clear();
+	this->tab_serv.clear();
 	this->mimePath.clear();
 	this->extpath.clear();
 	close(this->_epoll_fd);
@@ -592,18 +614,6 @@ void	Server::error(std::string errorType)
 /*----------------------------------------------------------------------------*/
 /*                             INITIALISATION                                 */
 /*----------------------------------------------------------------------------*/
-
-void	Server::creatMultiListenPort()
-{
-	std::vector<ServerConfiguration>::iterator it = tab_serv.begin();
-	int i = 0;
-	for(; it != tab_serv.end(); it++)
-	{
-		this->tab_list[i] = new ListeningSocket(it->getPort(), *it);
-		this->_config[this->tab_list[i]] = &(*it);
-		i++;
-	}
-}
 
 std::map<std::string, std::string>	Server::createExtPath()
 {
