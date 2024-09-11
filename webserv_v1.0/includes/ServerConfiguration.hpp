@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/10 15:53:08 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 10:41:39 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ class ServerConfiguration
         std::string							serverName;
 		std::string							strPort;
 		std::string							root;
+		std::string							root_index;
         int        							port;		
 		int									clientMaxBodySize;
 
@@ -75,6 +76,7 @@ class ServerConfiguration
 		/*---------------------------------------------------------------*/
 		std::string							getStrPort(void) const;
 		std::string							getRoot(void) const;
+		std::string							getRootIndex(void) const;
 		int									getPort(void) const;
 		std::string							getHostName(void) const;
 		std::string							getServerName(void) const;

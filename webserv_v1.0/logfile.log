@@ -1,18 +1,20 @@
-[INFO][20:40:28] : Starting Server.
-	[INFO][20:40:28] : Getprotobyname Succed.
-	[INFO][20:40:28] : Socket_fd in now created.
-	[INFO][20:40:28] : Socket_fd in now set.
-	[INFO][20:40:28] : Socket_fd is binded.
-	[INFO][20:40:28] : Socket_fd is non blocking fd.
-	[INFO][20:40:28] : Socket_fd is now listening every attemp of connection.
-	[INFO][20:40:28] : Epoll instance successfully created.
-	[INFO][20:40:28] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][20:40:28] : The server construction is now complete. The server is ready to accept incoming connections.
-[INFO][20:40:33] : [NEW REQUEST]
-	[INFO][20:40:33] : Server did accept the connection.
-	[INFO][20:40:33] : Server's receive a GET request.
-	[INFO][20:40:33] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/www/default.html" was found.
-	[INFO][20:40:33] : Server's ready to respond.
-	[INFO][20:40:33] : Closing the connection with the client.
-	[ERROR][21:36:32] : The call to epoll_wait failed.
-	[INFO][21:36:32] : Shutting down the server properly.
+[INFO][11:13:13] : Starting Server.
+	[INFO][11:13:13] : Getprotobyname Succed.
+	[INFO][11:13:13] : Socket_fd in now created.
+	[INFO][11:13:13] : Socket_fd in now set.
+	[INFO][11:13:13] : Socket_fd is binded.
+	[INFO][11:13:13] : Socket_fd is non blocking fd.
+	[INFO][11:13:13] : Socket_fd is now listening every attemp of connection.
+	[INFO][11:13:13] : Epoll instance successfully created.
+	[INFO][11:13:13] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][11:13:13] : The server construction is now complete. The server is ready to accept incoming connections.
+[INFO][11:13:17] : [NEW REQUEST]
+	[INFO][11:13:17] : Server did accept the connection.
+	[ERROR][11:13:17] : Recv failed.
+	[INFO][11:13:17] : File Screenshot from 2024-09-09 20-38-22.png saved successfully.
+	[INFO][11:13:17] : File is created.
+	[INFO][11:13:17] : Server's receive a POST request.
+	[INFO][11:13:17] : Server's ready to respond.
+	[INFO][11:13:17] : Closing the connection with the client.
+	[ERROR][11:30:56] : The call to epoll_wait failed.
+	[INFO][11:30:56] : Shutting down the server properly.

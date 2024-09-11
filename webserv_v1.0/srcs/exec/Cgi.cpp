@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:25:35 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/08 12:04:30 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/11 11:13:08 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ char	**Cgi::createArgv()
 	}
 	argv = (char **) malloc(3 * sizeof(char *));
 	argv[0] = strdup(executer.c_str());
-	argv[1] = strdup(absolutepath.c_str());
+	argv[1] = strdup(this->_path);
 	argv[2] = NULL;
 	return (argv);
 }

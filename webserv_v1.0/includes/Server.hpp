@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/10 14:59:18 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 11:05:19 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ class Server
 		std::map<std::string, std::string>					createExtPath();
 		std::map<std::string, std::string>					createMimePath();
 		void												handle_client(ServerConfiguration serv);
-		std::string											findPath(const std::string &receivedLine, std::string root);
+		std::string											findPath(const std::string &receivedLine, ServerConfiguration serv);
 		void												ft_get(std::string filePath);
 		void												ft_post(Client client, std::string filePath, ServerConfiguration *serv);
 		void												ft_delete(std::string filePath);
@@ -64,7 +64,7 @@ class Server
 		std::string											readRequest(Client *client);
 		void												creatMultiListenPort();
 		void												closeServer();
-		void												dlFile(std::string receivedLine, Client *client);
+		void												dlFile(std::string *receivedLine, Client *client);
 		void												parsing_g(int argc, char **argv);
 		void 												readConfigurationFile(const char *arg);
 		void												ft_tokenizer(std::string line);
