@@ -4,9 +4,8 @@
 /*                               CONSTRUCTOR                                  */
 /*----------------------------------------------------------------------------*/
 
-ListeningSocket::ListeningSocket(int port, ServerConfiguration &serv)
+ListeningSocket::ListeningSocket(int port)
 {
-	(void)serv;
 	socklen_t address_len = sizeof(this->_server_address);
 	this->_server_address.sin_family = AF_INET;
 	this->_server_address.sin_port = htons(port);
@@ -23,6 +22,7 @@ ListeningSocket::ListeningSocket(int port, ServerConfiguration &serv)
 	if ((this->_socket_fd = socket(this->_server_address.sin_family, SOCK_STREAM, this->_proto->p_proto)) < 0)
 		Server::log("Socket_fd creation failed.", 2);// TEST
 
+	std::cerr << "TEST : " << this->_socket_fd << std::endl; // TEST
 	Server::log("Socket_fd in now created.", 1);// TEST
 
 	if (setsockopt(this->_socket_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &this->_proto, sizeof(this->_proto))) {

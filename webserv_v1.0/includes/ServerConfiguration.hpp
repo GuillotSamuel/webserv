@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 10:41:39 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:35:04 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 #define ERROR_400_PAGE "/html/errors/400.html"
 #define CGI_FILES "/cgi-bin"
 
+class ListeningSocket;
+
 class ServerConfiguration
 {
     private:
@@ -46,7 +48,10 @@ class ServerConfiguration
 		std::string							root_index;
 		std::string							index;
         int        							port;		
+        int        							port;
+		std::vector<int>					_port;
 		int									clientMaxBodySize;
+		std::vector<ListeningSocket*>		tab_list;
 
     public:
 
@@ -57,6 +62,7 @@ class ServerConfiguration
         // ServerConfiguration(std::string port);
         // ServerConfiguration(const ServerConfiguration &copy);
         ~ServerConfiguration(void);
+		void			creatMultiPort();
 
 		/*---------------------------------------------------------------*/
 		/*                         OVERLOADED                            */
@@ -79,11 +85,13 @@ class ServerConfiguration
 		std::string							getRoot(void) const;
 		std::string							getRootIndex(void) const;
 		int									getPort(void) const;
+		std::vector<int>					getPortTab(void) const;
 		std::string							getHostName(void) const;
 		std::string							getServerName(void) const;
 		std::string							getErrorPage(int code) const;
 		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi() const;
+		std::vector<ListeningSocket*>		getTabList() const;
 
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */

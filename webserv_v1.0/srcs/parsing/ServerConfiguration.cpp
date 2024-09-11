@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 11:30:18 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 14:13:49 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 //     serverName(std::string()), errorPages(std::map<int, std::string>()),
 //     clientMaxBodySize(-1), _pathInfo(std::string()) {}
 
-ServerConfiguration::ServerConfiguration() {
-    
+ServerConfiguration::ServerConfiguration()
+{
     char *cRoot = getcwd(NULL, 0);// je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0/
     std::string root_cpy(cRoot, strlen(cRoot));
 
@@ -33,11 +33,22 @@ ServerConfiguration::ServerConfiguration() {
     this->_pathInfoCgi[".py"] = "/usr/bin/python3";
     this->errorPages[404] = root + "/www/error_pages/404.html";
     this->port = -1;
+    this->_port.push_back(8080);
+    this->_port.push_back(8081);
+    this->_port.push_back(8082);
+
     this->hostName = std::string("");
     this->serverName = std::string("localhost"); // TEST PARSING
 }
 
-
+void    ServerConfiguration::creatMultiPort()
+{   
+    std::vector<int>::iterator it = this->_port.begin();
+    for (;it < this->_port.end(); it++)
+    {
+        this->tab_list.push_back(new ListeningSocket(*it));
+    }
+}
 
 // ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
 //     port(copy.port), hostName(copy.hostName),
@@ -100,6 +111,11 @@ int		ServerConfiguration::getPort(void) const
     return (this->port);
 }
 
+std::vector<int> ServerConfiguration::getPortTab(void) const
+{
+	return (this->_port);
+}
+
 std::string	ServerConfiguration::getHostName(void) const
 {
     return (this->hostName);   
@@ -146,6 +162,11 @@ int	ServerConfiguration::getClientMaxBodySize(void) const
 std::map<std::string, std::string>	ServerConfiguration::getPathInfoCgi() const
 {
     return (this->_pathInfoCgi);
+}
+
+std::vector<ListeningSocket*>    ServerConfiguration::getTabList() const
+{
+	return (this->tab_list);
 }
 
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)

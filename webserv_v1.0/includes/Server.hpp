@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/11 14:08:43 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:34:47 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ class Server
 		std::string											_extensionPath;
 		char												received_line[BUFFER_SIZE];
 		char												socket_buffer[BUFFER_SIZE];
-		ListeningSocket										**tab_list;
 		std::vector<ServerConfiguration>					tab_serv;
-		std::map<ListeningSocket *, ServerConfiguration *>	_config;
 		std::map<std::string, std::string>					extpath;
 		std::map<std::string, std::string>					mimePath;
 		ServerConfiguration									*currentConfig;
@@ -62,7 +60,6 @@ class Server
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
 		std::string											readRequest(Client *client);
-		void												creatMultiListenPort();
 		void												closeServer();
 		void												dlFile(std::string *receivedLine, Client *client);
 		void												parsing_g(int argc, char **argv);
@@ -82,6 +79,7 @@ class Server
 		void												ft_set_root_param(std::vector<std::string> tokens);
 		void												ft_set_index_param(std::vector<std::string> tokens);
 
+		void												creatAllSocket();
 	public:
 		void												startingServer();
 		void												serverExecution();
