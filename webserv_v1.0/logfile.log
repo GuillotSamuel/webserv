@@ -1,22 +1,41 @@
-	[INFO][14:21:50] : Getprotobyname Succed.
-	[INFO][14:21:50] : Socket_fd in now created.
-	[INFO][14:21:50] : Socket_fd in now set.
-	[INFO][14:21:50] : Socket_fd is binded.
-	[INFO][14:21:50] : Socket_fd is non blocking fd.
-	[INFO][14:21:50] : Socket_fd is now listening every attemp of connection.
-	[INFO][14:21:50] : Getprotobyname Succed.
-	[INFO][14:21:50] : Socket_fd in now created.
-	[INFO][14:21:50] : Socket_fd in now set.
-	[INFO][14:21:50] : Socket_fd is binded.
-	[INFO][14:21:50] : Socket_fd is non blocking fd.
-	[INFO][14:21:50] : Socket_fd is now listening every attemp of connection.
-	[INFO][14:21:50] : Getprotobyname Succed.
-	[INFO][14:21:50] : Socket_fd in now created.
-	[INFO][14:21:50] : Socket_fd in now set.
-	[INFO][14:21:50] : Socket_fd is binded.
-	[INFO][14:21:50] : Socket_fd is non blocking fd.
-	[INFO][14:21:50] : Socket_fd is now listening every attemp of connection.
-[INFO][14:21:50] : Starting Server.
-	[INFO][14:21:50] : Epoll instance successfully created.
-	[INFO][14:21:50] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][14:21:50] : The server construction is now complete. The server is ready to accept incoming connections.
+	[INFO][15:58:57] : Getprotobyname Succed.
+	[INFO][15:58:57] : Socket_fd in now created.
+	[INFO][15:58:57] : Socket_fd in now set.
+	[INFO][15:58:57] : Socket_fd is binded.
+	[INFO][15:58:57] : Socket_fd is non blocking fd.
+	[INFO][15:58:57] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:58:57] : Getprotobyname Succed.
+	[INFO][15:58:57] : Socket_fd in now created.
+	[INFO][15:58:57] : Socket_fd in now set.
+	[INFO][15:58:57] : Socket_fd is binded.
+	[INFO][15:58:57] : Socket_fd is non blocking fd.
+	[INFO][15:58:57] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:58:57] : Getprotobyname Succed.
+	[INFO][15:58:57] : Socket_fd in now created.
+	[INFO][15:58:57] : Socket_fd in now set.
+	[INFO][15:58:57] : Socket_fd is binded.
+	[INFO][15:58:57] : Socket_fd is non blocking fd.
+	[INFO][15:58:57] : Socket_fd is now listening every attemp of connection.
+[INFO][15:58:57] : Starting Server.
+	[INFO][15:58:57] : Epoll instance successfully created.
+	[INFO][15:58:57] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][15:58:57] : The server construction is now complete. The server is ready to accept incoming connections.
+[INFO][15:58:59] : [NEW REQUEST]
+	[INFO][15:58:59] : Server did accept the connection.
+	[INFO][15:58:59] : Server's receive a GET request.
+	[INFO][15:58:59] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/form.html" was found.
+	[INFO][15:58:59] : Server's ready to respond.
+	[INFO][15:58:59] : Closing the connection with the client.
+[INFO][15:59:00] : [NEW REQUEST]
+	[INFO][15:59:00] : Server did accept the connection.
+	[INFO][15:59:00] : Server's receive a GET request.
+	[INFO][15:59:00] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
+	[INFO][15:59:00] : Server's ready to respond.
+	[INFO][15:59:00] : Closing the connection with the client.
+[INFO][15:59:00] : [NEW REQUEST]
+	[INFO][15:59:00] : Server did accept the connection.
+	[INFO][15:59:00] : Server's receive a GET request.
+	[INFO][15:59:00] : The file given cannot be found.
+	[INFO][15:59:00] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/images/favicon.ico" was found empty.
+	[INFO][15:59:00] : The file given cannot be found.
+	[INFO][15:59:00] : Server's ready to respond.
