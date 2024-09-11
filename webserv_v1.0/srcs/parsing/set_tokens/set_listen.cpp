@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:41 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/05 23:51:21 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/11 18:48:11 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@ void Server::ft_set_listen_param(std::vector<std::string> tokens)
 	{
 		ft_invalid_line(tokens);
 	}
-	/* else if (data->p_server_configuration->getPort() != -1) // A REVOIR
-	{
-		error("listen defined many times in configurations : " + tokens[0] + " " + tokens[1]);
-	} */
 
 	const std::string &str = tokens[1];
 

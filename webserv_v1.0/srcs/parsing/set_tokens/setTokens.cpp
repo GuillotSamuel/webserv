@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   SetTokens.cpp                                      :+:      :+:    :+:   */
+/*   setTokens.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 21:06:16 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/09 12:42:59 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/11 18:52:51 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,10 @@ void Server::ft_set_tokens(std::vector<std::string> tokens)
 
 void Server::ft_param_set_tokens(std::vector<std::string> tokens)
 {
-    // for (std::vector<std::string>::iterator it = tokens.begin(); it != tokens.end(); ++it)
-    // {
-    //     std::cout << "[" << *it << "]";
-    // }
-    // std::cout << std::endl;
-    const int nb_param = 7;
+    const int nb_param = 8;
     
     const char* param_array[nb_param] = {"listen", "host_name", "server_name", "error_page",
-                                         "client_max_body_size", "location", "index"};
+                                         "client_max_body_size", "location", "index", "root"};
     void (Server::*param_functions[nb_param])(std::vector<std::string>) = {
         &Server::ft_set_listen_param,
         &Server::ft_set_host_name_param,
@@ -53,7 +48,8 @@ void Server::ft_param_set_tokens(std::vector<std::string> tokens)
         &Server::ft_set_error_page_param,
         &Server::ft_set_client_max_body_param,
         &Server::ft_set_location_param,
-        &Server::ft_set_index_param
+        &Server::ft_set_index_param,
+        &Server::ft_set_root_param
     };
 
     for (int i = 0; i < nb_param; i++)

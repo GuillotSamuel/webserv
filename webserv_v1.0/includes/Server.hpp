@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/11 15:34:47 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/11 18:47:44 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ class Server
 		void												error(std::string errorType);
 		void												ft_param_set_tokens(std::vector<std::string> tokens);
 		void												ft_invalid_line(std::vector<std::string> tokens);
-		void												ft_start_set_tokens(std::vector<std::string> tokens);
 		void 												ft_set_tokens(std::vector<std::string> tokens);
 		void 												ft_set_server_name_param(std::vector<std::string> tokens);
 		void												ft_set_client_max_body_param(std::vector<std::string> tokens);

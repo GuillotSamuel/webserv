@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:31 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/05 23:39:54 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/11 21:22:38 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,18 @@ void Server::ft_set_server_name_param(std::vector<std::string> tokens)
     {
         return (ft_invalid_line(tokens));
     }
-    // else if (!this->serverName.empty())
-    // {
-    //     return (ft_error(data, "Server name defined many times in configurations : "
-    //         + tokens[0] + " " + tokens[1]));
-    // }
 
-    const std::string& str = tokens[1];
+    std::string str = tokens[1];
 
-    if (str.empty() || str[str.size() - 1] != ';')
+    if (!str.empty() && str[str.length() - 1] == ';')
     {
-        error("invalid argument (listen): " + tokens[1]);
+        str.erase(str.length() - 1, 1);
     }
+    else
+    {
+        error("Error: invalid argument (server name): " + tokens[1]);
+        return;
+    }
+
+    this->currentConfig->setServerName(str);
 }
