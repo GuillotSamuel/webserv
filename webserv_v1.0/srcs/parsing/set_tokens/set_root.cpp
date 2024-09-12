@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 14:06:46 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 11:07:09 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:43:04 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void Server::ft_set_root_param(std::vector<std::string> tokens)
 
     std::cout << str << std::endl;
 
-    this->currentConfig->setServerName(str);
+    this->currentConfig->setRoot(str);
 }
 
     

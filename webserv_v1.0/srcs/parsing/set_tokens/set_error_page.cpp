@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:47 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 11:52:21 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:34:18 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void Server::ft_set_error_page_param(std::vector<std::string> tokens)
         return;
     }
 
-    if (!error_page.empty() && error_page[error_page.length() - 1] == ';')
+    if (error_page.empty() && error_page[error_page.length() - 1] == ';')
     {
         error_page.erase(error_page.length() - 1, 1);
     }
