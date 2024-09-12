@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 21:08:03 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:39:26 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ class ServerConfiguration
 		std::string							root;
 		std::string							root_index;
 		std::string							index;
-        int        							port;
 		std::vector<int>					_port;
+		int									port;
 		int									clientMaxBodySize;
 		std::vector<ListeningSocket*>		tab_list;
 

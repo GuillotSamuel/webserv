@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 21:10:32 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:43:25 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,20 @@ ServerConfiguration::ServerConfiguration()
     char *cRoot = getcwd(NULL, 0);// je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0/
     std::string root_cpy(cRoot, strlen(cRoot));
 
-    root_cpy += "/../website_gallery"; // a supprimer
+    // root_cpy += "/../website_gallery"; // a supprimere
     
     this->root = root_cpy;
     free(cRoot);
     // this->_index =  root + "/www/default.html";
 
-    this->root_index = root + "/html/index.html"; // a supprimer
-    this->_pathInfoCgi[".py"] = "/usr/bin/python3";
-    this->errorPages[404] = root + "/www/error_pages/404.html";
+    // this->root_index = root + "/html/index.html"; // a supprimer
+    // this->_pathInfoCgi[".py"] = "/usr/bin/python3";
+    // this->errorPages[404] = root + "/www/error_pages/404.html";
     this->port = -1;
-    this->_port.push_back(8080); // TEST BRUTFORCE
-    this->_port.push_back(8081); // TEST BRUTFORCE
-    this->_port.push_back(8082); // TEST BRUTFORCE
-
+    // this->_port.push_back(8080); // TEST BRUTFORCE
+    // this->_port.push_back(8081); // TEST BRUTFORCE
+    // this->_port.push_back(8082); // TEST BRUTFORCE
+    this->index = "index.html";
     this->hostName = std::string("");
     this->serverName = std::string("localhost"); // TEST PARSING
 }
@@ -91,6 +91,7 @@ void	ServerConfiguration::setHostName(std::string str)
 
 void	ServerConfiguration::setServerName(std::string str)
 {
+    std::cout << "ici" << str << std::endl; // TEST
     this->serverName = str;
 }
 
@@ -179,12 +180,21 @@ std::vector<ListeningSocket*>    ServerConfiguration::getTabList() const
 	return (this->tab_list);
 }
 
+std::string ServerConfiguration::getIndex() const
+{
+    return (this->index);
+}
+
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
 {
 	Cout << i.getClientMaxBodySize() << std::endl;
-    Cout << i.getHostName() << std::endl;
-    Cout << i.getPort() << std::endl;
-    Cout << i.getServerName() << std::endl;
+    Cout << "Hostname : " << i.getHostName() << std::endl;
+    std::vector<int> tab = i.getPortTab();
+    std::vector<int>::iterator it = tab.begin();
+    for (; it < tab.end(); it++)
+        Cout << "Port: " << *it << std::endl;
+    Cout << "serverName: "<< i.getServerName() << std::endl;
+    Cout << "Index :" << i.getIndex() << std::endl;
     return (Cout);
 }
 

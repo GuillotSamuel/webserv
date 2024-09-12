@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/11 16:39:05 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:32:47 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,7 @@ Server::Server(int argc, char **argv)
 	{
 		it->creatMultiPort();
 		std::vector<ListeningSocket*> tab = it->getTabList();
-		// std::vector<ListeningSocket*>::iterator itTab = tab.begin(); // TEST
-		// for(; itTab != tab.end(); itTab++)
-		// {
-		// 	std::cout << (*itTab)->getSocket_fd() << std::endl;
-		// } //TEST
+		std::cout << *it << std::endl; // TEST
 	}
 	log("Starting Server.", 3);
 	this->_connexion_fd = -1;
@@ -501,8 +497,8 @@ std::string	Server::readRequest(Client *client)
 		receivedLine.append(buffer, total_read);
     	delete[] buffer;
 		dlFile(&receivedLine, client);
-		
-		std::ofstream file("request.txt", std::ios::binary);
+	}
+		std::ofstream file("request.txt");
 		if (file.is_open()) {
 			file << receivedLine;
 			file.close();
@@ -510,7 +506,6 @@ std::string	Server::readRequest(Client *client)
 		} 
 		else
 			log("Unable to open file.", 2);
-	}
 	return (receivedLine);
 }
 

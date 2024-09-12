@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_root.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 14:06:46 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 11:07:09 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:43:09 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ void Server::ft_set_root_param(std::vector<std::string> tokens)
         return;
     }
 
-    std::cout << str << std::endl;
+    // std::cout << str << std::endl; // TEST
 
-    this->currentConfig->setServerName(str);
+    this->currentConfig->setRoot(str);
 }
 
     
