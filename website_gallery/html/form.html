@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>website_gallery</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <a class="header-title" href="index.html">Webserv</a>
+    </header>
+    <main>
+        <div class="form-container">
+            <h1>Submit Your Informations</h1>
+            <form action="test_cgi.py" method="post" enctype="multipart/form-data">
+                <label for="first-name">First Name:</label>
+                <input type="text" id="first-name" name="first-name" required><br><br>
+    
+                <label for="last-name">Last Name:</label>
+                <input type="text" id="last-name" name="last-name" required><br><br>
+    
+                <label for="favorite-color">Favorite Color:</label>
+                <input type="text" id="favorite-color" name="favorite-color"><br><br>
+    
+                <label for="image">Upload an Image:</label>
+                <input type="file" id="image" name="image"><br><br>
+    
+                <input type="submit" value="Submit" class="button_all" id="form-button">
+            </form>
+        </div>
+        <button onclick="location.href='index.html';" class="button_all">Go Back to Home</button>
+    </main>
+    <footer>
+        <div class="footer-credits">Project made by sguillot and mmahfoud</div>
+    </footer>
+</body>
+
+</html>
