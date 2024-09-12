@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 18:16:40 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 20:45:10 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class ListeningSocket;
 
 class ServerConfiguration
 {
-    private:
+	private:
 		/*---------------------------------------------------------------*/
 		/*                            ATTRIBUT                           */
 		/*---------------------------------------------------------------*/	
@@ -41,8 +41,8 @@ class ServerConfiguration
 		std::map<std::string, std::string>	_pathInfoCgi;
 		std::map<std::string, std::string>	_location;
 		std::map<int, std::string>			errorPages;
-        std::string							hostName;
-        std::string							serverName;
+		std::string							hostName;
+		std::string							serverName;
 		std::string							strPort;
 		std::string							root;
 		std::string							root_index;
@@ -56,32 +56,31 @@ class ServerConfiguration
 		int									clientMaxBodySize;
 		std::vector<ListeningSocket*>		tab_list;
 
-    public:
-
+	public:
 		/*---------------------------------------------------------------*/
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
 		/*---------------------------------------------------------------*/
 		ServerConfiguration();
-        // ServerConfiguration(std::string port);
-        // ServerConfiguration(const ServerConfiguration &copy);
-        ~ServerConfiguration(void);
+		// ServerConfiguration(std::string port);
+		// ServerConfiguration(const ServerConfiguration &copy);
+		~ServerConfiguration(void);
 		void			creatMultiPort();
 
 		/*---------------------------------------------------------------*/
 		/*                         OVERLOADED                            */
 		/*---------------------------------------------------------------*/
-        ServerConfiguration &operator=(const ServerConfiguration &copy);
+		ServerConfiguration &operator=(const ServerConfiguration &copy);
 		
 		/*---------------------------------------------------------------*/
 		/*                            SETTER                             */
 		/*---------------------------------------------------------------*/
 		void								setPort(std::string str);
 		void								setHostName(std::string str);
-        void								setServerName(std::string str);
+		void								setServerName(std::string str);
 		void								setErrorPages(int code, std::string str);
 		void								setClientMaxBodySize(std::string str);
-		void    							setRoot(std::string str);
-		void    							setIndex(std::string str);
+		void								setRoot(std::string str);
+		void								setIndex(std::string str);
 		void								setLocation(std::string page, std::string location);
 		void								setAllowedMethods(std::vector<std::string> allowed_methods);
 		void								setUploadsLocation(std::string str);
@@ -100,10 +99,17 @@ class ServerConfiguration
 		std::string							getHostName(void) const;
 		std::string							getServerName(void) const;
 		std::string							getErrorPage(int code) const;
+		std::map<int, std::string>			getErrorPages(void) const;
 		int									getClientMaxBodySize(void) const;
-		std::map<std::string, std::string>	getPathInfoCgi() const;
-		std::vector<ListeningSocket*>		getTabList() const;
-		std::string							getIndex() const;
+		std::map<std::string, std::string>	getPathInfoCgi(void) const;
+		std::vector<ListeningSocket*>		getTabList(void) const;
+		std::string							getIndex(void) const;
+		std::string							getUploadLocation(void) const;
+		std::string							getErrorPageLocation(void) const;
+		std::string							getCgiLocation(void) const;
+		std::map<std::string, std::string>	getLocation(void) const;
+		std::map<std::string, std::string>	getInfoMime(void) const;
+		std::vector<std::string>			getAllowedMethods(void)const;
 
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */
