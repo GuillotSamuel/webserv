@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 13:43:25 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/12 18:17:56 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 
 ServerConfiguration::ServerConfiguration()
 {
-    char *cRoot = getcwd(NULL, 0);// je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0/
+    char *cRoot = getcwd(NULL, 0); // je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0/
     std::string root_cpy(cRoot, strlen(cRoot));
 
     // root_cpy += "/../website_gallery"; // a supprimere
-    
+
     this->root = root_cpy;
     free(cRoot);
     // this->_index =  root + "/www/default.html";
@@ -41,10 +41,10 @@ ServerConfiguration::ServerConfiguration()
     this->serverName = std::string("localhost"); // TEST PARSING
 }
 
-void    ServerConfiguration::creatMultiPort()
-{   
+void ServerConfiguration::creatMultiPort()
+{
     std::vector<int>::iterator it = this->_port.begin();
-    for (;it < this->_port.end(); it++)
+    for (; it < this->_port.end(); it++)
     {
         this->tab_list.push_back(new ListeningSocket(*it));
     }
@@ -77,67 +77,97 @@ ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &c
     return (*this);
 }
 
-void	ServerConfiguration::setPort(std::string str)
+void ServerConfiguration::setLocation(std::string page, std::string location)
+{
+    this->_location.insert(std::make_pair(page, location));
+}
+
+void ServerConfiguration::setAllowedMethods(std::vector<std::string> allowed_methods)
+{
+    this->allowed_methods = allowed_methods;
+}
+
+void ServerConfiguration::setPort(std::string str)
 {
     int n;
     std::istringstream(str) >> n;
     this->_port.push_back(n);
 }
 
-void	ServerConfiguration::setHostName(std::string str)
+void ServerConfiguration::setUploadsLocation(std::string str)
+{
+    this->uploadsLocation = str;
+}
+
+void ServerConfiguration::setErrorPagesLocation(std::string str)
+{
+    this->errorPagesLocation = str;
+}
+
+void ServerConfiguration::setPathInfoCgi(std::string extension, std::string location)
+{
+    this->_location.insert(std::make_pair(extension, location));
+}
+
+void    ServerConfiguration::setCgiBinLocation(std::string str)
+{
+    this->cgiBin_location = str;
+}
+
+
+void ServerConfiguration::setHostName(std::string str)
 {
     this->hostName = str;
 }
 
-void	ServerConfiguration::setServerName(std::string str)
+void ServerConfiguration::setServerName(std::string str)
 {
-    std::cout << "ici" << str << std::endl; // TEST
     this->serverName = str;
 }
 
-void	ServerConfiguration::setErrorPage(int code, std::string str)
+void ServerConfiguration::setErrorPages(int code, std::string str)
 {
     this->errorPages[code] = str;
 }
 
-void	ServerConfiguration::setClientMaxBodySize(std::string str)
+void ServerConfiguration::setClientMaxBodySize(std::string str)
 {
     int n;
     std::istringstream(str) >> n;
     this->clientMaxBodySize = n;
 }
 
-void    ServerConfiguration::setRoot(std::string str)
+void ServerConfiguration::setRoot(std::string str)
 {
     this->root = str;
 }
 
-void    ServerConfiguration::setIndex(std::string str)
+void ServerConfiguration::setIndex(std::string str)
 {
     this->index = str;
 }
 
-int		ServerConfiguration::getPort(void) const
+int ServerConfiguration::getPort(void) const
 {
     return (this->port);
 }
 
 std::vector<int> ServerConfiguration::getPortTab(void) const
 {
-	return (this->_port);
+    return (this->_port);
 }
 
-std::string	ServerConfiguration::getHostName(void) const
+std::string ServerConfiguration::getHostName(void) const
 {
-    return (this->hostName);   
+    return (this->hostName);
 }
 
-std::string	ServerConfiguration::getServerName(void) const
+std::string ServerConfiguration::getServerName(void) const
 {
     return (this->serverName);
 }
 
-std::string	ServerConfiguration::getStrPort(void) const
+std::string ServerConfiguration::getStrPort(void) const
 {
     return (this->strPort);
 }
@@ -149,13 +179,14 @@ std::string ServerConfiguration::getRoot(void) const
 
 std::string ServerConfiguration::getRootIndex(void) const
 {
-	return (this->root_index);
+    return (this->root_index);
 }
 
 std::string ServerConfiguration::getErrorPage(int code) const
 {
     std::map<int, std::string>::const_iterator it = this->errorPages.find(code);
-    if (it != this->errorPages.end()) {
+    if (it != this->errorPages.end())
+    {
         return it->second;
     }
     else
@@ -165,19 +196,19 @@ std::string ServerConfiguration::getErrorPage(int code) const
     }
 }
 
-int	ServerConfiguration::getClientMaxBodySize(void) const
+int ServerConfiguration::getClientMaxBodySize(void) const
 {
     return (this->clientMaxBodySize);
 }
 
-std::map<std::string, std::string>	ServerConfiguration::getPathInfoCgi() const
+std::map<std::string, std::string> ServerConfiguration::getPathInfoCgi() const
 {
     return (this->_pathInfoCgi);
 }
 
-std::vector<ListeningSocket*>    ServerConfiguration::getTabList() const
+std::vector<ListeningSocket *> ServerConfiguration::getTabList() const
 {
-	return (this->tab_list);
+    return (this->tab_list);
 }
 
 std::string ServerConfiguration::getIndex() const
@@ -187,18 +218,18 @@ std::string ServerConfiguration::getIndex() const
 
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
 {
-	Cout << i.getClientMaxBodySize() << std::endl;
+    Cout << i.getClientMaxBodySize() << std::endl;
     Cout << "Hostname : " << i.getHostName() << std::endl;
     std::vector<int> tab = i.getPortTab();
     std::vector<int>::iterator it = tab.begin();
     for (; it < tab.end(); it++)
         Cout << "Port: " << *it << std::endl;
-    Cout << "serverName: "<< i.getServerName() << std::endl;
+    Cout << "serverName: " << i.getServerName() << std::endl;
     Cout << "Index :" << i.getIndex() << std::endl;
     return (Cout);
 }
 
-void	ServerConfiguration::error(std::string errorType)
+void ServerConfiguration::error(std::string errorType)
 {
-	throw(std::runtime_error(errorType));
+    throw(std::runtime_error(errorType));
 }

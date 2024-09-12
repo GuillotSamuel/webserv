@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 13:39:26 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/12 18:16:40 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,11 @@ class ServerConfiguration
 		std::string							root;
 		std::string							root_index;
 		std::string							index;
+		std::string							uploadsLocation;
+		std::string							errorPagesLocation;
+		std::string							cgiBin_location;
 		std::vector<int>					_port;
+		std::vector<std::string>			allowed_methods;
 		int									port;
 		int									clientMaxBodySize;
 		std::vector<ListeningSocket*>		tab_list;
@@ -74,11 +78,17 @@ class ServerConfiguration
 		void								setPort(std::string str);
 		void								setHostName(std::string str);
         void								setServerName(std::string str);
-		void								setErrorPage(int code, std::string str);
+		void								setErrorPages(int code, std::string str);
 		void								setClientMaxBodySize(std::string str);
 		void    							setRoot(std::string str);
 		void    							setIndex(std::string str);
-		
+		void								setLocation(std::string page, std::string location);
+		void								setAllowedMethods(std::vector<std::string> allowed_methods);
+		void								setUploadsLocation(std::string str);
+		void								setErrorPagesLocation(std::string str);
+		void								setPathInfoCgi(std::string extension, std::string location);
+		void								setCgiBinLocation(std::string str);
+
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
 		/*---------------------------------------------------------------*/

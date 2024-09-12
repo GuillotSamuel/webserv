@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_host_name.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:44 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 13:30:47 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/12 17:01:49 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,29 +63,10 @@ static bool ft_is_ip_address(const std::string& str)
 
 void Server::ft_set_host_name_param(std::vector<std::string> tokens)
 {
-    if (tokens.size() != 2)
-    {
-        ft_invalid_line(tokens);
-    }
-    /* else if (!this->hostName.empty())
-    {
-        error("Host name defined many times in configurations : "
-            + tokens[0] + " " + tokens[1]));
-    } */
-
-    const std::string& str = tokens[1];
-
-    if (str.empty() || str[str.size() - 1] != ';')
-    {
-        error("invalid argument (listen): " + tokens[1]);
-    }
-    
-    if (!ft_is_ip_address(tokens[1].substr(0, tokens[1].size() - 1)))
+    if (tokens.size() != 2 || tokens[1].empty() || !ft_is_ip_address(tokens[1]))
     {
         ft_invalid_line(tokens);
     }
 
-    // std::cout << tokens[1].substr(0, tokens[1].size() - 1) << std::endl; // TEST
-
-    this->currentConfig->setHostName(tokens[1].substr(0, tokens[1].size() - 1));
+    this->currentConfig->setHostName(tokens[1]);
 }
