@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/12 13:32:47 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:46:41 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,7 +269,7 @@ void Server::ft_post(Client client, std::string filePath, ServerConfiguration *s
 
 	cgi->setPathInfoCgi(&tmp);
 	cgi->setPath(filePath.c_str());
-	cgi->setEnv(serv, client);
+	cgi->setEnv(serv, client); 
 	std::string content = cgi->executeCgi();
 
 	std::string mimeType = getMimeType();

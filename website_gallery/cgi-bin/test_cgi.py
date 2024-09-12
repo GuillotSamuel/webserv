@@ -36,6 +36,37 @@ if 'image' in form:
         with open(filepath, 'wb') as f:
             f.write(fileitem.file.read())
         
+
+
+    import sys
+import io
+import cgi
+
+# Simuler un fichier temporaire contenant la requête POST
+with open("/path/to/your/temporary_file", "rb") as temp_file:
+    # Rediriger le contenu du fichier temporaire vers stdin
+    sys.stdin = io.StringIO(temp_file.read().decode('utf-8'))  # Lire en mode texte si c'est UTF-8
+    
+    # Utiliser FieldStorage pour parser la requête
+    form = cgi.FieldStorage()
+
+    # Récupérer les données du formulaire comme d'habitude
+    if "first-name" in form and "last-name" in form:
+        first_name = form.getvalue("first-name")
+        last_name = form.getvalue("last-name")
+        print(f"First Name: {first_name}")
+        print(f"Last Name: {last_name}")
+    
+    # Gérer les fichiers uploadés
+    if "image" in form:
+        fileitem = form["image"]
+        if fileitem.filename:
+            filename = os.path.basename(fileitem.filename)
+            with open(f"/tmp/{filename}", 'wb') as f:
+                f.write(fileitem.file.read())
+            print(f"File {filename} has been uploaded.")
+        else:
+            print("No file uploaded.")
         # Réponse après soumission réussie
         print(f"Content-type: text/html\n")
         print("<html><body>")
