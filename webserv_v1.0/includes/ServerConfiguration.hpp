@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 21:08:03 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 11:58:31 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class ListeningSocket;
 
 class ServerConfiguration
 {
-    private:
+	private:
 		/*---------------------------------------------------------------*/
 		/*                            ATTRIBUT                           */
 		/*---------------------------------------------------------------*/	
@@ -41,44 +41,45 @@ class ServerConfiguration
 		std::map<std::string, std::string>	_pathInfoCgi;
 		std::map<std::string, std::string>	_location;
 		std::map<int, std::string>			errorPages;
-        std::string							hostName;
-        std::string							serverName;
+		std::string							hostName;
+		std::string							serverName;
 		std::string							strPort;
 		std::string							root;
 		std::string							root_index;
 		std::string							index;
-        int        							port;
+		int									port;
 		std::vector<int>					_port;
 		int									clientMaxBodySize;
 		std::vector<ListeningSocket*>		tab_list;
 
-    public:
+	public:
 
 		/*---------------------------------------------------------------*/
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
 		/*---------------------------------------------------------------*/
 		ServerConfiguration();
-        // ServerConfiguration(std::string port);
-        // ServerConfiguration(const ServerConfiguration &copy);
-        ~ServerConfiguration(void);
-		void			creatMultiPort();
+		// ServerConfiguration(std::string port);
+		// ServerConfiguration(const ServerConfiguration &copy);
+		~ServerConfiguration(void);
+		void								creatMultiPort();
 
 		/*---------------------------------------------------------------*/
 		/*                         OVERLOADED                            */
 		/*---------------------------------------------------------------*/
-        ServerConfiguration &operator=(const ServerConfiguration &copy);
+		ServerConfiguration	&operator=(const ServerConfiguration &copy);
 		
 		/*---------------------------------------------------------------*/
 		/*                            SETTER                             */
 		/*---------------------------------------------------------------*/
 		void								setPort(std::string str);
 		void								setHostName(std::string str);
-        void								setServerName(std::string str);
+		void								setServerName(std::string str);
 		void								setErrorPage(int code, std::string str);
 		void								setClientMaxBodySize(std::string str);
-		void    							setRoot(std::string str);
-		void    							setIndex(std::string str);
-		
+		void								setRoot(std::string str);
+		void								setIndex(std::string str);
+		void								setLocation(std::string page, std::string location);
+
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
 		/*---------------------------------------------------------------*/
