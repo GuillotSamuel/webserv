@@ -6,7 +6,11 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/09/12 13:43:25 by mmahfoud         ###   ########.fr       */
+=======
+/*   Updated: 2024/09/12 12:03:22 by sguillot         ###   ########.fr       */
+>>>>>>> a9a92301f7197a45d09ec957f795a0973cb8c5b0
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,34 +24,34 @@
 
 ServerConfiguration::ServerConfiguration()
 {
-    char *cRoot = getcwd(NULL, 0);// je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0/
-    std::string root_cpy(cRoot, strlen(cRoot));
+	char *cRoot = getcwd(NULL, 0); // je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0/
+	std::string root_cpy(cRoot, strlen(cRoot));
 
-    // root_cpy += "/../website_gallery"; // a supprimere
-    
-    this->root = root_cpy;
-    free(cRoot);
-    // this->_index =  root + "/www/default.html";
+	root_cpy += "/../website_gallery"; // a supprimer
 
-    // this->root_index = root + "/html/index.html"; // a supprimer
-    // this->_pathInfoCgi[".py"] = "/usr/bin/python3";
-    // this->errorPages[404] = root + "/www/error_pages/404.html";
-    this->port = -1;
-    // this->_port.push_back(8080); // TEST BRUTFORCE
-    // this->_port.push_back(8081); // TEST BRUTFORCE
-    // this->_port.push_back(8082); // TEST BRUTFORCE
-    this->index = "index.html";
-    this->hostName = std::string("");
-    this->serverName = std::string("localhost"); // TEST PARSING
+	this->root = root_cpy;
+	free(cRoot);
+	// this->_index =  root + "/www/default.html";
+
+	this->root_index = root + "/html/index.html"; // a supprimer
+	this->_pathInfoCgi[".py"] = "/usr/bin/python3";
+	this->errorPages[404] = root + "/www/error_pages/404.html";
+	this->port = -1;
+	this->_port.push_back(8080); // TEST BRUTFORCE
+	this->_port.push_back(8081); // TEST BRUTFORCE
+	this->_port.push_back(8082); // TEST BRUTFORCE
+
+	this->hostName = std::string("");
+	this->serverName = std::string("localhost"); // TEST PARSING
 }
 
-void    ServerConfiguration::creatMultiPort()
-{   
-    std::vector<int>::iterator it = this->_port.begin();
-    for (;it < this->_port.end(); it++)
-    {
-        this->tab_list.push_back(new ListeningSocket(*it));
-    }
+void ServerConfiguration::creatMultiPort()
+{
+	std::vector<int>::iterator it = this->_port.begin();
+	for (; it < this->_port.end(); it++)
+	{
+		this->tab_list.push_back(new ListeningSocket(*it));
+	}
 }
 
 // ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
@@ -57,69 +61,78 @@ void    ServerConfiguration::creatMultiPort()
 
 ServerConfiguration::~ServerConfiguration(void)
 {
-    this->_pathInfoCgi.clear();
-    this->_pathInfoMime.clear();
-    this->errorPages.clear();
-    // this->_log->close();
-    // delete this->_log;
+	this->_pathInfoCgi.clear();
+	this->_pathInfoMime.clear();
+	this->errorPages.clear();
+	// this->_log->close();
+	// delete this->_log;
 }
 
 ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &copy)
 {
-    if (this != &copy)
-    {
-        this->port = copy.port;
-        this->hostName = copy.hostName;
-        this->serverName = copy.serverName;
-        this->errorPages = copy.errorPages;
-        this->clientMaxBodySize = copy.clientMaxBodySize;
-    }
-    return (*this);
+	if (this != &copy)
+	{
+		this->port = copy.port;
+		this->hostName = copy.hostName;
+		this->serverName = copy.serverName;
+		this->errorPages = copy.errorPages;
+		this->clientMaxBodySize = copy.clientMaxBodySize;
+	}
+	return (*this);
 }
 
-void	ServerConfiguration::setPort(std::string str)
+void ServerConfiguration::setPort(std::string str)
 {
-    int n;
-    std::istringstream(str) >> n;
-    this->_port.push_back(n);
+	int n;
+	std::istringstream(str) >> n;
+	this->_port.push_back(n);
 }
 
-void	ServerConfiguration::setHostName(std::string str)
+void ServerConfiguration::setLocation(std::string page, std::string location)
 {
-    this->hostName = str;
+	this->_location.insert(std::make_pair(page, location));
 }
 
-void	ServerConfiguration::setServerName(std::string str)
+void ServerConfiguration::setHostName(std::string str)
 {
+<<<<<<< HEAD
     std::cout << "ici" << str << std::endl; // TEST
     this->serverName = str;
+=======
+	this->hostName = str;
+>>>>>>> a9a92301f7197a45d09ec957f795a0973cb8c5b0
 }
 
-void	ServerConfiguration::setErrorPage(int code, std::string str)
+void ServerConfiguration::setServerName(std::string str)
 {
-    this->errorPages[code] = str;
+	this->serverName = str;
 }
 
-void	ServerConfiguration::setClientMaxBodySize(std::string str)
+void ServerConfiguration::setErrorPage(int code, std::string str)
 {
-    int n;
-    std::istringstream(str) >> n;
-    this->clientMaxBodySize = n;
+	this->errorPages[code] = str;
 }
 
-void    ServerConfiguration::setRoot(std::string str)
+void ServerConfiguration::setClientMaxBodySize(std::string str)
 {
-    this->root = str;
+	int n;
+	std::istringstream(str) >> n;
+	this->clientMaxBodySize = n;
 }
 
-void    ServerConfiguration::setIndex(std::string str)
+void ServerConfiguration::setRoot(std::string str)
 {
-    this->index = str;
+	this->root = str;
 }
 
-int		ServerConfiguration::getPort(void) const
+void ServerConfiguration::setIndex(std::string str)
 {
-    return (this->port);
+	this->index = str;
+}
+
+int ServerConfiguration::getPort(void) const
+{
+	return (this->port);
 }
 
 std::vector<int> ServerConfiguration::getPortTab(void) const
@@ -127,24 +140,24 @@ std::vector<int> ServerConfiguration::getPortTab(void) const
 	return (this->_port);
 }
 
-std::string	ServerConfiguration::getHostName(void) const
+std::string ServerConfiguration::getHostName(void) const
 {
-    return (this->hostName);   
+	return (this->hostName);
 }
 
-std::string	ServerConfiguration::getServerName(void) const
+std::string ServerConfiguration::getServerName(void) const
 {
-    return (this->serverName);
+	return (this->serverName);
 }
 
-std::string	ServerConfiguration::getStrPort(void) const
+std::string ServerConfiguration::getStrPort(void) const
 {
-    return (this->strPort);
+	return (this->strPort);
 }
 
 std::string ServerConfiguration::getRoot(void) const
 {
-    return (this->root);
+	return (this->root);
 }
 
 std::string ServerConfiguration::getRootIndex(void) const
@@ -154,28 +167,29 @@ std::string ServerConfiguration::getRootIndex(void) const
 
 std::string ServerConfiguration::getErrorPage(int code) const
 {
-    std::map<int, std::string>::const_iterator it = this->errorPages.find(code);
-    if (it != this->errorPages.end()) {
-        return it->second;
-    }
-    else
-    {
-        it = this->errorPages.find(404);
-        return (it->second);
-    }
+	std::map<int, std::string>::const_iterator it = this->errorPages.find(code);
+	if (it != this->errorPages.end())
+	{
+		return it->second;
+	}
+	else
+	{
+		it = this->errorPages.find(404);
+		return (it->second);
+	}
 }
 
-int	ServerConfiguration::getClientMaxBodySize(void) const
+int ServerConfiguration::getClientMaxBodySize(void) const
 {
-    return (this->clientMaxBodySize);
+	return (this->clientMaxBodySize);
 }
 
-std::map<std::string, std::string>	ServerConfiguration::getPathInfoCgi() const
+std::map<std::string, std::string> ServerConfiguration::getPathInfoCgi() const
 {
-    return (this->_pathInfoCgi);
+	return (this->_pathInfoCgi);
 }
 
-std::vector<ListeningSocket*>    ServerConfiguration::getTabList() const
+std::vector<ListeningSocket *> ServerConfiguration::getTabList() const
 {
 	return (this->tab_list);
 }
@@ -188,6 +202,7 @@ std::string ServerConfiguration::getIndex() const
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
 {
 	Cout << i.getClientMaxBodySize() << std::endl;
+<<<<<<< HEAD
     Cout << "Hostname : " << i.getHostName() << std::endl;
     std::vector<int> tab = i.getPortTab();
     std::vector<int>::iterator it = tab.begin();
@@ -196,9 +211,15 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
     Cout << "serverName: "<< i.getServerName() << std::endl;
     Cout << "Index :" << i.getIndex() << std::endl;
     return (Cout);
+=======
+	Cout << i.getHostName() << std::endl;
+	Cout << i.getPort() << std::endl;
+	Cout << i.getServerName() << std::endl;
+	return (Cout);
+>>>>>>> a9a92301f7197a45d09ec957f795a0973cb8c5b0
 }
 
-void	ServerConfiguration::error(std::string errorType)
+void ServerConfiguration::error(std::string errorType)
 {
 	throw(std::runtime_error(errorType));
 }

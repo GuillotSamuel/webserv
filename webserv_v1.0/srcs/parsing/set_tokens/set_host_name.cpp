@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_host_name.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:44 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 13:30:47 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/12 16:12:54 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,6 @@ void Server::ft_set_host_name_param(std::vector<std::string> tokens)
     {
         ft_invalid_line(tokens);
     }
-    /* else if (!this->hostName.empty())
-    {
-        error("Host name defined many times in configurations : "
-            + tokens[0] + " " + tokens[1]));
-    } */
 
     const std::string& str = tokens[1];
 
