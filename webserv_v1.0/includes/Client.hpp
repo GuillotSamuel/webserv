@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:44 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/04 13:32:45 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/12 17:08:56 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ class Client
 	
 		/*---------------------------------------------------------------*/
 		/*                            ATTRIBUT                           */
-		/*---------------------------------------------------------------*/	
+		/*---------------------------------------------------------------*/
 		std::string _method;
 		std::string	_ipAdress;
 		std::string _httpAcceptMime; // text/*, image/jpeg, image/png, image/*, */*
@@ -30,6 +30,7 @@ class Client
 		std::string	_contentType;
 		std::string _contentLength;
 		std::string	_boundary;
+		std::string	_fileOrDirRequested;
 
 	public:
 
@@ -57,6 +58,7 @@ class Client
 		std::string getContentType() const;
 		std::string getContentLength() const;
 		std::string getBoundary() const;
+		std::string getFileOrDirRequested() const;
 
 
 		/*---------------------------------------------------------------*/

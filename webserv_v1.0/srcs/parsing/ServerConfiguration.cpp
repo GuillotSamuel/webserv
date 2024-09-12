@@ -3,24 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/09/12 13:43:25 by mmahfoud         ###   ########.fr       */
-=======
-/*   Updated: 2024/09/12 12:03:22 by sguillot         ###   ########.fr       */
->>>>>>> a9a92301f7197a45d09ec957f795a0973cb8c5b0
+/*   Updated: 2024/09/12 17:29:52 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 #include "ServerConfiguration.hpp"
-
-// ServerConfiguration::ServerConfiguration(void) :
-//     port(-1), hostName(std::string()),
-//     serverName(std::string()), errorPages(std::map<int, std::string>()),
-//     clientMaxBodySize(-1), _pathInfo(std::string()) {}
 
 ServerConfiguration::ServerConfiguration()
 {
@@ -45,27 +36,11 @@ ServerConfiguration::ServerConfiguration()
 	this->serverName = std::string("localhost"); // TEST PARSING
 }
 
-void ServerConfiguration::creatMultiPort()
-{
-	std::vector<int>::iterator it = this->_port.begin();
-	for (; it < this->_port.end(); it++)
-	{
-		this->tab_list.push_back(new ListeningSocket(*it));
-	}
-}
-
-// ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
-//     port(copy.port), hostName(copy.hostName),
-//     serverName(copy.serverName), errorPages(copy.errorPages),
-//     clientMaxBodySize(copy.clientMaxBodySize) {}
-
 ServerConfiguration::~ServerConfiguration(void)
 {
 	this->_pathInfoCgi.clear();
 	this->_pathInfoMime.clear();
 	this->errorPages.clear();
-	// this->_log->close();
-	// delete this->_log;
 }
 
 ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &copy)
@@ -95,12 +70,7 @@ void ServerConfiguration::setLocation(std::string page, std::string location)
 
 void ServerConfiguration::setHostName(std::string str)
 {
-<<<<<<< HEAD
-    std::cout << "ici" << str << std::endl; // TEST
-    this->serverName = str;
-=======
 	this->hostName = str;
->>>>>>> a9a92301f7197a45d09ec957f795a0973cb8c5b0
 }
 
 void ServerConfiguration::setServerName(std::string str)
@@ -128,11 +98,6 @@ void ServerConfiguration::setRoot(std::string str)
 void ServerConfiguration::setIndex(std::string str)
 {
 	this->index = str;
-}
-
-int ServerConfiguration::getPort(void) const
-{
-	return (this->port);
 }
 
 std::vector<int> ServerConfiguration::getPortTab(void) const
@@ -189,11 +154,6 @@ std::map<std::string, std::string> ServerConfiguration::getPathInfoCgi() const
 	return (this->_pathInfoCgi);
 }
 
-std::vector<ListeningSocket *> ServerConfiguration::getTabList() const
-{
-	return (this->tab_list);
-}
-
 std::string ServerConfiguration::getIndex() const
 {
     return (this->index);
@@ -202,21 +162,10 @@ std::string ServerConfiguration::getIndex() const
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
 {
 	Cout << i.getClientMaxBodySize() << std::endl;
-<<<<<<< HEAD
     Cout << "Hostname : " << i.getHostName() << std::endl;
-    std::vector<int> tab = i.getPortTab();
-    std::vector<int>::iterator it = tab.begin();
-    for (; it < tab.end(); it++)
-        Cout << "Port: " << *it << std::endl;
     Cout << "serverName: "<< i.getServerName() << std::endl;
     Cout << "Index :" << i.getIndex() << std::endl;
     return (Cout);
-=======
-	Cout << i.getHostName() << std::endl;
-	Cout << i.getPort() << std::endl;
-	Cout << i.getServerName() << std::endl;
-	return (Cout);
->>>>>>> a9a92301f7197a45d09ec957f795a0973cb8c5b0
 }
 
 void ServerConfiguration::error(std::string errorType)

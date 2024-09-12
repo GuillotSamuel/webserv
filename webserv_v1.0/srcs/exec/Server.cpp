@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/12 13:46:41 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/12 17:26:48 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,7 @@ Server::Server(int argc, char **argv)
 	}
 	this->_status_code = 0;
 	parsing_g(argc, argv);
-	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
-	for (; it < this->tab_serv.end(); it++)
-	{
-		it->creatMultiPort();
-		std::vector<ListeningSocket*> tab = it->getTabList();
-		std::cout << *it << std::endl; // TEST
-	}
+	creatAllListeningSockets();
 	log("Starting Server.", 3);
 	this->_connexion_fd = -1;
 	this->_epoll_fd = -1;
@@ -45,6 +39,28 @@ Server::Server(int argc, char **argv)
 	memset(socket_buffer, 0, BUFFER_SIZE);
 }
 
+void	Server::creatAllListeningSockets()
+{
+	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
+	for (; it < this->tab_serv.end(); it++)
+	{
+		int boul = 0;
+		std::vector<int> port = it->getPortTab();
+		std::vector<int>::iterator itTabPort = port.begin();
+		for (; itTabPort < port.end(); itTabPort++)
+		{
+			std::vector<ListeningSocket*>::iterator itList = _listSockets.begin();
+			for (; itList < _listSockets.end(); itList++)
+			{
+				if ((*itList)->getPort() == *itTabPort)
+					boul = 1;
+			}
+			if (boul != 1)
+				_listSockets.push_back(new ListeningSocket(*itTabPort));
+		}
+		
+	}
+}
 
 /*----------------------------------------------------------------------------*/
 /*                              METHOD/SERVER                                 */
@@ -63,9 +79,8 @@ void	Server::startingServer()
 	std::vector<ServerConfiguration>::iterator it = tab_serv.begin();
 	for (; it != this->tab_serv.end(); it++)
 	{
-		std::vector<ListeningSocket*> tab = it->getTabList();
-		std::vector<ListeningSocket*>::iterator itTab = tab.begin();
-		for(; itTab != tab.end(); itTab++)
+		std::vector<ListeningSocket*>::iterator itTab = this->_listSockets.begin();
+		for(; itTab != this->_listSockets.end(); itTab++)
 		{
 			this->_event.events = EPOLLIN;
 			this->_event.data.fd = (*itTab)->getSocket_fd();
@@ -89,7 +104,7 @@ void	Server::startingServer()
 */
 void Server::serverExecution()
 {
-	int	sock;
+	
 	while (true)
 	{
 		int nfds = epoll_wait(this->_epoll_fd, this->_events, MAX_EVENTS, -1);
@@ -97,35 +112,26 @@ void Server::serverExecution()
 			log("The call to epoll_wait failed.", 2);
 		if (g_signal == SIGNAL)
 			closeServer();
+		ListeningSocket *list;
 		for (int i = 0; i < nfds; i++)
 		{
-			ServerConfiguration serv;
-			sock = 0;
-			std::vector<ServerConfiguration>::iterator it = tab_serv.begin();
-			for (;it < tab_serv.end(); it++)
+			int	sock = 0;
+			std::vector<ListeningSocket*>::iterator it = _listSockets.begin();
+			for (; it < _listSockets.end(); it++)
 			{
-				std::vector<ListeningSocket*> tab = it->getTabList();
-				std::vector<ListeningSocket*>::iterator itTab = tab.begin();
-				
-				for(; itTab < tab.end(); itTab++)
+				if (this->_events[i].data.fd == (*it)->getSocket_fd())
 				{
-					if (this->_events[i].data.fd == (*itTab)->getSocket_fd())
-					{
-						sock = (*itTab)->getSocket_fd();
-						serv = *it;
-						break;
-					}
-				}
-				if (sock != 0)
+					sock = (*it)->getSocket_fd();
+					list = (*it);
 					break;
+				}
 			}
-			if (it == tab_serv.end() && sock == 0)
+			if (sock == 0)
 			{
 				if (this->_events[i].events & EPOLLIN)
 				{
-					handle_client(serv);
+					handle_client(list);
 				}
-
 				else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP)) {
 					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, this->_events->data.fd, NULL) == -1)
 						log("Epoll_ctl failed.", 2);
@@ -166,7 +172,7 @@ void Server::serverExecution()
 -Parsing request, download file if needed 
 and chose what method to use
 */
-void Server::handle_client(ServerConfiguration serv)
+void Server::handle_client(ListeningSocket *list)
 {
 	Client *client = new Client();
 
@@ -177,17 +183,19 @@ void Server::handle_client(ServerConfiguration serv)
 	std::string ipAdress(client_ip);
 	client->setIpAddress(ipAdress);
 	
-	std::string receivedLine = readRequest(client);
+	std::string receivedLine = readHead(client);
 	if (receivedLine == "")
 	{
 		delete client;
 		log("Server could not read anything from client. The client will be remove.", 2);
 		return ;
 	}
-	std::string filePath = findPath(receivedLine, serv);
+	getServConfig(client, list);
+
+	std::string filePath = findPath(receivedLine, *currentConfig);
 	if (filePath == "")
 	{
-		filePath = serv.getErrorPage(404);
+		filePath = currentConfig->getErrorPage(404);
 	}
 
 	if (client->getMethod() == "GET")
@@ -197,7 +205,7 @@ void Server::handle_client(ServerConfiguration serv)
 	}
 	else if (client->getMethod() == "POST")
 	{
-		ft_post(*client, filePath, &serv);
+		ft_post(*client, filePath, currentConfig);
 		delete client;
 	}
 	else if (client->getMethod() == "DELETE")
@@ -214,6 +222,39 @@ void Server::handle_client(ServerConfiguration serv)
 	write(this->_connexion_fd, this->socket_buffer, strlen(this->socket_buffer));
 	close(this->_connexion_fd);
 	log("Closing the connection with the client.", 1);
+}
+
+void	Server::getServConfig(Client *client, ListeningSocket *list)
+{
+	this->currentConfig = NULL;
+	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
+	for (; it < this->tab_serv.end(); it++)
+	{
+		if (it->getServerName() == client->getFileOrDirRequested())
+		{
+			this->currentConfig = &(*it);
+			break;
+		}
+	}
+	if (this->currentConfig == NULL)
+	{
+		it = this->tab_serv.begin();
+		for (; it < this->tab_serv.end(); it++)
+		{
+			std::vector<int> tab = it->getPortTab();
+			std::vector<int>::iterator itTab = tab.begin();
+			for (; itTab < tab.end(); itTab++)
+			{
+				if (list->getPort() == *itTab)
+				{
+					this->currentConfig = &(*it);
+					break;
+				}
+			}
+		}
+	}
+	if (this->currentConfig == NULL)
+		log("Can't retrieve the server connected to this socket", 2);
 }
 
 /*response to a GET request*/
@@ -352,7 +393,6 @@ void	Server::closeServer()
 	std::vector<ServerConfiguration>::iterator it = tab_serv.begin();
 	while (it != tab_serv.end())
 	{
-		it->getTabList().clear();
 		it++;
 	}
 	this->tab_serv.clear();
@@ -454,7 +494,7 @@ std::string	Server::getMimeType()
 	return ("application/octet-stream");
 }
 
-std::string	Server::readRequest(Client *client)
+std::string	Server::readHead(Client *client)
 {
 	int n = recv(this->_connexion_fd, this->received_line, 4096, 0);
 	if (n < 0)
@@ -470,7 +510,11 @@ std::string	Server::readRequest(Client *client)
 	std::string receivedLine(this->received_line, 4096);
 
 	client->setInfo(receivedLine);
-	
+	return (receivedLine);
+}
+
+std::string	Server::readBody(Client *client, std::string *receivedLine)
+{
 	if (client->getContentLength() != "")
 	{
 		int len = atoi(client->getContentLength().c_str());
@@ -494,9 +538,9 @@ std::string	Server::readRequest(Client *client)
             total_read += read;
         }
 
-		receivedLine.append(buffer, total_read);
+		(*receivedLine).append(buffer, total_read);
     	delete[] buffer;
-		dlFile(&receivedLine, client);
+		dlFile(receivedLine, client);
 	}
 		std::ofstream file("request.txt");
 		if (file.is_open()) {
@@ -506,7 +550,7 @@ std::string	Server::readRequest(Client *client)
 		} 
 		else
 			log("Unable to open file.", 2);
-	return (receivedLine);
+	return (*receivedLine);
 }
 
 std::string Server::findPath(const std::string &receivedLine, ServerConfiguration serv)

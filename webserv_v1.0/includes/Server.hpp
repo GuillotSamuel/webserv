@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/11 18:47:44 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 17:21:23 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class Server
 		char												received_line[BUFFER_SIZE];
 		char												socket_buffer[BUFFER_SIZE];
 		std::vector<ServerConfiguration>					tab_serv;
+		std::vector<ListeningSocket*>						_listSockets;
 		std::map<std::string, std::string>					extpath;
 		std::map<std::string, std::string>					mimePath;
 		ServerConfiguration									*currentConfig;
@@ -47,9 +48,11 @@ class Server
 		/*---------------------------------------------------------------*/
 		/*                            METHOD                             */
 		/*---------------------------------------------------------------*/
+
 		std::map<std::string, std::string>					createExtPath();
 		std::map<std::string, std::string>					createMimePath();
-		void												handle_client(ServerConfiguration serv);
+		void												creatAllListeningSockets();
+		void												handle_client(ListeningSocket *list);
 		std::string											findPath(const std::string &receivedLine, ServerConfiguration serv);
 		void												ft_get(std::string filePath);
 		void												ft_post(Client client, std::string filePath, ServerConfiguration *serv);
@@ -59,7 +62,9 @@ class Server
 		std::string 										getMimeType();
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
-		std::string											readRequest(Client *client);
+		std::string											readHead(Client *client);
+		void												getServConfig(Client *client, ListeningSocket *list);
+		std::string											readBody(Client *client, std::string *receivedLine);
 		void												closeServer();
 		void												dlFile(std::string *receivedLine, Client *client);
 		void												parsing_g(int argc, char **argv);

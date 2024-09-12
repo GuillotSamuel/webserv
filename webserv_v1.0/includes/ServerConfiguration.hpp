@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/09/12 13:39:26 by mmahfoud         ###   ########.fr       */
-=======
-/*   Updated: 2024/09/12 11:58:31 by sguillot         ###   ########.fr       */
->>>>>>> a9a92301f7197a45d09ec957f795a0973cb8c5b0
+/*   Updated: 2024/09/12 17:25:15 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +50,6 @@ class ServerConfiguration
 		std::vector<int>					_port;
 		int									port;
 		int									clientMaxBodySize;
-		std::vector<ListeningSocket*>		tab_list;
 
 	public:
 
@@ -65,7 +60,6 @@ class ServerConfiguration
 		// ServerConfiguration(std::string port);
 		// ServerConfiguration(const ServerConfiguration &copy);
 		~ServerConfiguration(void);
-		void								creatMultiPort();
 
 		/*---------------------------------------------------------------*/
 		/*                         OVERLOADED                            */
@@ -90,14 +84,12 @@ class ServerConfiguration
 		std::string							getStrPort(void) const;
 		std::string							getRoot(void) const;
 		std::string							getRootIndex(void) const;
-		int									getPort(void) const;
 		std::vector<int>					getPortTab(void) const;
 		std::string							getHostName(void) const;
 		std::string							getServerName(void) const;
 		std::string							getErrorPage(int code) const;
 		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi() const;
-		std::vector<ListeningSocket*>		getTabList() const;
 		std::string							getIndex() const;
 
 		/*---------------------------------------------------------------*/
