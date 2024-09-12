@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 14:07:06 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 21:23:36 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 11:03:47 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void Server::ft_set_index_param(std::vector<std::string> tokens)
         error("Error: invalid argument (index): " + tokens[1]);
         return;
     }
+
+    std::cout << str << std::endl;
 
     this->currentConfig->setServerName(str);
 }

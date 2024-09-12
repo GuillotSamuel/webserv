@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:31 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 21:22:38 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 11:08:07 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void Server::ft_set_server_name_param(std::vector<std::string> tokens)
         error("Error: invalid argument (server name): " + tokens[1]);
         return;
     }
+
+    std::cout << str << std::endl;
 
     this->currentConfig->setServerName(str);
 }

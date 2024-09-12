@@ -1,166 +1,30 @@
-	[INFO][21:24:27] : Getprotobyname Succed.
-	[INFO][21:24:27] : Socket_fd in now created.
-	[INFO][21:24:27] : Socket_fd in now set.
-	[INFO][21:24:27] : Socket_fd is binded.
-	[INFO][21:24:27] : Socket_fd is non blocking fd.
-	[INFO][21:24:27] : Socket_fd is now listening every attemp of connection.
-	[INFO][21:24:27] : Getprotobyname Succed.
-	[INFO][21:24:27] : Socket_fd in now created.
-	[INFO][21:24:27] : Socket_fd in now set.
-	[INFO][21:24:27] : Socket_fd is binded.
-	[INFO][21:24:27] : Socket_fd is non blocking fd.
-	[INFO][21:24:27] : Socket_fd is now listening every attemp of connection.
-	[INFO][21:24:27] : Getprotobyname Succed.
-	[INFO][21:24:27] : Socket_fd in now created.
-	[INFO][21:24:27] : Socket_fd in now set.
-	[INFO][21:24:27] : Socket_fd is binded.
-	[INFO][21:24:27] : Socket_fd is non blocking fd.
-	[INFO][21:24:27] : Socket_fd is now listening every attemp of connection.
-	[INFO][21:24:27] : Getprotobyname Succed.
-	[INFO][21:24:27] : Socket_fd in now created.
-	[INFO][21:24:27] : Socket_fd in now set.
-	[INFO][21:24:27] : Socket_fd is binded.
-	[INFO][21:24:27] : Socket_fd is non blocking fd.
-	[INFO][21:24:27] : Socket_fd is now listening every attemp of connection.
-[INFO][21:24:27] : Starting Server.
-	[INFO][21:24:27] : Epoll instance successfully created.
-	[INFO][21:24:27] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][21:24:27] : The server construction is now complete. The server is ready to accept incoming connections.
-[INFO][21:24:29] : [NEW REQUEST]
-	[INFO][21:24:29] : Server did accept the connection.
-	[INFO][21:24:29] : Server's receive a GET request.
-	[INFO][21:24:29] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/html/form.html" was found.
-	[INFO][21:24:29] : Server's ready to respond.
-	[INFO][21:24:29] : Closing the connection with the client.
-[INFO][21:24:29] : [NEW REQUEST]
-	[INFO][21:24:29] : Server did accept the connection.
-	[INFO][21:24:29] : Server's receive a GET request.
-	[INFO][21:24:29] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][21:24:29] : Server's ready to respond.
-	[INFO][21:24:29] : Closing the connection with the client.
-[INFO][21:24:40] : [NEW REQUEST]
-	[INFO][21:24:40] : Server did accept the connection.
-	[INFO][21:24:40] : Server's receive a GET request.
-	[INFO][21:24:40] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/html/index.html" was found.
-	[INFO][21:24:40] : Server's ready to respond.
-	[INFO][21:24:40] : Closing the connection with the client.
-[INFO][21:24:40] : [NEW REQUEST]
-	[INFO][21:24:40] : Server did accept the connection.
-	[INFO][21:24:40] : Server's receive a GET request.
-	[INFO][21:24:40] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][21:24:40] : Server's ready to respond.
-	[INFO][21:24:40] : Closing the connection with the client.
-[INFO][21:24:44] : [NEW REQUEST]
-	[INFO][21:24:44] : Server did accept the connection.
-[INFO][21:24:49] : The connexion has been interrupted.
-	[ERROR][21:24:49] : Server could not read anything from client. The client will be remove.
-[INFO][21:24:49] : [NEW REQUEST]
-	[INFO][21:24:49] : Server did accept the connection.
-	[INFO][21:24:49] : Server's receive a GET request.
-	[INFO][21:24:49] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/html/errors/404.html" was found.
-	[INFO][21:24:49] : Server's ready to respond.
-	[INFO][21:24:49] : Closing the connection with the client.
-[INFO][21:24:49] : [NEW REQUEST]
-	[INFO][21:24:49] : Server did accept the connection.
-	[INFO][21:24:49] : Server's receive a GET request.
-	[INFO][21:24:49] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][21:24:49] : Server's ready to respond.
-	[INFO][21:24:49] : Closing the connection with the client.
-[INFO][21:24:50] : [NEW REQUEST]
-	[INFO][21:24:50] : Server did accept the connection.
-[INFO][21:24:55] : The connexion has been interrupted.
-	[ERROR][21:24:55] : Server could not read anything from client. The client will be remove.
-[INFO][21:24:58] : [NEW REQUEST]
-	[INFO][21:24:58] : Server did accept the connection.
-	[INFO][21:24:58] : Server's receive a GET request.
-	[INFO][21:24:58] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/html/errors/400.html" was found.
-	[INFO][21:24:58] : Server's ready to respond.
-	[INFO][21:24:58] : Closing the connection with the client.
-[INFO][21:24:58] : [NEW REQUEST]
-	[INFO][21:24:58] : Server did accept the connection.
-	[INFO][21:24:58] : Server's receive a GET request.
-	[INFO][21:24:58] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][21:24:58] : Server's ready to respond.
-	[INFO][21:24:58] : Closing the connection with the client.
-[INFO][21:27:21] : [NEW REQUEST]
-	[INFO][21:27:21] : Server did accept the connection.
-	[INFO][21:27:25] : Server's receive a GET request.
-	[INFO][21:27:25] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/html/errors/404.html" was found.
-	[INFO][21:27:25] : Server's ready to respond.
-	[INFO][21:27:25] : Closing the connection with the client.
-[INFO][21:27:25] : [NEW REQUEST]
-	[INFO][21:27:25] : Server did accept the connection.
-	[INFO][21:27:25] : Server's receive a GET request.
-	[INFO][21:27:25] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][21:27:25] : Server's ready to respond.
-	[INFO][21:27:25] : Closing the connection with the client.
-[INFO][21:27:29] : [NEW REQUEST]
-	[INFO][21:27:29] : Server did accept the connection.
-	[INFO][21:27:29] : Server's receive a GET request.
-	[INFO][21:27:29] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/html/errors/403.html" was found.
-	[INFO][21:27:29] : Server's ready to respond.
-	[INFO][21:27:29] : Closing the connection with the client.
-[INFO][21:27:29] : [NEW REQUEST]
-	[INFO][21:27:29] : Server did accept the connection.
-	[INFO][21:27:29] : Server's receive a GET request.
-	[INFO][21:27:29] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][21:27:29] : Server's ready to respond.
-	[INFO][21:27:29] : Closing the connection with the client.
-[INFO][21:27:29] : [NEW REQUEST]
-	[INFO][21:27:29] : Server did accept the connection.
-	[INFO][21:27:30] : Server's receive a GET request.
-	[INFO][21:27:30] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/html/index.html" was found.
-	[INFO][21:27:30] : Server's ready to respond.
-	[INFO][21:27:30] : Closing the connection with the client.
-[INFO][21:27:30] : [NEW REQUEST]
-	[INFO][21:27:30] : Server did accept the connection.
-	[INFO][21:27:30] : Server's receive a GET request.
-	[INFO][21:27:30] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][21:27:30] : Server's ready to respond.
-	[INFO][21:27:30] : Closing the connection with the client.
-[INFO][21:27:30] : [NEW REQUEST]
-	[INFO][21:27:30] : Server did accept the connection.
-[INFO][21:27:36] : The connexion has been interrupted.
-	[ERROR][21:27:36] : Server could not read anything from client. The client will be remove.
-[INFO][21:28:24] : [NEW REQUEST]
-	[INFO][21:28:24] : Server did accept the connection.
-	[INFO][21:28:24] : Server's receive a GET request.
-	[INFO][21:28:24] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/html/index.html" was found.
-	[INFO][21:28:24] : Server's ready to respond.
-	[INFO][21:28:24] : Closing the connection with the client.
-[INFO][21:28:25] : [NEW REQUEST]
-	[INFO][21:28:25] : Server did accept the connection.
-	[INFO][21:28:25] : Server's receive a GET request.
-	[INFO][21:28:25] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][21:28:25] : Server's ready to respond.
-	[INFO][21:28:25] : Closing the connection with the client.
-[INFO][21:28:25] : [NEW REQUEST]
-	[INFO][21:28:25] : Server did accept the connection.
-	[INFO][21:28:25] : Server's receive a GET request.
-	[INFO][21:28:25] : The file given cannot be found.
-	[INFO][21:28:25] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/images/favicon.ico" was found empty.
-	[INFO][21:28:25] : The file given cannot be found.
-	[INFO][21:28:25] : Server's ready to respond.
-	[INFO][21:28:25] : Closing the connection with the client.
-[INFO][21:28:28] : [NEW REQUEST]
-	[INFO][21:28:28] : Server did accept the connection.
-	[INFO][21:28:28] : Server's receive a GET request.
-	[INFO][21:28:28] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/html/index.html" was found.
-	[INFO][21:28:28] : Server's ready to respond.
-	[INFO][21:28:28] : Closing the connection with the client.
-[INFO][21:28:28] : [NEW REQUEST]
-	[INFO][21:28:28] : Server did accept the connection.
-	[INFO][21:28:28] : Server's receive a GET request.
-	[INFO][21:28:28] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][21:28:28] : Server's ready to respond.
-	[INFO][21:28:28] : Closing the connection with the client.
-[INFO][21:28:28] : [NEW REQUEST]
-	[INFO][21:28:28] : Server did accept the connection.
-	[INFO][21:28:28] : Server's receive a GET request.
-	[INFO][21:28:28] : The file given cannot be found.
-	[INFO][21:28:28] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_gallery/images/favicon.ico" was found empty.
-	[INFO][21:28:28] : The file given cannot be found.
-	[INFO][21:28:28] : Server's ready to respond.
-	[INFO][21:28:28] : Closing the connection with the client.
-	[ERROR][21:28:35] : The call to epoll_wait failed.
-	[INFO][21:28:35] : Shutting down the server properly.
+	[INFO][11:10:40] : Getprotobyname Succed.
+	[INFO][11:10:40] : Socket_fd in now created.
+	[INFO][11:10:40] : Socket_fd in now set.
+	[INFO][11:10:40] : Socket_fd is binded.
+	[INFO][11:10:40] : Socket_fd is non blocking fd.
+	[INFO][11:10:40] : Socket_fd is now listening every attemp of connection.
+	[INFO][11:10:40] : Getprotobyname Succed.
+	[INFO][11:10:40] : Socket_fd in now created.
+	[INFO][11:10:40] : Socket_fd in now set.
+	[INFO][11:10:40] : Socket_fd is binded.
+	[INFO][11:10:40] : Socket_fd is non blocking fd.
+	[INFO][11:10:40] : Socket_fd is now listening every attemp of connection.
+	[INFO][11:10:40] : Getprotobyname Succed.
+	[INFO][11:10:40] : Socket_fd in now created.
+	[INFO][11:10:40] : Socket_fd in now set.
+	[INFO][11:10:40] : Socket_fd is binded.
+	[INFO][11:10:40] : Socket_fd is non blocking fd.
+	[INFO][11:10:40] : Socket_fd is now listening every attemp of connection.
+	[INFO][11:10:40] : Getprotobyname Succed.
+	[INFO][11:10:40] : Socket_fd in now created.
+	[INFO][11:10:40] : Socket_fd in now set.
+	[INFO][11:10:40] : Socket_fd is binded.
+	[INFO][11:10:40] : Socket_fd is non blocking fd.
+	[INFO][11:10:40] : Socket_fd is now listening every attemp of connection.
+[INFO][11:10:40] : Starting Server.
+	[INFO][11:10:40] : Epoll instance successfully created.
+	[INFO][11:10:40] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][11:10:40] : The server construction is now complete. The server is ready to accept incoming connections.
+	[ERROR][11:10:47] : The call to epoll_wait failed.
+	[INFO][11:10:47] : Shutting down the server properly.

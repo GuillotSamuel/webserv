@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:44 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 18:47:59 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/12 11:02:27 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ void Server::ft_set_host_name_param(std::vector<std::string> tokens)
     {
         ft_invalid_line(tokens);
     }
+
+    std::cout << tokens[1].substr(0, tokens[1].size() - 1) << std::endl;
 
     this->currentConfig->setHostName(tokens[1].substr(0, tokens[1].size() - 1));
 }
