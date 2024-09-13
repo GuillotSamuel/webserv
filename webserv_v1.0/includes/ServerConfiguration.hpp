@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 11:49:34 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 12:42:55 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #define HTML_FILES "/html"
 #define CSS_FILES "/styles"
-#define JS_FILES "/js"
+#define JS_FILES "/scripts"
 #define JSON_FILES "/data"
 #define IMAGE_FILES "/images"
 #define VIDEO_FILES "/videos"
@@ -44,6 +44,7 @@ class ServerConfiguration
 		std::string							hostName;
 		std::string							serverName;
 		std::string							strPort;
+		std::string							imHere;
 		std::string							root;
 		std::string							root_index;
 		std::string							index;
@@ -86,7 +87,8 @@ class ServerConfiguration
 		void								setErrorPagesLocation(std::string str);
 		void								setPathInfoCgi(std::string extension, std::string location);
 		void								setCgiBinLocation(std::string str);
-
+		void								setRootIndex();
+		
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
 		/*---------------------------------------------------------------*/
@@ -109,7 +111,7 @@ class ServerConfiguration
 		std::map<std::string, std::string>	getLocation(void) const;
 		std::map<std::string, std::string>	getInfoMime(void) const;
 		std::vector<std::string>			getAllowedMethods(void)const;
-
+		std::string							getimHere() const;
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */
 		/*---------------------------------------------------------------*/

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 11:44:38 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:58:54 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void Client::setInfo(std::string info)
 	size_t path_start = info.find('/');
 	if (path_start != std::string::npos)
 	{
+		path_start += 1;
 		size_t path_end = info.find(' ', path_start);
 		if (path_end != std::string::npos)
 			this->_fileOrDirRequested = info.substr(path_start, path_end - path_start);

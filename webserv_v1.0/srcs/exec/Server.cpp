@@ -6,12 +6,12 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 11:46:07 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 14:26:42 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "server.hpp"
 #include "webserv.hpp"
+
 std::ofstream* Server::_log = NULL;
 /*----------------------------------------------------------------------------*/
 /*                               CONSTRUCTOR                                  */
@@ -45,20 +45,25 @@ void	Server::creatAllListeningSockets()
 	for (; it < this->tab_serv.end(); it++)
 	{
 		int boul = 0;
+		it->setRootIndex();
 		std::vector<int> port = it->getPortTab();
 		std::vector<int>::iterator itTabPort = port.begin();
 		for (; itTabPort < port.end(); itTabPort++)
 		{
 			std::vector<ListeningSocket*>::iterator itList = _listSockets.begin();
-			for (; itList < _listSockets.end(); itList++)
+			for (int i = 0; itList < _listSockets.end(); itList++, i++)
 			{
 				if ((*itList)->getPort() == *itTabPort)
+				{
 					boul = 1;
+					break;
+				}
 			}
 			if (boul != 1)
+			{
 				_listSockets.push_back(new ListeningSocket(*itTabPort));
+			}
 		}
-		
 	}
 }
 
@@ -76,24 +81,20 @@ void	Server::startingServer()
 		log("Epoll instance creation failed.", 2);
 	
 	log("Epoll instance successfully created.", 1);
-	std::vector<ServerConfiguration>::iterator it = tab_serv.begin();
-	for (; it != this->tab_serv.end(); it++)
+	std::vector<ListeningSocket*>::iterator itTab = this->_listSockets.begin();
+	for(; itTab != this->_listSockets.end(); itTab++)
 	{
-		std::vector<ListeningSocket*>::iterator itTab = this->_listSockets.begin();
-		for(; itTab != this->_listSockets.end(); itTab++)
-		{
-			this->_event.events = EPOLLIN;
-			this->_event.data.fd = (*itTab)->getSocket_fd();
+		this->_event.events = EPOLLIN;
+		this->_event.data.fd = (*itTab)->getSocket_fd();
 
-			if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, (*itTab)->getSocket_fd(), &this->_event) == -1)
-			{
-				log("Server failed to add the socket file descriptor to his instance of Epoll.", 2);
-				exit(EXIT_FAILURE);
-			}
+		if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, (*itTab)->getSocket_fd(), &this->_event) == -1)
+		{
+			log("Server failed to add the socket file descriptor to his instance of Epoll.", 2);
+			exit(EXIT_FAILURE);
 		}
+	}
 		
 		log("Epoll_ctl successfully add the socket file descriptor to Epoll instance.", 1);
-	}
 	log("The server construction is now complete. The server is ready to accept incoming connections.", 1);
 }
 
@@ -104,7 +105,6 @@ void	Server::startingServer()
 */
 void Server::serverExecution()
 {
-	
 	while (true)
 	{
 		int nfds = epoll_wait(this->_epoll_fd, this->_events, MAX_EVENTS, -1);
@@ -191,8 +191,14 @@ void Server::handle_client(ListeningSocket *list)
 		return ;
 	}
 	getServConfig(client, list);
+	if (this->currentConfig == NULL)
+		return ;
 
-	std::string filePath = findPath(receivedLine, *currentConfig);
+	// std::cout << *this->currentConfig << std::endl; // TEST
+	
+	receivedLine = readBody(client, &receivedLine);
+
+	std::string filePath = findPath(receivedLine);
 	if (filePath == "")
 	{
 		filePath = currentConfig->getErrorPage(404);
@@ -205,7 +211,7 @@ void Server::handle_client(ListeningSocket *list)
 	}
 	else if (client->getMethod() == "POST")
 	{
-		ft_post(*client, filePath, currentConfig);
+		ft_post(*client, filePath);
 		delete client;
 	}
 	else if (client->getMethod() == "DELETE")
@@ -226,6 +232,7 @@ void Server::handle_client(ListeningSocket *list)
 
 void	Server::getServConfig(Client *client, ListeningSocket *list)
 {
+	(void)list;
 	this->currentConfig = NULL;
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
 	for (; it < this->tab_serv.end(); it++)
@@ -236,20 +243,21 @@ void	Server::getServConfig(Client *client, ListeningSocket *list)
 			break;
 		}
 	}
-	if (this->currentConfig == NULL)
+	std::string name = "";
+	std::string referer = client->getReferer();
+	size_t startname = referer.rfind("/");
+	if (startname != std::string::npos)
+		name = referer.substr(startname+1);
+	std::cout << "referer = " << name << std::endl; // test
+	if (this->currentConfig == NULL && name != "")
 	{
 		it = this->tab_serv.begin();
 		for (; it < this->tab_serv.end(); it++)
 		{
-			std::vector<int> tab = it->getPortTab();
-			std::vector<int>::iterator itTab = tab.begin();
-			for (; itTab < tab.end(); itTab++)
+			if (it->getServerName() == name)
 			{
-				if (list->getPort() == *itTab)
-				{
-					this->currentConfig = &(*it);
-					break;
-				}
+				this->currentConfig = &(*it);
+				break;
 			}
 		}
 	}
@@ -301,16 +309,16 @@ void Server::ft_get(std::string filePath) // a revoir
 }
 
 /*response to a POST request*/
-void Server::ft_post(Client client, std::string filePath, ServerConfiguration *serv) // a revoir surtout au niveau de la requete
+void Server::ft_post(Client client, std::string filePath) // a revoir surtout au niveau de la requete
 {
 	log("Server's receive a POST request.", 1);
 	Cgi *cgi = new Cgi();
 
-	std::map<std::string, std::string> tmp = serv->getPathInfoCgi();
+	std::map<std::string, std::string> tmp = this->currentConfig->getPathInfoCgi();
 
 	cgi->setPathInfoCgi(&tmp);
 	cgi->setPath(filePath.c_str());
-	cgi->setEnv(serv, client); 
+	cgi->setEnv(this->currentConfig, client); 
 	std::string content = cgi->executeCgi();
 
 	std::string mimeType = getMimeType();
@@ -454,7 +462,7 @@ void	Server::dlFile(std::string *receivedLine, Client *client)
 
 std::string	Server::readFileContent(const std::string &path)
 {
-	std::ifstream file(path.c_str(), std::ios::binary);
+	std::ifstream file(path.c_str());
 
 	if (!file.is_open())
 	{
@@ -484,7 +492,7 @@ void	Server::saveFile(const std::string &filename, const std::string &data) // P
 
 std::string	Server::getMimeType()
 {
-	if (this->_path == "/")
+	if (this->_path == "/" || this->_path == ("/" + this->currentConfig->getServerName()))
 		return ("text/html");
 	
 	if (this->mimePath.find(this->_extensionPath) != this->mimePath.end())
@@ -544,7 +552,7 @@ std::string	Server::readBody(Client *client, std::string *receivedLine)
 	}
 		std::ofstream file("request.txt");
 		if (file.is_open()) {
-			file << receivedLine;
+			file << *receivedLine;
 			file.close();
 			log("File is created.", 1);
 		} 
@@ -553,7 +561,7 @@ std::string	Server::readBody(Client *client, std::string *receivedLine)
 	return (*receivedLine);
 }
 
-std::string Server::findPath(const std::string &receivedLine, ServerConfiguration serv)
+std::string Server::findPath(const std::string &receivedLine)
 {
 	size_t path_start = receivedLine.find('/');
 	if (path_start == std::string::npos)
@@ -564,17 +572,19 @@ std::string Server::findPath(const std::string &receivedLine, ServerConfiguratio
 		log("Path_end failed.", 2);
 	this->_path = receivedLine.substr(path_start, path_end - path_start);
 
-	if (this->_path == "/")
+	std::cout << "path-ask : " << this->_path << std::endl; // TEST
+
+	if (this->_path == "/" || this->_path == ("/" + this->currentConfig->getServerName()))
 	{
 		this->_status_code = 0;
-		return (serv.getRootIndex());
+		return (this->currentConfig->getRootIndex());
 	}
 
 	size_t ext = this->_path.rfind(".");
 	if (ext == std::string::npos)
 	{
 		this->_status_code = 400;
-		return (serv.getErrorPage(400));
+		return (this->currentConfig->getErrorPage(400));
 	}
 	size_t extend = this->_path.size();
 	std::string extension = this->_path.substr(ext, (extend - ext));
@@ -582,7 +592,9 @@ std::string Server::findPath(const std::string &receivedLine, ServerConfiguratio
 	{
 		this->_extensionPath = extension;
 		this->_status_code = 0;
-		return (serv.getRoot() + this->extpath[extension] + this->_path);
+		std::string test = this->currentConfig->getimHere() + this->currentConfig->getRoot() + this->extpath[extension] + this->_path; // TEST
+		std::cout << "Absolute-path asked : " << test << std::endl; // TEST
+		return (this->currentConfig->getimHere() + this->currentConfig->getRoot() + this->extpath[extension] + this->_path);
 	}
 	
 	log("Extension of the files was not recognize.", 1);
@@ -696,7 +708,7 @@ std::map<std::string, std::string>	Server::createMimePath()
 	mimePath[".png"] = "image/png";
 	mimePath[".gif"] = "image/gif";
 	mimePath[".bmp"] = "image/bmp";
-	mimePath[".ico"] = "image/x-icon";
+	mimePath[".ico"] = "images/icons";
 	mimePath[".webp"] = "image/webp";
 	mimePath[".svg"] = "image/svg+xml";
 	mimePath[".mp4"] = "video/mp4";

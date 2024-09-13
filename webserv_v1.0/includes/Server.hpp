@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 11:47:59 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 12:36:31 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ class Server
 		std::map<std::string, std::string>					createMimePath();
 		void												creatAllListeningSockets();
 		void												handle_client(ListeningSocket *list);
-		std::string											findPath(const std::string &receivedLine, ServerConfiguration serv);
+		std::string											findPath(const std::string &receivedLine);
 		void												ft_get(std::string filePath);
-		void												ft_post(Client client, std::string filePath, ServerConfiguration *serv);
+		void												ft_post(Client client, std::string filePath);
 		void												ft_delete(std::string filePath);
 		void												ft_badRequest();
 		std::string											readFileContent(const std::string &path);

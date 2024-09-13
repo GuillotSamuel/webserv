@@ -1,48 +1,355 @@
-	[INFO][11:50:31] : Getprotobyname Succed.
-	[INFO][11:50:31] : Socket_fd in now created.
-	[INFO][11:50:31] : Socket_fd in now set.
-	[INFO][11:50:31] : Socket_fd is binded.
-	[INFO][11:50:31] : Socket_fd is non blocking fd.
-	[INFO][11:50:31] : Socket_fd is now listening every attemp of connection.
-	[INFO][11:50:31] : Getprotobyname Succed.
-	[INFO][11:50:31] : Socket_fd in now created.
-	[INFO][11:50:31] : Socket_fd in now set.
-	[INFO][11:50:31] : Socket_fd is binded.
-	[INFO][11:50:31] : Socket_fd is non blocking fd.
-	[INFO][11:50:31] : Socket_fd is now listening every attemp of connection.
-	[INFO][11:50:31] : Getprotobyname Succed.
-	[INFO][11:50:31] : Socket_fd in now created.
-	[INFO][11:50:31] : Socket_fd in now set.
-	[INFO][11:50:31] : Socket_fd is binded.
-	[INFO][11:50:31] : Socket_fd is non blocking fd.
-	[INFO][11:50:31] : Socket_fd is now listening every attemp of connection.
-[INFO][11:50:31] : Starting Server.
-	[INFO][11:50:31] : Epoll instance successfully created.
-	[INFO][11:50:31] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][11:50:31] : The server construction is now complete. The server is ready to accept incoming connections.
-[INFO][11:50:59] : [NEW REQUEST]
-	[INFO][11:50:59] : Server did accept the connection.
-	[INFO][11:50:59] : Server's receive a GET request.
-	[INFO][11:50:59] : The file given cannot be found.
-	[INFO][11:50:59] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/html/index.html" was found empty.
-	[INFO][11:50:59] : The file given cannot be found.
-	[INFO][11:50:59] : Server's ready to respond.
-	[INFO][11:50:59] : Closing the connection with the client.
-[INFO][11:51:09] : [NEW REQUEST]
-	[INFO][11:51:09] : Server did accept the connection.
-	[INFO][11:51:09] : Server's receive a GET request.
-	[INFO][11:51:09] : The file given cannot be found.
-	[INFO][11:51:09] : The file requested "404.html" was found empty.
-	[INFO][11:51:09] : The file given cannot be found.
-	[INFO][11:51:09] : Server's ready to respond.
-	[INFO][11:51:09] : Closing the connection with the client.
-[INFO][11:51:11] : [NEW REQUEST]
-	[INFO][11:51:11] : Server did accept the connection.
-	[INFO][11:51:11] : Server's receive a GET request.
-	[INFO][11:51:11] : The file given cannot be found.
-	[INFO][11:51:11] : The file requested "404.html" was found empty.
-	[INFO][11:51:11] : The file given cannot be found.
-	[INFO][11:51:11] : Server's ready to respond.
-	[INFO][11:51:11] : Closing the connection with the client.
-	[ERROR][11:51:14] : The call to epoll_wait failed.
-	[INFO][11:51:14] : Shutting down the server properly.
+	[INFO][14:14:22] : Getprotobyname Succed.
+	[INFO][14:14:22] : Socket_fd in now created.
+	[INFO][14:14:22] : Socket_fd in now set.
+	[INFO][14:14:22] : Socket_fd is binded.
+	[INFO][14:14:22] : Socket_fd is non blocking fd.
+	[INFO][14:14:22] : Socket_fd is now listening every attemp of connection.
+	[INFO][14:14:22] : Getprotobyname Succed.
+	[INFO][14:14:22] : Socket_fd in now created.
+	[INFO][14:14:22] : Socket_fd in now set.
+	[INFO][14:14:22] : Socket_fd is binded.
+	[INFO][14:14:22] : Socket_fd is non blocking fd.
+	[INFO][14:14:22] : Socket_fd is now listening every attemp of connection.
+	[INFO][14:14:22] : Getprotobyname Succed.
+	[INFO][14:14:22] : Socket_fd in now created.
+	[INFO][14:14:22] : Socket_fd in now set.
+	[INFO][14:14:22] : Socket_fd is binded.
+	[INFO][14:14:22] : Socket_fd is non blocking fd.
+	[INFO][14:14:22] : Socket_fd is now listening every attemp of connection.
+[INFO][14:14:22] : Starting Server.
+	[INFO][14:14:22] : Epoll instance successfully created.
+	[INFO][14:14:22] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][14:14:22] : The server construction is now complete. The server is ready to accept incoming connections.
+[INFO][14:14:33] : [NEW REQUEST]
+	[INFO][14:14:33] : Server did accept the connection.
+	[INFO][14:14:33] : File is created.
+	[INFO][14:14:33] : Server's receive a GET request.
+	[INFO][14:14:33] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/html/index.html" was found.
+	[INFO][14:14:33] : Server's ready to respond.
+	[INFO][14:14:33] : Closing the connection with the client.
+[INFO][14:14:33] : [NEW REQUEST]
+	[INFO][14:14:33] : Server did accept the connection.
+	[INFO][14:14:33] : File is created.
+	[INFO][14:14:33] : Server's receive a GET request.
+	[INFO][14:14:33] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/styles/styles.css" was found.
+	[INFO][14:14:33] : Server's ready to respond.
+	[INFO][14:14:33] : Closing the connection with the client.
+[INFO][14:14:33] : [NEW REQUEST]
+	[INFO][14:14:33] : Server did accept the connection.
+	[INFO][14:14:33] : File is created.
+	[INFO][14:14:33] : Server's receive a GET request.
+	[INFO][14:14:33] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/scripts/script.js" was found.
+	[INFO][14:14:33] : Server's ready to respond.
+	[INFO][14:14:33] : Closing the connection with the client.
+[INFO][14:14:33] : [NEW REQUEST]
+	[INFO][14:14:33] : Server did accept the connection.
+	[ERROR][14:14:33] : Can't retrieve the server connected to this socket
+[INFO][14:14:33] : [NEW REQUEST]
+	[INFO][14:14:33] : Server did accept the connection.
+	[ERROR][14:14:33] : Can't retrieve the server connected to this socket
+[INFO][14:14:34] : [NEW REQUEST]
+	[INFO][14:14:34] : Server did accept the connection.
+	[INFO][14:14:34] : File is created.
+	[INFO][14:14:34] : Server's receive a GET request.
+	[INFO][14:14:34] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/images/icons/favicon.ico" was found.
+	[INFO][14:14:34] : Server's ready to respond.
+	[INFO][14:14:34] : Closing the connection with the client.
+[INFO][14:14:47] : [NEW REQUEST]
+	[INFO][14:14:47] : Server did accept the connection.
+	[INFO][14:14:47] : File is created.
+	[INFO][14:14:47] : Server's receive a GET request.
+	[INFO][14:14:47] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/index.html" was found.
+	[INFO][14:14:47] : Server's ready to respond.
+	[INFO][14:14:47] : Closing the connection with the client.
+[INFO][14:14:47] : [NEW REQUEST]
+	[INFO][14:14:47] : Server did accept the connection.
+	[INFO][14:14:47] : File is created.
+	[INFO][14:14:47] : Server's receive a GET request.
+	[INFO][14:14:47] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
+	[INFO][14:14:47] : Server's ready to respond.
+	[INFO][14:14:47] : Closing the connection with the client.
+[INFO][14:14:55] : [NEW REQUEST]
+	[INFO][14:14:55] : Server did accept the connection.
+	[INFO][14:14:55] : File is created.
+	[INFO][14:14:55] : Server's receive a GET request.
+	[INFO][14:14:55] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/html/index.html" was found.
+	[INFO][14:14:55] : Server's ready to respond.
+	[INFO][14:14:55] : Closing the connection with the client.
+[INFO][14:14:56] : [NEW REQUEST]
+	[INFO][14:14:56] : Server did accept the connection.
+	[INFO][14:14:56] : File is created.
+	[INFO][14:14:56] : Server's receive a GET request.
+	[INFO][14:14:56] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/styles/styles.css" was found.
+	[INFO][14:14:56] : Server's ready to respond.
+	[INFO][14:14:56] : Closing the connection with the client.
+[INFO][14:14:56] : [NEW REQUEST]
+	[INFO][14:14:56] : Server did accept the connection.
+	[INFO][14:14:56] : File is created.
+	[INFO][14:14:56] : Server's receive a GET request.
+	[INFO][14:14:56] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/scripts/script.js" was found.
+	[INFO][14:14:56] : Server's ready to respond.
+	[INFO][14:14:56] : Closing the connection with the client.
+[INFO][14:14:56] : [NEW REQUEST]
+	[INFO][14:14:56] : Server did accept the connection.
+	[ERROR][14:14:56] : Can't retrieve the server connected to this socket
+[INFO][14:14:56] : [NEW REQUEST]
+	[INFO][14:14:56] : Server did accept the connection.
+	[ERROR][14:14:56] : Can't retrieve the server connected to this socket
+[INFO][14:14:57] : [NEW REQUEST]
+	[INFO][14:14:57] : Server did accept the connection.
+	[INFO][14:14:57] : File is created.
+	[INFO][14:14:57] : Server's receive a GET request.
+	[INFO][14:14:57] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/images/icons/favicon.ico" was found.
+	[INFO][14:14:57] : Server's ready to respond.
+	[INFO][14:14:57] : Closing the connection with the client.
+[INFO][14:15:02] : [NEW REQUEST]
+	[INFO][14:15:02] : Server did accept the connection.
+	[INFO][14:15:02] : File is created.
+	[INFO][14:15:02] : Server's receive a GET request.
+	[INFO][14:15:02] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/html/gallery.html" was found.
+	[INFO][14:15:02] : Server's ready to respond.
+	[INFO][14:15:02] : Closing the connection with the client.
+[INFO][14:15:03] : [NEW REQUEST]
+	[INFO][14:15:03] : Server did accept the connection.
+	[ERROR][14:15:03] : Can't retrieve the server connected to this socket
+[INFO][14:15:03] : [NEW REQUEST]
+	[INFO][14:15:03] : Server did accept the connection.
+	[ERROR][14:15:03] : Can't retrieve the server connected to this socket
+	[ERROR][14:15:06] : The call recv failed.
+	[ERROR][14:15:06] : Server could not read anything from client. The client will be remove.
+	[ERROR][14:15:06] : The call recv failed.
+	[ERROR][14:15:06] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:08] : The connexion has been interrupted.
+	[ERROR][14:15:08] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:08] : The connexion has been interrupted.
+	[ERROR][14:15:08] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:08] : [NEW REQUEST]
+	[INFO][14:15:08] : Server did accept the connection.
+[INFO][14:15:08] : [NEW REQUEST]
+	[INFO][14:15:08] : Server did accept the connection.
+[INFO][14:15:08] : [NEW REQUEST]
+	[INFO][14:15:08] : Server did accept the connection.
+[INFO][14:15:08] : [NEW REQUEST]
+	[INFO][14:15:08] : Server did accept the connection.
+	[ERROR][14:15:08] : Can't retrieve the server connected to this socket
+	[ERROR][14:15:08] : The call recv failed.
+	[ERROR][14:15:08] : Server could not read anything from client. The client will be remove.
+	[ERROR][14:15:08] : The call recv failed.
+	[ERROR][14:15:08] : Server could not read anything from client. The client will be remove.
+	[ERROR][14:15:08] : The call recv failed.
+	[ERROR][14:15:08] : Server could not read anything from client. The client will be remove.
+	[ERROR][14:15:08] : The call recv failed.
+	[ERROR][14:15:08] : Server could not read anything from client. The client will be remove.
+	[ERROR][14:15:08] : The call recv failed.
+	[ERROR][14:15:08] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:08] : The connexion has been interrupted.
+	[ERROR][14:15:08] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:08] : The connexion has been interrupted.
+	[ERROR][14:15:08] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:08] : [NEW REQUEST]
+	[INFO][14:15:08] : Server did accept the connection.
+	[INFO][14:15:08] : File is created.
+	[INFO][14:15:08] : Server's receive a GET request.
+	[INFO][14:15:08] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/html/index.html" was found.
+	[INFO][14:15:08] : Server's ready to respond.
+	[INFO][14:15:08] : Closing the connection with the client.
+[INFO][14:15:08] : [NEW REQUEST]
+	[INFO][14:15:08] : Server did accept the connection.
+	[INFO][14:15:08] : File is created.
+	[INFO][14:15:08] : Server's receive a GET request.
+	[INFO][14:15:08] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/styles/styles.css" was found.
+	[INFO][14:15:08] : Server's ready to respond.
+	[INFO][14:15:08] : Closing the connection with the client.
+[INFO][14:15:08] : [NEW REQUEST]
+	[INFO][14:15:08] : Server did accept the connection.
+	[INFO][14:15:08] : File is created.
+	[INFO][14:15:08] : Server's receive a GET request.
+	[INFO][14:15:08] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/scripts/script.js" was found.
+	[INFO][14:15:08] : Server's ready to respond.
+	[INFO][14:15:08] : Closing the connection with the client.
+[INFO][14:15:08] : [NEW REQUEST]
+	[INFO][14:15:08] : Server did accept the connection.
+	[ERROR][14:15:08] : Can't retrieve the server connected to this socket
+[INFO][14:15:08] : [NEW REQUEST]
+	[INFO][14:15:08] : Server did accept the connection.
+	[ERROR][14:15:08] : Can't retrieve the server connected to this socket
+[INFO][14:15:09] : [NEW REQUEST]
+	[INFO][14:15:09] : Server did accept the connection.
+	[INFO][14:15:09] : File is created.
+	[INFO][14:15:09] : Server's receive a GET request.
+	[INFO][14:15:09] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/images/icons/favicon.ico" was found.
+	[INFO][14:15:09] : Server's ready to respond.
+	[INFO][14:15:09] : Closing the connection with the client.
+	[ERROR][14:15:10] : The call recv failed.
+	[ERROR][14:15:10] : Server could not read anything from client. The client will be remove.
+	[ERROR][14:15:10] : The call recv failed.
+	[ERROR][14:15:10] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:11] : [NEW REQUEST]
+	[INFO][14:15:11] : Server did accept the connection.
+	[INFO][14:15:11] : File is created.
+	[INFO][14:15:11] : Server's receive a GET request.
+	[INFO][14:15:11] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/form.html" was found.
+	[INFO][14:15:11] : Server's ready to respond.
+	[INFO][14:15:11] : Closing the connection with the client.
+[INFO][14:15:12] : [NEW REQUEST]
+	[INFO][14:15:12] : Server did accept the connection.
+	[ERROR][14:15:12] : Can't retrieve the server connected to this socket
+[INFO][14:15:13] : The connexion has been interrupted.
+	[ERROR][14:15:13] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:14] : [NEW REQUEST]
+	[INFO][14:15:14] : Server did accept the connection.
+	[INFO][14:15:14] : File is created.
+	[INFO][14:15:14] : Server's receive a GET request.
+	[INFO][14:15:14] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/form.html" was found.
+	[INFO][14:15:14] : Server's ready to respond.
+	[INFO][14:15:14] : Closing the connection with the client.
+[INFO][14:15:14] : [NEW REQUEST]
+	[INFO][14:15:14] : Server did accept the connection.
+	[ERROR][14:15:14] : Can't retrieve the server connected to this socket
+[INFO][14:15:15] : The connexion has been interrupted.
+	[ERROR][14:15:15] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:15] : [NEW REQUEST]
+	[INFO][14:15:15] : Server did accept the connection.
+	[INFO][14:15:15] : File is created.
+	[INFO][14:15:15] : Server's receive a GET request.
+	[INFO][14:15:15] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/list.html" was found.
+	[INFO][14:15:15] : Server's ready to respond.
+	[INFO][14:15:15] : Closing the connection with the client.
+[INFO][14:15:15] : [NEW REQUEST]
+	[INFO][14:15:15] : Server did accept the connection.
+	[ERROR][14:15:15] : Can't retrieve the server connected to this socket
+[INFO][14:15:16] : The connexion has been interrupted.
+	[ERROR][14:15:16] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:18] : [NEW REQUEST]
+	[INFO][14:15:18] : Server did accept the connection.
+	[INFO][14:15:18] : File is created.
+	[INFO][14:15:18] : Server's receive a GET request.
+	[INFO][14:15:18] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/form.html" was found.
+	[INFO][14:15:18] : Server's ready to respond.
+	[INFO][14:15:18] : Closing the connection with the client.
+[INFO][14:15:18] : [NEW REQUEST]
+	[INFO][14:15:18] : Server did accept the connection.
+	[ERROR][14:15:18] : Can't retrieve the server connected to this socket
+[INFO][14:15:22] : The connexion has been interrupted.
+	[ERROR][14:15:22] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:24] : [NEW REQUEST]
+	[INFO][14:15:24] : Server did accept the connection.
+	[INFO][14:15:24] : File is created.
+	[INFO][14:15:24] : Server's receive a GET request.
+	[INFO][14:15:24] : The file given cannot be found.
+	[INFO][14:15:24] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/images/favicon.ico" was found empty.
+	[INFO][14:15:24] : The file given cannot be found.
+	[INFO][14:15:24] : Server's ready to respond.
+	[INFO][14:15:24] : Closing the connection with the client.
+[INFO][14:15:26] : [NEW REQUEST]
+	[INFO][14:15:26] : Server did accept the connection.
+	[INFO][14:15:26] : File is created.
+	[INFO][14:15:26] : Server's receive a GET request.
+	[INFO][14:15:26] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/form.html" was found.
+	[INFO][14:15:26] : Server's ready to respond.
+	[INFO][14:15:26] : Closing the connection with the client.
+[INFO][14:15:26] : [NEW REQUEST]
+	[INFO][14:15:26] : Server did accept the connection.
+	[ERROR][14:15:26] : Can't retrieve the server connected to this socket
+[INFO][14:15:31] : The connexion has been interrupted.
+	[ERROR][14:15:31] : Server could not read anything from client. The client will be remove.
+[INFO][14:15:31] : [NEW REQUEST]
+	[INFO][14:15:31] : Server did accept the connection.
+	[INFO][14:15:31] : File is created.
+	[INFO][14:15:31] : Server's receive a GET request.
+	[INFO][14:15:31] : The file given cannot be found.
+	[INFO][14:15:31] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/images/favicon.ico" was found empty.
+	[INFO][14:15:31] : The file given cannot be found.
+	[INFO][14:15:31] : Server's ready to respond.
+	[INFO][14:15:31] : Closing the connection with the client.
+[INFO][14:15:35] : [NEW REQUEST]
+	[INFO][14:15:35] : Server did accept the connection.
+	[INFO][14:15:35] : File is created.
+	[INFO][14:15:35] : Server's receive a GET request.
+	[INFO][14:15:35] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/html/index.html" was found.
+	[INFO][14:15:35] : Server's ready to respond.
+	[INFO][14:15:35] : Closing the connection with the client.
+[INFO][14:15:35] : [NEW REQUEST]
+	[INFO][14:15:35] : Server did accept the connection.
+	[INFO][14:15:35] : File is created.
+	[INFO][14:15:35] : Server's receive a GET request.
+	[INFO][14:15:35] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/styles/styles.css" was found.
+	[INFO][14:15:35] : Server's ready to respond.
+	[INFO][14:15:35] : Closing the connection with the client.
+[INFO][14:15:35] : [NEW REQUEST]
+	[INFO][14:15:35] : Server did accept the connection.
+	[INFO][14:15:35] : File is created.
+	[INFO][14:15:35] : Server's receive a GET request.
+	[INFO][14:15:35] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/scripts/script.js" was found.
+	[INFO][14:15:35] : Server's ready to respond.
+	[INFO][14:15:35] : Closing the connection with the client.
+[INFO][14:15:35] : [NEW REQUEST]
+	[INFO][14:15:35] : Server did accept the connection.
+	[ERROR][14:15:35] : Can't retrieve the server connected to this socket
+[INFO][14:15:35] : [NEW REQUEST]
+	[INFO][14:15:35] : Server did accept the connection.
+	[ERROR][14:15:35] : Can't retrieve the server connected to this socket
+[INFO][14:15:36] : [NEW REQUEST]
+	[INFO][14:15:36] : Server did accept the connection.
+	[INFO][14:15:36] : File is created.
+	[INFO][14:15:36] : Server's receive a GET request.
+	[INFO][14:15:36] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/images/icons/favicon.ico" was found.
+	[INFO][14:15:36] : Server's ready to respond.
+	[INFO][14:15:36] : Closing the connection with the client.
+	[ERROR][14:16:10] : The call recv failed.
+	[ERROR][14:16:10] : Server could not read anything from client. The client will be remove.
+	[ERROR][14:16:10] : The call recv failed.
+	[ERROR][14:16:10] : Server could not read anything from client. The client will be remove.
+[INFO][14:16:28] : [NEW REQUEST]
+	[INFO][14:16:28] : Server did accept the connection.
+	[INFO][14:16:28] : File is created.
+	[INFO][14:16:28] : Server's receive a GET request.
+	[INFO][14:16:28] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/html/index.html" was found.
+	[INFO][14:16:28] : Server's ready to respond.
+	[INFO][14:16:28] : Closing the connection with the client.
+[INFO][14:16:28] : [NEW REQUEST]
+	[INFO][14:16:28] : Server did accept the connection.
+	[INFO][14:16:28] : File is created.
+	[INFO][14:16:28] : Server's receive a GET request.
+	[INFO][14:16:28] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/styles/styles.css" was found.
+	[INFO][14:16:28] : Server's ready to respond.
+	[INFO][14:16:28] : Closing the connection with the client.
+[INFO][14:16:28] : [NEW REQUEST]
+	[INFO][14:16:28] : Server did accept the connection.
+	[INFO][14:16:28] : File is created.
+	[INFO][14:16:28] : Server's receive a GET request.
+	[INFO][14:16:28] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/scripts/script.js" was found.
+	[INFO][14:16:28] : Server's ready to respond.
+	[INFO][14:16:28] : Closing the connection with the client.
+[INFO][14:16:28] : [NEW REQUEST]
+	[INFO][14:16:28] : Server did accept the connection.
+[INFO][14:16:28] : [NEW REQUEST]
+	[INFO][14:16:28] : Server did accept the connection.
+	[ERROR][14:16:28] : The call recv failed.
+	[ERROR][14:16:28] : Server could not read anything from client. The client will be remove.
+	[ERROR][14:16:28] : Can't retrieve the server connected to this socket
+[INFO][14:16:50] : [NEW REQUEST]
+	[INFO][14:16:50] : Server did accept the connection.
+	[INFO][14:16:50] : File is created.
+	[INFO][14:16:50] : Server's receive a GET request.
+	[INFO][14:16:50] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/index.html" was found.
+	[INFO][14:16:50] : Server's ready to respond.
+	[INFO][14:16:50] : Closing the connection with the client.
+[INFO][14:16:50] : [NEW REQUEST]
+	[INFO][14:16:50] : Server did accept the connection.
+	[INFO][14:16:50] : File is created.
+	[INFO][14:16:50] : Server's receive a GET request.
+	[INFO][14:16:50] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
+	[INFO][14:16:50] : Server's ready to respond.
+	[INFO][14:16:50] : Closing the connection with the client.
+[INFO][14:16:51] : [NEW REQUEST]
+	[INFO][14:16:51] : Server did accept the connection.
+	[INFO][14:16:51] : File is created.
+	[INFO][14:16:51] : Server's receive a GET request.
+	[INFO][14:16:51] : The file given cannot be found.
+	[INFO][14:16:51] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/images/favicon.ico" was found empty.
+	[INFO][14:16:51] : The file given cannot be found.
+	[INFO][14:16:51] : Server's ready to respond.
+	[INFO][14:16:51] : Closing the connection with the client.
+	[ERROR][14:26:45] : The call to epoll_wait failed.
+	[INFO][14:26:45] : Shutting down the server properly.

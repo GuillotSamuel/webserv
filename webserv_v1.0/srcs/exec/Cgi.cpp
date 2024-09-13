@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:25:35 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/11 11:13:08 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 13:25:33 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ char	**Cgi::createArgv()
 {
 	char **argv;
 	char *here1 = getcwd(NULL, 0);
-	std::cout << here1 << std::endl; // TEST
 	std::string here(here1, strlen(here1));
 	std::string path(this->_path);
 	std::string absolutepath = here + path;

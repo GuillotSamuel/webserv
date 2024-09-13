@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 11:46:14 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 12:41:04 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,19 @@
 
 ServerConfiguration::ServerConfiguration()
 {
-	char *cRoot = getcwd(NULL, 0); // je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0/
-	std::string root_cpy(cRoot, strlen(cRoot));
-
-	// root_cpy += "/../website_gallery"; // a supprimere
-
-	this->root = root_cpy;
-	free(cRoot);
-	// this->_index =  root + "/www/default.html";
-
-	this->root_index = root + "/html/index.html"; // a supprimer
-	this->_pathInfoCgi[".py"] = "/usr/bin/python3";
-	this->errorPages[404] = root + "/www/error_pages/404.html";
-	this->port = -1;
-	this->_port.push_back(8080); // TEST BRUTFORCE
-	this->_port.push_back(8081); // TEST BRUTFORCE
-	this->_port.push_back(8082); // TEST BRUTFORCE
-
-	this->hostName = std::string("");
-	this->serverName = std::string("localhost"); // TEST PARSING
+	char *tmp = getcwd(NULL, 0);
+	std::string tmp2(tmp, strlen(tmp));
+	free(tmp);
+	this->hostName = "";
+	this->serverName = "";
+	this->strPort = "";
+	this->imHere = tmp2;
+	this->root = "";
+	this->root_index = "";
+	this->index = "";
+	this->uploadsLocation = "";
+	this->errorPagesLocation = "";
+	this->cgiBin_location = "";
 }
 
 ServerConfiguration::~ServerConfiguration(void)
@@ -54,6 +48,11 @@ ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &c
 		this->clientMaxBodySize = copy.clientMaxBodySize;
 	}
 	return (*this);
+}
+
+void ServerConfiguration::setRootIndex()
+{
+	this->root_index = this->imHere + this->root + HTML_FILES + "/" + this->index;
 }
 
 void ServerConfiguration::setLocation(std::string page, std::string location)
@@ -198,6 +197,11 @@ std::map<std::string, std::string> ServerConfiguration::getLocation(void) const
 std::vector<std::string> ServerConfiguration::getAllowedMethods(void) const
 {
 	return (this->allowed_methods);
+}
+
+std::string ServerConfiguration::getimHere() const
+{
+	return (this->imHere);
 }
 
 std::map<std::string, std::string> ServerConfiguration::getInfoMime(void) const
