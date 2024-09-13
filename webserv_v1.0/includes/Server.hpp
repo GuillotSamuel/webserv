@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 12:36:31 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 14:28:36 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ class Server
 		void												ft_set_uploads_location(std::vector<std::string> tokens);
 
 		void												creatAllSocket();
+
 	public:
 		void												startingServer();
 		void												serverExecution();
