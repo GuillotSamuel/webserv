@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/12 17:21:23 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:47:59 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,10 @@ class Server
 		void												ft_set_error_page_param(std::vector<std::string> tokens);
 		void												ft_set_root_param(std::vector<std::string> tokens);
 		void												ft_set_index_param(std::vector<std::string> tokens);
+		void												ft_set_allowed_methods(std::vector<std::string> tokens);
+		void												ft_set_cgi_bin_location(std::vector<std::string> tokens);
+		void												ft_set_errors_location(std::vector<std::string> tokens);
+		void												ft_set_uploads_location(std::vector<std::string> tokens);
 
 		void												creatAllSocket();
 	public:

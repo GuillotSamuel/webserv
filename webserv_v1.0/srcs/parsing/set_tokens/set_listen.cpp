@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_listen.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:41 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 13:30:55 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:32:29 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,26 @@
 
 void Server::ft_set_listen_param(std::vector<std::string> tokens)
 {
-	if (tokens.size() != 2)
+	if (tokens.size() != 2 || tokens[1].empty())
 	{
 		ft_invalid_line(tokens);
 	}
 
-	const std::string &str = tokens[1];
-
-	if (str.empty() || str[str.size() - 1] != ';')
+	for (size_t i = 0; i < tokens[1].size(); ++i)
 	{
-		error("invalid argument (listen): " + tokens[1]);
-	}
-
-	for (size_t i = 0; i < str.size() - 1; ++i)
-	{
-		if (!std::isdigit(str[i]))
+		if (!std::isdigit(tokens[1][i]))
 		{
-			error("non-numeric character in port number: " + str);
+			error("non-numeric character in port number: " + tokens[1]);
 		}
 	}
 
-	std::string num_str = str.substr(0, str.size() - 1); // A REVOIR
+	std::string num_str = tokens[1];
 	char *end;
 	long port = std::strtol(num_str.c_str(), &end, 10);
 
 	if (*end != '\0')
 	{
-		error("invalid argument (listen): " + str);
+		error("invalid argument (listen): " + tokens[1]);
 	}
 	else if (port < 0 || port > 65535)
 	{
@@ -60,8 +53,6 @@ void Server::ft_set_listen_param(std::vector<std::string> tokens)
 	{
 		error("forbiden port (listen argument): " + tokens[1]);
 	}
-
-	// std::cout << num_str << std::endl; // TEST
 
 	this->currentConfig->setPort(num_str);
 }

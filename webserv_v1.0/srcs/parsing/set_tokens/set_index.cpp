@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 14:07:06 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 16:12:56 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:32:20 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,10 @@
 
 void Server::ft_set_index_param(std::vector<std::string> tokens)
 {
-    if (tokens.size() != 2)
+    if (tokens.size() != 2 || tokens[1].empty())
     {
-        return (ft_invalid_line(tokens));
+        ft_invalid_line(tokens);
     }
 
-    std::string str = tokens[1];
-
-    if (!str.empty() && str[str.length() - 1] == ';')
-    {
-        str.erase(str.length() - 1, 1);
-    }
-    else
-    {
-        error("Error: invalid argument (index): " + tokens[1]);
-        return;
-    }
-
-    // std::cout << str << std::endl; // TEST
-
-    this->currentConfig->setIndex(str);
+    this->currentConfig->setIndex(tokens[1]);
 }

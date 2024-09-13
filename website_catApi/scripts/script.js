@@ -13,14 +13,14 @@ function fetchCatImage() {
             'x-api-key': 'YOUR_API_KEY'
         }
     })
-        .then(response => response.json())
-        .then(data => {
-            const imgElement = document.createElement('img');
-            imgElement.src = data[0].url;
-            imgElement.alt = 'A cute cat';
-            catContainer.appendChild(imgElement);
-        })
-        .catch(error => {
-            console.error('Error fetching cat image:', error);
-        });
+    .then(response => response.json())
+    .then(data => {
+        const imgElement = document.createElement('img');
+        imgElement.src = data[0].url;
+        imgElement.alt = 'A cute cat';
+        catContainer.appendChild(imgElement);
+    })
+    .catch(error => {
+        console.error('Error fetching cat image:', error);
+    });
 }

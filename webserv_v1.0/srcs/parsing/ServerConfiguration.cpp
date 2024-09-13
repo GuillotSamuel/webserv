@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 17:29:52 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:46:14 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ ServerConfiguration::ServerConfiguration()
 	char *cRoot = getcwd(NULL, 0); // je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0/
 	std::string root_cpy(cRoot, strlen(cRoot));
 
-	root_cpy += "/../website_gallery"; // a supprimer
+	// root_cpy += "/../website_gallery"; // a supprimere
 
 	this->root = root_cpy;
 	free(cRoot);
@@ -56,6 +56,16 @@ ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &c
 	return (*this);
 }
 
+void ServerConfiguration::setLocation(std::string page, std::string location)
+{
+	this->_location.insert(std::make_pair(page, location));
+}
+
+void ServerConfiguration::setAllowedMethods(std::vector<std::string> allowed_methods)
+{
+	this->allowed_methods = allowed_methods;
+}
+
 void ServerConfiguration::setPort(std::string str)
 {
 	int n;
@@ -63,9 +73,24 @@ void ServerConfiguration::setPort(std::string str)
 	this->_port.push_back(n);
 }
 
-void ServerConfiguration::setLocation(std::string page, std::string location)
+void ServerConfiguration::setUploadsLocation(std::string str)
 {
-	this->_location.insert(std::make_pair(page, location));
+	this->uploadsLocation = str;
+}
+
+void ServerConfiguration::setErrorPagesLocation(std::string str)
+{
+	this->errorPagesLocation = str;
+}
+
+void ServerConfiguration::setPathInfoCgi(std::string extension, std::string location)
+{
+	this->_location.insert(std::make_pair(extension, location));
+}
+
+void ServerConfiguration::setCgiBinLocation(std::string str)
+{
+	this->cgiBin_location = str;
 }
 
 void ServerConfiguration::setHostName(std::string str)
@@ -78,7 +103,7 @@ void ServerConfiguration::setServerName(std::string str)
 	this->serverName = str;
 }
 
-void ServerConfiguration::setErrorPage(int code, std::string str)
+void ServerConfiguration::setErrorPages(int code, std::string str)
 {
 	this->errorPages[code] = str;
 }
@@ -98,6 +123,11 @@ void ServerConfiguration::setRoot(std::string str)
 void ServerConfiguration::setIndex(std::string str)
 {
 	this->index = str;
+}
+
+int ServerConfiguration::getPort(void) const
+{
+	return (this->port);
 }
 
 std::vector<int> ServerConfiguration::getPortTab(void) const
@@ -130,6 +160,11 @@ std::string ServerConfiguration::getRootIndex(void) const
 	return (this->root_index);
 }
 
+std::string ServerConfiguration::getUploadLocation() const
+{
+	return (this->uploadsLocation);
+}
+
 std::string ServerConfiguration::getErrorPage(int code) const
 {
 	std::map<int, std::string>::const_iterator it = this->errorPages.find(code);
@@ -144,6 +179,37 @@ std::string ServerConfiguration::getErrorPage(int code) const
 	}
 }
 
+std::string ServerConfiguration::getCgiLocation(void) const
+{
+	return (this->cgiBin_location);
+}
+
+
+std::string ServerConfiguration::getErrorPageLocation(void) const
+{
+	return (this->errorPagesLocation);
+}
+
+std::map<std::string, std::string> ServerConfiguration::getLocation(void) const
+{
+	return (this->_location);
+}
+
+std::vector<std::string> ServerConfiguration::getAllowedMethods(void) const
+{
+	return (this->allowed_methods);
+}
+
+std::map<std::string, std::string> ServerConfiguration::getInfoMime(void) const
+{
+	return (this->_pathInfoMime);
+}
+
+std::map<int, std::string> ServerConfiguration::getErrorPages(void) const
+{
+	return (this->errorPages);
+}
+
 int ServerConfiguration::getClientMaxBodySize(void) const
 {
 	return (this->clientMaxBodySize);
@@ -154,18 +220,62 @@ std::map<std::string, std::string> ServerConfiguration::getPathInfoCgi() const
 	return (this->_pathInfoCgi);
 }
 
-std::string ServerConfiguration::getIndex() const
+std::vector<ListeningSocket *> ServerConfiguration::getTabList() const
 {
-    return (this->index);
+	return (this->tab_list);
 }
 
-std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
+std::string ServerConfiguration::getIndex() const
 {
-	Cout << i.getClientMaxBodySize() << std::endl;
-    Cout << "Hostname : " << i.getHostName() << std::endl;
-    Cout << "serverName: "<< i.getServerName() << std::endl;
-    Cout << "Index :" << i.getIndex() << std::endl;
-    return (Cout);
+	return (this->index);
+}
+
+std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
+{
+	Cout << "Server name : " << sc.getServerName() << "\n\n";
+	Cout << "Path info mime map : \n";
+	std::map<std::string, std::string> info_mime_tab = sc.getInfoMime();
+	std::map<std::string, std::string>::iterator info_mime_it = info_mime_tab.begin();
+	for (; info_mime_it != info_mime_tab.end(); info_mime_it++)
+		Cout << info_mime_it->first << " : " << info_mime_it->second << "\n";
+	Cout << "Path info cgi map : \n";
+	std::map<std::string, std::string> path_info_tab = sc.getPathInfoCgi();
+	std::map<std::string, std::string>::iterator path_info_it = path_info_tab.begin();
+	for (; path_info_it != path_info_tab.end(); path_info_it++)
+		Cout << path_info_it->first << " : " << path_info_it->second << "\n";
+	Cout << "Location map : \n";
+	std::map<std::string, std::string> location_tab = sc.getLocation();
+	std::map<std::string, std::string>::iterator location_it = location_tab.begin();
+	for (; location_it != location_tab.end(); location_it++)
+		Cout << location_it->first << " : " << location_it->second << "\n";
+	Cout << "Error pages map: \n";
+	std::map<int, std::string> error_pages_tab = sc.getErrorPages();
+	std::map<int, std::string>::iterator error_pages_it = error_pages_tab.begin();
+	for (; error_pages_it != error_pages_tab.end(); error_pages_it++)
+		Cout << error_pages_it->first << " : " << error_pages_it->second << "\n";
+	Cout << "Host name : " << sc.getHostName() << "\n";
+	Cout << "Server name : " << sc.getServerName() << "\n";
+	Cout << "Str Port : " << sc.getStrPort() << "\n";
+	Cout << "Root : " << sc.getRoot() << "\n";
+	Cout << "Root index : " << sc.getRootIndex() << "\n";
+	Cout << "Index : " << sc.getIndex() << "\n";
+	Cout << "Upload location : " << sc.getUploadLocation() << "\n";
+	Cout << "Error Page Location : " << sc.getErrorPageLocation() << "\n";
+	Cout << "Cgi-bin location : " << sc.getCgiLocation() << "\n";
+	Cout << "Port vector : \n";
+	std::vector<int> port_tab = sc.getPortTab();
+	std::vector<int>::iterator port_it = port_tab.begin();
+	for (; port_it < port_tab.end(); port_it++)
+		Cout << *port_it << "\n";
+	Cout << "Allowed methods vector : \n";
+	std::vector<std::string> allowed_methods_tab = sc.getAllowedMethods();
+	std::vector<std::string>::iterator allowed_methods_it = allowed_methods_tab.begin();
+	for (; allowed_methods_it < allowed_methods_tab.end(); allowed_methods_it++)
+		Cout << *allowed_methods_it << "\n";
+	Cout << "Port : " << sc.getPort() << "\n";
+	Cout << "Client max body size : " << sc.getClientMaxBodySize() << "\n";	
+
+	return (Cout);
 }
 
 void ServerConfiguration::error(std::string errorType)

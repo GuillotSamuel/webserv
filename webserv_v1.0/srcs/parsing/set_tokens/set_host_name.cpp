@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:44 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 16:12:54 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:32:14 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,24 +63,10 @@ static bool ft_is_ip_address(const std::string& str)
 
 void Server::ft_set_host_name_param(std::vector<std::string> tokens)
 {
-    if (tokens.size() != 2)
+    if (tokens.size() != 2 || tokens[1].empty() || !ft_is_ip_address(tokens[1]))
     {
         ft_invalid_line(tokens);
     }
 
-    const std::string& str = tokens[1];
-
-    if (str.empty() || str[str.size() - 1] != ';')
-    {
-        error("invalid argument (listen): " + tokens[1]);
-    }
-    
-    if (!ft_is_ip_address(tokens[1].substr(0, tokens[1].size() - 1)))
-    {
-        ft_invalid_line(tokens);
-    }
-
-    // std::cout << tokens[1].substr(0, tokens[1].size() - 1) << std::endl; // TEST
-
-    this->currentConfig->setHostName(tokens[1].substr(0, tokens[1].size() - 1));
+    this->currentConfig->setHostName(tokens[1]);
 }

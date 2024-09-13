@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 17:25:15 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:49:34 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,16 @@ class ServerConfiguration
 		std::string							root;
 		std::string							root_index;
 		std::string							index;
+		std::string							uploadsLocation;
+		std::string							errorPagesLocation;
+		std::string							cgiBin_location;
 		std::vector<int>					_port;
+		std::vector<std::string>			allowed_methods;
 		int									port;
 		int									clientMaxBodySize;
+		std::vector<ListeningSocket*>		tab_list;
 
 	public:
-
 		/*---------------------------------------------------------------*/
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
 		/*---------------------------------------------------------------*/
@@ -64,7 +68,7 @@ class ServerConfiguration
 		/*---------------------------------------------------------------*/
 		/*                         OVERLOADED                            */
 		/*---------------------------------------------------------------*/
-		ServerConfiguration	&operator=(const ServerConfiguration &copy);
+		ServerConfiguration &operator=(const ServerConfiguration &copy);
 		
 		/*---------------------------------------------------------------*/
 		/*                            SETTER                             */
@@ -72,11 +76,16 @@ class ServerConfiguration
 		void								setPort(std::string str);
 		void								setHostName(std::string str);
 		void								setServerName(std::string str);
-		void								setErrorPage(int code, std::string str);
+		void								setErrorPages(int code, std::string str);
 		void								setClientMaxBodySize(std::string str);
 		void								setRoot(std::string str);
 		void								setIndex(std::string str);
 		void								setLocation(std::string page, std::string location);
+		void								setAllowedMethods(std::vector<std::string> allowed_methods);
+		void								setUploadsLocation(std::string str);
+		void								setErrorPagesLocation(std::string str);
+		void								setPathInfoCgi(std::string extension, std::string location);
+		void								setCgiBinLocation(std::string str);
 
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
@@ -84,13 +93,22 @@ class ServerConfiguration
 		std::string							getStrPort(void) const;
 		std::string							getRoot(void) const;
 		std::string							getRootIndex(void) const;
+		int									getPort(void) const;
 		std::vector<int>					getPortTab(void) const;
 		std::string							getHostName(void) const;
 		std::string							getServerName(void) const;
 		std::string							getErrorPage(int code) const;
+		std::map<int, std::string>			getErrorPages(void) const;
 		int									getClientMaxBodySize(void) const;
-		std::map<std::string, std::string>	getPathInfoCgi() const;
-		std::string							getIndex() const;
+		std::map<std::string, std::string>	getPathInfoCgi(void) const;
+		std::vector<ListeningSocket*>		getTabList(void) const;
+		std::string							getIndex(void) const;
+		std::string							getUploadLocation(void) const;
+		std::string							getErrorPageLocation(void) const;
+		std::string							getCgiLocation(void) const;
+		std::map<std::string, std::string>	getLocation(void) const;
+		std::map<std::string, std::string>	getInfoMime(void) const;
+		std::vector<std::string>			getAllowedMethods(void)const;
 
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */
