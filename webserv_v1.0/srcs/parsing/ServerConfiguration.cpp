@@ -6,62 +6,35 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 12:03:22 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/13 17:53:52 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 #include "ServerConfiguration.hpp"
 
-// ServerConfiguration::ServerConfiguration(void) :
-//     port(-1), hostName(std::string()),
-//     serverName(std::string()), errorPages(std::map<int, std::string>()),
-//     clientMaxBodySize(-1), _pathInfo(std::string()) {}
-
 ServerConfiguration::ServerConfiguration()
 {
-	char *cRoot = getcwd(NULL, 0); // je suis ici ->  /home/mmahfoud/ecole_42/webserv/webserv_v1.0/
-	std::string root_cpy(cRoot, strlen(cRoot));
-
-	root_cpy += "/../website_gallery"; // a supprimer
-
-	this->root = root_cpy;
-	free(cRoot);
-	// this->_index =  root + "/www/default.html";
-
-	this->root_index = root + "/html/index.html"; // a supprimer
-	this->_pathInfoCgi[".py"] = "/usr/bin/python3";
-	this->errorPages[404] = root + "/www/error_pages/404.html";
-	this->port = -1;
-	this->_port.push_back(8080); // TEST BRUTFORCE
-	this->_port.push_back(8081); // TEST BRUTFORCE
-	this->_port.push_back(8082); // TEST BRUTFORCE
-
-	this->hostName = std::string("");
-	this->serverName = std::string("localhost"); // TEST PARSING
+	char *tmp = getcwd(NULL, 0);
+	std::string tmp2(tmp, strlen(tmp));
+	free(tmp);
+	this->hostName = "";
+	this->serverName = "";
+	this->strPort = "";
+	this->imHere = tmp2;
+	this->root = "";
+	this->root_index = "";
+	this->index = "";
+	this->uploadsLocation = "";
+	this->errorPagesLocation = "";
+	this->cgiBin_location = "";
 }
-
-void ServerConfiguration::creatMultiPort()
-{
-	std::vector<int>::iterator it = this->_port.begin();
-	for (; it < this->_port.end(); it++)
-	{
-		this->tab_list.push_back(new ListeningSocket(*it));
-	}
-}
-
-// ServerConfiguration::ServerConfiguration(const ServerConfiguration &copy) :
-//     port(copy.port), hostName(copy.hostName),
-//     serverName(copy.serverName), errorPages(copy.errorPages),
-//     clientMaxBodySize(copy.clientMaxBodySize) {}
 
 ServerConfiguration::~ServerConfiguration(void)
 {
 	this->_pathInfoCgi.clear();
 	this->_pathInfoMime.clear();
 	this->errorPages.clear();
-	// this->_log->close();
-	// delete this->_log;
 }
 
 ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &copy)
@@ -77,6 +50,21 @@ ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &c
 	return (*this);
 }
 
+void ServerConfiguration::setRootIndex()
+{
+	this->root_index = this->imHere + this->root + HTML_FILES + "/" + this->index;
+}
+
+void ServerConfiguration::setLocation(std::string page, std::string location)
+{
+	this->_location.insert(std::make_pair(page, location));
+}
+
+void ServerConfiguration::setAllowedMethods(std::vector<std::string> allowed_methods)
+{
+	this->allowed_methods = allowed_methods;
+}
+
 void ServerConfiguration::setPort(std::string str)
 {
 	int n;
@@ -84,9 +72,24 @@ void ServerConfiguration::setPort(std::string str)
 	this->_port.push_back(n);
 }
 
-void ServerConfiguration::setLocation(std::string page, std::string location)
+void ServerConfiguration::setUploadsLocation(std::string str)
 {
-	this->_location.insert(std::make_pair(page, location));
+	this->uploadsLocation = str;
+}
+
+void ServerConfiguration::setErrorPagesLocation(std::string str)
+{
+	this->errorPagesLocation = str;
+}
+
+void ServerConfiguration::setPathInfoCgi(std::string extension, std::string location)
+{
+	this->_location.insert(std::make_pair(extension, location));
+}
+
+void ServerConfiguration::setCgiBinLocation(std::string str)
+{
+	this->cgiBin_location = str;
 }
 
 void ServerConfiguration::setHostName(std::string str)
@@ -99,7 +102,7 @@ void ServerConfiguration::setServerName(std::string str)
 	this->serverName = str;
 }
 
-void ServerConfiguration::setErrorPage(int code, std::string str)
+void ServerConfiguration::setErrorPages(int code, std::string str)
 {
 	this->errorPages[code] = str;
 }
@@ -156,6 +159,11 @@ std::string ServerConfiguration::getRootIndex(void) const
 	return (this->root_index);
 }
 
+std::string ServerConfiguration::getUploadLocation() const
+{
+	return (this->uploadsLocation);
+}
+
 std::string ServerConfiguration::getErrorPage(int code) const
 {
 	std::map<int, std::string>::const_iterator it = this->errorPages.find(code);
@@ -168,6 +176,42 @@ std::string ServerConfiguration::getErrorPage(int code) const
 		it = this->errorPages.find(404);
 		return (it->second);
 	}
+}
+
+std::string ServerConfiguration::getCgiLocation(void) const
+{
+	return (this->cgiBin_location);
+}
+
+
+std::string ServerConfiguration::getErrorPageLocation(void) const
+{
+	return (this->errorPagesLocation);
+}
+
+std::map<std::string, std::string> ServerConfiguration::getLocation(void) const
+{
+	return (this->_location);
+}
+
+std::vector<std::string> ServerConfiguration::getAllowedMethods(void) const
+{
+	return (this->allowed_methods);
+}
+
+std::string ServerConfiguration::getimHere() const
+{
+	return (this->imHere);
+}
+
+std::map<std::string, std::string> ServerConfiguration::getInfoMime(void) const
+{
+	return (this->_pathInfoMime);
+}
+
+std::map<int, std::string> ServerConfiguration::getErrorPages(void) const
+{
+	return (this->errorPages);
 }
 
 int ServerConfiguration::getClientMaxBodySize(void) const
@@ -185,12 +229,83 @@ std::vector<ListeningSocket *> ServerConfiguration::getTabList() const
 	return (this->tab_list);
 }
 
-std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &i)
+std::string ServerConfiguration::getIndex() const
 {
-	Cout << i.getClientMaxBodySize() << std::endl;
-	Cout << i.getHostName() << std::endl;
-	Cout << i.getPort() << std::endl;
-	Cout << i.getServerName() << std::endl;
+	return (this->index);
+}
+
+std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
+{
+	Cout << YELLOW << "\n---------------------------------------------------------------------\n\n" << RESET;
+	
+ 	Cout << WHITE << "Server name : " << RESET << CYAN << sc.getServerName() << RESET << "\n\n\n";
+	
+	Cout << WHITE << "Path info mime map : \n" << RESET;
+	std::map<std::string, std::string> info_mime_tab = sc.getInfoMime();
+	std::map<std::string, std::string>::iterator info_mime_it = info_mime_tab.begin();
+	for (; info_mime_it != info_mime_tab.end(); info_mime_it++)
+		Cout << CYAN << info_mime_it->first << " : " << info_mime_it->second << RESET << "\n";
+	Cout << "\n";
+	
+	Cout << WHITE << "Path info cgi map : \n" << RESET;
+	std::map<std::string, std::string> path_info_tab = sc.getPathInfoCgi();
+	std::map<std::string, std::string>::iterator path_info_it = path_info_tab.begin();
+	for (; path_info_it != path_info_tab.end(); path_info_it++)
+		Cout << CYAN << path_info_it->first << " : " << path_info_it->second << RESET << "\n";
+	Cout << "\n";
+	
+	Cout << WHITE << "Location map : \n" << RESET;
+	std::map<std::string, std::string> location_tab = sc.getLocation();
+	std::map<std::string, std::string>::iterator location_it = location_tab.begin();
+	for (; location_it != location_tab.end(); location_it++)
+		Cout << CYAN << location_it->first << " : " << location_it->second << RESET << "\n";
+	Cout << "\n";
+	
+	Cout << WHITE << "Error pages map: \n" << RESET;
+	std::map<int, std::string> error_pages_tab = sc.getErrorPages();
+	std::map<int, std::string>::iterator error_pages_it = error_pages_tab.begin();
+	for (; error_pages_it != error_pages_tab.end(); error_pages_it++)
+		Cout << CYAN << error_pages_it->first << " : " << error_pages_it->second << RESET << "\n";
+	Cout << "\n";
+	
+	Cout << WHITE << "Host name : " << RESET << CYAN << sc.getHostName() << RESET << "\n\n";
+	
+	Cout << WHITE << "Server name : " << RESET << CYAN << sc.getServerName() << RESET << "\n\n";
+	
+	Cout << WHITE << "Str Port : " << RESET << CYAN << sc.getStrPort() << RESET << "\n\n";
+	
+	Cout << WHITE << "Root : " << RESET << CYAN << sc.getRoot() << RESET << "\n\n";
+	
+	Cout << WHITE << "Root index : " << RESET << CYAN << sc.getRootIndex() << RESET << "\n\n";
+	
+	Cout << WHITE << "Index : " << RESET << CYAN << sc.getIndex() << RESET << "\n\n";
+	
+	Cout << WHITE << "Upload location : " << RESET << CYAN << sc.getUploadLocation() << RESET << "\n\n";
+	
+	Cout << WHITE << "Error Page Location : " << RESET << CYAN << sc.getErrorPageLocation() << RESET << "\n\n";
+	
+	Cout << WHITE << "Cgi-bin location : " << RESET << CYAN << sc.getCgiLocation() << RESET << "\n\n";
+	
+	Cout << WHITE << "Port vector : \n" << RESET;
+	std::vector<int> port_tab = sc.getPortTab();
+	std::vector<int>::iterator port_it = port_tab.begin();
+	for (; port_it < port_tab.end(); port_it++)
+		Cout << CYAN << *port_it << RESET << "\n";
+	Cout << "\n";
+	
+	Cout << WHITE << "Allowed methods vector : \n" << RESET;
+	std::vector<std::string> allowed_methods_tab = sc.getAllowedMethods();
+	std::vector<std::string>::iterator allowed_methods_it = allowed_methods_tab.begin();
+	for (; allowed_methods_it < allowed_methods_tab.end(); allowed_methods_it++)
+		Cout << CYAN << *allowed_methods_it << RESET << "\n";
+	Cout << "\n";
+	
+	Cout << WHITE << "Port : " << RESET << CYAN << sc.getPort() << RESET << "\n\n";
+	
+	Cout << WHITE << "Client max body size : " << RESET << CYAN << sc.getClientMaxBodySize() << RESET << "\n\n";
+
+	Cout << YELLOW << "---------------------------------------------------------------------\n" << RESET;
+
 	return (Cout);
 }
 

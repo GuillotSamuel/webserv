@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_server_name.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:31 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 11:08:07 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:40:43 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,10 @@
 
 void Server::ft_set_server_name_param(std::vector<std::string> tokens)
 {
-    if (tokens.size() != 2)
+    if (tokens.size() != 2 || tokens[1].empty())
     {
-        return (ft_invalid_line(tokens));
+        ft_invalid_line(tokens);
     }
 
-    std::string str = tokens[1];
-
-    if (!str.empty() && str[str.length() - 1] == ';')
-    {
-        str.erase(str.length() - 1, 1);
-    }
-    else
-    {
-        error("Error: invalid argument (server name): " + tokens[1]);
-        return;
-    }
-
-    std::cout << str << std::endl;
-
-    this->currentConfig->setServerName(str);
+    this->currentConfig->setServerName(tokens[1]);
 }

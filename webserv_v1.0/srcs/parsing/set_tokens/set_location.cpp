@@ -3,40 +3,83 @@
 /*                                                        :::      ::::::::   */
 /*   set_location.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:38 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 11:54:41 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:53:13 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
+void Server::ft_set_uploads_location(std::vector<std::string> tokens)
+{
+    if (tokens.size() != 3 || tokens[2].empty())
+    {
+        ft_invalid_line(tokens);
+    }
+
+    this->currentConfig->setUploadsLocation(tokens[2]);
+}
+
+void Server::ft_set_errors_location(std::vector<std::string> tokens)
+{
+    if (tokens.size() != 3 || tokens[2].empty())
+    {
+        ft_invalid_line(tokens);
+    }
+
+    this->currentConfig->setErrorPagesLocation(tokens[2]);
+}
+
+void Server::ft_set_cgi_bin_location(std::vector<std::string> tokens)
+{
+    if (tokens.size() < 4 || tokens.size() % 2 == 1)
+    {
+        ft_invalid_line(tokens);
+    }
+
+    for (size_t i = 0; i < tokens.size(); i++)
+    {
+        if (tokens[i].empty())
+        {
+            ft_invalid_line(tokens);
+        }
+    }
+    
+    this->currentConfig->setCgiBinLocation(tokens[1]);
+
+    size_t i = 2;
+    for (; (i + 1) < tokens.size(); i += 2)
+    {
+        this->currentConfig->setPathInfoCgi(tokens[i], tokens[i + 1]);
+    }
+}
+
 void Server::ft_set_location_param(std::vector<std::string> tokens)
 {
-    if (tokens.size() != 3)
+    for (size_t i = 0; i < tokens.size(); i++)
     {
-        return (ft_invalid_line(tokens));
+        if (tokens[i].empty())
+        {
+            ft_invalid_line(tokens);
+        }
     }
 
-    std::string page = tokens[1];
-	std::string location = tokens[2];
-
-    if (page.empty())
+    if (tokens[1] == "uploads")
     {
-        error("Error: invalid argument (location): " + page);
-        return;
+        ft_set_uploads_location(tokens);
     }
-
-    if (!location.empty() && location[location.length() - 1] == ';')
+    else if (tokens[1] == "errors")
     {
-        location.erase(location.length() - 1, 1);
+        ft_set_errors_location(tokens);
+    }
+    else if (tokens[1] == "cgi-bin")
+    {
+        ft_set_cgi_bin_location(tokens);
     }
     else
     {
-        error("Error: invalid argument (location): " + tokens[2]);
-        return;
+        ft_invalid_line(tokens);
     }
-
-	this->currentConfig->setLocation(page, location);
 }

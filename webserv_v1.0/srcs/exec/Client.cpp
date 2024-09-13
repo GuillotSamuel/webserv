@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/04 13:30:59 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:58:54 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ Client::Client()
 	this->_contentLength = "";
 	this->_contentType = "";
 	this->_boundary = "";
+	this->_fileOrDirRequested = "";
 }
 
 Client::~Client()
@@ -40,6 +41,15 @@ Client::~Client()
 
 void Client::setInfo(std::string info)
 {
+	size_t path_start = info.find('/');
+	if (path_start != std::string::npos)
+	{
+		path_start += 1;
+		size_t path_end = info.find(' ', path_start);
+		if (path_end != std::string::npos)
+			this->_fileOrDirRequested = info.substr(path_start, path_end - path_start);
+	}
+	
 	size_t methodEnd = info.find(" ");
 	if (methodEnd != std::string::npos)
 		this->setMethod(info.substr(0, methodEnd));
@@ -144,6 +154,11 @@ std::string	Client::getContentLength() const {
 
 std::string	Client::getBoundary() const {
 	return (this->_boundary);
+}
+
+std::string Client::getFileOrDirRequested() const
+{
+	return (this->_fileOrDirRequested);
 }
 
 void	Client::setMethod(std::string method) {

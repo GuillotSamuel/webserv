@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/11 18:47:44 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/13 16:16:44 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class Server
 		char												received_line[BUFFER_SIZE];
 		char												socket_buffer[BUFFER_SIZE];
 		std::vector<ServerConfiguration>					tab_serv;
+		std::vector<ListeningSocket*>						_listSockets;
 		std::map<std::string, std::string>					extpath;
 		std::map<std::string, std::string>					mimePath;
 		ServerConfiguration									*currentConfig;
@@ -47,22 +48,35 @@ class Server
 		/*---------------------------------------------------------------*/
 		/*                            METHOD                             */
 		/*---------------------------------------------------------------*/
+
 		std::map<std::string, std::string>					createExtPath();
 		std::map<std::string, std::string>					createMimePath();
-		void												handle_client(ServerConfiguration serv);
-		std::string											findPath(const std::string &receivedLine, ServerConfiguration serv);
+		void												creatAllListeningSockets();
+		void												handle_client(ListeningSocket *list);
+		std::string											findPath(const std::string &receivedLine);
 		void												ft_get(std::string filePath);
-		void												ft_post(Client client, std::string filePath, ServerConfiguration *serv);
+		void												ft_post(Client client, std::string filePath);
 		void												ft_delete(std::string filePath);
 		void												ft_badRequest();
 		std::string											readFileContent(const std::string &path);
 		std::string 										getMimeType();
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
-		std::string											readRequest(Client *client);
+		std::string											readHead(Client *client);
+		void												getServConfig(Client *client, ListeningSocket *list);
+		std::string											readBody(Client *client, std::string *receivedLine);
 		void												closeServer();
 		void												dlFile(std::string *receivedLine, Client *client);
 		void												parsing_g(int argc, char **argv);
+		void												check_parsing(void);
+		void												check_error_page(ServerConfiguration server_conf);
+		void												check_host_page(ServerConfiguration server_conf);
+		void												check_index(ServerConfiguration server_conf);
+		void												check_listen(ServerConfiguration server_conf);
+		void												check_location(ServerConfiguration server_conf);
+		void												check_max_body(ServerConfiguration server_conf);
+		void												check_root(ServerConfiguration server_conf);
+		void												check_server_name(ServerConfiguration server_conf);
 		void 												readConfigurationFile(const char *arg);
 		void												ft_tokenizer(std::string line);
 		void												error(std::string errorType);
@@ -77,8 +91,13 @@ class Server
 		void												ft_set_error_page_param(std::vector<std::string> tokens);
 		void												ft_set_root_param(std::vector<std::string> tokens);
 		void												ft_set_index_param(std::vector<std::string> tokens);
+		void												ft_set_allowed_methods(std::vector<std::string> tokens);
+		void												ft_set_cgi_bin_location(std::vector<std::string> tokens);
+		void												ft_set_errors_location(std::vector<std::string> tokens);
+		void												ft_set_uploads_location(std::vector<std::string> tokens);
 
 		void												creatAllSocket();
+
 	public:
 		void												startingServer();
 		void												serverExecution();
