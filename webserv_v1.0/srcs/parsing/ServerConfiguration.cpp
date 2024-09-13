@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 14:29:14 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 14:48:02 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,7 @@ std::string ServerConfiguration::getIndex() const
 
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 {
+	Cout << WHITE << "\n----------------------------------------------------------------------\n" << RESET;
  	Cout << WHITE << "Server name : " << RESET << CYAN << sc.getServerName() << RESET << "\n\n\n";
 	
 	Cout << WHITE << "Path info mime map : \n" << RESET;
@@ -301,6 +302,8 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 	Cout << WHITE << "Port : " << RESET << CYAN << sc.getPort() << RESET << "\n\n";
 	
 	Cout << WHITE << "Client max body size : " << RESET << CYAN << sc.getClientMaxBodySize() << RESET << "\n\n";
+
+	Cout << WHITE << "\n----------------------------------------------------------------------\n" << RESET;
 
 	return (Cout);
 }

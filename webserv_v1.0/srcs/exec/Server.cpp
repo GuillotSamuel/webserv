@@ -6,13 +6,14 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 14:29:16 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 22:43:13 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
 std::ofstream* Server::_log = NULL;
+
 /*----------------------------------------------------------------------------*/
 /*                               CONSTRUCTOR                                  */
 /*----------------------------------------------------------------------------*/
@@ -194,8 +195,6 @@ void Server::handle_client(ListeningSocket *list)
 	if (this->currentConfig == NULL)
 		return ;
 
-	// std::cout << *this->currentConfig << std::endl; // TEST
-	
 	receivedLine = readBody(client, &receivedLine);
 
 	std::string filePath = findPath(receivedLine);
@@ -232,37 +231,50 @@ void Server::handle_client(ListeningSocket *list)
 
 void	Server::getServConfig(Client *client, ListeningSocket *list)
 {
-	(void)list;
 	this->currentConfig = NULL;
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
 	for (; it < this->tab_serv.end(); it++)
 	{
-		if (it->getServerName() == client->getFileOrDirRequested())
+		std::cout << it->getServerName() << " " << client->getPath() << std::endl; // TEST
+		if (it->getServerName() == client->getPath())
 		{
 			this->currentConfig = &(*it);
-			break;
+			return ;
 		}
 	}
-	std::string name = "";
-	std::string referer = client->getReferer();
-	size_t startname = referer.rfind("/");
-	if (startname != std::string::npos)
-		name = referer.substr(startname+1);
-	std::cout << "referer = " << name << std::endl; // test
-	if (this->currentConfig == NULL && name != "")
+	if (this->currentConfig == NULL)
 	{
 		it = this->tab_serv.begin();
 		for (; it < this->tab_serv.end(); it++)
 		{
-			if (it->getServerName() == name)
+			std::cout << it->getHostName() << " " << client->getHost() << std::endl; // TEST
+			if (it->getHostName() == client->getHost())
 			{
 				this->currentConfig = &(*it);
-				break;
+				return ;
 			}
 		}
 	}
 	if (this->currentConfig == NULL)
-		log("Can't retrieve the server connected to this socket", 2);
+	{
+		it = this->tab_serv.begin();
+		for (; it < this->tab_serv.end(); it++)
+		{
+			std::vector<int> tab = it->getPortTab();
+			std::vector<int>::iterator itPort = tab.begin();
+			for (; itPort < tab.end(); itPort++)
+			{
+				std::cout << *itPort << " " << list->getPort() << std::endl; // TEST
+				if (*itPort == list->getPort())
+				{
+					this->currentConfig = &(*it);
+					return ;
+				}
+			}
+		}
+	}
+	std::cout << "bla" << std::endl;
+	this->currentConfig = NULL;
 }
 
 /*response to a GET request*/
@@ -299,7 +311,7 @@ void Server::ft_get(std::string filePath) // a revoir
 		oss << content.size();
 		response += "Content-Length: " + oss.str() + "\r\n";
 		response += "Connection: close\r\n";
-		response += "Server: webserv/1.0\r\n\r\n";
+		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 		response += content;
 	}
 
@@ -572,8 +584,6 @@ std::string Server::findPath(const std::string &receivedLine)
 		log("Path_end failed.", 2);
 	this->_path = receivedLine.substr(path_start, path_end - path_start);
 
-	std::cout << "path-ask : " << this->_path << std::endl; // TEST
-
 	if (this->_path == "/" || this->_path == ("/" + this->currentConfig->getServerName()))
 	{
 		this->_status_code = 0;
@@ -592,8 +602,6 @@ std::string Server::findPath(const std::string &receivedLine)
 	{
 		this->_extensionPath = extension;
 		this->_status_code = 0;
-		std::string test = this->currentConfig->getimHere() + this->currentConfig->getRoot() + this->extpath[extension] + this->_path; // TEST
-		std::cout << "Absolute-path asked : " << test << std::endl; // TEST
 		return (this->currentConfig->getimHere() + this->currentConfig->getRoot() + this->extpath[extension] + this->_path);
 	}
 	

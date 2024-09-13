@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:44 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 14:28:29 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/13 22:18:55 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ class Client
 		std::string	_contentType;
 		std::string	_contentLength;
 		std::string	_boundary;
-		std::string	_fileOrDirRequested;
+		std::string	_path;
+		std::string	_host;
 
 	public:
 
@@ -58,8 +59,8 @@ class Client
 		std::string getContentType() const;
 		std::string getContentLength() const;
 		std::string getBoundary() const;
-		std::string getFileOrDirRequested() const;
-
+		std::string getPath() const;
+		std::string	getHost() const;
 
 		/*---------------------------------------------------------------*/
 		/*                            SETTER                             */
@@ -73,6 +74,7 @@ class Client
 		void		setContentType(std::string contentType);
 		void		setContentLength(std::string contentLength);
 		void		setBoundary(std::string boundary);
+		void		setHost(std::string host);
 
 };
 
