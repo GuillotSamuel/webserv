@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 20:45:10 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/13 14:08:27 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@
 #define CSV_FILES "/data"
 #define ERROR_400_PAGE "/html/errors/400.html"
 #define CGI_FILES "/cgi-bin"
+
+#define RESET "\033[0m"
+#define CYAN "\033[36m"
+#define WHITE "\033[37m"
 
 class ListeningSocket;
 
