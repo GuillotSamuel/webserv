@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 18:30:20 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/13 18:31:15 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void Server::check_listen(ServerConfiguration server_conf)
 
 void Server::check_location(ServerConfiguration server_conf)
 {
+	(void)server_conf;
 /*	std::string path = server_conf.getRoot() + server_conf.getLocation();
 	
  	struct stat info;
