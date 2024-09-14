@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/14 17:42:35 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 22:52:27 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,7 @@ void	Server::startingServer()
 			exit(EXIT_FAILURE);
 		}
 	}
-		
-		log("Epoll_ctl successfully add the socket file descriptor to Epoll instance.", 1);
+	log("Epoll_ctl successfully add the socket file descriptor to Epoll instance.", 1);
 	log("The server construction is now complete. The server is ready to accept incoming connections.", 1);
 }
 
@@ -109,7 +108,6 @@ void Server::serverExecution()
 	while (true)
 	{
 		int nfds = epoll_wait(this->_epoll_fd, this->_events, MAX_EVENTS, -1);
-		std::cout << "evenement recue" << std::endl; // TEST
 		if (nfds == -1)
 			log("The call to epoll_wait failed.", 2);
 		if (g_signal == SIGNAL)
@@ -225,9 +223,9 @@ void Server::handle_client(ListeningSocket *list)
 		delete client;
 	}
 
-	write(this->_connexion_fd, this->socket_buffer, strlen(this->socket_buffer));
-	close(this->_connexion_fd);
-	log("Closing the connection with the client.", 1);
+	// write(this->_connexion_fd, this->socket_buffer, strlen(this->socket_buffer));
+	// close(this->_connexion_fd);
+	// log("Closing the connection with the client.", 1);
 }
 
 void	Server::getServConfig(Client *client, ListeningSocket *list)
@@ -311,10 +309,23 @@ void Server::ft_get(std::string filePath, Client *client) // a revoir
 		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 		response += content;
 	}
+	SendResponse(response, "GET");
+}
 
+void	Server::SendResponse(std::string response, std::string method)
+{
 	log("Server's ready to respond.", 1);
 	if (write(this->_connexion_fd, response.c_str(), response.size()) == -1)
-		log("Server's failed to respond to GET request.", 2);
+	{
+		int failed_count = 1;
+		while (failed_count < 5)
+		{
+			if (write(this->_connexion_fd, response.c_str(), response.size()) != -1)
+				return ;
+			failed_count++;
+		}
+		log("Server's failed to respond to " + method + " request.", 2);
+	}
 }
 
 /*response to a POST request*/
@@ -341,9 +352,7 @@ void Server::ft_post(Client client, std::string filePath) // a revoir surtout au
 	response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 	response += content;
 
-	log("Server's ready to respond.", 1);
-	if (write(this->_connexion_fd, response.c_str(), response.size()) == -1)
-		log("Server's failed to respond to POST request.", 2);
+	SendResponse(response, "POST");
 	delete cgi;
 }
 
@@ -364,9 +373,7 @@ void Server::ft_delete(std::string filePath) // a revoir
 		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 		response += "File not found";
 
-		log("Server's ready to respond.", 1);
-		if (write(this->_connexion_fd, response.c_str(), response.size()) == -1)
-			log("Server's failed to respond to DELETE request.", 2);
+		SendResponse(response, "DELETE");
 		return;
 	}
 
@@ -374,12 +381,9 @@ void Server::ft_delete(std::string filePath) // a revoir
 	{
 		std::string response = "HTTP/1.1 204 No Content\r\n";
 		response += "Connection: close\r\n";
-		response += "Server: webserv/1.0\r\n\r\n";
+		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 
-		log("Server's ready to respond.", 1);
-		if (write(this->_connexion_fd, response.c_str(), response.size()) == -1)
-			log("Server's failed to respond to DELETE request.", 2);
-
+		SendResponse(response, "DELETE");
 	}
 	else
 		log("Server failed to respond at the DELETE request.", 2);
@@ -399,21 +403,24 @@ void Server::ft_badRequest()
 	response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 	response += content;
 
-	log("The server did not understand this request.", 1);
-	write(this->_connexion_fd, response.c_str(), response.size());
+	SendResponse(response, "BAD REQUEST");
 }
 
 //Closing The server using key CTRL /C.
 void	Server::closeServer()
 {
 	log("Shutting down the server properly.", 1);
-	std::vector<ServerConfiguration>::iterator it = tab_serv.begin();
-	while (it != tab_serv.end())
+	_log->close();
+	delete _log;
+	std::vector<ListeningSocket*>::iterator itList = this->_listSockets.begin();
+	for (; itList < this->_listSockets.end(); itList++)
 	{
-		it++;
+		delete (*itList);
 	}
+	this->_listSockets.clear();
 	this->tab_serv.clear();
-	this->tab_serv.clear();
+	std::vector<ListeningSocket*>().swap(_listSockets);
+	std::vector<ServerConfiguration>().swap(tab_serv);
 	this->mimePath.clear();
 	this->extpath.clear();
 	close(this->_epoll_fd);
@@ -513,7 +520,6 @@ std::string	Server::getMimeType(Client *client)
 
 std::string	Server::readHead(Client *client)
 {
-	std::cout << "je vais lire!" << std::endl; // TEST
 	int n = recv(this->_connexion_fd, this->received_line, 4096, 0);
 	if (n < 0)
 	{
@@ -523,27 +529,16 @@ std::string	Server::readHead(Client *client)
 			int n = recv(this->_connexion_fd, this->received_line, 4096, 0);
 			if (n >= 0)
 			{
-				std::cout << "contenue trouve" << std::endl; // TEST
 				break;
 			}
 			if (n < 0 && error_count == 5)
 			{
-				std::cout << "contenue introuve" << std::endl; // TEST
 				log("The call recv failed.", 2);
-				std::cerr << "Error on recv: " << strerror(errno) << std::endl; // TEST
 				return ("");
 			}
 			error_count++;
 		}
 	}
-	// int n = recv(this->_connexion_fd, this->received_line, 4096, 0);
-	// if (n < 0)
-	// {
-	// 	std::cout << "contenue introuve" << std::endl; // TEST
-	// 	log("The call recv failed.", 2);
-	// 	std::cerr << "Error on recv: " << strerror(errno) << std::endl; // TEST
-	// 	return ("");
-	// }
 	if (n == 0)
 	{
 		log("The connexion has been interrupted.", 3);
@@ -610,6 +605,7 @@ std::string Server::findPath(Client *client)
 		t_location loc = obj[client->getPath()];
 
 		client->setFullPath(loc.real_path);
+		// if (client->getMethod() != loc.method_requested)
 	}
 
 	size_t ext = client->getFullPath().rfind(".");
@@ -718,20 +714,20 @@ std::map<std::string, std::string>	Server::createExtPath()
 	extPath[".woff"] = FONT_FILES;
 	extPath[".woff2"] = FONT_FILES;
 	extPath[".csv"] = CSV_FILES;
-	extPath[".py"] = CGI_FILES;
-	extPath[".sh"] = CGI_FILES;
-	extPath[".c"] = CGI_FILES;
-	extPath[".cpp"] = CGI_FILES;
-	extPath[".cs"] = CGI_FILES;
-	extPath[".java"] = CGI_FILES;
-	extPath[".js"] = CGI_FILES;
-	extPath[".lua"] = CGI_FILES;
-	extPath[".php"] = CGI_FILES;
-	extPath[".pl"] = CGI_FILES;
-	extPath[".py"] = CGI_FILES;
-	extPath[".rb"] = CGI_FILES;
-	extPath[".rs"] = CGI_FILES;
-	extPath[".sh"] = CGI_FILES;
+	// extPath[".py"] = CGI_FILES;
+	// extPath[".sh"] = CGI_FILES;
+	// extPath[".c"] = CGI_FILES;
+	// extPath[".cpp"] = CGI_FILES;
+	// extPath[".cs"] = CGI_FILES;
+	// extPath[".java"] = CGI_FILES;
+	// extPath[".js"] = CGI_FILES;
+	// extPath[".lua"] = CGI_FILES;
+	// extPath[".php"] = CGI_FILES;
+	// extPath[".pl"] = CGI_FILES;
+	// extPath[".py"] = CGI_FILES;
+	// extPath[".rb"] = CGI_FILES;
+	// extPath[".rs"] = CGI_FILES;
+	// extPath[".sh"] = CGI_FILES;
 	return (extPath);
 }
 

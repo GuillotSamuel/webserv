@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/14 17:40:18 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 22:55:48 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,7 @@ class ServerConfiguration
 		std::string							cgiBin_location;
 		std::vector<int>					_port;
 		std::vector<std::string>			allowed_methods;
-		int									port;
 		int									clientMaxBodySize;
-		std::vector<ListeningSocket*>		tab_list;
 		std::map<std::string, t_location>	locations;
 
 	public:
@@ -71,8 +69,6 @@ class ServerConfiguration
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
 		/*---------------------------------------------------------------*/
 		ServerConfiguration();
-		// ServerConfiguration(std::string port);
-		// ServerConfiguration(const ServerConfiguration &copy);
 		~ServerConfiguration(void);
 
 		/*---------------------------------------------------------------*/
@@ -112,7 +108,6 @@ class ServerConfiguration
 		std::map<int, std::string>			getErrorPages(void) const;
 		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi(void) const;
-		std::vector<ListeningSocket*>		getTabList(void) const;
 		std::string							getIndex(void) const;
 		std::string							getUploadLocation(void) const;
 		std::string							getErrorPageLocation(void) const;
@@ -122,6 +117,7 @@ class ServerConfiguration
 		std::map<std::string, t_location>	getTabLocation(void) const;
 		std::vector<std::string>			getAllowedMethods(void)const;
 		std::string							getimHere() const;
+
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */
 		/*---------------------------------------------------------------*/

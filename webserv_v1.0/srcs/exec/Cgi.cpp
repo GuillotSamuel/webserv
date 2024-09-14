@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:25:35 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 13:25:33 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 19:00:21 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,15 +106,6 @@ std::string	Cgi::executeCgi()
 
 		char **argv = this->createArgv();
 		char **envp = this->conversionEnvFunc();
-		// int i;
-
-		// fprintf(stderr, "%s\n%s\n", argv[0], argv[1]);
-		// i = 0;
-		// while (envp[i])
-		// {
-		// 	fprintf(stderr, "%s\n", envp[i]);
-		// 	i++;
-		// }
 		execve(argv[0], argv, envp);
 		error("Error: execve cgi failed");
 	}
