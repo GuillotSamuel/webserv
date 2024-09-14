@@ -23,7 +23,7 @@ body {
 
 header {
     padding: 20px;
-    background-image: url('../images/panther.webp');
+    background-image: url('../panther.webp');
     text-shadow:
         1px 1px 0 #fff,
         -1px -1px 0 #fff,

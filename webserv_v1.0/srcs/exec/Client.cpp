@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 11:58:54 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 17:41:14 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ Client::Client()
 	this->_contentLength = "";
 	this->_contentType = "";
 	this->_boundary = "";
-	this->_fileOrDirRequested = "";
+	this->_path = "";
+	this->_host = "";
 }
 
 Client::~Client()
@@ -40,20 +41,39 @@ Client::~Client()
 
 
 void Client::setInfo(std::string info)
-{
-	size_t path_start = info.find('/');
-	if (path_start != std::string::npos)
-	{
-		path_start += 1;
-		size_t path_end = info.find(' ', path_start);
-		if (path_end != std::string::npos)
-			this->_fileOrDirRequested = info.substr(path_start, path_end - path_start);
-	}
-	
+{	
 	size_t methodEnd = info.find(" ");
 	if (methodEnd != std::string::npos)
 		this->setMethod(info.substr(0, methodEnd));
 
+	size_t path_start = info.find('/');
+	if (path_start != std::string::npos)
+	{
+		size_t path_end = info.find(' ', path_start);
+		if (path_end != std::string::npos)
+		{
+			this->_fullPath = info.substr(path_start, path_end - path_start);
+			path_start += 1;
+			this->_path = info.substr(path_start, path_end - path_start);
+		}
+	}
+	
+	size_t host = info.find("Host: ");
+	if (host != std::string::npos)
+	{
+		host += 6;
+		size_t endHost = info.find("\r\n", host);
+		if (endHost != std::string::npos)
+		{
+			std::string tmphost = info.substr(host, (endHost - host));
+			size_t pos = tmphost.find(':');
+    		if (pos != std::string::npos)
+        		this->setHost(tmphost.substr(0, pos));
+			else
+				this->setHost(tmphost);
+		}
+    }
+    
 	size_t userAgent = info.find("User-Agent: ");
 	if (userAgent != std::string::npos)
 	{
@@ -156,10 +176,21 @@ std::string	Client::getBoundary() const {
 	return (this->_boundary);
 }
 
-std::string Client::getFileOrDirRequested() const
-{
-	return (this->_fileOrDirRequested);
+std::string	Client::getHost() const {
+	return (this->_host);
 }
+
+std::string Client::getFullPath() const
+{
+	return (this->_fullPath);
+}
+
+std::string Client::getPath() const
+{
+	return (this->_path);
+}
+
+/*----------------------------------------------------------------------------*/
 
 void	Client::setMethod(std::string method) {
 	this->_method = method;
@@ -195,6 +226,16 @@ void	Client::setContentLength(std::string contentLength) {
 
 void	Client::setBoundary(std::string boundary) {
 	this->_boundary = boundary;
+}
+
+void	Client::setHost(std::string host)
+{
+	this->_host = host;
+}
+
+void Client::setFullPath(std::string str)
+{
+	this->_fullPath = str;
 }
 
 /*----------------------------------------------------------------------------*/

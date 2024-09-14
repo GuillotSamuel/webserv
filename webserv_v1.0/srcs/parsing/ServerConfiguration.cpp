@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 17:53:52 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/14 17:44:19 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ ServerConfiguration::ServerConfiguration()
 	this->root_index = "";
 	this->index = "";
 	this->uploadsLocation = "";
-	this->errorPagesLocation = "";
+	this->errorPagesLocation = "www/error_pages/";
 	this->cgiBin_location = "";
 }
 
@@ -207,6 +207,11 @@ std::string ServerConfiguration::getimHere() const
 std::map<std::string, std::string> ServerConfiguration::getInfoMime(void) const
 {
 	return (this->_pathInfoMime);
+}
+
+std::map<std::string, t_location> ServerConfiguration::getTabLocation(void) const
+{
+	return (this->locations);
 }
 
 std::map<int, std::string> ServerConfiguration::getErrorPages(void) const

@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 17:39:16 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/14 17:42:35 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
 std::ofstream* Server::_log = NULL;
+
 /*----------------------------------------------------------------------------*/
 /*                               CONSTRUCTOR                                  */
 /*----------------------------------------------------------------------------*/
@@ -108,6 +109,7 @@ void Server::serverExecution()
 	while (true)
 	{
 		int nfds = epoll_wait(this->_epoll_fd, this->_events, MAX_EVENTS, -1);
+		std::cout << "evenement recue" << std::endl; // TEST
 		if (nfds == -1)
 			log("The call to epoll_wait failed.", 2);
 		if (g_signal == SIGNAL)
@@ -194,11 +196,9 @@ void Server::handle_client(ListeningSocket *list)
 	if (this->currentConfig == NULL)
 		return ;
 
-	// std::cout << *this->currentConfig << std::endl; // TEST
-	
 	receivedLine = readBody(client, &receivedLine);
 
-	std::string filePath = findPath(receivedLine);
+	std::string filePath = findPath(client);
 	if (filePath == "")
 	{
 		filePath = currentConfig->getErrorPage(404);
@@ -206,7 +206,7 @@ void Server::handle_client(ListeningSocket *list)
 
 	if (client->getMethod() == "GET")
 	{
-		ft_get(filePath);
+		ft_get(filePath, client);
 		delete client;
 	}
 	else if (client->getMethod() == "POST")
@@ -232,41 +232,50 @@ void Server::handle_client(ListeningSocket *list)
 
 void	Server::getServConfig(Client *client, ListeningSocket *list)
 {
-	(void)list;
 	this->currentConfig = NULL;
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
 	for (; it < this->tab_serv.end(); it++)
 	{
-		if (it->getServerName() == client->getFileOrDirRequested())
+		if (it->getServerName() == client->getPath())
 		{
 			this->currentConfig = &(*it);
-			break;
+			return ;
 		}
 	}
-	std::string name = "";
-	std::string referer = client->getReferer();
-	size_t startname = referer.rfind("/");
-	if (startname != std::string::npos)
-		name = referer.substr(startname+1);
-	std::cout << "referer = " << name << std::endl; // test
-	if (this->currentConfig == NULL && name != "")
+	if (this->currentConfig == NULL)
 	{
 		it = this->tab_serv.begin();
 		for (; it < this->tab_serv.end(); it++)
 		{
-			if (it->getServerName() == name)
+			if (it->getHostName() == client->getHost())
 			{
 				this->currentConfig = &(*it);
-				break;
+				return ;
 			}
 		}
 	}
 	if (this->currentConfig == NULL)
-		log("Can't retrieve the server connected to this socket", 2);
+	{
+		it = this->tab_serv.begin();
+		for (; it < this->tab_serv.end(); it++)
+		{
+			std::vector<int> tab = it->getPortTab();
+			std::vector<int>::iterator itPort = tab.begin();
+			for (; itPort < tab.end(); itPort++)
+			{
+				if (*itPort == list->getPort())
+				{
+					this->currentConfig = &(*it);
+					return ;
+				}
+			}
+		}
+	}
+	this->currentConfig = NULL;
 }
 
 /*response to a GET request*/
-void Server::ft_get(std::string filePath) // a revoir
+void Server::ft_get(std::string filePath, Client *client) // a revoir
 {
 	log("Server's receive a GET request.", 1);
 	std::string content = readFileContent(filePath);
@@ -291,7 +300,7 @@ void Server::ft_get(std::string filePath) // a revoir
 	else
 	{
 		log("The file requested \"" + filePath + "\" was found.", 1);
-		std::string mimeType = getMimeType();
+		std::string mimeType = getMimeType(client);
 
 		response = "HTTP/1.1 200 OK\r\n";
 		response += "Content-Type: " + mimeType + "\r\n";
@@ -299,7 +308,7 @@ void Server::ft_get(std::string filePath) // a revoir
 		oss << content.size();
 		response += "Content-Length: " + oss.str() + "\r\n";
 		response += "Connection: close\r\n";
-		response += "Server: webserv/1.0\r\n\r\n";
+		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 		response += content;
 	}
 
@@ -321,7 +330,7 @@ void Server::ft_post(Client client, std::string filePath) // a revoir surtout au
 	cgi->setEnv(this->currentConfig, client); 
 	std::string content = cgi->executeCgi();
 
-	std::string mimeType = getMimeType();
+	std::string mimeType = getMimeType(&client);
 
 	std::string response = "HTTP/1.1 200 OK\r\n";
 	response += "Content-Type: text/html\r\n";
@@ -329,7 +338,7 @@ void Server::ft_post(Client client, std::string filePath) // a revoir surtout au
 	oss << content.size();
 	response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
-	response += "Server: webserv/1.0\r\n\r\n";
+	response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 	response += content;
 
 	log("Server's ready to respond.", 1);
@@ -352,7 +361,7 @@ void Server::ft_delete(std::string filePath) // a revoir
 		oss << content.size();
 		response += "Content-Length: " + oss.str() + "\r\n";
 		response += "Connection: close\r\n";
-		response += "Server: webserv/1.0\r\n\r\n";
+		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 		response += "File not found";
 
 		log("Server's ready to respond.", 1);
@@ -387,7 +396,7 @@ void Server::ft_badRequest()
     oss << content.size();
     response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
-	response += "Server: webserv/1.0\r\n\r\n";
+	response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 	response += content;
 
 	log("The server did not understand this request.", 1);
@@ -490,9 +499,9 @@ void	Server::saveFile(const std::string &filename, const std::string &data) // P
     }
 }
 
-std::string	Server::getMimeType()
+std::string	Server::getMimeType(Client *client)
 {
-	if (this->_path == "/" || this->_path == ("/" + this->currentConfig->getServerName()))
+	if (client->getFullPath() == "/" || client->getFullPath() == ("/" + this->currentConfig->getServerName()))
 		return ("text/html");
 	
 	if (this->mimePath.find(this->_extensionPath) != this->mimePath.end())
@@ -504,12 +513,37 @@ std::string	Server::getMimeType()
 
 std::string	Server::readHead(Client *client)
 {
+	std::cout << "je vais lire!" << std::endl; // TEST
 	int n = recv(this->_connexion_fd, this->received_line, 4096, 0);
 	if (n < 0)
 	{
-		log("The call recv failed.", 2);
-		return ("");
+		int error_count = 1;
+		while (error_count < 5)
+		{
+			int n = recv(this->_connexion_fd, this->received_line, 4096, 0);
+			if (n >= 0)
+			{
+				std::cout << "contenue trouve" << std::endl; // TEST
+				break;
+			}
+			if (n < 0 && error_count == 5)
+			{
+				std::cout << "contenue introuve" << std::endl; // TEST
+				log("The call recv failed.", 2);
+				std::cerr << "Error on recv: " << strerror(errno) << std::endl; // TEST
+				return ("");
+			}
+			error_count++;
+		}
 	}
+	// int n = recv(this->_connexion_fd, this->received_line, 4096, 0);
+	// if (n < 0)
+	// {
+	// 	std::cout << "contenue introuve" << std::endl; // TEST
+	// 	log("The call recv failed.", 2);
+	// 	std::cerr << "Error on recv: " << strerror(errno) << std::endl; // TEST
+	// 	return ("");
+	// }
 	if (n == 0)
 	{
 		log("The connexion has been interrupted.", 3);
@@ -561,45 +595,44 @@ std::string	Server::readBody(Client *client, std::string *receivedLine)
 	return (*receivedLine);
 }
 
-std::string Server::findPath(const std::string &receivedLine)
+std::string Server::findPath(Client *client)
 {
-	size_t path_start = receivedLine.find('/');
-	if (path_start == std::string::npos)
-		log("Path_start failed.", 2);
-
-	size_t path_end = receivedLine.find(' ', path_start);
-	if (path_end == std::string::npos)
-		log("Path_end failed.", 2);
-	this->_path = receivedLine.substr(path_start, path_end - path_start);
-
-	std::cout << "path-ask : " << this->_path << std::endl; // TEST
-
-	if (this->_path == "/" || this->_path == ("/" + this->currentConfig->getServerName()))
+	if (client->getFullPath() == "/" || client->getFullPath() == ("/" + this->currentConfig->getServerName()))
 	{
 		this->_status_code = 0;
 		return (this->currentConfig->getRootIndex());
 	}
 
-	size_t ext = this->_path.rfind(".");
+	//regarder sil ni a pas un alias
+	std::map<std::string, t_location> obj = this->currentConfig->getTabLocation();
+	if (obj.find(client->getPath()) != obj.end())
+	{
+		t_location loc = obj[client->getPath()];
+
+		client->setFullPath(loc.real_path);
+	}
+
+	size_t ext = client->getFullPath().rfind(".");
 	if (ext == std::string::npos)
 	{
 		this->_status_code = 400;
-		return (this->currentConfig->getErrorPage(400));
+		return (this->currentConfig->getimHere()
+		+ this->currentConfig->getErrorPageLocation()
+		+ this->currentConfig->getErrorPage(400));
 	}
-	size_t extend = this->_path.size();
-	std::string extension = this->_path.substr(ext, (extend - ext));
+	
+	size_t extend = client->getFullPath().size();
+	std::string extension = client->getFullPath().substr(ext, (extend - ext));
 	if (this->extpath.find(extension) != this->extpath.end())
 	{
 		this->_extensionPath = extension;
 		this->_status_code = 0;
-		std::string test = this->currentConfig->getimHere() + this->currentConfig->getRoot() + this->extpath[extension] + this->_path; // TEST
-		std::cout << "Absolute-path asked : " << test << std::endl; // TEST
-		return (this->currentConfig->getimHere() + this->currentConfig->getRoot() + this->extpath[extension] + this->_path);
+		return (this->currentConfig->getimHere() + this->currentConfig->getRoot() + this->extpath[extension] + client->getFullPath());
 	}
 	
 	log("Extension of the files was not recognize.", 1);
 	this->_status_code = 400;
-	return ("");
+	return (this->currentConfig->getimHere() + this->currentConfig->getErrorPageLocation() + this->currentConfig->getErrorPage(400));
 }
 
 void   	Server::log(std::string error, int type)
@@ -637,15 +670,12 @@ void   	Server::log(std::string error, int type)
 void 	Server::set_nonblocking(int sockfd) 
 {
     int flags = fcntl(sockfd, F_GETFL, 0);
-
     if (flags == -1)
 	{
 		log("fnctl failed.", 2);
 		return ;
     }
-
     flags |= O_NONBLOCK;
-
     if (fcntl(sockfd, F_SETFL, flags) == -1) 
 	{
 		log("fnctl failed.", 2);
@@ -675,7 +705,7 @@ std::map<std::string, std::string>	Server::createExtPath()
 	extPath[".png"] = IMAGE_FILES;
 	extPath[".gif"] = IMAGE_FILES;
 	extPath[".bmp"] = IMAGE_FILES;
-	extPath[".ico"] = IMAGE_FILES;
+	extPath[".ico"] = ICONS_FILES;
 	extPath[".webp"] = IMAGE_FILES;
 	extPath[".svg"] = IMAGE_FILES;
 	extPath[".mp4"] = VIDEO_FILES;

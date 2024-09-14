@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/14 16:01:15 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/14 17:39:38 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ class Server
 		std::map<std::string, std::string>					createMimePath();
 		void												creatAllListeningSockets();
 		void												handle_client(ListeningSocket *list);
-		std::string											findPath(const std::string &receivedLine);
-		void												ft_get(std::string filePath);
+		std::string											findPath(Client *client);
+		void												ft_get(std::string filePath, Client *client);
 		void												ft_post(Client client, std::string filePath);
 		void												ft_delete(std::string filePath);
 		void												ft_badRequest();
 		std::string											readFileContent(const std::string &path);
-		std::string 										getMimeType();
+		std::string 										getMimeType(Client *client);
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
 		std::string											readHead(Client *client);
