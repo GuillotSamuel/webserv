@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_location.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:38 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 11:53:13 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 16:02:05 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void Server::ft_set_cgi_bin_location(std::vector<std::string> tokens)
 
 void Server::ft_set_location_param(std::vector<std::string> tokens)
 {
+    this->location_started = true;
+
     for (size_t i = 0; i < tokens.size(); i++)
     {
         if (tokens[i].empty())
@@ -77,6 +79,10 @@ void Server::ft_set_location_param(std::vector<std::string> tokens)
     else if (tokens[1] == "cgi-bin")
     {
         ft_set_cgi_bin_location(tokens);
+    }
+    else if (tokens[1][0] == '/')
+    {
+        ft_location_pages(tokens);
     }
     else
     {

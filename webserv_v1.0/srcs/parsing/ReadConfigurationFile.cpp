@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 20:01:59 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/11 18:46:56 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/14 14:21:40 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void Server::readConfigurationFile(const char *arg)
 				if (line.find("server {") != std::string::npos)
 				{
                     this->currentConfig = new ServerConfiguration();
+					this->location_started = false;
                     if (!this->currentConfig)
 					{
 						error("Error: Unable to allocate memory for ServerConfiguration");

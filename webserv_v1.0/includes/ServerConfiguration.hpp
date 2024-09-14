@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 17:53:09 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/14 15:58:11 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ class ServerConfiguration
 		int									port;
 		int									clientMaxBodySize;
 		std::vector<ListeningSocket*>		tab_list;
+		std::map<std::string, t_location>	locations;
 
 	public:
 		/*---------------------------------------------------------------*/

@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 16:16:44 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/14 16:01:15 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ class Server
 		int													fd_config;
 		bool												insideServerBlock;
 		bool												insideParamBlock;
+		bool												location_started;
 
 		/*---------------------------------------------------------------*/
 		/*                            METHOD                             */
@@ -95,6 +96,8 @@ class Server
 		void												ft_set_cgi_bin_location(std::vector<std::string> tokens);
 		void												ft_set_errors_location(std::vector<std::string> tokens);
 		void												ft_set_uploads_location(std::vector<std::string> tokens);
+		void												ft_location_pages(std::vector<std::string> tokens);
+		void												ft_location_pages_dispatch(std::vector<std::string> current_param);
 
 		void												creatAllSocket();
 

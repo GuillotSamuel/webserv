@@ -1,0 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_location_pages.cpp                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
+/*   Updated: 2024/09/14 16:01:31 by sguillot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "webserv.hpp"
+
+void Server::ft_location_pages_dispatch(std::vector<std::string> current_param)
+{
+    (void)current_param;
+}
+
+void Server::ft_location_pages(std::vector<std::string> tokens)
+{
+    std::vector<std::string> current_param;
+
+    if (tokens.size() < 5 || tokens[2] != "|")
+    {
+        ft_invalid_line(tokens);
+    }
+
+    for (size_t i = 3; i < tokens.size(); i++)
+    {
+        current_param.clear();
+
+        while (i < tokens.size() && tokens[i] != "|")
+        {
+            current_param.push_back(tokens[i]);
+            i++;
+        }
+
+        if (!current_param.empty())
+        {
+            ft_location_pages_dispatch(current_param);
+        }
+    }
+}

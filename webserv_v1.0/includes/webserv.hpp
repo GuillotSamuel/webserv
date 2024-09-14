@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/09 20:30:17 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 15:59:53 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,12 @@
 
 #define MAX_EVENTS 10
 #define BUFFER_SIZE 4096
+
+typedef struct s_location
+{
+    std::string real_path;
+    std::string method_requested;
+}               t_location;
 
 #include "ServerConfiguration.hpp"
 #include "Server.hpp"
