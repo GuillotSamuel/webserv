@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/14 12:35:57 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 16:58:49 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,13 @@ void Client::setInfo(std::string info)
 	size_t path_start = info.find('/');
 	if (path_start != std::string::npos)
 	{
-		path_start += 1;
 		size_t path_end = info.find(' ', path_start);
 		if (path_end != std::string::npos)
+		{
+			this->_fullPath = info.substr(path_start, path_end - path_start);
+			path_start += 1;
 			this->_path = info.substr(path_start, path_end - path_start);
+		}
 	}
 	
 	size_t host = info.find("Host: ");
@@ -177,6 +180,11 @@ std::string	Client::getHost() const {
 	return (this->_host);
 }
 
+std::string Client::getFullPath() const
+{
+	return (this->_fullPath);
+}
+
 std::string Client::getPath() const
 {
 	return (this->_path);
@@ -223,6 +231,11 @@ void	Client::setBoundary(std::string boundary) {
 void	Client::setHost(std::string host)
 {
 	this->_host = host;
+}
+
+void Client::setFullPath(std::string str)
+{
+	this->_fullPath = str;
 }
 
 /*----------------------------------------------------------------------------*/

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/14 12:43:28 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 16:58:17 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,11 @@ std::string ServerConfiguration::getimHere() const
 std::map<std::string, std::string> ServerConfiguration::getInfoMime(void) const
 {
 	return (this->_pathInfoMime);
+}
+
+std::map<std::string, t_location> ServerConfiguration::getTabLocation(void) const
+{
+	return (this->tab_location);
 }
 
 std::map<int, std::string> ServerConfiguration::getErrorPages(void) const

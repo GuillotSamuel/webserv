@@ -1,30 +1,51 @@
-	[INFO][12:48:45] : Getprotobyname Succed.
-	[INFO][12:48:45] : Socket_fd in now created.
-	[INFO][12:48:45] : Socket_fd in now set.
-	[INFO][12:48:45] : Socket_fd is binded.
-	[INFO][12:48:45] : Socket_fd is non blocking fd.
-	[INFO][12:48:45] : Socket_fd is now listening every attemp of connection.
-[INFO][12:48:45] : Starting Server.
-	[INFO][12:48:45] : Epoll instance successfully created.
-	[INFO][12:48:45] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][12:48:45] : The server construction is now complete. The server is ready to accept incoming connections.
-[INFO][12:48:47] : [NEW REQUEST]
-	[INFO][12:48:47] : Server did accept the connection.
-	[INFO][12:48:47] : File is created.
-	[INFO][12:48:47] : Server's receive a GET request.
-	[INFO][12:48:47] : The file given cannot be found.
-	[INFO][12:48:47] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/html/galldedsry.html" was found empty.
-	[INFO][12:48:47] : The file given cannot be found.
-	[INFO][12:48:47] : Server's ready to respond.
-	[INFO][12:48:47] : Closing the connection with the client.
-[INFO][12:48:47] : [NEW REQUEST]
-	[INFO][12:48:47] : Server did accept the connection.
-	[INFO][12:48:47] : File is created.
-	[INFO][12:48:47] : Server's receive a GET request.
-	[INFO][12:48:47] : The file given cannot be found.
-	[INFO][12:48:47] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/images/favicon.ico" was found empty.
-	[INFO][12:48:47] : The file given cannot be found.
-	[INFO][12:48:47] : Server's ready to respond.
-	[INFO][12:48:47] : Closing the connection with the client.
-	[ERROR][12:49:11] : The call to epoll_wait failed.
-	[INFO][12:49:11] : Shutting down the server properly.
+	[INFO][16:42:33] : Getprotobyname Succed.
+	[INFO][16:42:33] : Socket_fd in now created.
+	[INFO][16:42:33] : Socket_fd in now set.
+	[INFO][16:42:33] : Socket_fd is binded.
+	[INFO][16:42:33] : Socket_fd is non blocking fd.
+	[INFO][16:42:33] : Socket_fd is now listening every attemp of connection.
+[INFO][16:42:33] : Starting Server.
+	[INFO][16:42:33] : Epoll instance successfully created.
+	[INFO][16:42:33] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][16:42:33] : The server construction is now complete. The server is ready to accept incoming connections.
+[INFO][16:42:47] : [NEW REQUEST]
+	[INFO][16:42:47] : Server did accept the connection.
+	[INFO][16:42:47] : File is created.
+	[INFO][16:42:47] : Server's receive a GET request.
+	[INFO][16:42:47] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/html/index.html" was found.
+	[INFO][16:42:47] : Server's ready to respond.
+	[INFO][16:42:47] : Closing the connection with the client.
+[INFO][16:42:47] : [NEW REQUEST]
+	[INFO][16:42:47] : Server did accept the connection.
+	[INFO][16:42:47] : File is created.
+	[INFO][16:42:47] : Server's receive a GET request.
+	[INFO][16:42:47] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/styles/styles.css" was found.
+	[INFO][16:42:47] : Server's ready to respond.
+	[INFO][16:42:47] : Closing the connection with the client.
+[INFO][16:42:47] : [NEW REQUEST]
+	[INFO][16:42:47] : Server did accept the connection.
+	[INFO][16:42:47] : File is created.
+	[INFO][16:42:47] : Server's receive a GET request.
+	[INFO][16:42:47] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/scripts/script.js" was found.
+	[INFO][16:42:47] : Server's ready to respond.
+	[INFO][16:42:47] : Closing the connection with the client.
+[INFO][16:42:47] : [NEW REQUEST]
+	[INFO][16:42:47] : Server did accept the connection.
+[INFO][16:42:47] : [NEW REQUEST]
+	[INFO][16:42:47] : Server did accept the connection.
+	[INFO][16:42:47] : File is created.
+	[INFO][16:42:47] : Server's receive a GET request.
+	[INFO][16:42:47] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/images/hearts.jpg" was found.
+	[INFO][16:42:47] : Server's ready to respond.
+	[INFO][16:42:47] : Closing the connection with the client.
+[INFO][16:42:47] : [NEW REQUEST]
+	[INFO][16:42:47] : Server did accept the connection.
+	[INFO][16:42:47] : File is created.
+	[INFO][16:42:47] : Server's receive a GET request.
+	[INFO][16:42:47] : The file given cannot be found.
+	[INFO][16:42:47] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/images/icons/icons/favicon.ico" was found empty.
+	[INFO][16:42:47] : The file given cannot be found.
+	[INFO][16:42:47] : Server's ready to respond.
+	[INFO][16:42:47] : Closing the connection with the client.
+	[ERROR][16:44:36] : The call to epoll_wait failed.
+	[INFO][16:44:36] : Shutting down the server properly.

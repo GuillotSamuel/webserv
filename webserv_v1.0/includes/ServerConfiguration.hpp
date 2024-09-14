@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 14:28:42 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 16:58:53 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,15 @@
 #define JS_FILES "/scripts"
 #define JSON_FILES "/data"
 #define IMAGE_FILES "/images"
+#define	ICONS_FILES "/images/icons"
 #define VIDEO_FILES "/videos"
 #define AUDIO_FILES "/audio"
 #define FONT_FILES "/fonts"
 #define PDF_FILES "/docs"
 #define XML_FILES "/xml"
-#define ICON_FILES "/icons"
 #define CSV_FILES "/data"
 #define ERROR_400_PAGE "/html/errors/400.html"
 #define CGI_FILES "/cgi-bin"
-
 #define RESET "\033[0m"
 #define CYAN "\033[36m"
 #define WHITE "\033[37m"
@@ -60,6 +59,7 @@ class ServerConfiguration
 		int									port;
 		int									clientMaxBodySize;
 		std::vector<ListeningSocket*>		tab_list;
+		std::map<std::string, t_location>	tab_location;
 
 	public:
 		/*---------------------------------------------------------------*/
@@ -92,6 +92,7 @@ class ServerConfiguration
 		void								setPathInfoCgi(std::string extension, std::string location);
 		void								setCgiBinLocation(std::string str);
 		void								setRootIndex();
+
 		
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
@@ -114,6 +115,7 @@ class ServerConfiguration
 		std::string							getCgiLocation(void) const;
 		std::map<std::string, std::string>	getLocation(void) const;
 		std::map<std::string, std::string>	getInfoMime(void) const;
+		std::map<std::string, t_location>	getTabLocation(void) const;
 		std::vector<std::string>			getAllowedMethods(void)const;
 		std::string							getimHere() const;
 		/*---------------------------------------------------------------*/
