@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 22:19:23 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 12:35:57 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,16 @@ void Client::setInfo(std::string info)
 		host += 6;
 		size_t endHost = info.find("\r\n", host);
 		if (endHost != std::string::npos)
-			this->setHost(info.substr(host, (endHost - host)));
-	}
-
-
-
+		{
+			std::string tmphost = info.substr(host, (endHost - host));
+			size_t pos = tmphost.find(':');
+    		if (pos != std::string::npos)
+        		this->setHost(tmphost.substr(0, pos));
+			else
+				this->setHost(tmphost);
+		}
+    }
+    
 	size_t userAgent = info.find("User-Agent: ");
 	if (userAgent != std::string::npos)
 	{

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 22:43:13 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 12:48:29 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -594,7 +594,7 @@ std::string Server::findPath(const std::string &receivedLine)
 	if (ext == std::string::npos)
 	{
 		this->_status_code = 400;
-		return (this->currentConfig->getErrorPage(400));
+		return (this->currentConfig->getimHere() + this->currentConfig->getErrorPageLocation() + this->currentConfig->getErrorPage(400));
 	}
 	size_t extend = this->_path.size();
 	std::string extension = this->_path.substr(ext, (extend - ext));
@@ -607,7 +607,7 @@ std::string Server::findPath(const std::string &receivedLine)
 	
 	log("Extension of the files was not recognize.", 1);
 	this->_status_code = 400;
-	return ("");
+	return (this->currentConfig->getimHere() + this->currentConfig->getErrorPageLocation() + this->currentConfig->getErrorPage(400));
 }
 
 void   	Server::log(std::string error, int type)

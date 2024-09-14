@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/09 20:30:17 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 12:03:36 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,12 @@
 
 #define SIGNAL 2
 extern int g_signal;
+
+typedef struct s_location
+{
+    std::string real_path;
+    std::string method_requested;
+}               t_location;
 
 /* -------------------------------------------------------------------------- */
 /*                                    UTILS                                   */

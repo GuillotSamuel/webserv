@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 22:32:59 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 12:35:07 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ class Server
 		int													fd_config;
 		bool												insideServerBlock;
 		bool												insideParamBlock;
+		// std::map<std::string, t_location>					locations;
 
 		/*---------------------------------------------------------------*/
 		/*                            METHOD                             */
