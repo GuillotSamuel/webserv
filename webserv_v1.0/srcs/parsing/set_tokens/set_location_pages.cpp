@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/14 16:01:31 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 11:29:37 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,40 @@
 
 void Server::ft_location_pages_dispatch(std::vector<std::string> current_param)
 {
-    (void)current_param;
+	std::vector<std::string>::iterator current_param_it = current_param.begin();
+
+	if (*current_param_it == "methods")
+	{
+		
+	}
+	else if (*current_param_it == "path")
+	{
+		
+	}
 }
 
 void Server::ft_location_pages(std::vector<std::string> tokens)
 {
-    std::vector<std::string> current_param;
+	std::vector<std::string> current_param;
 
-    if (tokens.size() < 5 || tokens[2] != "|")
-    {
-        ft_invalid_line(tokens);
-    }
+	if (tokens.size() < 5 || tokens[2] != "|")
+	{
+		ft_invalid_line(tokens);
+	}
 
-    for (size_t i = 3; i < tokens.size(); i++)
-    {
-        current_param.clear();
+	for (size_t i = 3; i < tokens.size(); i++)
+	{
+		current_param.clear();
 
-        while (i < tokens.size() && tokens[i] != "|")
-        {
-            current_param.push_back(tokens[i]);
-            i++;
-        }
+		while (i < tokens.size() && tokens[i] != "|")
+		{
+			current_param.push_back(tokens[i]);
+			i++;
+		}
 
-        if (!current_param.empty())
-        {
-            ft_location_pages_dispatch(current_param);
-        }
-    }
+		if (!current_param.empty())
+		{
+			ft_location_pages_dispatch(current_param);
+		}
+	}
 }

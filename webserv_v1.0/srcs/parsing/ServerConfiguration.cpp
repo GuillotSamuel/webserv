@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/14 17:44:19 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/16 11:54:29 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,23 @@ ServerConfiguration::ServerConfiguration()
 	char *tmp = getcwd(NULL, 0);
 	std::string tmp2(tmp, strlen(tmp));
 	free(tmp);
-	this->hostName = "";
-	this->serverName = "";
+	this->_hostName = "";
+	this->_serverName = "";
 	this->strPort = "";
 	this->imHere = tmp2;
-	this->root = "";
+	this->_root = "";
 	this->root_index = "";
-	this->index = "";
-	this->uploadsLocation = "";
-	this->errorPagesLocation = "www/error_pages/";
-	this->cgiBin_location = "";
+	this->_index = "";
+	this->_uploadsLocation = "";
+	this->_errorPagesLocation = "www/error_pages/";
+	this->_cgiBin_location = "";
 }
 
 ServerConfiguration::~ServerConfiguration(void)
 {
 	this->_pathInfoCgi.clear();
 	this->_pathInfoMime.clear();
-	this->errorPages.clear();
+	this->_errorPages.clear();
 }
 
 ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &copy)
@@ -42,17 +42,17 @@ ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &c
 	if (this != &copy)
 	{
 		this->port = copy.port;
-		this->hostName = copy.hostName;
-		this->serverName = copy.serverName;
-		this->errorPages = copy.errorPages;
-		this->clientMaxBodySize = copy.clientMaxBodySize;
+		this->_hostName = copy._hostName;
+		this->_serverName = copy._serverName;
+		this->_errorPages = copy._errorPages;
+		this->_clientMaxBodySize = copy._clientMaxBodySize;
 	}
 	return (*this);
 }
 
 void ServerConfiguration::setRootIndex()
 {
-	this->root_index = this->imHere + this->root + HTML_FILES + "/" + this->index;
+	this->root_index = this->imHere + this->_root + HTML_FILES + "/" + this->_index;
 }
 
 void ServerConfiguration::setLocation(std::string page, std::string location)
@@ -60,9 +60,9 @@ void ServerConfiguration::setLocation(std::string page, std::string location)
 	this->_location.insert(std::make_pair(page, location));
 }
 
-void ServerConfiguration::setAllowedMethods(std::vector<std::string> allowed_methods)
+void ServerConfiguration::setAllowedMethods(std::vector<std::string> _allowed_methods)
 {
-	this->allowed_methods = allowed_methods;
+	this->_allowed_methods = _allowed_methods;
 }
 
 void ServerConfiguration::setPort(std::string str)
@@ -74,12 +74,12 @@ void ServerConfiguration::setPort(std::string str)
 
 void ServerConfiguration::setUploadsLocation(std::string str)
 {
-	this->uploadsLocation = str;
+	this->_uploadsLocation = str;
 }
 
 void ServerConfiguration::setErrorPagesLocation(std::string str)
 {
-	this->errorPagesLocation = str;
+	this->_errorPagesLocation = str;
 }
 
 void ServerConfiguration::setPathInfoCgi(std::string extension, std::string location)
@@ -89,39 +89,39 @@ void ServerConfiguration::setPathInfoCgi(std::string extension, std::string loca
 
 void ServerConfiguration::setCgiBinLocation(std::string str)
 {
-	this->cgiBin_location = str;
+	this->_cgiBin_location = str;
 }
 
 void ServerConfiguration::setHostName(std::string str)
 {
-	this->hostName = str;
+	this->_hostName = str;
 }
 
 void ServerConfiguration::setServerName(std::string str)
 {
-	this->serverName = str;
+	this->_serverName = str;
 }
 
 void ServerConfiguration::setErrorPages(int code, std::string str)
 {
-	this->errorPages[code] = str;
+	this->_errorPages[code] = str;
 }
 
 void ServerConfiguration::setClientMaxBodySize(std::string str)
 {
 	int n;
 	std::istringstream(str) >> n;
-	this->clientMaxBodySize = n;
+	this->_clientMaxBodySize = n;
 }
 
 void ServerConfiguration::setRoot(std::string str)
 {
-	this->root = str;
+	this->_root = str;
 }
 
 void ServerConfiguration::setIndex(std::string str)
 {
-	this->index = str;
+	this->_index = str;
 }
 
 int ServerConfiguration::getPort(void) const
@@ -136,12 +136,12 @@ std::vector<int> ServerConfiguration::getPortTab(void) const
 
 std::string ServerConfiguration::getHostName(void) const
 {
-	return (this->hostName);
+	return (this->_hostName);
 }
 
 std::string ServerConfiguration::getServerName(void) const
 {
-	return (this->serverName);
+	return (this->_serverName);
 }
 
 std::string ServerConfiguration::getStrPort(void) const
@@ -151,7 +151,7 @@ std::string ServerConfiguration::getStrPort(void) const
 
 std::string ServerConfiguration::getRoot(void) const
 {
-	return (this->root);
+	return (this->_root);
 }
 
 std::string ServerConfiguration::getRootIndex(void) const
@@ -161,32 +161,32 @@ std::string ServerConfiguration::getRootIndex(void) const
 
 std::string ServerConfiguration::getUploadLocation() const
 {
-	return (this->uploadsLocation);
+	return (this->_uploadsLocation);
 }
 
 std::string ServerConfiguration::getErrorPage(int code) const
 {
-	std::map<int, std::string>::const_iterator it = this->errorPages.find(code);
-	if (it != this->errorPages.end())
+	std::map<int, std::string>::const_iterator it = this->_errorPages.find(code);
+	if (it != this->_errorPages.end())
 	{
 		return it->second;
 	}
 	else
 	{
-		it = this->errorPages.find(404);
+		it = this->_errorPages.find(404);
 		return (it->second);
 	}
 }
 
 std::string ServerConfiguration::getCgiLocation(void) const
 {
-	return (this->cgiBin_location);
+	return (this->_cgiBin_location);
 }
 
 
 std::string ServerConfiguration::getErrorPageLocation(void) const
 {
-	return (this->errorPagesLocation);
+	return (this->_errorPagesLocation);
 }
 
 std::map<std::string, std::string> ServerConfiguration::getLocation(void) const
@@ -196,7 +196,7 @@ std::map<std::string, std::string> ServerConfiguration::getLocation(void) const
 
 std::vector<std::string> ServerConfiguration::getAllowedMethods(void) const
 {
-	return (this->allowed_methods);
+	return (this->_allowed_methods);
 }
 
 std::string ServerConfiguration::getimHere() const
@@ -216,12 +216,12 @@ std::map<std::string, t_location> ServerConfiguration::getTabLocation(void) cons
 
 std::map<int, std::string> ServerConfiguration::getErrorPages(void) const
 {
-	return (this->errorPages);
+	return (this->_errorPages);
 }
 
 int ServerConfiguration::getClientMaxBodySize(void) const
 {
-	return (this->clientMaxBodySize);
+	return (this->_clientMaxBodySize);
 }
 
 std::map<std::string, std::string> ServerConfiguration::getPathInfoCgi() const
@@ -236,7 +236,7 @@ std::vector<ListeningSocket *> ServerConfiguration::getTabList() const
 
 std::string ServerConfiguration::getIndex() const
 {
-	return (this->index);
+	return (this->_index);
 }
 
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)

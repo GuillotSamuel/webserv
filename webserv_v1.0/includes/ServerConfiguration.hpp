@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/14 17:40:18 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/16 11:55:30 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,36 @@ class ServerConfiguration
 	private:
 		/*---------------------------------------------------------------*/
 		/*                            ATTRIBUT                           */
-		/*---------------------------------------------------------------*/	
-		std::map<std::string, std::string>	_pathInfoMime;
-		std::map<std::string, std::string>	_pathInfoCgi;
-		std::map<std::string, std::string>	_location;
-		std::map<int, std::string>			errorPages;
-		std::string							hostName;
-		std::string							serverName;
-		std::string							strPort;
-		std::string							imHere;
-		std::string							root;
-		std::string							root_index;
-		std::string							index;
-		std::string							uploadsLocation;
-		std::string							errorPagesLocation;
-		std::string							cgiBin_location;
-		std::vector<int>					_port;
-		std::vector<std::string>			allowed_methods;
-		int									port;
-		int									clientMaxBodySize;
-		std::vector<ListeningSocket*>		tab_list;
-		std::map<std::string, t_location>	locations;
+		/*---------------------------------------------------------------*/
+
+		/* --- General informations from configuration file --- */
+		std::string							_serverName; // ok
+		std::string							_hostName; // ok
+		std::vector<int>					_port; // ok
+		std::string							_root;  // ok //Path_du_site
+		std::string							_index; // ok
+		std::map<std::string, std::string>	_pathInfoCgi; // ok
+		std::vector<std::string>			_allowed_methods; // TO CHANGE
+		// std::map<std::string, int>			_allowed_methods; // TO ADOPT
+		std::map<int, std::string>			_errorPages; // ok
+		int									_clientMaxBodySize; // ok
+
+		/* --- Locations from configuration file --- */
+		std::string							_errorPagesLocation; // ok
+		std::string							_cgiBin_location; // ok
+		std::string							_uploadsLocation; // ok
+		std::map<std::string, t_location>	locations; // ok // adding _
+
+		/* --- Div informations --- */
+		std::string							root_index; // ok
+		std::string							imHere; // ok // ou est ce que je suis
+
+		/* --- WE DON'T KNOW YET (because Marianne is dumb) --- */
+		std::map<std::string, std::string>	_pathInfoMime; // TO REMOVE ???
+		std::map<std::string, std::string>	_location; // TO REMOVE
+		int									port; // TO REMOVE ???
+		std::string							strPort; // a check
+		std::vector<ListeningSocket*>		tab_list; // TO REMOVE	
 
 	public:
 		/*---------------------------------------------------------------*/
@@ -91,7 +100,7 @@ class ServerConfiguration
 		void								setRoot(std::string str);
 		void								setIndex(std::string str);
 		void								setLocation(std::string page, std::string location);
-		void								setAllowedMethods(std::vector<std::string> allowed_methods);
+		void								setAllowedMethods(std::vector<std::string> _allowed_methods);
 		void								setUploadsLocation(std::string str);
 		void								setErrorPagesLocation(std::string str);
 		void								setPathInfoCgi(std::string extension, std::string location);
@@ -122,6 +131,7 @@ class ServerConfiguration
 		std::map<std::string, t_location>	getTabLocation(void) const;
 		std::vector<std::string>			getAllowedMethods(void)const;
 		std::string							getimHere() const;
+	
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */
 		/*---------------------------------------------------------------*/
