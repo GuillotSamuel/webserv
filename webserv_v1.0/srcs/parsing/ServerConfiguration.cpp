@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 15:21:18 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 19:10:55 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ ServerConfiguration::ServerConfiguration()
 	this->_uploadsLocation = "";
 	this->_errorPagesLocation = "www/error_pages/";
 	this->_cgiBin_location = "";
-	this->_allowed_methods2["GET"] = 0;
-	this->_allowed_methods2["POST"] = 0;
-	this->_allowed_methods2["DELETE"] = 0;
+	this->_allowed_methods["GET"] = 0;
+	this->_allowed_methods["POST"] = 0;
+	this->_allowed_methods["DELETE"] = 0;
 }
 
 ServerConfiguration::~ServerConfiguration(void)
@@ -40,7 +40,7 @@ ServerConfiguration::~ServerConfiguration(void)
 	this->_errorPages.clear();
 	this->_location.clear();
 	this->_port.clear();
-	this->_allowed_methods2.clear();
+	this->_allowed_methods.clear();
 	this->_locations_map.clear();
 }
 
@@ -56,7 +56,7 @@ void ServerConfiguration::setLocation(std::string page, std::string location)
 
 void ServerConfiguration::setAllowedMethods(std::string method, int code)
 {
-	this->_allowed_methods2[method] = code;
+	this->_allowed_methods[method] = code;
 }
 
 
@@ -186,7 +186,7 @@ std::map<std::string, std::string> ServerConfiguration::getLocation(void) const
 
 std::map<std::string, int> ServerConfiguration::getAllowedMethods(void) const
 {
-	return (this->_allowed_methods2);
+	return (this->_allowed_methods);
 }
 
 std::string ServerConfiguration::getimHere() const

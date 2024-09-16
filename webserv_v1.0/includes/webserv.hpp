@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 12:02:39 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 19:10:06 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,17 @@ extern int g_signal;
 
 typedef struct s_location
 {
-    std::string real_path;
-    std::map<std::string, int> method_requested;
+    std::string                 alias;
+    std::string                 root;
+    std::string                 clientMaxBodySize;
+    int                         autoindex;
+    std::string                 path_info;
+    std::string                 index;
+    std::string                 uploadsLocation;
+    //cgi 
+    //error page
+    //return
+    std::map<std::string, int>  allowed_methods;
 }               t_location;
 
 #include "ServerConfiguration.hpp"

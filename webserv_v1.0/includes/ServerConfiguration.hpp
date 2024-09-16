@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 15:18:11 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 19:10:55 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,9 @@ class ServerConfiguration
 		std::string							_index; // ok
 		int									_clientMaxBodySize; // ok
 		std::map<std::string, std::string>	_pathInfoCgi; // ok
-		std::map<std::string, int>			_allowed_methods2; // TO ADOPT
+		std::map<std::string, int>			_allowed_methods; // TO ADOPT
 		std::map<int, std::string>			_errorPages; // ok
+		int									_autoindex; // TO ADOPT
 
 		/* --- Locations from configuration file --- */
 		std::string							_errorPagesLocation; // ok

@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/16 17:09:06 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 19:05:11 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -613,7 +613,7 @@ std::string Server::findPath(Client *client)
 	{
 		t_location loc = obj[client->getPath()];
 
-		client->setFullPath(loc.real_path);
+		client->setFullPath(loc.alias);
 		// if (client->getMethod() != )
 	}
 
