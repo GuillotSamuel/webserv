@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 11:55:30 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:02:34 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,13 @@ class ServerConfiguration
 		/* --- WE DON'T KNOW YET (because Marianne is dumb) --- */
 		std::map<std::string, std::string>	_pathInfoMime; // TO REMOVE ???
 		std::map<std::string, std::string>	_location; // TO REMOVE
-		int									port; // TO REMOVE ???
 		std::string							strPort; // a check
-		std::vector<ListeningSocket*>		tab_list; // TO REMOVE	
 
 	public:
 		/*---------------------------------------------------------------*/
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
 		/*---------------------------------------------------------------*/
 		ServerConfiguration();
-		// ServerConfiguration(std::string port);
-		// ServerConfiguration(const ServerConfiguration &copy);
 		~ServerConfiguration(void);
 
 		/*---------------------------------------------------------------*/
@@ -121,7 +117,6 @@ class ServerConfiguration
 		std::map<int, std::string>			getErrorPages(void) const;
 		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi(void) const;
-		std::vector<ListeningSocket*>		getTabList(void) const;
 		std::string							getIndex(void) const;
 		std::string							getUploadLocation(void) const;
 		std::string							getErrorPageLocation(void) const;
@@ -131,7 +126,7 @@ class ServerConfiguration
 		std::map<std::string, t_location>	getTabLocation(void) const;
 		std::vector<std::string>			getAllowedMethods(void)const;
 		std::string							getimHere() const;
-	
+		
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */
 		/*---------------------------------------------------------------*/

@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 11:25:03 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:02:39 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,6 @@
 
 #define MAX_EVENTS 10
 #define BUFFER_SIZE 4096
-
-typedef struct s_location
-{
-    std::string real_path;
-    std::string method_requested;
-}               t_location;
-
-#include "ServerConfiguration.hpp"
-#include "Server.hpp"
-#include "Client.hpp"
-#include "Cgi.hpp"
-
 #define SIGNAL 2
 extern int g_signal;
 
@@ -82,6 +70,11 @@ typedef struct s_location
     std::string real_path;
     std::map<std::string, int> method_requested;
 }               t_location;
+
+#include "ServerConfiguration.hpp"
+#include "Server.hpp"
+#include "Client.hpp"
+#include "Cgi.hpp"
 
 /* -------------------------------------------------------------------------- */
 /*                                    UTILS                                   */

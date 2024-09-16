@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 11:54:29 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:01:43 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ ServerConfiguration::ServerConfiguration()
 	this->_hostName = "";
 	this->_serverName = "";
 	this->strPort = "";
-	this->imHere = tmp2;
-	this->_root = "";
+	this->imHere = tmp2 + "/";
+	this->root = "";
 	this->root_index = "";
 	this->_index = "";
 	this->_uploadsLocation = "";
@@ -34,20 +34,11 @@ ServerConfiguration::~ServerConfiguration(void)
 {
 	this->_pathInfoCgi.clear();
 	this->_pathInfoMime.clear();
-	this->_errorPages.clear();
-}
-
-ServerConfiguration &ServerConfiguration::operator=(const ServerConfiguration &copy)
-{
-	if (this != &copy)
-	{
-		this->port = copy.port;
-		this->_hostName = copy._hostName;
-		this->_serverName = copy._serverName;
-		this->_errorPages = copy._errorPages;
-		this->_clientMaxBodySize = copy._clientMaxBodySize;
-	}
-	return (*this);
+	this->errorPages.clear();
+	this->_location.clear();
+	this->_port.clear();
+	this->allowed_methods.clear();
+	this->locations.clear();
 }
 
 void ServerConfiguration::setRootIndex()
@@ -122,11 +113,6 @@ void ServerConfiguration::setRoot(std::string str)
 void ServerConfiguration::setIndex(std::string str)
 {
 	this->_index = str;
-}
-
-int ServerConfiguration::getPort(void) const
-{
-	return (this->port);
 }
 
 std::vector<int> ServerConfiguration::getPortTab(void) const
@@ -229,11 +215,6 @@ std::map<std::string, std::string> ServerConfiguration::getPathInfoCgi() const
 	return (this->_pathInfoCgi);
 }
 
-std::vector<ListeningSocket *> ServerConfiguration::getTabList() const
-{
-	return (this->tab_list);
-}
-
 std::string ServerConfiguration::getIndex() const
 {
 	return (this->_index);
@@ -304,8 +285,6 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 	for (; allowed_methods_it < allowed_methods_tab.end(); allowed_methods_it++)
 		Cout << CYAN << *allowed_methods_it << RESET << "\n";
 	Cout << "\n";
-	
-	Cout << WHITE << "Port : " << RESET << CYAN << sc.getPort() << RESET << "\n\n";
 	
 	Cout << WHITE << "Client max body size : " << RESET << CYAN << sc.getClientMaxBodySize() << RESET << "\n\n";
 

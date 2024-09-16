@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/14 17:39:38 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/14 22:13:00 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,7 @@ class Server
 		void												ft_set_uploads_location(std::vector<std::string> tokens);
 		void												ft_location_pages(std::vector<std::string> tokens);
 		void												ft_location_pages_dispatch(std::vector<std::string> current_param);
-
-		void												creatAllSocket();
+		void												SendResponse(std::string response, std::string method);
 
 	public:
 		void												startingServer();
