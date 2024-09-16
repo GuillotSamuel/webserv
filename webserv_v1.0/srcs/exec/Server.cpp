@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/16 15:00:49 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 17:09:06 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,9 @@ void Server::serverExecution()
 					break;
 				}
 			}
-			if (sock == 0)
+			if (sock == 0)	
 			{
+				std::cout << "bla\n";
 				if (this->_events[i].events & EPOLLIN)
 				{
 					handle_client(list);
@@ -192,7 +193,9 @@ void Server::handle_client(ListeningSocket *list)
 	}
 	getServConfig(client, list);
 	if (this->currentConfig == NULL)
+	{
 		return ;
+	}
 
 	// std::map<std::string, int> tab = this->currentConfig->getAllowedMethods();
 	// if (tab[client->getMethod()] == 0)
@@ -226,7 +229,7 @@ void Server::handle_client(ListeningSocket *list)
 		ft_badRequest();
 		delete client;
 	}
-
+	log("End of the request.", 1);
 	// write(this->_connexion_fd, this->socket_buffer, strlen(this->socket_buffer));
 	// close(this->_connexion_fd);
 	// log("Closing the connection with the client.", 1);
@@ -545,6 +548,7 @@ std::string	Server::readHead(Client *client)
 	}
 	if (n == 0)
 	{
+		std::cout << "je passe pour lire\n";
 		log("The connexion has been interrupted.", 3);
 		return ("");
 	}
