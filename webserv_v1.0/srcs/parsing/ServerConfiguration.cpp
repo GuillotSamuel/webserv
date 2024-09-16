@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 14:20:20 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 15:21:18 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ ServerConfiguration::ServerConfiguration()
 	this->_uploadsLocation = "";
 	this->_errorPagesLocation = "www/error_pages/";
 	this->_cgiBin_location = "";
+	this->_allowed_methods2["GET"] = 0;
+	this->_allowed_methods2["POST"] = 0;
+	this->_allowed_methods2["DELETE"] = 0;
 }
 
 ServerConfiguration::~ServerConfiguration(void)
@@ -37,7 +40,7 @@ ServerConfiguration::~ServerConfiguration(void)
 	this->_errorPages.clear();
 	this->_location.clear();
 	this->_port.clear();
-	this->_allowed_methods.clear();
+	this->_allowed_methods2.clear();
 	this->_locations_map.clear();
 }
 
@@ -51,10 +54,11 @@ void ServerConfiguration::setLocation(std::string page, std::string location)
 	this->_location.insert(std::make_pair(page, location));
 }
 
-void ServerConfiguration::setAllowedMethods(std::vector<std::string> _allowed_methods)
+void ServerConfiguration::setAllowedMethods(std::string method, int code)
 {
-	this->_allowed_methods = _allowed_methods;
+	this->_allowed_methods2[method] = code;
 }
+
 
 void ServerConfiguration::setPort(std::string str)
 {
@@ -180,9 +184,9 @@ std::map<std::string, std::string> ServerConfiguration::getLocation(void) const
 	return (this->_location);
 }
 
-std::vector<std::string> ServerConfiguration::getAllowedMethods(void) const
+std::map<std::string, int> ServerConfiguration::getAllowedMethods(void) const
 {
-	return (this->_allowed_methods);
+	return (this->_allowed_methods2);
 }
 
 std::string ServerConfiguration::getimHere() const
@@ -255,11 +259,11 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 	// 	Cout << CYAN << info_mime_it->first << " : " << info_mime_it->second << RESET << "\n";
 	// Cout << "\n";
 
-	Cout << WHITE << "Allowed methods vector : \n" << RESET;
-	std::vector<std::string> allowed_methods_tab = sc.getAllowedMethods();
-	std::vector<std::string>::iterator allowed_methods_it = allowed_methods_tab.begin();
-	for (; allowed_methods_it < allowed_methods_tab.end(); allowed_methods_it++)
-		Cout << CYAN << *allowed_methods_it << RESET << "\n";
+	Cout << WHITE << "Allowed methods map : \n" << RESET;
+	std::map<std::string, int> allowed_methods_tab = sc.getAllowedMethods();
+	std::map<std::string, int>::iterator allowed_methods_it = allowed_methods_tab.begin();
+	for (; allowed_methods_it != allowed_methods_tab.end(); allowed_methods_it++)
+		Cout << CYAN << allowed_methods_it->first << " : " << allowed_methods_it->second << RESET << "\n";
 	Cout << "\n";
 	
 	Cout << WHITE << "Location map : \n" << RESET;

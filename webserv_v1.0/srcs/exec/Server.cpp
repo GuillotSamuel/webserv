@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/16 12:02:31 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 15:00:49 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,10 @@ void Server::handle_client(ListeningSocket *list)
 	getServConfig(client, list);
 	if (this->currentConfig == NULL)
 		return ;
+
+	// std::map<std::string, int> tab = this->currentConfig->getAllowedMethods();
+	// if (tab[client->getMethod()] == 0)
+		
 
 	receivedLine = readBody(client, &receivedLine);
 
@@ -598,6 +602,7 @@ std::string Server::findPath(Client *client)
 		return (this->currentConfig->getRootIndex());
 	}
 
+	//verif pages
 	//regarder sil ni a pas un alias
 	std::map<std::string, t_location> obj = this->currentConfig->getTabLocation();
 	if (obj.find(client->getPath()) != obj.end())
@@ -605,7 +610,7 @@ std::string Server::findPath(Client *client)
 		t_location loc = obj[client->getPath()];
 
 		client->setFullPath(loc.real_path);
-		// if (client->getMethod() != loc.method_requested)
+		// if (client->getMethod() != )
 	}
 
 	size_t ext = client->getFullPath().rfind(".");

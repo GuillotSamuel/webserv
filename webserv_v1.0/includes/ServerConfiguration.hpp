@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 14:20:20 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 15:18:11 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ class ServerConfiguration
 		std::string							_index; // ok
 		int									_clientMaxBodySize; // ok
 		std::map<std::string, std::string>	_pathInfoCgi; // ok
-		std::vector<std::string>			_allowed_methods; // TO CHANGE
-		// std::map<std::string, int>			_allowed_methods; // TO ADOPT
+		std::map<std::string, int>			_allowed_methods2; // TO ADOPT
 		std::map<int, std::string>			_errorPages; // ok
 
 		/* --- Locations from configuration file --- */
@@ -96,7 +95,7 @@ class ServerConfiguration
 		void								setRoot(std::string str);
 		void								setIndex(std::string str);
 		void								setLocation(std::string page, std::string location);
-		void								setAllowedMethods(std::vector<std::string> _allowed_methods);
+		void								setAllowedMethods(std::string method, int code);
 		void								setUploadsLocation(std::string str);
 		void								setErrorPagesLocation(std::string str);
 		void								setPathInfoCgi(std::string extension, std::string location);
@@ -124,7 +123,7 @@ class ServerConfiguration
 		std::map<std::string, std::string>	getLocation(void) const;
 		std::map<std::string, std::string>	getInfoMime(void) const;
 		std::map<std::string, t_location>	getTabLocation(void) const;
-		std::vector<std::string>			getAllowedMethods(void)const;
+		std::map<std::string, int>			getAllowedMethods(void)const;
 		std::string							getimHere() const;
 		
 		/*---------------------------------------------------------------*/

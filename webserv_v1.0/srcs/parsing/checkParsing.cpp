@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 13:36:51 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 14:44:56 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 void Server::check_error_page(ServerConfiguration server_conf)
 {
+	// check : if no lcation , what to do with pages / opo situation also 
 	(void)server_conf;
 }
 
