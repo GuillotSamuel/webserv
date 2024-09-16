@@ -1,30 +1,30 @@
-	[INFO][14:20:39] : Getprotobyname Succed.
-	[INFO][14:20:39] : Socket_fd in now created.
-	[INFO][14:20:39] : Socket_fd in now set.
-	[INFO][14:20:39] : Socket_fd is binded.
-	[INFO][14:20:39] : Socket_fd is non blocking fd.
-	[INFO][14:20:39] : Socket_fd is now listening every attemp of connection.
-	[INFO][14:20:39] : Getprotobyname Succed.
-	[INFO][14:20:39] : Socket_fd in now created.
-	[INFO][14:20:39] : Socket_fd in now set.
-	[INFO][14:20:39] : Socket_fd is binded.
-	[INFO][14:20:39] : Socket_fd is non blocking fd.
-	[INFO][14:20:39] : Socket_fd is now listening every attemp of connection.
-	[INFO][14:20:39] : Getprotobyname Succed.
-	[INFO][14:20:39] : Socket_fd in now created.
-	[INFO][14:20:39] : Socket_fd in now set.
-	[INFO][14:20:39] : Socket_fd is binded.
-	[INFO][14:20:39] : Socket_fd is non blocking fd.
-	[INFO][14:20:39] : Socket_fd is now listening every attemp of connection.
-	[INFO][14:20:39] : Getprotobyname Succed.
-	[INFO][14:20:39] : Socket_fd in now created.
-	[INFO][14:20:39] : Socket_fd in now set.
-	[INFO][14:20:39] : Socket_fd is binded.
-	[INFO][14:20:39] : Socket_fd is non blocking fd.
-	[INFO][14:20:39] : Socket_fd is now listening every attemp of connection.
-[INFO][14:20:39] : Starting Server.
-	[INFO][14:20:39] : Epoll instance successfully created.
-	[INFO][14:20:39] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][14:20:39] : The server construction is now complete. The server is ready to accept incoming connections.
-	[ERROR][14:20:41] : The call to epoll_wait failed.
-	[INFO][14:20:41] : Shutting down the server properly.
+	[INFO][14:31:00] : Getprotobyname Succed.
+	[INFO][14:31:00] : Socket_fd in now created.
+	[INFO][14:31:00] : Socket_fd in now set.
+	[INFO][14:31:00] : Socket_fd is binded.
+	[INFO][14:31:00] : Socket_fd is non blocking fd.
+	[INFO][14:31:00] : Socket_fd is now listening every attemp of connection.
+	[INFO][14:31:00] : Getprotobyname Succed.
+	[INFO][14:31:00] : Socket_fd in now created.
+	[INFO][14:31:00] : Socket_fd in now set.
+	[INFO][14:31:00] : Socket_fd is binded.
+	[INFO][14:31:00] : Socket_fd is non blocking fd.
+	[INFO][14:31:00] : Socket_fd is now listening every attemp of connection.
+	[INFO][14:31:00] : Getprotobyname Succed.
+	[INFO][14:31:00] : Socket_fd in now created.
+	[INFO][14:31:00] : Socket_fd in now set.
+	[INFO][14:31:00] : Socket_fd is binded.
+	[INFO][14:31:00] : Socket_fd is non blocking fd.
+	[INFO][14:31:00] : Socket_fd is now listening every attemp of connection.
+	[INFO][14:31:00] : Getprotobyname Succed.
+	[INFO][14:31:00] : Socket_fd in now created.
+	[INFO][14:31:00] : Socket_fd in now set.
+	[INFO][14:31:00] : Socket_fd is binded.
+	[INFO][14:31:00] : Socket_fd is non blocking fd.
+	[INFO][14:31:00] : Socket_fd is now listening every attemp of connection.
+[INFO][14:31:00] : Starting Server.
+	[INFO][14:31:00] : Epoll instance successfully created.
+	[INFO][14:31:00] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][14:31:00] : The server construction is now complete. The server is ready to accept incoming connections.
+	[ERROR][14:31:08] : The call to epoll_wait failed.
+	[INFO][14:31:08] : Shutting down the server properly.

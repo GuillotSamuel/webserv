@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:38 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 14:04:23 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 14:30:20 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void Server::ft_set_errors_location(std::vector<std::string> tokens)
 
 void Server::ft_set_cgi_bin_location(std::vector<std::string> tokens)
 {
-    if (tokens.size() != 3)
+    if (tokens.size() < 3 || tokens.size() % 2 == 0)
     {
         ft_invalid_line(tokens);
     }
@@ -47,6 +47,12 @@ void Server::ft_set_cgi_bin_location(std::vector<std::string> tokens)
         }
     }
     this->currentConfig->setCgiBinLocation(tokens[2]);
+
+    size_t i = 3;
+    for (; (i + 1) < tokens.size(); i += 2)
+    {
+        this->currentConfig->setPathInfoCgi(tokens[i], tokens[i + 1]);
+    }
 }
 
 void Server::ft_set_location_param(std::vector<std::string> tokens)
