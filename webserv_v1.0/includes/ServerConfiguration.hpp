@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 12:02:34 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 14:20:20 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,17 @@ class ServerConfiguration
 		std::vector<int>					_port; // ok
 		std::string							_root;  // ok //Path_du_site
 		std::string							_index; // ok
+		int									_clientMaxBodySize; // ok
 		std::map<std::string, std::string>	_pathInfoCgi; // ok
 		std::vector<std::string>			_allowed_methods; // TO CHANGE
 		// std::map<std::string, int>			_allowed_methods; // TO ADOPT
 		std::map<int, std::string>			_errorPages; // ok
-		int									_clientMaxBodySize; // ok
 
 		/* --- Locations from configuration file --- */
 		std::string							_errorPagesLocation; // ok
 		std::string							_cgiBin_location; // ok
 		std::string							_uploadsLocation; // ok
-		std::map<std::string, t_location>	locations; // ok // adding _
+		std::map<std::string, t_location>	_locations_map; // ok // adding _
 
 		/* --- Div informations --- */
 		std::string							root_index; // ok

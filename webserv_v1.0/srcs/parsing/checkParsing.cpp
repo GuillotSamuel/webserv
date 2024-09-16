@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 18:31:15 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 13:36:51 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void Server::check_error_page(ServerConfiguration server_conf)
 void Server::check_host_page(ServerConfiguration server_conf)
 {
 	(void)server_conf;
+	// check: possible de mettre plusieurs hostnames en commun sur plusieurs servers + plusieurs hostnames par server ?
 }
 
 void Server::check_index(ServerConfiguration server_conf)
@@ -61,11 +62,15 @@ void Server::check_location(ServerConfiguration server_conf)
 void Server::check_max_body(ServerConfiguration server_conf)
 {
 	(void)server_conf;
+	// forbiding some sizes ?
+	
 }
 
 void Server::check_root(ServerConfiguration server_conf)
 {
 	struct stat info;
+
+	// if root indique, le verifier , si pas indiquer ne pas le verifier
 
 	if (stat(server_conf.getRoot().c_str(), &info) != 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 20:01:59 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/14 14:21:40 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/16 13:55:32 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void Server::readConfigurationFile(const char *arg)
 	{
 		error("Error: Could not open the configuration file [./webserv --help]");
 	}
-	
+
 	ssize_t bytes_read = 1;
 	char buffer[1];
 	std::string line;
@@ -32,12 +32,20 @@ void Server::readConfigurationFile(const char *arg)
 	while ((bytes_read = read(this->fd_config, buffer, 1)) > 0)
 	{
 		if (bytes_read == -1)
-        {
-            error("Error: Error while reading from the configuration file");
-        }
-		
+		{
+			error("Error: Error while reading from the configuration file");
+		}
+
 		if (*buffer == '\0' || *buffer == '\n')
 		{
+			for (size_t i = 0; line[i] && std::isspace((unsigned char)line[i]); i++)
+			{
+				if (line[i + 1] && line[i + 1] == '#')
+				{
+					return;
+				}
+			}
+			
 			if (this->insideServerBlock)
 			{
 				if (this->insideParamBlock == false && line.find("}") != std::string::npos)
@@ -66,14 +74,14 @@ void Server::readConfigurationFile(const char *arg)
 			{
 				if (line.find("server {") != std::string::npos)
 				{
-                    this->currentConfig = new ServerConfiguration();
+					this->currentConfig = new ServerConfiguration();
 					this->location_started = false;
-                    if (!this->currentConfig)
+					if (!this->currentConfig)
 					{
 						error("Error: Unable to allocate memory for ServerConfiguration");
 					}
 					insideServerBlock = true;
-                }
+				}
 			}
 			line.clear();
 		}
@@ -84,11 +92,11 @@ void Server::readConfigurationFile(const char *arg)
 	}
 
 	if (insideServerBlock && this->currentConfig != NULL)
-    {
-        this->tab_serv.push_back(*this->currentConfig);
-        delete this->currentConfig;
+	{
+		this->tab_serv.push_back(*this->currentConfig);
+		delete this->currentConfig;
 		this->currentConfig = NULL;
-    }
-	
+	}
+
 	close(this->fd_config);
 }
