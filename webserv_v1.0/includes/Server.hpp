@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/14 22:13:00 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/17 17:01:56 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class Server
 		struct epoll_event									_event;
 		struct epoll_event									_events[MAX_EVENTS];
 		int													_epoll_fd;
-		int													_connexion_fd;
+		std::vector<uint32_t>								_connexion_fd;
 		int													_status_code;
 		std::string											_path;
 		std::string											_extensionPath;
@@ -45,7 +45,7 @@ class Server
 		bool												insideServerBlock;
 		bool												insideParamBlock;
 		bool												location_started;
-
+		std::string											_response;
 		/*---------------------------------------------------------------*/
 		/*                            METHOD                             */
 		/*---------------------------------------------------------------*/
@@ -53,7 +53,7 @@ class Server
 		std::map<std::string, std::string>					createExtPath();
 		std::map<std::string, std::string>					createMimePath();
 		void												creatAllListeningSockets();
-		void												handle_client(ListeningSocket *list);
+		void												handle_client(ListeningSocket *list, int current_fd);
 		std::string											findPath(Client *client);
 		void												ft_get(std::string filePath, Client *client);
 		void												ft_post(Client client, std::string filePath);
@@ -63,9 +63,9 @@ class Server
 		std::string 										getMimeType(Client *client);
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
-		std::string											readHead(Client *client);
+		std::string											readHead(Client *client, int current_fd);
 		void												getServConfig(Client *client, ListeningSocket *list);
-		std::string											readBody(Client *client, std::string *receivedLine);
+		std::string											readBody(Client *client, std::string *receivedLine, int current_fd);
 		void												closeServer();
 		void												dlFile(std::string *receivedLine, Client *client);
 		void												parsing_g(int argc, char **argv);
@@ -98,7 +98,7 @@ class Server
 		void												ft_set_uploads_location(std::vector<std::string> tokens);
 		void												ft_location_pages(std::vector<std::string> tokens);
 		void												ft_location_pages_dispatch(std::vector<std::string> current_param);
-		void												SendResponse(std::string response, std::string method);
+		// void												SendResponse(std::string response, std::string method);
 
 	public:
 		void												startingServer();

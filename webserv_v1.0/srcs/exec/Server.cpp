@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/16 19:05:11 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/17 17:29:23 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ std::ofstream* Server::_log = NULL;
 
 Server::Server(int argc, char **argv)
 {
+	this->_response = "";
 	_log = new std::ofstream("logfile.log", std::ios::out);
 	if (!_log->is_open())
 	{		
@@ -29,7 +30,6 @@ Server::Server(int argc, char **argv)
 	parsing_g(argc, argv);
 	creatAllListeningSockets();
 	log("Starting Server.", 3);
-	this->_connexion_fd = -1;
 	this->_epoll_fd = -1;
 	this->extpath = createExtPath();
 	this->mimePath = createMimePath();
@@ -112,7 +112,7 @@ void Server::serverExecution()
 			log("The call to epoll_wait failed.", 2);
 		if (g_signal == SIGNAL)
 			closeServer();
-		ListeningSocket *list;
+		ListeningSocket *list = NULL;
 		for (int i = 0; i < nfds; i++)
 		{
 			int	sock = 0;
@@ -128,18 +128,44 @@ void Server::serverExecution()
 			}
 			if (sock == 0)	
 			{
-				std::cout << "bla\n";
+				std::vector<uint32_t>::iterator confd = this->_connexion_fd.begin();
+				for(; confd != this->_connexion_fd.end(); confd++)
+				{
+					if (*confd == (uint32_t)this->_events[i].data.fd)
+					{
+						break;
+					}
+				}
 				if (this->_events[i].events & EPOLLIN)
 				{
-					handle_client(list);
-				}
-				else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP)) {
-					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, this->_events->data.fd, NULL) == -1)
+					handle_client(list, *confd);
+					this->_event.events = EPOLLOUT | EPOLLRDHUP | EPOLLHUP;
+					this->_event.data.fd = *confd;
+					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_MOD, *confd, &this->_event) == -1)
+					{
 						log("Epoll_ctl failed.", 2);
-
-					close(this->_events->data.fd);
+					}	
+				}
+				else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP))
+				{
+					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, *confd, &this->_event) == -1)
+					{
+						log("Epoll_ctl failed.", 2);
+					}
+					close(*confd);
+					list = NULL;
+					
 					log("Client has been successfuly closed.", 1);
-					continue;
+				}
+				else if (this->_events[i].events & EPOLLOUT)
+				{
+					send(*confd, this->_response.c_str(), this->_response.size(), 0);
+					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, *confd, &this->_event) == -1)
+					{
+						log("Epoll_ctl failed.", 2);
+					}
+					close(*confd);
+					list = NULL;
 				}
 				else
 					log("Inexpected event has been detected.", 2);
@@ -149,31 +175,34 @@ void Server::serverExecution()
 				if (this->_events[i].data.fd == sock)
 				{
 					socklen_t client_addrlen = sizeof(this->_clientAdress);
-					this->_connexion_fd = accept(sock, (struct sockaddr *)&this->_clientAdress, &client_addrlen);
-					if (this->_connexion_fd == -1)
+					this->_connexion_fd.push_back(accept(sock, (struct sockaddr *)&this->_clientAdress, &client_addrlen));
+					if ((int)(this->_connexion_fd.back()) == -1)
 					{
 						log("The call to accept function failed for unknown reason.", 2);
 					}
 					log("[NEW REQUEST]", 3);
 					log("Server did accept the connection.", 1);
 
-					set_nonblocking(this->_connexion_fd);
+					set_nonblocking(this->_connexion_fd.back());
 
-					this->_event.events = EPOLLIN | EPOLLET | EPOLLRDHUP | EPOLLHUP;
-					this->_event.data.fd = this->_connexion_fd;
-					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_connexion_fd, &this->_event) == -1)
+					this->_event.events = EPOLLIN;
+					this->_event.data.fd = this->_connexion_fd.back();
+					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_connexion_fd.back(), &this->_event) == -1)
+					{
 						log("Epoll_ctl failed.", 2);
+					}
 				}
 			}
 		}
 	}
 }
 
+
 /*
 -Parsing request, download file if needed 
 and chose what method to use
 */
-void Server::handle_client(ListeningSocket *list)
+void Server::handle_client(ListeningSocket *list, int current_fd)
 {
 	Client *client = new Client();
 
@@ -184,7 +213,7 @@ void Server::handle_client(ListeningSocket *list)
 	std::string ipAdress(client_ip);
 	client->setIpAddress(ipAdress);
 	
-	std::string receivedLine = readHead(client);
+	std::string receivedLine = readHead(client, current_fd);
 	if (receivedLine == "")
 	{
 		delete client;
@@ -199,9 +228,8 @@ void Server::handle_client(ListeningSocket *list)
 
 	// std::map<std::string, int> tab = this->currentConfig->getAllowedMethods();
 	// if (tab[client->getMethod()] == 0)
-		
 
-	receivedLine = readBody(client, &receivedLine);
+	receivedLine = readBody(client, &receivedLine, current_fd);
 
 	std::string filePath = findPath(client);
 	if (filePath == "")
@@ -230,9 +258,8 @@ void Server::handle_client(ListeningSocket *list)
 		delete client;
 	}
 	log("End of the request.", 1);
-	// write(this->_connexion_fd, this->socket_buffer, strlen(this->socket_buffer));
-	// close(this->_connexion_fd);
-	// log("Closing the connection with the client.", 1);
+	
+
 }
 
 void	Server::getServConfig(Client *client, ListeningSocket *list)
@@ -316,23 +343,7 @@ void Server::ft_get(std::string filePath, Client *client) // a revoir
 		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 		response += content;
 	}
-	SendResponse(response, "GET");
-}
-
-void	Server::SendResponse(std::string response, std::string method)
-{
-	log("Server's ready to respond.", 1);
-	if (write(this->_connexion_fd, response.c_str(), response.size()) == -1)
-	{
-		int failed_count = 1;
-		while (failed_count < 5)
-		{
-			if (write(this->_connexion_fd, response.c_str(), response.size()) != -1)
-				return ;
-			failed_count++;
-		}
-		log("Server's failed to respond to " + method + " request.", 2);
-	}
+	this->_response = response;
 }
 
 /*response to a POST request*/
@@ -359,7 +370,7 @@ void Server::ft_post(Client client, std::string filePath) // a revoir surtout au
 	response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 	response += content;
 
-	SendResponse(response, "POST");
+	this->_response = response;
 	delete cgi;
 }
 
@@ -380,7 +391,7 @@ void Server::ft_delete(std::string filePath) // a revoir
 		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 		response += "File not found";
 
-		SendResponse(response, "DELETE");
+		this->_response = response;
 		return;
 	}
 
@@ -390,7 +401,7 @@ void Server::ft_delete(std::string filePath) // a revoir
 		response += "Connection: close\r\n";
 		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 
-		SendResponse(response, "DELETE");
+		this->_response = response;
 	}
 	else
 		log("Server failed to respond at the DELETE request.", 2);
@@ -410,7 +421,7 @@ void Server::ft_badRequest()
 	response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 	response += content;
 
-	SendResponse(response, "BAD REQUEST");
+	this->_response = response;
 }
 
 //Closing The server using key CTRL /C.
@@ -430,6 +441,7 @@ void	Server::closeServer()
 	std::vector<ServerConfiguration>().swap(tab_serv);
 	this->mimePath.clear();
 	this->extpath.clear();
+	this->_connexion_fd.clear();
 	close(this->_epoll_fd);
 	exit(EXIT_SUCCESS);
 }
@@ -525,30 +537,15 @@ std::string	Server::getMimeType(Client *client)
 	return ("application/octet-stream");
 }
 
-std::string	Server::readHead(Client *client)
+std::string	Server::readHead(Client *client, int current_fd)
 {
-	int n = recv(this->_connexion_fd, this->received_line, 4096, 0);
+	int n = recv(current_fd, this->received_line, 4096, 0);
 	if (n < 0)
 	{
-		int error_count = 1;
-		while (error_count < 5)
-		{
-			int n = recv(this->_connexion_fd, this->received_line, 4096, 0);
-			if (n >= 0)
-			{
-				break;
-			}
-			if (n < 0 && error_count == 5)
-			{
-				log("The call recv failed.", 2);
-				return ("");
-			}
-			error_count++;
-		}
+		log("The call recv failed.", 2);
 	}
 	if (n == 0)
 	{
-		std::cout << "je passe pour lire\n";
 		log("The connexion has been interrupted.", 3);
 		return ("");
 	}
@@ -558,7 +555,7 @@ std::string	Server::readHead(Client *client)
 	return (receivedLine);
 }
 
-std::string	Server::readBody(Client *client, std::string *receivedLine)
+std::string	Server::readBody(Client *client, std::string *receivedLine, int current_fd)
 {
 	if (client->getContentLength() != "")
 	{
@@ -569,7 +566,7 @@ std::string	Server::readBody(Client *client, std::string *receivedLine)
         int total_read = 0;
 		while (total_read < len)
         {
-            int read = recv(this->_connexion_fd, buffer + total_read, len - total_read, 0);
+            int read = recv(current_fd, buffer + total_read, len - total_read, 0);
             if (read < 0)
             {
                 log("Recv failed.", 2);
@@ -608,22 +605,21 @@ std::string Server::findPath(Client *client)
 
 	//verif pages
 	//regarder sil ni a pas un alias
-	std::map<std::string, t_location> obj = this->currentConfig->getTabLocation();
-	if (obj.find(client->getPath()) != obj.end())
-	{
-		t_location loc = obj[client->getPath()];
+	// std::map<std::string, t_location> obj = this->currentConfig->getTabLocation();
+	// if (obj.find(client->getPath()) != obj.end())
+	// {
+	// 	t_location loc = obj[client->getPath()];
 
-		client->setFullPath(loc.alias);
-		// if (client->getMethod() != )
-	}
+	// 	client->setFullPath(loc.alias);
+	// 	// if (client->getMethod() != )
+	// }
 
 	size_t ext = client->getFullPath().rfind(".");
 	if (ext == std::string::npos)
 	{
 		this->_status_code = 400;
-		return (this->currentConfig->getimHere()
-		+ this->currentConfig->getErrorPageLocation()
-		+ this->currentConfig->getErrorPage(400));
+		return (this->currentConfig->getimHere() + this->currentConfig->getErrorPageLocation()
+			+ this->currentConfig->getErrorPage(400));
 	}
 	
 	size_t extend = client->getFullPath().size();
@@ -632,12 +628,14 @@ std::string Server::findPath(Client *client)
 	{
 		this->_extensionPath = extension;
 		this->_status_code = 0;
-		return (this->currentConfig->getimHere() + this->currentConfig->getRoot() + this->extpath[extension] + client->getFullPath());
+		return (this->currentConfig->getimHere() + this->currentConfig->getRoot()
+			+ this->extpath[extension] + client->getFullPath());
 	}
 	
 	log("Extension of the files was not recognize.", 1);
 	this->_status_code = 400;
-	return (this->currentConfig->getimHere() + this->currentConfig->getErrorPageLocation() + this->currentConfig->getErrorPage(400));
+	return (this->currentConfig->getimHere() + this->currentConfig->getErrorPageLocation()
+		+ this->currentConfig->getErrorPage(400));
 }
 
 void   	Server::log(std::string error, int type)

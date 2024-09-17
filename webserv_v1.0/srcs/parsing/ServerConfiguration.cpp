@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 19:10:55 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/17 17:25:11 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ ServerConfiguration::ServerConfiguration()
 	this->_index = "";
 	this->_uploadsLocation = "";
 	this->_errorPagesLocation = "www/error_pages/";
+	this->_errorPages[400] = "400.html";
+	this->_errorPages[404] = "404.html";
 	this->_cgiBin_location = "";
 	this->_allowed_methods["GET"] = 0;
 	this->_allowed_methods["POST"] = 0;
