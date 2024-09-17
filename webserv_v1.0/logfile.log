@@ -1,134 +1,48 @@
-	[INFO][17:09:45] : Getprotobyname Succed.
-	[INFO][17:09:45] : Socket_fd in now created.
-	[INFO][17:09:45] : Socket_fd in now set.
-	[INFO][17:09:45] : Socket_fd is binded.
-	[INFO][17:09:45] : Socket_fd is non blocking fd.
-	[INFO][17:09:45] : Socket_fd is now listening every attemp of connection.
-	[INFO][17:09:45] : Getprotobyname Succed.
-	[INFO][17:09:45] : Socket_fd in now created.
-	[INFO][17:09:45] : Socket_fd in now set.
-	[INFO][17:09:45] : Socket_fd is binded.
-	[INFO][17:09:45] : Socket_fd is non blocking fd.
-	[INFO][17:09:45] : Socket_fd is now listening every attemp of connection.
-	[INFO][17:09:45] : Getprotobyname Succed.
-	[INFO][17:09:45] : Socket_fd in now created.
-	[INFO][17:09:45] : Socket_fd in now set.
-	[INFO][17:09:45] : Socket_fd is binded.
-	[INFO][17:09:45] : Socket_fd is non blocking fd.
-	[INFO][17:09:45] : Socket_fd is now listening every attemp of connection.
-	[INFO][17:09:45] : Getprotobyname Succed.
-	[INFO][17:09:45] : Socket_fd in now created.
-	[INFO][17:09:45] : Socket_fd in now set.
-	[INFO][17:09:45] : Socket_fd is binded.
-	[INFO][17:09:45] : Socket_fd is non blocking fd.
-	[INFO][17:09:45] : Socket_fd is now listening every attemp of connection.
-	[INFO][17:09:45] : Getprotobyname Succed.
-	[INFO][17:09:45] : Socket_fd in now created.
-	[INFO][17:09:45] : Socket_fd in now set.
-	[INFO][17:09:45] : Socket_fd is binded.
-	[INFO][17:09:45] : Socket_fd is non blocking fd.
-	[INFO][17:09:45] : Socket_fd is now listening every attemp of connection.
-	[INFO][17:09:45] : Getprotobyname Succed.
-	[INFO][17:09:45] : Socket_fd in now created.
-	[INFO][17:09:45] : Socket_fd in now set.
-	[INFO][17:09:45] : Socket_fd is binded.
-	[INFO][17:09:45] : Socket_fd is non blocking fd.
-	[INFO][17:09:45] : Socket_fd is now listening every attemp of connection.
-	[INFO][17:09:45] : Getprotobyname Succed.
-	[INFO][17:09:45] : Socket_fd in now created.
-	[INFO][17:09:45] : Socket_fd in now set.
-	[INFO][17:09:45] : Socket_fd is binded.
-	[INFO][17:09:45] : Socket_fd is non blocking fd.
-	[INFO][17:09:45] : Socket_fd is now listening every attemp of connection.
-[INFO][17:09:45] : Starting Server.
-	[INFO][17:09:45] : Epoll instance successfully created.
-	[INFO][17:09:45] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][17:09:45] : The server construction is now complete. The server is ready to accept incoming connections.
-[INFO][17:09:47] : [NEW REQUEST]
-	[INFO][17:09:47] : Server did accept the connection.
-	[INFO][17:09:47] : File is created.
-	[INFO][17:09:47] : Server's receive a GET request.
-	[INFO][17:09:47] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_catApi/html/gallery.html" was found.
-	[INFO][17:09:47] : Server's ready to respond.
-	[INFO][17:09:47] : End of the request.
-[INFO][17:09:47] : The connexion has been interrupted.
-	[ERROR][17:09:47] : Server could not read anything from client. The client will be remove.
-[INFO][17:09:47] : [NEW REQUEST]
-	[INFO][17:09:47] : Server did accept the connection.
-	[INFO][17:09:47] : File is created.
-	[INFO][17:09:47] : Server's receive a GET request.
-	[INFO][17:09:47] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_catApi/styles/styles.css" was found.
-	[INFO][17:09:47] : Server's ready to respond.
-	[INFO][17:09:47] : End of the request.
-[INFO][17:09:47] : The connexion has been interrupted.
-	[ERROR][17:09:47] : Server could not read anything from client. The client will be remove.
-[INFO][17:09:47] : [NEW REQUEST]
-	[INFO][17:09:47] : Server did accept the connection.
-[INFO][17:09:47] : [NEW REQUEST]
-	[INFO][17:09:47] : Server did accept the connection.
-	[INFO][17:09:47] : File is created.
-	[INFO][17:09:47] : Server's receive a GET request.
-	[INFO][17:09:47] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_catApi/styles/styles.css" was found.
-	[INFO][17:09:47] : Server's ready to respond.
-	[INFO][17:09:47] : End of the request.
-	[INFO][17:09:47] : File is created.
-	[INFO][17:09:47] : Server's receive a GET request.
-	[INFO][17:09:47] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_catApi/images/cat2.jpg" was found.
-	[INFO][17:09:47] : Server's ready to respond.
-	[INFO][17:09:47] : End of the request.
-[INFO][17:09:47] : The connexion has been interrupted.
-	[ERROR][17:09:47] : Server could not read anything from client. The client will be remove.
-[INFO][17:09:47] : [NEW REQUEST]
-	[INFO][17:09:47] : Server did accept the connection.
-[INFO][17:09:47] : [NEW REQUEST]
-	[INFO][17:09:47] : Server did accept the connection.
-	[INFO][17:09:47] : File is created.
-	[INFO][17:09:47] : Server's receive a GET request.
-	[INFO][17:09:47] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_catApi/images/cat4.jpg" was found.
-	[INFO][17:09:47] : Server's ready to respond.
-	[INFO][17:09:47] : End of the request.
-[INFO][17:09:47] : [NEW REQUEST]
-	[INFO][17:09:47] : Server did accept the connection.
-[INFO][17:09:47] : [NEW REQUEST]
-	[INFO][17:09:47] : Server did accept the connection.
-	[INFO][17:09:47] : File is created.
-	[INFO][17:09:47] : Server's receive a GET request.
-	[INFO][17:09:47] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_catApi/scripts/script.js" was found.
-	[INFO][17:09:47] : Server's ready to respond.
-	[INFO][17:09:47] : End of the request.
-[INFO][17:09:47] : The connexion has been interrupted.
-	[ERROR][17:09:47] : Server could not read anything from client. The client will be remove.
-[INFO][17:09:47] : [NEW REQUEST]
-	[INFO][17:09:47] : Server did accept the connection.
-	[INFO][17:09:47] : File is created.
-	[INFO][17:09:47] : Server's receive a GET request.
-	[INFO][17:09:47] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_catApi/images/panther.webp" was found.
-	[INFO][17:09:47] : Server's ready to respond.
-	[INFO][17:09:47] : End of the request.
-[INFO][17:09:47] : [NEW REQUEST]
-	[INFO][17:09:47] : Server did accept the connection.
-	[INFO][17:09:47] : File is created.
-	[INFO][17:09:47] : Server's receive a GET request.
-	[INFO][17:09:47] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_catApi/images/hearts.jpg" was found.
-	[INFO][17:09:47] : Server's ready to respond.
-	[INFO][17:09:47] : End of the request.
-	[INFO][17:09:47] : File is created.
-	[INFO][17:09:47] : Server's receive a GET request.
-	[INFO][17:09:47] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_catApi/images/hearts.jpg" was found.
-	[INFO][17:09:47] : Server's ready to respond.
-	[INFO][17:09:47] : End of the request.
-[INFO][17:09:47] : The connexion has been interrupted.
-	[ERROR][17:09:47] : Server could not read anything from client. The client will be remove.
-[INFO][17:09:47] : The connexion has been interrupted.
-	[ERROR][17:09:47] : Server could not read anything from client. The client will be remove.
-[INFO][17:09:47] : [NEW REQUEST]
-	[INFO][17:09:47] : Server did accept the connection.
-	[INFO][17:09:47] : File is created.
-	[INFO][17:09:47] : Server's receive a GET request.
-	[INFO][17:09:47] : The file requested "/home/sguillot/travail/webserv/webserv_v1.0/../website_catApi/images/icons/favicon.ico" was found.
-	[INFO][17:09:47] : Server's ready to respond.
-	[INFO][17:09:47] : End of the request.
-[INFO][17:09:47] : The connexion has been interrupted.
-	[ERROR][17:09:47] : Server could not read anything from client. The client will be remove.
-	[ERROR][17:44:30] : The call to epoll_wait failed.
-	[INFO][17:44:30] : Shutting down the server properly.
+	[INFO][13:03:25] : Getprotobyname Succed.
+	[INFO][13:03:25] : Socket_fd in now created.
+	[INFO][13:03:25] : Socket_fd in now set.
+	[INFO][13:03:25] : Socket_fd is binded.
+	[INFO][13:03:25] : Socket_fd is non blocking fd.
+	[INFO][13:03:25] : Socket_fd is now listening every attemp of connection.
+	[INFO][13:03:25] : Getprotobyname Succed.
+	[INFO][13:03:25] : Socket_fd in now created.
+	[INFO][13:03:25] : Socket_fd in now set.
+	[INFO][13:03:25] : Socket_fd is binded.
+	[INFO][13:03:25] : Socket_fd is non blocking fd.
+	[INFO][13:03:25] : Socket_fd is now listening every attemp of connection.
+	[INFO][13:03:25] : Getprotobyname Succed.
+	[INFO][13:03:25] : Socket_fd in now created.
+	[INFO][13:03:25] : Socket_fd in now set.
+	[INFO][13:03:25] : Socket_fd is binded.
+	[INFO][13:03:25] : Socket_fd is non blocking fd.
+	[INFO][13:03:25] : Socket_fd is now listening every attemp of connection.
+	[INFO][13:03:25] : Getprotobyname Succed.
+	[INFO][13:03:25] : Socket_fd in now created.
+	[INFO][13:03:25] : Socket_fd in now set.
+	[INFO][13:03:25] : Socket_fd is binded.
+	[INFO][13:03:25] : Socket_fd is non blocking fd.
+	[INFO][13:03:25] : Socket_fd is now listening every attemp of connection.
+	[INFO][13:03:25] : Getprotobyname Succed.
+	[INFO][13:03:25] : Socket_fd in now created.
+	[INFO][13:03:25] : Socket_fd in now set.
+	[INFO][13:03:25] : Socket_fd is binded.
+	[INFO][13:03:25] : Socket_fd is non blocking fd.
+	[INFO][13:03:25] : Socket_fd is now listening every attemp of connection.
+	[INFO][13:03:25] : Getprotobyname Succed.
+	[INFO][13:03:25] : Socket_fd in now created.
+	[INFO][13:03:25] : Socket_fd in now set.
+	[INFO][13:03:25] : Socket_fd is binded.
+	[INFO][13:03:25] : Socket_fd is non blocking fd.
+	[INFO][13:03:25] : Socket_fd is now listening every attemp of connection.
+	[INFO][13:03:25] : Getprotobyname Succed.
+	[INFO][13:03:25] : Socket_fd in now created.
+	[INFO][13:03:25] : Socket_fd in now set.
+	[INFO][13:03:25] : Socket_fd is binded.
+	[INFO][13:03:25] : Socket_fd is non blocking fd.
+	[INFO][13:03:25] : Socket_fd is now listening every attemp of connection.
+[INFO][13:03:25] : Starting Server.
+	[INFO][13:03:25] : Epoll instance successfully created.
+	[INFO][13:03:25] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][13:03:25] : The server construction is now complete. The server is ready to accept incoming connections.
+	[ERROR][13:03:27] : The call to epoll_wait failed.
+	[INFO][13:03:27] : Shutting down the server properly.

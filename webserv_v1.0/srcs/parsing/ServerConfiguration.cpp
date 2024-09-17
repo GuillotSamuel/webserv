@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 19:10:55 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/17 13:03:15 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void ServerConfiguration::setAllowedMethods(std::string method, int code)
 {
 	this->_allowed_methods[method] = code;
 }
-
 
 void ServerConfiguration::setPort(std::string str)
 {
@@ -114,6 +113,18 @@ void ServerConfiguration::setRoot(std::string str)
 	this->_root = str;
 }
 
+void ServerConfiguration::setAutoIndex(std::string str)
+{
+	if (str == "on")
+	{
+		this->_autoIndex = 1;
+	}
+	else if (str == "off")
+	{
+		this->_autoIndex = 0;
+	}
+}
+
 void ServerConfiguration::setIndex(std::string str)
 {
 	this->_index = str;
@@ -154,6 +165,14 @@ std::string ServerConfiguration::getUploadLocation() const
 	return (this->_uploadsLocation);
 }
 
+std::string ServerConfiguration::getAutoIndex() const
+{
+	if (this->_autoIndex == 1)
+		return ("on");
+	else
+		return ("off");
+}
+
 std::string ServerConfiguration::getErrorPage(int code) const
 {
 	std::map<int, std::string>::const_iterator it = this->_errorPages.find(code);
@@ -172,7 +191,6 @@ std::string ServerConfiguration::getCgiLocation(void) const
 {
 	return (this->_cgiBin_location);
 }
-
 
 std::string ServerConfiguration::getErrorPageLocation(void) const
 {
@@ -226,13 +244,15 @@ std::string ServerConfiguration::getIndex() const
 
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 {
-	Cout << YELLOW << "\n---------------------------------------------------------------------\n\n" << RESET;
-	
- 	Cout << WHITE << "Server name : " << RESET << CYAN << sc.getServerName() << RESET << "\n\n\n";
-	
+	Cout << YELLOW << "\n---------------------------------------------------------------------\n\n"
+		 << RESET;
+
+	Cout << WHITE << "Server name : " << RESET << CYAN << sc.getServerName() << RESET << "\n\n\n";
+
 	Cout << WHITE << "Host name : " << RESET << CYAN << sc.getHostName() << RESET << "\n\n";
 
-	Cout << WHITE << "Port vector : \n" << RESET;
+	Cout << WHITE << "Port vector : \n"
+		 << RESET;
 	std::vector<int> port_tab = sc.getPortTab();
 	std::vector<int>::iterator port_it = port_tab.begin();
 	for (; port_it < port_tab.end(); port_it++)
@@ -245,13 +265,14 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 
 	Cout << WHITE << "Client max body size : " << RESET << CYAN << sc.getClientMaxBodySize() << RESET << "\n\n";
 
-	Cout << WHITE << "Path info cgi map : \n" << RESET;
+	Cout << WHITE << "Path info cgi map : \n"
+		 << RESET;
 	std::map<std::string, std::string> path_info_tab = sc.getPathInfoCgi();
 	std::map<std::string, std::string>::iterator path_info_it = path_info_tab.begin();
 	for (; path_info_it != path_info_tab.end(); path_info_it++)
 		Cout << CYAN << path_info_it->first << " : " << path_info_it->second << RESET << "\n";
 	Cout << "\n";
-	
+
 	// Cout << WHITE << "Path info mime map : \n" << RESET;
 	// std::map<std::string, std::string> info_mime_tab = sc.getInfoMime();
 	// std::map<std::string, std::string>::iterator info_mime_it = info_mime_tab.begin();
@@ -259,36 +280,42 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 	// 	Cout << CYAN << info_mime_it->first << " : " << info_mime_it->second << RESET << "\n";
 	// Cout << "\n";
 
-	Cout << WHITE << "Allowed methods map : \n" << RESET;
+	Cout << WHITE << "Allowed methods map : \n"
+		 << RESET;
 	std::map<std::string, int> allowed_methods_tab = sc.getAllowedMethods();
 	std::map<std::string, int>::iterator allowed_methods_it = allowed_methods_tab.begin();
 	for (; allowed_methods_it != allowed_methods_tab.end(); allowed_methods_it++)
 		Cout << CYAN << allowed_methods_it->first << " : " << allowed_methods_it->second << RESET << "\n";
 	Cout << "\n";
-	
-	Cout << WHITE << "Location map : \n" << RESET;
+
+	Cout << WHITE << "Location map : \n"
+		 << RESET;
 	std::map<std::string, std::string> location_tab = sc.getLocation();
 	std::map<std::string, std::string>::iterator location_it = location_tab.begin();
 	for (; location_it != location_tab.end(); location_it++)
 		Cout << CYAN << location_it->first << " : " << location_it->second << RESET << "\n";
 	Cout << "\n";
-	
-	Cout << WHITE << "Error pages map: \n" << RESET;
+
+	Cout << WHITE << "Error pages map: \n"
+		 << RESET;
 	std::map<int, std::string> error_pages_tab = sc.getErrorPages();
 	std::map<int, std::string>::iterator error_pages_it = error_pages_tab.begin();
 	for (; error_pages_it != error_pages_tab.end(); error_pages_it++)
 		Cout << CYAN << error_pages_it->first << " : " << error_pages_it->second << RESET << "\n";
 	Cout << "\n";
-	
+
+	Cout << WHITE << "Auto Index : " << RESET << CYAN << sc.getAutoIndex() << RESET << "\n\n";
+
 	Cout << WHITE << "Error Page Location : " << RESET << CYAN << sc.getErrorPageLocation() << RESET << "\n\n";
 
 	Cout << WHITE << "Cgi-bin location : " << RESET << CYAN << sc.getCgiLocation() << RESET << "\n\n";
-	
+
 	Cout << WHITE << "Upload location : " << RESET << CYAN << sc.getUploadLocation() << RESET << "\n\n";
 
-	//ADDING : display location map
+	// ADDING : display location map
 
-	Cout << YELLOW << "---------------------------------------------------------------------\n" << RESET;
+	Cout << YELLOW << "---------------------------------------------------------------------\n"
+		 << RESET;
 
 	return (Cout);
 }

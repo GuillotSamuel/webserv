@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 19:10:55 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/17 13:00:25 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ class ServerConfiguration
 		std::map<std::string, std::string>	_pathInfoCgi; // ok
 		std::map<std::string, int>			_allowed_methods; // TO ADOPT
 		std::map<int, std::string>			_errorPages; // ok
-		int									_autoindex; // TO ADOPT
+		int									_autoIndex; // ok
 
 		/* --- Locations from configuration file --- */
 		std::string							_errorPagesLocation; // ok
@@ -102,6 +102,7 @@ class ServerConfiguration
 		void								setPathInfoCgi(std::string extension, std::string location);
 		void								setCgiBinLocation(std::string str);
 		void								setRootIndex();
+		void								setAutoIndex(std::string str);
 		
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
@@ -126,6 +127,7 @@ class ServerConfiguration
 		std::map<std::string, t_location>	getTabLocation(void) const;
 		std::map<std::string, int>			getAllowedMethods(void)const;
 		std::string							getimHere() const;
+		std::string							getAutoIndex() const;
 		
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */
