@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/17 16:44:44 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 00:33:35 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,11 @@ void ServerConfiguration::setAutoIndex(std::string str)
 	{
 		this->_autoIndex = 0;
 	}
+}
+
+void	ServerConfiguration::setLocationMap(std::string location_key, t_location new_location)
+{
+	this->_locations_map[location_key] = new_location;
 }
 
 void ServerConfiguration::setIndex(std::string str)
@@ -252,7 +257,7 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 	Cout << YELLOW << "\n---------------------------------------------------------------------\n\n"
 		 << RESET;
 
-	Cout << WHITE << "Server name : " << RESET << CYAN << sc.getServerName() << RESET << "\n\n\n";
+	Cout << WHITE << "Server name : " << RESET << CYAN << BOLD << sc.getServerName() << RESET << "\n\n\n";
 
 	Cout << WHITE << "Host name : " << RESET << CYAN << sc.getHostName() << RESET << "\n\n";
 
@@ -317,14 +322,13 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		Cout << CYAN << interpreter_it->first << " : " << interpreter_it->second << RESET << "\n";
 	Cout << "\n";
 
-	Cout << WHITE << "Location map : \n"
-		 << RESET;
+	Cout << WHITE << "Location map : \n"<< RESET;
 	std::map<std::string, t_location> location_tab = sc.getLocationMap();
 	std::map<std::string, t_location>::iterator location_it = location_tab.begin();
 	for (; location_it != location_tab.end(); location_it++)
 	{
 		Cout << GREEN << "*****************************" << RESET << "\n";
-		Cout << "Page : " << GREEN << location_it->first << RESET << "\n\n";
+		Cout << "Page : " << GREEN << BOLD << location_it->first << RESET << "\n\n";
 		Cout << "Alias : " << GREEN << location_it->second.alias << RESET << "\n";
 		Cout << "Root : " << GREEN << location_it->second.root << RESET << "\n";
 		Cout << "Client Max Body Size : " << GREEN << location_it->second.clientMaxBodySize << RESET << "\n";
@@ -332,7 +336,7 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		Cout << "Path Info : " << GREEN << location_it->second.path_info << RESET << "\n";
 		Cout << "Index : " << GREEN << location_it->second.index << RESET << "\n";
 		Cout << "Uploads location : " << GREEN << location_it->second.uploadsLocation << RESET << "\n";
-		Cout << GREEN << "*****************************" << RESET << "\n\n";
+		Cout << GREEN << "*****************************" << RESET << "\n";
 	}
 	Cout << "\n";
 

@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/17 12:53:02 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 00:37:59 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ class Server
 		void												ft_set_errors_location(std::vector<std::string> tokens);
 		void												ft_set_uploads_location(std::vector<std::string> tokens);
 		void												ft_location_pages(std::vector<std::string> tokens);
-		void												ft_location_pages_dispatch(std::vector<std::string> current_param);
+		void												ft_location_pages_dispatch(std::vector<std::string> current_param, t_location  &new_location);
 		void												SendResponse(std::string response, std::string method);
 
 	public:

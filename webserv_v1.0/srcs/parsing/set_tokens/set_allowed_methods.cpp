@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 15:38:20 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 15:25:23 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 00:26:44 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void Server::ft_set_allowed_methods(std::vector<std::string> tokens)
 {
 	for (size_t i = 1; i < tokens.size(); i++)
 	{
-		if (tokens[i].empty() || (tokens[i] != "GET" && tokens[i] != "POST" && tokens[i] != "DELETE"))
+		if (tokens[i].empty() || (tokens[i] != "GET" && tokens[i] != "POST" && tokens[i] != "DELETE") || this->location_started)
 		{
 			ft_invalid_line(tokens);
 		}

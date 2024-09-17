@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/17 16:16:35 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:48:56 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@
 #define GREEN "\033[32m"
 #define BLUE "\033[34m"
 #define RED "\033[31m"
+#define BOLD "\033[1m"
 extern int g_signal;
 
 typedef struct s_location

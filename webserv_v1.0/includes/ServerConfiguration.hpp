@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/17 16:15:11 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/17 23:03:42 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ class ServerConfiguration
 		std::string							root_index; // ok
 		std::string							imHere; // ok // ou est ce que je suis
 
-		/* --- WE DON'T KNOW YET (because Marianne is dumb) --- */
+		/* --- WE DON'T KNOW YET (because Marianne is trop forte) --- */
 		std::map<std::string, std::string>	_pathInfoMime; // TO REMOVE ???
 		std::string							strPort; // a check
 
@@ -95,6 +95,7 @@ class ServerConfiguration
 		void								setCgiBinLocation(std::string str);
 		void								setRootIndex();
 		void								setAutoIndex(std::string str);
+		void								setLocationMap(std::string location_key, t_location new_location);
 		
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */

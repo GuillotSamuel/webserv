@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_index.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 14:07:06 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 11:32:20 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 00:26:31 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void Server::ft_set_index_param(std::vector<std::string> tokens)
 {
-    if (tokens.size() != 2 || tokens[1].empty())
+    if (tokens.size() != 2 || tokens[1].empty() || this->location_started)
     {
         ft_invalid_line(tokens);
     }

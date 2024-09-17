@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:44:12 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 17:46:08 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 00:36:56 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,5 @@ void Server::parsing_g(int argc, char **argv)
     }
 
     check_parsing();
+    std::cout << "server size : " << this->tab_serv.size() << std::endl;
 }
