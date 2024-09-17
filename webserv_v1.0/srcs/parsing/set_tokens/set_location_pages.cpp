@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 11:29:37 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/17 15:55:00 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,39 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param)
 {
 	std::vector<std::string>::iterator current_param_it = current_param.begin();
 
-	if (*current_param_it == "methods")
+	if (*current_param_it == "alias")
 	{
 		
 	}
-	else if (*current_param_it == "path")
+	else if (*current_param_it == "root")
 	{
 		
 	}
+	else if (*current_param_it == "client_max_body_size")
+	{
+		
+	}
+	else if (*current_param_it == "auto_index")
+	{
+		
+	}
+	else if (*current_param_it == "path_info")
+	{
+		
+	}
+	else if (*current_param_it == "index")
+	{
+		
+	}
+	else if (*current_param_it == "uploads_location")
+	{
+		
+	}
+	else if (*current_param_it == "allowed_methods")
+	{
+		
+	}
+	
 }
 
 void Server::ft_location_pages(std::vector<std::string> tokens)

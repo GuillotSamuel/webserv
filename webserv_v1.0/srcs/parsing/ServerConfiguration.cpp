@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/17 13:03:15 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:44:44 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ ServerConfiguration::~ServerConfiguration(void)
 	this->_pathInfoCgi.clear();
 	this->_pathInfoMime.clear();
 	this->_errorPages.clear();
-	this->_location.clear();
+	this->_interpreter_map.clear();
 	this->_port.clear();
 	this->_allowed_methods.clear();
 	this->_locations_map.clear();
@@ -49,9 +49,9 @@ void ServerConfiguration::setRootIndex()
 	this->root_index = this->imHere + this->_root + HTML_FILES + "/" + this->_index;
 }
 
-void ServerConfiguration::setLocation(std::string page, std::string location)
+void ServerConfiguration::setInterpreterMap(std::string page, std::string interpreter)
 {
-	this->_location.insert(std::make_pair(page, location));
+	this->_interpreter_map.insert(std::make_pair(page, interpreter));
 }
 
 void ServerConfiguration::setAllowedMethods(std::string method, int code)
@@ -76,9 +76,9 @@ void ServerConfiguration::setErrorPagesLocation(std::string str)
 	this->_errorPagesLocation = str;
 }
 
-void ServerConfiguration::setPathInfoCgi(std::string extension, std::string location)
+void ServerConfiguration::setPathInfoCgi(std::string extension, std::string interpreter)
 {
-	this->_location.insert(std::make_pair(extension, location));
+	this->_interpreter_map.insert(std::make_pair(extension, interpreter));
 }
 
 void ServerConfiguration::setCgiBinLocation(std::string str)
@@ -197,9 +197,9 @@ std::string ServerConfiguration::getErrorPageLocation(void) const
 	return (this->_errorPagesLocation);
 }
 
-std::map<std::string, std::string> ServerConfiguration::getLocation(void) const
+std::map<std::string, std::string> ServerConfiguration::getInterpreterMap(void) const
 {
-	return (this->_location);
+	return (this->_interpreter_map);
 }
 
 std::map<std::string, int> ServerConfiguration::getAllowedMethods(void) const
@@ -240,6 +240,11 @@ std::map<std::string, std::string> ServerConfiguration::getPathInfoCgi() const
 std::string ServerConfiguration::getIndex() const
 {
 	return (this->_index);
+}
+
+std::map<std::string, t_location> ServerConfiguration::getLocationMap() const
+{
+	return (this->_locations_map);
 }
 
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
@@ -288,14 +293,6 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		Cout << CYAN << allowed_methods_it->first << " : " << allowed_methods_it->second << RESET << "\n";
 	Cout << "\n";
 
-	Cout << WHITE << "Location map : \n"
-		 << RESET;
-	std::map<std::string, std::string> location_tab = sc.getLocation();
-	std::map<std::string, std::string>::iterator location_it = location_tab.begin();
-	for (; location_it != location_tab.end(); location_it++)
-		Cout << CYAN << location_it->first << " : " << location_it->second << RESET << "\n";
-	Cout << "\n";
-
 	Cout << WHITE << "Error pages map: \n"
 		 << RESET;
 	std::map<int, std::string> error_pages_tab = sc.getErrorPages();
@@ -308,11 +305,36 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 
 	Cout << WHITE << "Error Page Location : " << RESET << CYAN << sc.getErrorPageLocation() << RESET << "\n\n";
 
-	Cout << WHITE << "Cgi-bin location : " << RESET << CYAN << sc.getCgiLocation() << RESET << "\n\n";
+	Cout << WHITE << "Cgi-bin interpreter : " << RESET << CYAN << sc.getCgiLocation() << RESET << "\n\n";
 
-	Cout << WHITE << "Upload location : " << RESET << CYAN << sc.getUploadLocation() << RESET << "\n\n";
+	Cout << WHITE << "Upload interpreter : " << RESET << CYAN << sc.getUploadLocation() << RESET << "\n\n";
 
-	// ADDING : display location map
+	Cout << WHITE << "Interpreters path map : \n"
+		 << RESET;
+	std::map<std::string, std::string> interpreter_tab = sc.getInterpreterMap();
+	std::map<std::string, std::string>::iterator interpreter_it = interpreter_tab.begin();
+	for (; interpreter_it != interpreter_tab.end(); interpreter_it++)
+		Cout << CYAN << interpreter_it->first << " : " << interpreter_it->second << RESET << "\n";
+	Cout << "\n";
+
+	Cout << WHITE << "Location map : \n"
+		 << RESET;
+	std::map<std::string, t_location> location_tab = sc.getLocationMap();
+	std::map<std::string, t_location>::iterator location_it = location_tab.begin();
+	for (; location_it != location_tab.end(); location_it++)
+	{
+		Cout << GREEN << "*****************************" << RESET << "\n";
+		Cout << "Page : " << GREEN << location_it->first << RESET << "\n\n";
+		Cout << "Alias : " << GREEN << location_it->second.alias << RESET << "\n";
+		Cout << "Root : " << GREEN << location_it->second.root << RESET << "\n";
+		Cout << "Client Max Body Size : " << GREEN << location_it->second.clientMaxBodySize << RESET << "\n";
+		Cout << "Auto index : " << GREEN << location_it->second.autoindex << RESET << "\n";
+		Cout << "Path Info : " << GREEN << location_it->second.path_info << RESET << "\n";
+		Cout << "Index : " << GREEN << location_it->second.index << RESET << "\n";
+		Cout << "Uploads location : " << GREEN << location_it->second.uploadsLocation << RESET << "\n";
+		Cout << GREEN << "*****************************" << RESET << "\n\n";
+	}
+	Cout << "\n";
 
 	Cout << YELLOW << "---------------------------------------------------------------------\n"
 		 << RESET;

@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 19:10:06 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:16:35 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,13 @@
 #define MAX_EVENTS 10
 #define BUFFER_SIZE 4096
 #define SIGNAL 2
+#define RESET "\033[0m"
+#define CYAN "\033[36m"
+#define WHITE "\033[37m"
+#define YELLOW "\033[33m"
+#define GREEN "\033[32m"
+#define BLUE "\033[34m"
+#define RED "\033[31m"
 extern int g_signal;
 
 typedef struct s_location
