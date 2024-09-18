@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkParsing.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 14:44:56 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 19:53:27 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,11 @@ void Server::check_max_body(ServerConfiguration server_conf)
 
 void Server::check_root(ServerConfiguration server_conf)
 {
-	struct stat info;
+	(void)server_conf;
+	// struct stat info;
 
 	// if root indique, le verifier , si pas indiquer ne pas le verifier
-
+/* 
 	if (stat(server_conf.getRoot().c_str(), &info) != 0)
 	{
 		error("Error: Cannot access root directory: " + std::string(strerror(errno)) + " (" + server_conf.getRoot() + ")" +
@@ -86,7 +87,7 @@ void Server::check_root(ServerConfiguration server_conf)
 	else
 	{
 		error("Error: The root path is not a directory / server name -> " + server_conf.getServerName());
-	}
+	} */
 }
 
 void Server::check_server_name(ServerConfiguration server_conf)

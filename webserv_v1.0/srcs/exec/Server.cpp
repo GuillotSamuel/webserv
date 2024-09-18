@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/18 15:34:45 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 19:49:03 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,8 +213,8 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
     inet_ntop(AF_INET, &this->_address.sin_addr, client_ip, INET_ADDRSTRLEN);
 	std::string ipAdress(client_ip);
 	client->setIpAddress(ipAdress);
-	
-	std::string receivedLine = readHead(client, current_fd);
+	client->setCurrentFd(current_fd);
+	std::string receivedLine = readHead(client);
 	if (receivedLine == "")
 	{
 		delete client;
@@ -223,33 +223,39 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 	}
 	getServConfig(client, list);
 	if (this->currentConfig == NULL)
-	{
 		return ;
-	}
+	client->setFilePath(findPath(client));
 	if (client->getMethod() == "GET")
-	{
 		ft_get(client);
-		delete client;
-	}
 	else if (client->getMethod() == "POST")
-	{
 		ft_post(client);
-		delete client;
-	}
 	else if (client->getMethod() == "DELETE")
-	{
 		ft_delete(client);
-		delete client;
-	}
 	else
-	{
 		ft_badRequest();
-		delete client;
-	}
+	delete client;
 	log("End of the request.", 1);
-
-	receivedLine = readBody(client, &receivedLine, current_fd);
 }
+
+std::string	Server::readHead(Client *client)
+{
+	int n = recv(client->getCurrentFd(), this->received_line, 4096, 0);
+	if (n < 0)
+	{
+		log("The call recv failed.", 2);
+		return ("");
+	}
+	if (n == 0)
+	{
+		log("The connexion has been interrupted.", 3);
+		return ("");
+	}
+	std::string receivedLine(this->received_line, 4096);
+
+	client->setInfo(receivedLine);
+	return (receivedLine);
+}
+
 
 void	Server::getServConfig(Client *client, ListeningSocket *list)
 {
@@ -263,38 +269,73 @@ void	Server::getServConfig(Client *client, ListeningSocket *list)
 			return ;
 		}
 	}
-	if (this->currentConfig == NULL)
+	
+	it = this->tab_serv.begin();
+	for (; it < this->tab_serv.end(); it++)
 	{
-		it = this->tab_serv.begin();
-		for (; it < this->tab_serv.end(); it++)
+		if (it->getHostName() == client->getHost())
 		{
-			if (it->getHostName() == client->getHost())
+			this->currentConfig = &(*it);
+			return ;
+		}
+	}
+
+	it = this->tab_serv.begin();
+	for (; it < this->tab_serv.end(); it++)
+	{
+		std::vector<int> tab = it->getPortTab();
+		std::vector<int>::iterator itPort = tab.begin();
+		for (; itPort < tab.end(); itPort++)
+		{
+			if (*itPort == list->getPort())
 			{
 				this->currentConfig = &(*it);
 				return ;
 			}
 		}
 	}
-	if (this->currentConfig == NULL)
-	{
-		it = this->tab_serv.begin();
-		for (; it < this->tab_serv.end(); it++)
-		{
-			std::vector<int> tab = it->getPortTab();
-			std::vector<int>::iterator itPort = tab.begin();
-			for (; itPort < tab.end(); itPort++)
-			{
-				if (*itPort == list->getPort())
-				{
-					this->currentConfig = &(*it);
-					return ;
-				}
-			}
-		}
-	}
 	this->currentConfig = NULL;
 }
 
+std::string	Server::readBody(Client *client, std::string *receivedLine)
+{
+	if (client->getContentLength() != "")
+	{
+		int len = atoi(client->getContentLength().c_str());
+
+        char *buffer = new char[len + 1];
+        memset(buffer, 0, len + 1);
+        int total_read = 0;
+		while (total_read < len)
+        {
+            int read = recv(client->getCurrentFd(), buffer + total_read, len - total_read, 0);
+            if (read < 0)
+            {
+                log("Recv failed.", 2);
+                break ;
+            }
+            if (read == 0)
+            {
+                log("The connection has been interrupted.", 2);
+                break ;
+            }
+            total_read += read;
+        }
+
+		(*receivedLine).append(buffer, total_read);
+    	delete[] buffer;
+		dlFile(receivedLine, client);
+	}
+
+	std::ofstream file("request.txt");
+	if (file.is_open()) {
+		file << *receivedLine;
+		file.close();
+		log("File is created.", 1);	} 
+	else
+		log("Unable to open file.", 2);
+	return (*receivedLine);
+}
 void	Server::cgiExecution(std::string filePath, Client client)
 {
 	Cgi *cgi = new Cgi();
@@ -322,22 +363,22 @@ void	Server::cgiExecution(std::string filePath, Client client)
 void Server::ft_get(Client *client) // a revoir
 {
 	log("Server's receive a GET request.", 1);
-	std::string filePath = findPath(client);
+	
 	if (this->_is_cgi == 1)
 	{
-		cgiExecution(filePath, *client);
+		cgiExecution(client->getFilePath(), *client);
 	}
 	else
 	{
-		std::string content = readFileContent(filePath);
+		std::string content = readFileContent(client->getFilePath());
 		std::string response = "";
 		std::stringstream ss;
 		ss << this->_status_code;
 		std::string _code = ss.str();
 		if (this->_status_code != 0)
 		{
-			log("The file requested \"" + filePath + "\" was found empty.", 1);
-			content = readFileContent(filePath);
+			log("The file requested \"" + client->getFilePath() + "\" was found empty.", 1);
+			content = readFileContent(client->getFilePath());
 
 			response = "HTTP/1.1 " + _code + " Bad Request\r\n";
 			response += "Content-Type: text/html\r\n";
@@ -350,7 +391,7 @@ void Server::ft_get(Client *client) // a revoir
 		}
 		else
 		{
-			log("The file requested \"" + filePath + "\" was found.", 1);
+			log("The file requested \"" + client->getFilePath() + "\" was found.", 1);
 			std::string mimeType = getMimeType(client);
 
 			response = "HTTP/1.1 200 OK\r\n";
@@ -369,23 +410,22 @@ void Server::ft_get(Client *client) // a revoir
 /*response to a POST request*/
 void Server::ft_post(Client *client) // a revoir surtout au niveau de la requete
 {
-	std::string filePath = findPath(client);
 	log("Server's receive a POST request.", 1);
 	if (this->_is_cgi == 1)
 	{
-		cgiExecution(filePath, *client);
+		cgiExecution(client->getFilePath(), *client);
 	}
 	else
 	{
-		std::string content = readFileContent(filePath);
+		std::string content = readFileContent(client->getFilePath());
 		std::string response = "";
 		std::stringstream ss;
 		ss << this->_status_code;
 		std::string _code = ss.str();
 		if (this->_status_code != 0)
 		{
-			log("The file requested \"" + filePath + "\" was found empty.", 1);
-			content = readFileContent(filePath);
+			log("The file requested \"" + client->getFilePath() + "\" was found empty.", 1);
+			content = readFileContent(client->getFilePath());
 
 			response = "HTTP/1.1 " + _code + " Bad Request\r\n";
 			response += "Content-Type: text/html\r\n";
@@ -398,7 +438,7 @@ void Server::ft_post(Client *client) // a revoir surtout au niveau de la requete
 		}
 		else
 		{
-			log("The file requested \"" + filePath + "\" was found.", 1);
+			log("The file requested \"" + client->getFilePath() + "\" was found.", 1);
 			std::string mimeType = getMimeType(client);
 
 			response = "HTTP/1.1 200 OK\r\n";
@@ -417,10 +457,9 @@ void Server::ft_post(Client *client) // a revoir surtout au niveau de la requete
 /*response to a DELETE request*/
 void Server::ft_delete(Client *client) // a revoir
 {
-	std::string filePath = findPath(client);
 	log("Server's receive a DELETE request.", 1);
 
-	if (access(filePath.c_str(), F_OK) != 0)
+	if (access(client->getFilePath().c_str(), F_OK) != 0)
 	{
 		std::string response = "HTTP/1.1 404 Not Found\r\n";
 		response += "Content-Type: text/html\r\n";
@@ -436,7 +475,7 @@ void Server::ft_delete(Client *client) // a revoir
 		return;
 	}
 
-	if (unlink(filePath.c_str()) == 0)
+	if (unlink(client->getFilePath().c_str()) == 0)
 	{
 		std::string response = "HTTP/1.1 204 No Content\r\n";
 		response += "Connection: close\r\n";
@@ -520,7 +559,7 @@ void	Server::dlFile(std::string *receivedLine, Client *client)
 				{
 					body_content = (*receivedLine).substr(body, (endbody - body));
 					(*receivedLine).erase(body, (endbody - body));
-					saveFile(file_name, body_content);
+					saveFile(this->currentConfig->getUploadLocation() + file_name, body_content);
 				}
 				else
 					log("The request body cannot be found.", 2);
@@ -542,19 +581,7 @@ std::string	Server::readFileContent(std::string path)
 
 	if (!file.is_open())
 	{
-		log("The file given cannot be found.", 1);
-		if (this->currentConfig->getErrorPageLocation() == "")
-			path = this->currentConfig->getimHere()
-					+ DEFAULT_PATH_ERROR
-					+ this->currentConfig->getErrorPage(400);
-		else
-		{
-			path	= this->currentConfig->getimHere()
-					+ this->currentConfig->getRoot()
-					+ this->currentConfig->getErrorPageLocation()
-					+ this->currentConfig->getErrorPage(400);
-		}
-		return (readFileContent(path));
+		return (readFileContent(findErrorPage(404)));
 	}
 
 	std::ostringstream oss;
@@ -579,7 +606,8 @@ void	Server::saveFile(const std::string &filename, const std::string &data) // P
 
 std::string	Server::getMimeType(Client *client)
 {
-	if (client->getFullPath() == "/" || client->getFullPath() == ("/" + this->currentConfig->getServerName()))
+	if (client->getFullPath() == ("/" + this->currentConfig->getServerName())
+		|| client->getFullPath() == "/" )
 		return ("text/html");
 	
 	if (this->mimePath.find(this->_extensionPath) != this->mimePath.end())
@@ -589,79 +617,21 @@ std::string	Server::getMimeType(Client *client)
 	return ("application/octet-stream");
 }
 
-std::string	Server::readHead(Client *client, int current_fd)
-{
-	int n = recv(current_fd, this->received_line, 4096, 0);
-	if (n < 0)
-	{
-		log("The call recv failed.", 2);
-	}
-	if (n == 0)
-	{
-		log("The connexion has been interrupted.", 3);
-		return ("");
-	}
-	std::string receivedLine(this->received_line, 4096);
-
-	client->setInfo(receivedLine);
-	return (receivedLine);
-}
-
-std::string	Server::readBody(Client *client, std::string *receivedLine, int current_fd)
-{
-	if (client->getContentLength() != "")
-	{
-		int len = atoi(client->getContentLength().c_str());
-
-        char *buffer = new char[len + 1];
-        memset(buffer, 0, len + 1);
-        int total_read = 0;
-		while (total_read < len)
-        {
-            int read = recv(current_fd, buffer + total_read, len - total_read, 0);
-            if (read < 0)
-            {
-                log("Recv failed.", 2);
-                break ;
-            }
-            if (read == 0)
-            {
-                log("The connection has been interrupted.", 2);
-                break ;
-            }
-            total_read += read;
-        }
-
-		(*receivedLine).append(buffer, total_read);
-    	delete[] buffer;
-		dlFile(receivedLine, client);
-	}
-
-	std::ofstream file("request.txt");
-	if (file.is_open()) {
-		file << *receivedLine;
-		file.close();
-		log("File is created.", 1);	} 
-	else
-		log("Unable to open file.", 2);
-	return (*receivedLine);
-}
 
 std::string Server::findPath(Client *client)
-{
-	this->_is_cgi = 0;
+{	
 	/*---------------------------------------------------------------*/
-	/*                       IS IT INDEX ?                           */
+	/*                  IS IT SPECIFIC LOCATION?                     */
 	/*---------------------------------------------------------------*/
-	if (client->getFullPath() == ("/" + this->currentConfig->getServerName())
-	|| client->getFullPath() == "/")
+	if (this->currentConfig->getUploadLocation() == client->getFullPath())
 	{
-		this->_status_code = 0;
-		return (this->currentConfig->getRootIndex());
+		//c'est pas un cgi et il faut dl
+		//ici on telecharge
+		//on stock
+		//une redirection temporaire 304 vers une page success
+		//si elle existe pas, peut etre en prendre une par default
+		readBody(client, &receivedLine);
 	}
-	/*---------------------------------------------------------------*/
-	/*                        IS IT ALIAS ?                          */
-	/*---------------------------------------------------------------*/
 	// std::map<std::string, t_location> obj = this->currentConfig->getTabLocation();
 	// if (obj.find(client->getPath()) != obj.end())
 	// {
@@ -670,16 +640,35 @@ std::string Server::findPath(Client *client)
 	// 	client->setFullPath(loc.alias);
 	// 	// if (client->getMethod() != )
 	// }
-
+	
 	/*---------------------------------------------------------------*/
-	/*             		  DOES IT HAVE EXTENSION	                 */
+	/*                   IS THIS AN ALLOWED METHOD ?                 */
+	/*---------------------------------------------------------------*/
+	std::map<std::string, int> method = this->currentConfig->getAllowedMethods();
+	if (method.find(client->getMethod()) == method.end())
+		return (findErrorPage(403));
+	else
+	{
+		if (method[client->getMethod()] == 0)
+			return (findErrorPage(403));
+	}
+	/*---------------------------------------------------------------*/
+	/*                         IS IT INDEX ?                         */
+	/*---------------------------------------------------------------*/
+	if (client->getFullPath() == ("/" + this->currentConfig->getServerName())
+	|| client->getFullPath() == "/")
+	{
+		this->_status_code = 0;
+		return (this->currentConfig->getRootIndex());
+	}
+	/*---------------------------------------------------------------*/
+	/*             		  DOES IT HAVE EXTENSION?	                 */
 	/*---------------------------------------------------------------*/
 	size_t ext = client->getFullPath().rfind(".");
 	if (ext != std::string::npos)
 	{
 		size_t extend = client->getFullPath().size();
 		std::string extension = client->getFullPath().substr(ext, (extend - ext));
-
 		/*---------------------------------------------------------------*/
 		/*                 LOOKING FOR STATIC EXTENSION                  */
 		/*---------------------------------------------------------------*/
@@ -692,7 +681,8 @@ std::string Server::findPath(Client *client)
 		}
 		/*---------------------------------------------------------------*/
 		/*                   LOOKING FOR CGI EXTENSION                   */
-		/*---------------------------------------------------------------*/	
+		/*---------------------------------------------------------------*/
+		this->_is_cgi = 0;
 		std::map<std::string, std::string> cgi_ext = this->currentConfig->getPathInfoCgi();		
 		if (!cgi_ext.empty() && cgi_ext.find(extension) != this->extpath.end())
 		{
@@ -708,18 +698,22 @@ std::string Server::findPath(Client *client)
 	/*                       PAGE NOT FOUND                          */
 	/*---------------------------------------------------------------*/
 	log("Extension of the files was not recognize.", 1);
-	this->_status_code = 400;
+	return (findErrorPage(400));
+}
+
+std::string	Server::findErrorPage(int code)
+{
 	std::string absolutPath;
 	if (this->currentConfig->getErrorPageLocation() == "")
 		absolutPath = this->currentConfig->getimHere()
 					+ DEFAULT_PATH_ERROR
-					+ this->currentConfig->getErrorPage(400);
+					+ this->currentConfig->getErrorPage(code);
 	else
 	{
 		absolutPath = this->currentConfig->getimHere()
 					+ this->currentConfig->getRoot()
 					+ this->currentConfig->getErrorPageLocation()
-					+ this->currentConfig->getErrorPage(400);
+					+ this->currentConfig->getErrorPage(code);
 	}
 	return (absolutPath);
 }
