@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/13 14:08:27 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:17:56 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,18 @@
 
 #define HTML_FILES "/html"
 #define CSS_FILES "/styles"
-#define JS_FILES "/js"
+#define JS_FILES "/scripts"
 #define JSON_FILES "/data"
 #define IMAGE_FILES "/images"
+#define	ICONS_FILES "/images/icons"
 #define VIDEO_FILES "/videos"
 #define AUDIO_FILES "/audio"
 #define FONT_FILES "/fonts"
 #define PDF_FILES "/docs"
 #define XML_FILES "/xml"
-#define ICON_FILES "/icons"
 #define CSV_FILES "/data"
-#define ERROR_400_PAGE "/html/errors/400.html"
+#define DEFAULT_PATH_ERROR "/www/error_pages/"
 #define CGI_FILES "/cgi-bin"
-
-#define RESET "\033[0m"
-#define CYAN "\033[36m"
-#define WHITE "\033[37m"
 
 class ListeningSocket;
 
@@ -40,40 +36,45 @@ class ServerConfiguration
 	private:
 		/*---------------------------------------------------------------*/
 		/*                            ATTRIBUT                           */
-		/*---------------------------------------------------------------*/	
-		std::map<std::string, std::string>	_pathInfoMime;
-		std::map<std::string, std::string>	_pathInfoCgi;
-		std::map<std::string, std::string>	_location;
-		std::map<int, std::string>			errorPages;
-		std::string							hostName;
-		std::string							serverName;
-		std::string							strPort;
-		std::string							root;
-		std::string							root_index;
-		std::string							index;
-		std::string							uploadsLocation;
-		std::string							errorPagesLocation;
-		std::string							cgiBin_location;
-		std::vector<int>					_port;
-		std::vector<std::string>			allowed_methods;
-		int									port;
-		int									clientMaxBodySize;
-		std::vector<ListeningSocket*>		tab_list;
+		/*---------------------------------------------------------------*/
+
+		/* --- General informations from configuration file --- */
+		std::string							_serverName; // ok
+		std::string							_hostName; // ok
+		std::vector<int>					_port; // ok
+		std::string							_root;  // ok //Path_du_site
+		std::string							_index; // ok
+		int									_clientMaxBodySize; // ok
+		std::map<std::string, std::string>	_pathInfoCgi; // ok
+		std::map<std::string, int>			_allowed_methods; // ok
+		std::map<int, std::string>			_errorPages; // ok
+		int									_autoIndex; // ok
+
+		/* --- Locations from configuration file --- */
+		std::string							_errorPagesLocation; // ok
+		std::string							_cgiBin_location; // ok
+		std::string							_uploadsLocation; // ok
+		std::map<std::string, std::string>	_interpreter_map; // ADDING IN <<
+		std::map<std::string, t_location>	_locations_map; // ok // adding _
+
+		/* --- Div informations --- */
+		std::string							root_index; // ok
+		std::string							imHere; // ok // ou est ce que je suis
+
+		/* --- WE DON'T KNOW YET (because Marianne is trop forte) --- */
+		std::map<std::string, std::string>	_pathInfoMime; // TO REMOVE ???
+		std::string							strPort; // a check
 
 	public:
 		/*---------------------------------------------------------------*/
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
 		/*---------------------------------------------------------------*/
 		ServerConfiguration();
-		// ServerConfiguration(std::string port);
-		// ServerConfiguration(const ServerConfiguration &copy);
 		~ServerConfiguration(void);
-		void			creatMultiPort();
 
 		/*---------------------------------------------------------------*/
 		/*                         OVERLOADED                            */
 		/*---------------------------------------------------------------*/
-		ServerConfiguration &operator=(const ServerConfiguration &copy);
 		
 		/*---------------------------------------------------------------*/
 		/*                            SETTER                             */
@@ -85,13 +86,16 @@ class ServerConfiguration
 		void								setClientMaxBodySize(std::string str);
 		void								setRoot(std::string str);
 		void								setIndex(std::string str);
-		void								setLocation(std::string page, std::string location);
-		void								setAllowedMethods(std::vector<std::string> allowed_methods);
+		void								setInterpreterMap(std::string page, std::string location);
+		void								setAllowedMethods(std::string method, int code);
 		void								setUploadsLocation(std::string str);
 		void								setErrorPagesLocation(std::string str);
 		void								setPathInfoCgi(std::string extension, std::string location);
 		void								setCgiBinLocation(std::string str);
-
+		void								setRootIndex();
+		void								setAutoIndex(std::string str);
+		void								setLocationMap(std::string location_key, t_location new_location);
+		
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
 		/*---------------------------------------------------------------*/
@@ -106,15 +110,18 @@ class ServerConfiguration
 		std::map<int, std::string>			getErrorPages(void) const;
 		int									getClientMaxBodySize(void) const;
 		std::map<std::string, std::string>	getPathInfoCgi(void) const;
-		std::vector<ListeningSocket*>		getTabList(void) const;
 		std::string							getIndex(void) const;
 		std::string							getUploadLocation(void) const;
 		std::string							getErrorPageLocation(void) const;
 		std::string							getCgiLocation(void) const;
-		std::map<std::string, std::string>	getLocation(void) const;
+		std::map<std::string, std::string>	getInterpreterMap(void) const;
 		std::map<std::string, std::string>	getInfoMime(void) const;
-		std::vector<std::string>			getAllowedMethods(void)const;
-
+		std::map<std::string, t_location>	getTabLocation(void) const;
+		std::map<std::string, int>			getAllowedMethods(void)const;
+		std::string							getimHere() const;
+		std::string							getAutoIndex() const;
+		std::map<std::string, t_location>	getLocationMap() const;
+		
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */
 		/*---------------------------------------------------------------*/

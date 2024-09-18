@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:25:35 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/11 11:13:08 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 14:49:50 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ Cgi::Cgi()
 {
 	this->_myEnvp = NULL;
 	this->_path = NULL;
-	this->_myArgv = NULL;
 }
  
 //Destructor
@@ -104,19 +103,19 @@ std::string	Cgi::executeCgi()
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 
-		char **argv = this->createArgv();
-		char **envp = this->conversionEnvFunc();
-		// int i;
+		char **argv = (char **)malloc(3 * sizeof(char *));
+		argv[0] = strdup((char *)this->_executer.c_str());
+		argv[1] = strdup((char *)this->_path);
+		argv[2] = NULL;
 
-		// fprintf(stderr, "%s\n%s\n", argv[0], argv[1]);
-		// i = 0;
-		// while (envp[i])
-		// {
-		// 	fprintf(stderr, "%s\n", envp[i]);
-		// 	i++;
-		// }
-		execve(argv[0], argv, envp);
-		error("Error: execve cgi failed");
+		char **envp = this->conversionEnvFunc();
+
+		if (execve(argv[0], argv, envp) == -1)
+		{
+			error("Error: execve cgi failed");
+			freeTab(&argv);
+			freeTab(&envp);
+		}
 	}
 	close(pipefd[1]);
 	char buffer[BUFFER_SIZE];
@@ -131,34 +130,6 @@ std::string	Cgi::executeCgi()
 	return (getContent);
 }
 
-char	**Cgi::createArgv()
-{
-	char **argv;
-	char *here1 = getcwd(NULL, 0);
-	std::cout << here1 << std::endl; // TEST
-	std::string here(here1, strlen(here1));
-	std::string path(this->_path);
-	std::string absolutepath = here + path;
-	std::string executer = "";
-
-
-	size_t ext = path.rfind(".");
-	size_t extend = path.size();
-	std::string extension = path.substr(ext, (extend - ext));
-
-	if ((this->_pathInfoCgi)->find(extension) != this->_pathInfoCgi->end())
-		executer = (*_pathInfoCgi)[extension];
-	if (executer == "")
-	{
-		fprintf(stderr, "extension of cgi not recognize\n");
-		exit(EXIT_FAILURE);
-	}
-	argv = (char **) malloc(3 * sizeof(char *));
-	argv[0] = strdup(executer.c_str());
-	argv[1] = strdup(this->_path);
-	argv[2] = NULL;
-	return (argv);
-}
 /*----------------------------------------------------------------------------*/
 /*                                  UTILS                                     */
 /*----------------------------------------------------------------------------*/
@@ -173,7 +144,20 @@ void	Cgi::setPath(const char *path)
 	this->_path = path;
 }
 
-void	Cgi::setPathInfoCgi(std::map<std::string, std::string> *map)
+void	Cgi::setExecuter(std::string executer)
 {
-	this->_pathInfoCgi = map;
+	this->_executer = executer;
+}
+
+void Cgi::freeTab(char ***tab)
+{
+	int	i;
+
+	i = 0;
+	while (*tab[i])
+	{
+		free (*tab[i]);
+		i++;
+	}
+	free(*tab);
 }

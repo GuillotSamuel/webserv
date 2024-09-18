@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:44 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 13:49:12 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 19:27:05 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ class Client
 		std::string	_contentType;
 		std::string	_contentLength;
 		std::string	_boundary;
+		std::string	_host;
+		std::string	_fullPath; // path with the '/' at start
+		std::string	_path; // path without the '/' at start
+		std::string	_filePath; // absoluth path of the file requested
+		int			_currentFd; // fd of the current socketclient
+		
 
 	public:
 
@@ -48,16 +54,20 @@ class Client
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
 		/*---------------------------------------------------------------*/
-		std::string	getMethod() const;
-		std::string	getIpAdress() const;
-		std::string	getAcceptMime() const;
-		std::string	getAcceptLanguage() const;
-		std::string	getUserAgent() const;
-		std::string	getReferer() const;
-		std::string	getContentType() const;
-		std::string	getContentLength() const;
-		std::string	getBoundary() const;
-
+		std::string getMethod() const;
+		std::string getIpAdress() const;
+		std::string getAcceptMime() const;
+		std::string getAcceptLanguage() const;
+		std::string getUserAgent() const;
+		std::string getReferer() const;
+		std::string getContentType() const;
+		std::string getContentLength() const;
+		std::string getBoundary() const;
+		std::string getPath() const;
+		std::string	getHost() const;
+		std::string	getFullPath() const;
+		std::string	getFilePath() const;
+		int			getCurrentFd() const;
 
 		/*---------------------------------------------------------------*/
 		/*                            SETTER                             */
@@ -71,6 +81,10 @@ class Client
 		void		setContentType(std::string contentType);
 		void		setContentLength(std::string contentLength);
 		void		setBoundary(std::string boundary);
+		void		setHost(std::string host);
+		void		setFullPath(std::string str);
+		void		setCurrentFd(int currentFd);
+		void		setFilePath(std::string filePath);
 
 };
 

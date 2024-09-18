@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_g.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:44:12 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/09 11:39:03 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:18:04 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,16 @@ void Server::parsing_g(int argc, char **argv)
     {
         error("Error: args required : [./webserv] [./webserv <file.conf>] [./webserv --help]");
     }
+
+    std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
+    std::vector<ServerConfiguration>::iterator end = this->tab_serv.end();
+
+    while (it != end)
+    {
+        std::cout << *it << std::endl;
+        ++it;
+    }
+
+    check_parsing();
+    std::cout << "server size : " << this->tab_serv.size() << std::endl;
 }

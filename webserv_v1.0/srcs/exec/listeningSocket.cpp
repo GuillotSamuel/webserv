@@ -6,6 +6,7 @@
 
 ListeningSocket::ListeningSocket(int port)
 {
+	this->port = port;
 	socklen_t address_len = sizeof(this->_server_address);
 	this->_server_address.sin_family = AF_INET;
 	this->_server_address.sin_port = htons(port);
@@ -85,6 +86,11 @@ void ListeningSocket::set_nonblocking(int sockfd) {
         perror("fcntl F_SETFL");
         exit(EXIT_FAILURE);
     }
+}
+
+int ListeningSocket::getPort() const
+{
+	return (this->port);
 }
 
 bool	ListeningSocket::operator==(const ListeningSocket& other) const {    

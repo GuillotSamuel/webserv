@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 15:38:20 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/12 16:52:50 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 00:26:44 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,26 @@
 
 void Server::ft_set_allowed_methods(std::vector<std::string> tokens)
 {
-    std::vector<std::string> current_allowed_methods;
-    for (size_t i = 0; i < tokens.size(); i++)
-    {
-        if (tokens[i].empty()
-            || std::find(current_allowed_methods.begin(), current_allowed_methods.end(), tokens[i]) != current_allowed_methods.end())
-        {
-            ft_invalid_line(tokens);
-        }
-        else if (tokens[i] == "GET" || tokens[i] == "POST" || tokens[i] == "DELETE")
-        {
-            current_allowed_methods.push_back(tokens[i]);
-        }
-    }
-
-	this->currentConfig->setAllowedMethods(current_allowed_methods);
+	for (size_t i = 1; i < tokens.size(); i++)
+	{
+		if (tokens[i].empty() || (tokens[i] != "GET" && tokens[i] != "POST" && tokens[i] != "DELETE") || this->location_started)
+		{
+			ft_invalid_line(tokens);
+		}
+		else
+		{
+			if (tokens[i] == "GET")
+			{
+				this->currentConfig->setAllowedMethods("GET", 1);
+			}
+			else if (tokens[i] == "POST")
+			{
+				this->currentConfig->setAllowedMethods("POST", 1);
+			}
+			else if (tokens[i] == "DELETE")
+			{
+				this->currentConfig->setAllowedMethods("DELETE", 1);
+			}
+		}
+	}
 }

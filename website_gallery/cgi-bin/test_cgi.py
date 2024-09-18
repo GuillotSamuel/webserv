@@ -4,16 +4,22 @@ import cgi
 import os
 
 # Définir le répertoire où les fichiers seront téléchargés (racine du serveur web)
-UPLOAD_DIR = "/home/user/ecole_42/webserv"  # Remplace par le chemin réel de la racine du serveur
+UPLOAD_DIR = "webserv/website_gallery/uploads"  # Remplace par le chemin réel de la racine du serveur
 
 # Lire la requête à partir du fichier request.txt (facultatif si utilisé différemment)
-with open('request.txt', 'r') as request_file:
+with open('webserv/webserv_v1.0/request.txt', 'r') as request_file:
     request_data = request_file.read()
     print("Requête lue depuis request.txt :")
     print(request_data)
 
 # Créer un objet de formulaire pour traiter les données envoyées
 form = cgi.FieldStorage()
+if "name" not in form or "addr" not in form:
+    print("<H1>Error</H1>")
+    print("Please fill in the name and addr fields.")
+    return
+print("<p>name:", form["name"].value)
+print("<p>addr:", form["addr"].value)
 
 # Extraire les champs de texte
 first_name = form.getvalue('first-name')
@@ -38,7 +44,7 @@ if 'image' in form:
         
 
 
-    import sys
+import sys
 import io
 import cgi
 

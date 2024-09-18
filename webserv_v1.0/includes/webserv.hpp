@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/09 20:30:17 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:48:56 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,36 @@
 
 #define MAX_EVENTS 10
 #define BUFFER_SIZE 4096
+#define SIGNAL 2
+#define RESET "\033[0m"
+#define CYAN "\033[36m"
+#define WHITE "\033[37m"
+#define YELLOW "\033[33m"
+#define GREEN "\033[32m"
+#define BLUE "\033[34m"
+#define RED "\033[31m"
+#define BOLD "\033[1m"
+extern int g_signal;
+
+typedef struct s_location
+{
+    std::string                 alias;
+    std::string                 root;
+    std::string                 clientMaxBodySize;
+    int                         autoindex;
+    std::string                 path_info;
+    std::string                 index;
+    std::string                 uploadsLocation;
+    //cgi 
+    //error page
+    //return
+    std::map<std::string, int>  allowed_methods;
+}               t_location;
 
 #include "ServerConfiguration.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Cgi.hpp"
-
-#define SIGNAL 2
-extern int g_signal;
 
 /* -------------------------------------------------------------------------- */
 /*                                    UTILS                                   */
