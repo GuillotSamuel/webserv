@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/18 00:33:35 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:10:08 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,15 +254,13 @@ std::map<std::string, t_location> ServerConfiguration::getLocationMap() const
 
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 {
-	Cout << YELLOW << "\n---------------------------------------------------------------------\n\n"
-		 << RESET;
+	Cout << YELLOW << "\n---------------------------------------------------------------------\n\n" << RESET;
 
 	Cout << WHITE << "Server name : " << RESET << CYAN << BOLD << sc.getServerName() << RESET << "\n\n\n";
 
 	Cout << WHITE << "Host name : " << RESET << CYAN << sc.getHostName() << RESET << "\n\n";
 
-	Cout << WHITE << "Port vector : \n"
-		 << RESET;
+	Cout << WHITE << "Port vector : \n" << RESET;
 	std::vector<int> port_tab = sc.getPortTab();
 	std::vector<int>::iterator port_it = port_tab.begin();
 	for (; port_it < port_tab.end(); port_it++)
@@ -275,8 +273,7 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 
 	Cout << WHITE << "Client max body size : " << RESET << CYAN << sc.getClientMaxBodySize() << RESET << "\n\n";
 
-	Cout << WHITE << "Path info cgi map : \n"
-		 << RESET;
+	Cout << WHITE << "Path info cgi map : \n" << RESET;
 	std::map<std::string, std::string> path_info_tab = sc.getPathInfoCgi();
 	std::map<std::string, std::string>::iterator path_info_it = path_info_tab.begin();
 	for (; path_info_it != path_info_tab.end(); path_info_it++)
@@ -298,8 +295,7 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		Cout << CYAN << allowed_methods_it->first << " : " << allowed_methods_it->second << RESET << "\n";
 	Cout << "\n";
 
-	Cout << WHITE << "Error pages map: \n"
-		 << RESET;
+	Cout << WHITE << "Error pages map: \n" << RESET;
 	std::map<int, std::string> error_pages_tab = sc.getErrorPages();
 	std::map<int, std::string>::iterator error_pages_it = error_pages_tab.begin();
 	for (; error_pages_it != error_pages_tab.end(); error_pages_it++)
@@ -314,8 +310,7 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 
 	Cout << WHITE << "Upload interpreter : " << RESET << CYAN << sc.getUploadLocation() << RESET << "\n\n";
 
-	Cout << WHITE << "Interpreters path map : \n"
-		 << RESET;
+	Cout << WHITE << "Interpreters path map : \n" << RESET;
 	std::map<std::string, std::string> interpreter_tab = sc.getInterpreterMap();
 	std::map<std::string, std::string>::iterator interpreter_it = interpreter_tab.begin();
 	for (; interpreter_it != interpreter_tab.end(); interpreter_it++)
@@ -336,12 +331,17 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		Cout << "Path Info : " << GREEN << location_it->second.path_info << RESET << "\n";
 		Cout << "Index : " << GREEN << location_it->second.index << RESET << "\n";
 		Cout << "Uploads location : " << GREEN << location_it->second.uploadsLocation << RESET << "\n";
+		Cout << WHITE << "Allowed methods map : \n" << RESET;
+		std::map<std::string, int> location_allowed_methods_tab = location_it->second.allowed_methods;
+		std::map<std::string, int>::iterator location_allowed_methods_it = location_allowed_methods_tab.begin();
+		for (; location_allowed_methods_it != location_allowed_methods_tab.end(); location_allowed_methods_it++)
+			Cout << GREEN << location_allowed_methods_it->first << " : " << location_allowed_methods_it->second << RESET << "\n";
+		Cout << "\n";
 		Cout << GREEN << "*****************************" << RESET << "\n";
 	}
 	Cout << "\n";
 
-	Cout << YELLOW << "---------------------------------------------------------------------\n"
-		 << RESET;
+	Cout << YELLOW << "---------------------------------------------------------------------\n" << RESET;
 
 	return (Cout);
 }

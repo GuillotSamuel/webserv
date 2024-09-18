@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/17 23:00:19 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:11:49 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,30 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, 
 	{
 		new_location.uploadsLocation = current_param[1];
 	}
-	else if (*current_param_it == "allowed_methods")
+	else if (*current_param_it == "allowed_methods" && current_param.size() >= 2)
 	{
-		
+		for (size_t i = 1; i < current_param.size(); i++)
+		{
+			if (current_param[i].empty() || (current_param[i] != "GET" && current_param[i] != "POST" && current_param[i] != "DELETE"))
+			{
+				ft_invalid_line(current_param);
+			}
+			else
+			{
+				if (current_param[i] == "GET")
+				{
+					new_location.allowed_methods["GET"] = 1;
+				}
+				else if (current_param[i] == "POST")
+				{
+					new_location.allowed_methods["POST"] = 1;
+				}
+				else if (current_param[i] == "DELETE")
+				{
+					new_location.allowed_methods["DELETE"] = 1;
+				}
+			}
+		}
 	}
 	else
 	{
@@ -65,6 +86,10 @@ void Server::ft_location_pages(std::vector<std::string> tokens)
 {
 	std::vector<std::string> current_param;
 	t_location new_location;
+
+	new_location.allowed_methods["GET"] = 0;
+	new_location.allowed_methods["POST"] = 0;
+	new_location.allowed_methods["DELETE"] = 0;
 
 	if (tokens.size() < 5 || tokens[2] != "|")
 	{
@@ -87,8 +112,7 @@ void Server::ft_location_pages(std::vector<std::string> tokens)
 		{
 			ft_location_pages_dispatch(current_param, new_location);
 		}
-		
-		// this->currentConfig->_locations_map[location_key] = new_location;
+
 		this->currentConfig->setLocationMap(location_key, new_location);
 	}
 }

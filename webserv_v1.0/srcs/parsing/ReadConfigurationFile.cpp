@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 20:01:59 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 13:55:32 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 13:57:39 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,22 @@ void Server::readConfigurationFile(const char *arg)
 
 		if (*buffer == '\0' || *buffer == '\n')
 		{
-			for (size_t i = 0; line[i] && std::isspace((unsigned char)line[i]); i++)
+			size_t start = line.find_first_not_of(" \t");
+			if (start != std::string::npos)
 			{
-				if (line[i + 1] && line[i + 1] == '#')
-				{
-					return;
-				}
+				line = line.substr(start);
+			}
+
+			size_t comment_pos = line.find('#');
+			if (comment_pos != std::string::npos)
+			{
+				line = line.substr(0, comment_pos);
+			}
+
+			if (line.empty())
+			{
+				line.clear();
+				continue;
 			}
 			
 			if (this->insideServerBlock)
