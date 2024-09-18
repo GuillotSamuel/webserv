@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/14 17:41:14 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 19:27:30 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ Client::Client()
 	this->_boundary = "";
 	this->_path = "";
 	this->_host = "";
+	this->_currentFd = -1;
+	this->_filePath = "";
 }
 
 Client::~Client()
@@ -185,6 +187,16 @@ std::string Client::getFullPath() const
 	return (this->_fullPath);
 }
 
+std::string Client::getFilePath() const
+{
+	return (this->_filePath);
+}
+
+int Client::getCurrentFd() const
+{
+	return (this->_currentFd);
+}
+
 std::string Client::getPath() const
 {
 	return (this->_path);
@@ -236,6 +248,16 @@ void	Client::setHost(std::string host)
 void Client::setFullPath(std::string str)
 {
 	this->_fullPath = str;
+}
+
+void Client::setCurrentFd(int currentFd)
+{
+	this->_currentFd = currentFd;
+}
+
+void Client::setFilePath(std::string filePath)
+{
+	this->_filePath = filePath;
 }
 
 /*----------------------------------------------------------------------------*/

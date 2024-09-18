@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/18 15:30:14 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 19:16:02 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ class Server
 		void												creatAllListeningSockets();
 		void												handle_client(ListeningSocket *list, int current_fd);
 		std::string											findPath(Client *client);
+		std::string											findErrorPage(int code);
 		void												ft_get(Client *client);
 		void												ft_post(Client *client);
 		void												ft_delete(Client *client);
@@ -74,11 +75,13 @@ class Server
 		std::string 										getMimeType(Client *client);
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
-		std::string											readHead(Client *client, int current_fd);
+		std::string											readHead(Client *client);
 		void												getServConfig(Client *client, ListeningSocket *list);
-		std::string											readBody(Client *client, std::string *receivedLine, int current_fd);
+		std::string											readBody(Client *client, std::string *receivedLine);
 		void												closeServer();
 		void												dlFile(std::string *receivedLine, Client *client);
+
+					/*-------------PARSING HANDLING-------------*/
 		void												parsing_g(int argc, char **argv);
 		void												check_parsing(void);
 		void												check_error_page(ServerConfiguration server_conf);

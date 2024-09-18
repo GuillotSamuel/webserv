@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:44 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/14 17:39:52 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 19:27:05 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,12 @@ class Client
 		std::string	_contentType;
 		std::string	_contentLength;
 		std::string	_boundary;
-		std::string	_fullPath;
-		std::string	_path;
 		std::string	_host;
+		std::string	_fullPath; // path with the '/' at start
+		std::string	_path; // path without the '/' at start
+		std::string	_filePath; // absoluth path of the file requested
+		int			_currentFd; // fd of the current socketclient
+		
 
 	public:
 
@@ -63,6 +66,8 @@ class Client
 		std::string getPath() const;
 		std::string	getHost() const;
 		std::string	getFullPath() const;
+		std::string	getFilePath() const;
+		int			getCurrentFd() const;
 
 		/*---------------------------------------------------------------*/
 		/*                            SETTER                             */
@@ -78,6 +83,8 @@ class Client
 		void		setBoundary(std::string boundary);
 		void		setHost(std::string host);
 		void		setFullPath(std::string str);
+		void		setCurrentFd(int currentFd);
+		void		setFilePath(std::string filePath);
 
 };
 

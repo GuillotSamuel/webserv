@@ -1,127 +1,118 @@
-	[INFO][15:41:30] : Getprotobyname Succed.
-	[INFO][15:41:30] : Socket_fd in now created.
-	[INFO][15:41:30] : Socket_fd in now set.
-	[INFO][15:41:30] : Socket_fd is binded.
-	[INFO][15:41:30] : Socket_fd is non blocking fd.
-	[INFO][15:41:30] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:41:30] : Getprotobyname Succed.
-	[INFO][15:41:30] : Socket_fd in now created.
-	[INFO][15:41:30] : Socket_fd in now set.
-	[INFO][15:41:30] : Socket_fd is binded.
-	[INFO][15:41:30] : Socket_fd is non blocking fd.
-	[INFO][15:41:30] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:41:30] : Getprotobyname Succed.
-	[INFO][15:41:30] : Socket_fd in now created.
-	[INFO][15:41:30] : Socket_fd in now set.
-	[INFO][15:41:30] : Socket_fd is binded.
-	[INFO][15:41:30] : Socket_fd is non blocking fd.
-	[INFO][15:41:30] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:41:30] : Getprotobyname Succed.
-	[INFO][15:41:30] : Socket_fd in now created.
-	[INFO][15:41:30] : Socket_fd in now set.
-	[INFO][15:41:30] : Socket_fd is binded.
-	[INFO][15:41:30] : Socket_fd is non blocking fd.
-	[INFO][15:41:30] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:41:30] : Getprotobyname Succed.
-	[INFO][15:41:30] : Socket_fd in now created.
-	[INFO][15:41:30] : Socket_fd in now set.
-	[INFO][15:41:30] : Socket_fd is binded.
-	[INFO][15:41:30] : Socket_fd is non blocking fd.
-	[INFO][15:41:30] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:41:30] : Getprotobyname Succed.
-	[INFO][15:41:30] : Socket_fd in now created.
-	[INFO][15:41:30] : Socket_fd in now set.
-	[INFO][15:41:30] : Socket_fd is binded.
-	[INFO][15:41:30] : Socket_fd is non blocking fd.
-	[INFO][15:41:30] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:41:30] : Getprotobyname Succed.
-	[INFO][15:41:30] : Socket_fd in now created.
-	[INFO][15:41:30] : Socket_fd in now set.
-	[INFO][15:41:30] : Socket_fd is binded.
-	[INFO][15:41:30] : Socket_fd is non blocking fd.
-	[INFO][15:41:30] : Socket_fd is now listening every attemp of connection.
-[INFO][15:41:30] : Starting Server.
-	[INFO][15:41:30] : Epoll instance successfully created.
-	[INFO][15:41:30] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][15:41:30] : The server construction is now complete. The server is ready to accept incoming connections.
-[INFO][15:41:39] : [NEW REQUEST]
-	[INFO][15:41:39] : Server did accept the connection.
-	[INFO][15:41:39] : Server's receive a GET request.
-	[INFO][15:41:39] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/index.html" was found.
-	[INFO][15:41:39] : End of the request.
-	[INFO][15:41:39] : File is created.
-[INFO][15:41:39] : [NEW REQUEST]
-	[INFO][15:41:39] : Server did accept the connection.
-	[INFO][15:41:39] : Server's receive a GET request.
-	[INFO][15:41:39] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][15:41:39] : End of the request.
-	[INFO][15:41:39] : File is created.
-[INFO][15:41:43] : [NEW REQUEST]
-	[INFO][15:41:43] : Server did accept the connection.
-	[INFO][15:41:43] : Server's receive a GET request.
-	[INFO][15:41:43] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/upload.html" was found.
-	[INFO][15:41:43] : End of the request.
-	[INFO][15:41:43] : File is created.
-[INFO][15:42:08] : [NEW REQUEST]
-	[INFO][15:42:08] : Server did accept the connection.
-	[INFO][15:42:08] : Server's receive a GET request.
-	[INFO][15:42:08] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/index.html" was found.
-	[INFO][15:42:08] : End of the request.
-	[INFO][15:42:08] : File is created.
-[INFO][15:42:08] : [NEW REQUEST]
-	[INFO][15:42:08] : Server did accept the connection.
-	[INFO][15:42:08] : Server's receive a GET request.
-	[INFO][15:42:08] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][15:42:08] : End of the request.
-	[INFO][15:42:08] : File is created.
-[INFO][15:42:10] : [NEW REQUEST]
-	[INFO][15:42:10] : Server did accept the connection.
-	[INFO][15:42:10] : Server's receive a GET request.
-	[INFO][15:42:10] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/upload.html" was found.
-	[INFO][15:42:10] : End of the request.
-	[INFO][15:42:10] : File is created.
-[INFO][15:42:20] : [NEW REQUEST]
-	[INFO][15:42:20] : Server did accept the connection.
-	[INFO][15:42:20] : Extension of the files was not recognize.
-	[INFO][15:42:20] : Server's receive a POST request.
-	[INFO][15:42:20] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/errors/400.html" was found empty.
-	[INFO][15:42:20] : End of the request.
-	[ERROR][15:42:20] : Recv failed.
-	[ERROR][15:42:20] : The request body cannot be found.
-	[INFO][15:42:20] : File is created.
-[INFO][15:42:20] : [NEW REQUEST]
-	[INFO][15:42:20] : Server did accept the connection.
-	[INFO][15:42:20] : Server's receive a GET request.
-	[INFO][15:42:20] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][15:42:20] : End of the request.
-	[ERROR][15:42:20] : Recv failed.
-	[INFO][15:42:20] : File Screenshot from 2024-09-17 17-07-12.png saved successfully.
-	[INFO][15:42:20] : File is created.
-[INFO][15:42:26] : [NEW REQUEST]
-	[INFO][15:42:26] : Server did accept the connection.
-	[INFO][15:42:26] : Extension of the files was not recognize.
-	[INFO][15:42:26] : Server's receive a POST request.
-	[INFO][15:42:26] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/errors/400.html" was found empty.
-	[INFO][15:42:26] : End of the request.
-	[ERROR][15:42:26] : Recv failed.
-	[ERROR][15:42:26] : The request body cannot be found.
-	[INFO][15:42:26] : File is created.
-[INFO][15:42:34] : [NEW REQUEST]
-	[INFO][15:42:34] : Server did accept the connection.
-	[INFO][15:42:34] : Extension of the files was not recognize.
-	[INFO][15:42:34] : Server's receive a POST request.
-	[INFO][15:42:34] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/errors/400.html" was found empty.
-	[INFO][15:42:34] : End of the request.
-	[ERROR][15:42:34] : Recv failed.
-	[ERROR][15:42:34] : The request body cannot be found.
-	[INFO][15:42:34] : File is created.
-[INFO][15:42:34] : [NEW REQUEST]
-	[INFO][15:42:34] : Server did accept the connection.
-	[INFO][15:42:34] : Server's receive a GET request.
-	[INFO][15:42:34] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
-	[INFO][15:42:34] : End of the request.
-	[ERROR][15:42:34] : Recv failed.
-	[INFO][15:42:34] : File Screenshot from 2024-09-17 17-07-12.png saved successfully.
-	[INFO][15:42:34] : File is created.
-	[ERROR][16:15:25] : The call to epoll_wait failed.
-	[INFO][16:15:25] : Shutting down the server properly.
+	[INFO][17:15:30] : Getprotobyname Succed.
+	[INFO][17:15:30] : Socket_fd in now created.
+	[INFO][17:15:30] : Socket_fd in now set.
+	[INFO][17:15:30] : Socket_fd is binded.
+	[INFO][17:15:30] : Socket_fd is non blocking fd.
+	[INFO][17:15:30] : Socket_fd is now listening every attemp of connection.
+	[INFO][17:15:30] : Getprotobyname Succed.
+	[INFO][17:15:30] : Socket_fd in now created.
+	[INFO][17:15:30] : Socket_fd in now set.
+	[INFO][17:15:30] : Socket_fd is binded.
+	[INFO][17:15:30] : Socket_fd is non blocking fd.
+	[INFO][17:15:30] : Socket_fd is now listening every attemp of connection.
+	[INFO][17:15:30] : Getprotobyname Succed.
+	[INFO][17:15:30] : Socket_fd in now created.
+	[INFO][17:15:30] : Socket_fd in now set.
+	[INFO][17:15:30] : Socket_fd is binded.
+	[INFO][17:15:30] : Socket_fd is non blocking fd.
+	[INFO][17:15:30] : Socket_fd is now listening every attemp of connection.
+	[INFO][17:15:30] : Getprotobyname Succed.
+	[INFO][17:15:30] : Socket_fd in now created.
+	[INFO][17:15:30] : Socket_fd in now set.
+	[INFO][17:15:30] : Socket_fd is binded.
+	[INFO][17:15:30] : Socket_fd is non blocking fd.
+	[INFO][17:15:30] : Socket_fd is now listening every attemp of connection.
+	[INFO][17:15:30] : Getprotobyname Succed.
+	[INFO][17:15:30] : Socket_fd in now created.
+	[INFO][17:15:30] : Socket_fd in now set.
+	[INFO][17:15:30] : Socket_fd is binded.
+	[INFO][17:15:30] : Socket_fd is non blocking fd.
+	[INFO][17:15:30] : Socket_fd is now listening every attemp of connection.
+	[INFO][17:15:30] : Getprotobyname Succed.
+	[INFO][17:15:30] : Socket_fd in now created.
+	[INFO][17:15:30] : Socket_fd in now set.
+	[INFO][17:15:30] : Socket_fd is binded.
+	[INFO][17:15:30] : Socket_fd is non blocking fd.
+	[INFO][17:15:30] : Socket_fd is now listening every attemp of connection.
+	[INFO][17:15:30] : Getprotobyname Succed.
+	[INFO][17:15:30] : Socket_fd in now created.
+	[INFO][17:15:30] : Socket_fd in now set.
+	[INFO][17:15:30] : Socket_fd is binded.
+	[INFO][17:15:30] : Socket_fd is non blocking fd.
+	[INFO][17:15:30] : Socket_fd is now listening every attemp of connection.
+[INFO][17:15:30] : Starting Server.
+	[INFO][17:15:30] : Epoll instance successfully created.
+	[INFO][17:15:30] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][17:15:30] : The server construction is now complete. The server is ready to accept incoming connections.
+[INFO][17:15:44] : [NEW REQUEST]
+	[INFO][17:15:44] : Server did accept the connection.
+	[INFO][17:15:44] : Server's receive a GET request.
+	[INFO][17:15:44] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/html/index.html" was found.
+	[INFO][17:15:44] : End of the request.
+	[INFO][17:15:44] : File is created.
+[INFO][17:15:44] : [NEW REQUEST]
+	[INFO][17:15:44] : Server did accept the connection.
+	[INFO][17:15:44] : Server's receive a GET request.
+	[INFO][17:15:44] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/styles/styles.css" was found.
+	[INFO][17:15:44] : End of the request.
+	[INFO][17:15:44] : File is created.
+[INFO][17:15:44] : [NEW REQUEST]
+	[INFO][17:15:44] : Server did accept the connection.
+	[INFO][17:15:44] : Server's receive a GET request.
+	[INFO][17:15:44] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/scripts/script.js" was found.
+	[INFO][17:15:44] : End of the request.
+	[INFO][17:15:44] : File is created.
+[INFO][17:15:44] : [NEW REQUEST]
+	[INFO][17:15:44] : Server did accept the connection.
+	[INFO][17:15:44] : Server's receive a GET request.
+	[INFO][17:15:44] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/images/hearts.jpg" was found.
+	[INFO][17:15:44] : End of the request.
+	[INFO][17:15:44] : File is created.
+[INFO][17:15:44] : [NEW REQUEST]
+	[INFO][17:15:44] : Server did accept the connection.
+	[INFO][17:15:44] : Server's receive a GET request.
+	[INFO][17:15:44] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_catApi/images/panther.webp" was found.
+	[INFO][17:15:44] : End of the request.
+	[INFO][17:15:44] : File is created.
+[INFO][17:15:52] : [NEW REQUEST]
+	[INFO][17:15:52] : Server did accept the connection.
+	[INFO][17:15:52] : Server's receive a GET request.
+	[INFO][17:15:52] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/index.html" was found.
+	[INFO][17:15:52] : End of the request.
+	[INFO][17:15:52] : File is created.
+[INFO][17:15:52] : [NEW REQUEST]
+	[INFO][17:15:52] : Server did accept the connection.
+	[INFO][17:15:52] : Server's receive a GET request.
+	[INFO][17:15:52] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/styles/styles.css" was found.
+	[INFO][17:15:52] : End of the request.
+	[INFO][17:15:52] : File is created.
+[INFO][17:15:54] : [NEW REQUEST]
+	[INFO][17:15:54] : Server did accept the connection.
+	[INFO][17:15:54] : Server's receive a GET request.
+	[INFO][17:15:54] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/upload.html" was found.
+	[INFO][17:15:54] : End of the request.
+	[INFO][17:15:54] : File is created.
+[INFO][17:15:59] : [NEW REQUEST]
+	[INFO][17:15:59] : Server did accept the connection.
+	[INFO][17:15:59] : Server's receive a POST request.
+	[INFO][17:15:59] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/upload.html" was found.
+	[INFO][17:15:59] : End of the request.
+	[ERROR][17:15:59] : Recv failed.
+	[ERROR][17:15:59] : The request body cannot be found.
+	[INFO][17:15:59] : File is created.
+[INFO][17:16:09] : [NEW REQUEST]
+	[INFO][17:16:09] : Server did accept the connection.
+	[INFO][17:16:09] : Server's receive a POST request.
+	[INFO][17:16:09] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/upload.html" was found.
+	[INFO][17:16:09] : End of the request.
+	[ERROR][17:16:09] : Recv failed.
+	[ERROR][17:16:09] : The request body cannot be found.
+	[INFO][17:16:09] : File is created.
+[INFO][17:16:19] : [NEW REQUEST]
+	[INFO][17:16:19] : Server did accept the connection.
+	[INFO][17:16:19] : Server's receive a GET request.
+	[INFO][17:16:19] : The file requested "/home/user/ecole_42/webserv/webserv_v1.0/../website_gallery/html/upload.html" was found.
+	[INFO][17:16:19] : End of the request.
+	[INFO][17:16:19] : File is created.
+	[ERROR][19:11:07] : The call to epoll_wait failed.
+	[INFO][19:11:07] : Shutting down the server properly.
