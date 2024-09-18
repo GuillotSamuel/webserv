@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/18 15:27:05 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:17:56 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,6 @@
 #define CSV_FILES "/data"
 #define DEFAULT_PATH_ERROR "/www/error_pages/"
 #define CGI_FILES "/cgi-bin"
-#define RESET "\033[0m"
-#define CYAN "\033[36m"
-#define WHITE "\033[37m"
-
-#define RESET "\033[0m"
-#define CYAN "\033[36m"
-#define WHITE "\033[37m"
-#define YELLOW "\033[33m"
 
 class ListeningSocket;
 
@@ -54,23 +46,23 @@ class ServerConfiguration
 		std::string							_index; // ok
 		int									_clientMaxBodySize; // ok
 		std::map<std::string, std::string>	_pathInfoCgi; // ok
-		std::map<std::string, int>			_allowed_methods; // TO ADOPT
+		std::map<std::string, int>			_allowed_methods; // ok
 		std::map<int, std::string>			_errorPages; // ok
-		int									_autoindex; // TO ADOPT
+		int									_autoIndex; // ok
 
 		/* --- Locations from configuration file --- */
 		std::string							_errorPagesLocation; // ok
 		std::string							_cgiBin_location; // ok
 		std::string							_uploadsLocation; // ok
+		std::map<std::string, std::string>	_interpreter_map; // ADDING IN <<
 		std::map<std::string, t_location>	_locations_map; // ok // adding _
 
 		/* --- Div informations --- */
 		std::string							root_index; // ok
 		std::string							imHere; // ok // ou est ce que je suis
 
-		/* --- WE DON'T KNOW YET (because Marianne is dumb) --- */
+		/* --- WE DON'T KNOW YET (because Marianne is trop forte) --- */
 		std::map<std::string, std::string>	_pathInfoMime; // TO REMOVE ???
-		std::map<std::string, std::string>	_location; // TO REMOVE
 		std::string							strPort; // a check
 
 	public:
@@ -83,7 +75,6 @@ class ServerConfiguration
 		/*---------------------------------------------------------------*/
 		/*                         OVERLOADED                            */
 		/*---------------------------------------------------------------*/
-		ServerConfiguration &operator=(const ServerConfiguration &copy);
 		
 		/*---------------------------------------------------------------*/
 		/*                            SETTER                             */
@@ -95,13 +86,15 @@ class ServerConfiguration
 		void								setClientMaxBodySize(std::string str);
 		void								setRoot(std::string str);
 		void								setIndex(std::string str);
-		void								setLocation(std::string page, std::string location);
+		void								setInterpreterMap(std::string page, std::string location);
 		void								setAllowedMethods(std::string method, int code);
 		void								setUploadsLocation(std::string str);
 		void								setErrorPagesLocation(std::string str);
 		void								setPathInfoCgi(std::string extension, std::string location);
 		void								setCgiBinLocation(std::string str);
 		void								setRootIndex();
+		void								setAutoIndex(std::string str);
+		void								setLocationMap(std::string location_key, t_location new_location);
 		
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
@@ -121,11 +114,13 @@ class ServerConfiguration
 		std::string							getUploadLocation(void) const;
 		std::string							getErrorPageLocation(void) const;
 		std::string							getCgiLocation(void) const;
-		std::map<std::string, std::string>	getLocation(void) const;
+		std::map<std::string, std::string>	getInterpreterMap(void) const;
 		std::map<std::string, std::string>	getInfoMime(void) const;
 		std::map<std::string, t_location>	getTabLocation(void) const;
 		std::map<std::string, int>			getAllowedMethods(void)const;
 		std::string							getimHere() const;
+		std::string							getAutoIndex() const;
+		std::map<std::string, t_location>	getLocationMap() const;
 		
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:44:12 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/17 17:30:53 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:18:04 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,5 @@ void Server::parsing_g(int argc, char **argv)
     }
 
     check_parsing();
+    std::cout << "server size : " << this->tab_serv.size() << std::endl;
 }

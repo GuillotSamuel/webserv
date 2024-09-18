@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/18 15:30:14 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:17:55 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ class Server
 		void												ft_param_set_tokens(std::vector<std::string> tokens);
 		void												ft_invalid_line(std::vector<std::string> tokens);
 		void 												ft_set_tokens(std::vector<std::string> tokens);
+		void    											ft_set_auto_index(std::vector<std::string> tokens);
 		void 												ft_set_server_name_param(std::vector<std::string> tokens);
 		void												ft_set_client_max_body_param(std::vector<std::string> tokens);
 		void												ft_set_location_param(std::vector<std::string> tokens);
@@ -108,7 +109,7 @@ class Server
 		void												ft_set_errors_location(std::vector<std::string> tokens);
 		void												ft_set_uploads_location(std::vector<std::string> tokens);
 		void												ft_location_pages(std::vector<std::string> tokens);
-		void												ft_location_pages_dispatch(std::vector<std::string> current_param);
+		void												ft_location_pages_dispatch(std::vector<std::string> current_param, t_location  &new_location);
 
 	public:
 		void												startingServer();
