@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/17 17:29:23 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:34:45 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ std::ofstream* Server::_log = NULL;
 Server::Server(int argc, char **argv)
 {
 	this->_response = "";
+	this->_is_cgi = 0;
 	_log = new std::ofstream("logfile.log", std::ios::out);
 	if (!_log->is_open())
 	{		
@@ -225,31 +226,19 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 	{
 		return ;
 	}
-
-	// std::map<std::string, int> tab = this->currentConfig->getAllowedMethods();
-	// if (tab[client->getMethod()] == 0)
-
-	receivedLine = readBody(client, &receivedLine, current_fd);
-
-	std::string filePath = findPath(client);
-	if (filePath == "")
-	{
-		filePath = currentConfig->getErrorPage(404);
-	}
-
 	if (client->getMethod() == "GET")
 	{
-		ft_get(filePath, client);
+		ft_get(client);
 		delete client;
 	}
 	else if (client->getMethod() == "POST")
 	{
-		ft_post(*client, filePath);
+		ft_post(client);
 		delete client;
 	}
 	else if (client->getMethod() == "DELETE")
 	{
-		ft_delete(filePath);
+		ft_delete(client);
 		delete client;
 	}
 	else
@@ -258,8 +247,8 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 		delete client;
 	}
 	log("End of the request.", 1);
-	
 
+	receivedLine = readBody(client, &receivedLine, current_fd);
 }
 
 void	Server::getServConfig(Client *client, ListeningSocket *list)
@@ -306,55 +295,10 @@ void	Server::getServConfig(Client *client, ListeningSocket *list)
 	this->currentConfig = NULL;
 }
 
-/*response to a GET request*/
-void Server::ft_get(std::string filePath, Client *client) // a revoir
+void	Server::cgiExecution(std::string filePath, Client client)
 {
-	log("Server's receive a GET request.", 1);
-	std::string content = readFileContent(filePath);
-	std::string response = "";
-    std::stringstream ss;
-    ss << this->_status_code;
-    std::string _code = ss.str();
-	if (content.empty() || this->_status_code != 0)
-	{
-		log("The file requested \"" + filePath + "\" was found empty.", 1);
-		content = readFileContent(filePath);
-
-		response = "HTTP/1.1 " + _code + " Bad Request\r\n";
-		response += "Content-Type: text/html\r\n";
-		std::ostringstream oss;
-		oss << content.size();
-		response += "Content-Length: " + oss.str() + "\r\n";
-		response += "Connection: close\r\n";
-		response += "Server: webserv/1.0\r\n\r\n";
-		response += content;
-	}
-	else
-	{
-		log("The file requested \"" + filePath + "\" was found.", 1);
-		std::string mimeType = getMimeType(client);
-
-		response = "HTTP/1.1 200 OK\r\n";
-		response += "Content-Type: " + mimeType + "\r\n";
-		std::ostringstream oss;
-		oss << content.size();
-		response += "Content-Length: " + oss.str() + "\r\n";
-		response += "Connection: close\r\n";
-		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
-		response += content;
-	}
-	this->_response = response;
-}
-
-/*response to a POST request*/
-void Server::ft_post(Client client, std::string filePath) // a revoir surtout au niveau de la requete
-{
-	log("Server's receive a POST request.", 1);
 	Cgi *cgi = new Cgi();
-
-	std::map<std::string, std::string> tmp = this->currentConfig->getPathInfoCgi();
-
-	cgi->setPathInfoCgi(&tmp);
+	cgi->setExecuter(this->_executer_cgi);
 	cgi->setPath(filePath.c_str());
 	cgi->setEnv(this->currentConfig, client); 
 	std::string content = cgi->executeCgi();
@@ -374,9 +318,106 @@ void Server::ft_post(Client client, std::string filePath) // a revoir surtout au
 	delete cgi;
 }
 
-/*response to a DELETE request*/
-void Server::ft_delete(std::string filePath) // a revoir
+/*response to a GET request*/
+void Server::ft_get(Client *client) // a revoir
 {
+	log("Server's receive a GET request.", 1);
+	std::string filePath = findPath(client);
+	if (this->_is_cgi == 1)
+	{
+		cgiExecution(filePath, *client);
+	}
+	else
+	{
+		std::string content = readFileContent(filePath);
+		std::string response = "";
+		std::stringstream ss;
+		ss << this->_status_code;
+		std::string _code = ss.str();
+		if (this->_status_code != 0)
+		{
+			log("The file requested \"" + filePath + "\" was found empty.", 1);
+			content = readFileContent(filePath);
+
+			response = "HTTP/1.1 " + _code + " Bad Request\r\n";
+			response += "Content-Type: text/html\r\n";
+			std::ostringstream oss;
+			oss << content.size();
+			response += "Content-Length: " + oss.str() + "\r\n";
+			response += "Connection: close\r\n";
+			response += "Server: webserv/1.0\r\n\r\n";
+			response += content;
+		}
+		else
+		{
+			log("The file requested \"" + filePath + "\" was found.", 1);
+			std::string mimeType = getMimeType(client);
+
+			response = "HTTP/1.1 200 OK\r\n";
+			response += "Content-Type: " + mimeType + "\r\n";
+			std::ostringstream oss;
+			oss << content.size();
+			response += "Content-Length: " + oss.str() + "\r\n";
+			response += "Connection: close\r\n";
+			response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+			response += content;
+		}
+		this->_response = response;
+	}
+}
+
+/*response to a POST request*/
+void Server::ft_post(Client *client) // a revoir surtout au niveau de la requete
+{
+	std::string filePath = findPath(client);
+	log("Server's receive a POST request.", 1);
+	if (this->_is_cgi == 1)
+	{
+		cgiExecution(filePath, *client);
+	}
+	else
+	{
+		std::string content = readFileContent(filePath);
+		std::string response = "";
+		std::stringstream ss;
+		ss << this->_status_code;
+		std::string _code = ss.str();
+		if (this->_status_code != 0)
+		{
+			log("The file requested \"" + filePath + "\" was found empty.", 1);
+			content = readFileContent(filePath);
+
+			response = "HTTP/1.1 " + _code + " Bad Request\r\n";
+			response += "Content-Type: text/html\r\n";
+			std::ostringstream oss;
+			oss << content.size();
+			response += "Content-Length: " + oss.str() + "\r\n";
+			response += "Connection: close\r\n";
+			response += "Server: webserv/1.0\r\n\r\n";
+			response += content;
+		}
+		else
+		{
+			log("The file requested \"" + filePath + "\" was found.", 1);
+			std::string mimeType = getMimeType(client);
+
+			response = "HTTP/1.1 200 OK\r\n";
+			response += "Content-Type: " + mimeType + "\r\n";
+			std::ostringstream oss;
+			oss << content.size();
+			response += "Content-Length: " + oss.str() + "\r\n";
+			response += "Connection: close\r\n";
+			response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+			response += content;
+		}
+		this->_response = response;
+	}
+}
+
+/*response to a DELETE request*/
+void Server::ft_delete(Client *client) // a revoir
+{
+	std::string filePath = findPath(client);
 	log("Server's receive a DELETE request.", 1);
 
 	if (access(filePath.c_str(), F_OK) != 0)
@@ -402,7 +443,7 @@ void Server::ft_delete(std::string filePath) // a revoir
 		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
 
 		this->_response = response;
-	}
+	} 
 	else
 		log("Server failed to respond at the DELETE request.", 2);
 }
@@ -410,7 +451,7 @@ void Server::ft_delete(std::string filePath) // a revoir
 /*response to a bad request*/
 void Server::ft_badRequest()
 {
-	std::string content = readFileContent(ERROR_400_PAGE);
+	std::string content = readFileContent("");
 
 	std::string response = "HTTP/1.1 400 Bad Request\r\n";
 	response += "Content-Type: text/html\r\n";
@@ -495,14 +536,25 @@ void	Server::dlFile(std::string *receivedLine, Client *client)
 		log("Filename cannot be found.", 2);
 }
 
-std::string	Server::readFileContent(const std::string &path)
+std::string	Server::readFileContent(std::string path)
 {
 	std::ifstream file(path.c_str());
 
 	if (!file.is_open())
 	{
 		log("The file given cannot be found.", 1);
-		return ("");
+		if (this->currentConfig->getErrorPageLocation() == "")
+			path = this->currentConfig->getimHere()
+					+ DEFAULT_PATH_ERROR
+					+ this->currentConfig->getErrorPage(400);
+		else
+		{
+			path	= this->currentConfig->getimHere()
+					+ this->currentConfig->getRoot()
+					+ this->currentConfig->getErrorPageLocation()
+					+ this->currentConfig->getErrorPage(400);
+		}
+		return (readFileContent(path));
 	}
 
 	std::ostringstream oss;
@@ -584,27 +636,32 @@ std::string	Server::readBody(Client *client, std::string *receivedLine, int curr
     	delete[] buffer;
 		dlFile(receivedLine, client);
 	}
-		std::ofstream file("request.txt");
-		if (file.is_open()) {
-			file << *receivedLine;
-			file.close();
-			log("File is created.", 1);
-		} 
-		else
-			log("Unable to open file.", 2);
+
+	std::ofstream file("request.txt");
+	if (file.is_open()) {
+		file << *receivedLine;
+		file.close();
+		log("File is created.", 1);	} 
+	else
+		log("Unable to open file.", 2);
 	return (*receivedLine);
 }
 
 std::string Server::findPath(Client *client)
 {
-	if (client->getFullPath() == "/" || client->getFullPath() == ("/" + this->currentConfig->getServerName()))
+	this->_is_cgi = 0;
+	/*---------------------------------------------------------------*/
+	/*                       IS IT INDEX ?                           */
+	/*---------------------------------------------------------------*/
+	if (client->getFullPath() == ("/" + this->currentConfig->getServerName())
+	|| client->getFullPath() == "/")
 	{
 		this->_status_code = 0;
 		return (this->currentConfig->getRootIndex());
 	}
-
-	//verif pages
-	//regarder sil ni a pas un alias
+	/*---------------------------------------------------------------*/
+	/*                        IS IT ALIAS ?                          */
+	/*---------------------------------------------------------------*/
 	// std::map<std::string, t_location> obj = this->currentConfig->getTabLocation();
 	// if (obj.find(client->getPath()) != obj.end())
 	// {
@@ -614,28 +671,57 @@ std::string Server::findPath(Client *client)
 	// 	// if (client->getMethod() != )
 	// }
 
+	/*---------------------------------------------------------------*/
+	/*             		  DOES IT HAVE EXTENSION	                 */
+	/*---------------------------------------------------------------*/
 	size_t ext = client->getFullPath().rfind(".");
-	if (ext == std::string::npos)
+	if (ext != std::string::npos)
 	{
-		this->_status_code = 400;
-		return (this->currentConfig->getimHere() + this->currentConfig->getErrorPageLocation()
-			+ this->currentConfig->getErrorPage(400));
+		size_t extend = client->getFullPath().size();
+		std::string extension = client->getFullPath().substr(ext, (extend - ext));
+
+		/*---------------------------------------------------------------*/
+		/*                 LOOKING FOR STATIC EXTENSION                  */
+		/*---------------------------------------------------------------*/
+		if (!this->extpath.empty() && this->extpath.find(extension) != this->extpath.end())
+		{
+			this->_extensionPath = extension;
+			this->_status_code = 0;
+			return (this->currentConfig->getimHere() + this->currentConfig->getRoot()
+				+ this->extpath[extension] + client->getFullPath());
+		}
+		/*---------------------------------------------------------------*/
+		/*                   LOOKING FOR CGI EXTENSION                   */
+		/*---------------------------------------------------------------*/	
+		std::map<std::string, std::string> cgi_ext = this->currentConfig->getPathInfoCgi();		
+		if (!cgi_ext.empty() && cgi_ext.find(extension) != this->extpath.end())
+		{
+			this->_extensionPath = extension;
+			this->_status_code = 0;
+			this->_is_cgi = 1;
+			this->_executer_cgi = cgi_ext[extension];
+			return (this->currentConfig->getimHere() + this->currentConfig->getRoot()
+				+ CGI_FILES + client->getFullPath());
+		}
 	}
-	
-	size_t extend = client->getFullPath().size();
-	std::string extension = client->getFullPath().substr(ext, (extend - ext));
-	if (this->extpath.find(extension) != this->extpath.end())
-	{
-		this->_extensionPath = extension;
-		this->_status_code = 0;
-		return (this->currentConfig->getimHere() + this->currentConfig->getRoot()
-			+ this->extpath[extension] + client->getFullPath());
-	}
-	
+	/*---------------------------------------------------------------*/
+	/*                       PAGE NOT FOUND                          */
+	/*---------------------------------------------------------------*/
 	log("Extension of the files was not recognize.", 1);
 	this->_status_code = 400;
-	return (this->currentConfig->getimHere() + this->currentConfig->getErrorPageLocation()
-		+ this->currentConfig->getErrorPage(400));
+	std::string absolutPath;
+	if (this->currentConfig->getErrorPageLocation() == "")
+		absolutPath = this->currentConfig->getimHere()
+					+ DEFAULT_PATH_ERROR
+					+ this->currentConfig->getErrorPage(400);
+	else
+	{
+		absolutPath = this->currentConfig->getimHere()
+					+ this->currentConfig->getRoot()
+					+ this->currentConfig->getErrorPageLocation()
+					+ this->currentConfig->getErrorPage(400);
+	}
+	return (absolutPath);
 }
 
 void   	Server::log(std::string error, int type)
@@ -721,20 +807,6 @@ std::map<std::string, std::string>	Server::createExtPath()
 	extPath[".woff"] = FONT_FILES;
 	extPath[".woff2"] = FONT_FILES;
 	extPath[".csv"] = CSV_FILES;
-	// extPath[".py"] = CGI_FILES;
-	// extPath[".sh"] = CGI_FILES;
-	// extPath[".c"] = CGI_FILES;
-	// extPath[".cpp"] = CGI_FILES;
-	// extPath[".cs"] = CGI_FILES;
-	// extPath[".java"] = CGI_FILES;
-	// extPath[".js"] = CGI_FILES;
-	// extPath[".lua"] = CGI_FILES;
-	// extPath[".php"] = CGI_FILES;
-	// extPath[".pl"] = CGI_FILES;
-	// extPath[".py"] = CGI_FILES;
-	// extPath[".rb"] = CGI_FILES;
-	// extPath[".rs"] = CGI_FILES;
-	// extPath[".sh"] = CGI_FILES;
 	return (extPath);
 }
 

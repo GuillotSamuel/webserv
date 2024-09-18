@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/17 17:25:11 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:11:42 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ ServerConfiguration::ServerConfiguration()
 	this->root_index = "";
 	this->_index = "";
 	this->_uploadsLocation = "";
-	this->_errorPagesLocation = "www/error_pages/";
+	this->_errorPagesLocation = "";
 	this->_errorPages[400] = "400.html";
 	this->_errorPages[404] = "404.html";
 	this->_cgiBin_location = "";

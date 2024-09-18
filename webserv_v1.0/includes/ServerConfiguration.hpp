@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/16 19:10:55 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:27:05 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #define PDF_FILES "/docs"
 #define XML_FILES "/xml"
 #define CSV_FILES "/data"
-#define ERROR_400_PAGE "/html/errors/400.html"
+#define DEFAULT_PATH_ERROR "/www/error_pages/"
 #define CGI_FILES "/cgi-bin"
 #define RESET "\033[0m"
 #define CYAN "\033[36m"

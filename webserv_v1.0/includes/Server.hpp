@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/17 17:01:56 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:30:14 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,35 @@ class Server
 		/*---------------------------------------------------------------*/	
 		struct sockaddr										_clientAdress;
 		struct sockaddr_in									_address;
+		std::vector<ServerConfiguration>					tab_serv;
+		std::vector<ListeningSocket*>						_listSockets;
+					/*--------------EPOLL HANDLING--------------*/
 		struct epoll_event									_event;
 		struct epoll_event									_events[MAX_EVENTS];
 		int													_epoll_fd;
 		std::vector<uint32_t>								_connexion_fd;
+
+					/*-------------REQUEST HANDLING-------------*/
 		int													_status_code;
 		std::string											_path;
 		std::string											_extensionPath;
 		char												received_line[BUFFER_SIZE];
 		char												socket_buffer[BUFFER_SIZE];
-		std::vector<ServerConfiguration>					tab_serv;
-		std::vector<ListeningSocket*>						_listSockets;
 		std::map<std::string, std::string>					extpath;
 		std::map<std::string, std::string>					mimePath;
 		ServerConfiguration									*currentConfig;
 		int													fd_config;
+
+					/*-------------PARSING HANDLING-------------*/		
 		bool												insideServerBlock;
 		bool												insideParamBlock;
 		bool												location_started;
 		std::string											_response;
+
+					/*--------------CGI HANDLING----------------*/
+		int													_is_cgi;
+		std::string											_executer_cgi;
+		
 		/*---------------------------------------------------------------*/
 		/*                            METHOD                             */
 		/*---------------------------------------------------------------*/
@@ -55,11 +65,12 @@ class Server
 		void												creatAllListeningSockets();
 		void												handle_client(ListeningSocket *list, int current_fd);
 		std::string											findPath(Client *client);
-		void												ft_get(std::string filePath, Client *client);
-		void												ft_post(Client client, std::string filePath);
-		void												ft_delete(std::string filePath);
+		void												ft_get(Client *client);
+		void												ft_post(Client *client);
+		void												ft_delete(Client *client);
 		void												ft_badRequest();
-		std::string											readFileContent(const std::string &path);
+		void												cgiExecution(std::string filePath, Client client);
+		std::string											readFileContent(std::string path);
 		std::string 										getMimeType(Client *client);
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
@@ -98,14 +109,12 @@ class Server
 		void												ft_set_uploads_location(std::vector<std::string> tokens);
 		void												ft_location_pages(std::vector<std::string> tokens);
 		void												ft_location_pages_dispatch(std::vector<std::string> current_param);
-		// void												SendResponse(std::string response, std::string method);
 
 	public:
 		void												startingServer();
 		void												serverExecution();
 		static void											log(std::string error, int type);
  		static std::ofstream								*_log;
-
 
 		/*---------------------------------------------------------------*/
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
