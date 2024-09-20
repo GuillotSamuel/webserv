@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/17 16:48:56 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/20 15:06:26 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ typedef struct s_location
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Cgi.hpp"
+#include "Location.hpp"
 
 /* -------------------------------------------------------------------------- */
 /*                                    UTILS                                   */

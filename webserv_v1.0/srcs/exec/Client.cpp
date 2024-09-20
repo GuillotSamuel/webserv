@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/18 19:27:30 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/19 22:52:10 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ Client::Client()
 	this->_contentType = "";
 	this->_boundary = "";
 	this->_path = "";
-	this->_host = "";
+	this->_host = ""; // contient le nom du domaine -> (server_name);
 	this->_currentFd = -1;
 	this->_filePath = "";
 }

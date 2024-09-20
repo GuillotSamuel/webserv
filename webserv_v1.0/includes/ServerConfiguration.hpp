@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/18 16:17:56 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/19 22:49:46 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@ class ServerConfiguration
 		/* --- General informations from configuration file --- */
 		std::string							_serverName; // ok
 		std::string							_hostName; // ok
+		//ajout
+		std::string							_ipAdress;
+		
 		std::vector<int>					_port; // ok
 		std::string							_root;  // ok //Path_du_site
 		std::string							_index; // ok
@@ -95,6 +98,9 @@ class ServerConfiguration
 		void								setRootIndex();
 		void								setAutoIndex(std::string str);
 		void								setLocationMap(std::string location_key, t_location new_location);
+
+		//ajout
+		void								setIpAdress(std::string IpAdress);
 		
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
@@ -121,6 +127,9 @@ class ServerConfiguration
 		std::string							getimHere() const;
 		std::string							getAutoIndex() const;
 		std::map<std::string, t_location>	getLocationMap() const;
+
+		//ajout
+		std::string							getIpAdress();
 		
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */

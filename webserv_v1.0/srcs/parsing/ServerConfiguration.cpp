@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/18 16:17:44 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/19 22:49:29 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,11 @@ void	ServerConfiguration::setLocationMap(std::string location_key, t_location ne
 	this->_locations_map[location_key] = new_location;
 }
 
+void ServerConfiguration::setIpAdress(std::string ipAdress)
+{
+	this->_ipAdress = ipAdress;
+}
+
 void ServerConfiguration::setIndex(std::string str)
 {
 	this->_index = str;
@@ -252,6 +257,11 @@ std::string ServerConfiguration::getIndex() const
 std::map<std::string, t_location> ServerConfiguration::getLocationMap() const
 {
 	return (this->_locations_map);
+}
+
+std::string ServerConfiguration::getIpAdress()
+{
+	return (this->_ipAdress);
 }
 
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
