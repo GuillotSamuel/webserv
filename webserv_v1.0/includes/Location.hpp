@@ -32,27 +32,31 @@ class Location
 	public:
 		Location(/* args */);
 		~Location();
+
+		void							void	Server::applyConfig(Client *client)	setBlockName(std::string blockName);
+		void								setBlockType(std::string blockType);
+		void								setAlias(std::string alias);
+		void								setRoot(std::string root);
+		void								setClientMaxBodySize(int clientMaxBodySize);
+		void								setAutoIndex(int autoIndex);
+		void								setIndex(std::string index);
+		void								setUploadsLocation(std::string uploadsLocation);
+		void								setCgi(std::string first, std::string second);
+		void								setErrorPage(int code, std::string errorPage);
+		void								setRedirection(int code, std::string to);
+		void								setAllowedMathods(std::string whichOne, int allow);
+
+		std::string							getBlockName() const;
+		std::string							getBlockType() const;
+		std::string							getAlias() const;
+		std::string							getRoot() const;
+		int									getClientMaxBodySize() const;
+		int									getAutoIndex() const;
+		std::string							getPathInfo() const;
+		std::string							getIndex() const;
+		std::string							getUploadsLocation() const;
+		std::map<std::string, std::string>	getCgi() const;
+		std::map<int, std::string>			getErrorPage() const;
+		std::map<int, std::string>			getRedirection() const;
+		int									getAllowedMethods(std::string wichOne);
 };
-
-Location::Location(/* args */)
-{
-	this->_blockName = "";
-	this->_blockType = "";
-	this->_alias = "";
-	this->_root = "";
-	this->_clientMaxBodySize = 0;
-	this->_autoindex = 0;
-	this->_path_info = "";
-	this->_index = "";
-	this->_uploadsLocation = "";
-	this->_allowed_methods["GET"] = 0;
-	this->_allowed_methods["POST"] = 0;
-}
-
-Location::~Location()
-{
-	this->_cgi.clear();
-	this->_error_page.clear();
-	this->_redirection.clear();
-	this->_allowed_methods.clear();
-}

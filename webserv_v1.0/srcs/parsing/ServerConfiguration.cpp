@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/19 22:49:29 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/22 22:43:36 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ ServerConfiguration::ServerConfiguration()
 	this->_errorPages[400] = "400.html";
 	this->_errorPages[404] = "404.html";
 	this->_cgiBin_location = "";
-	this->_allowed_methods["GET"] = 0;
-	this->_allowed_methods["POST"] = 0;
-	this->_allowed_methods["DELETE"] = 0;
+	this->_allowed_methods["GET"] = -1;
+	this->_allowed_methods["POST"] = -1;
+	this->_allowed_methods["DELETE"] = -1;
 }
 
 ServerConfiguration::~ServerConfiguration(void)
@@ -44,11 +44,12 @@ ServerConfiguration::~ServerConfiguration(void)
 	this->_port.clear();
 	this->_allowed_methods.clear();
 	this->_locations_map.clear();
+	// this->_location.clear();
 }
 
 void ServerConfiguration::setRootIndex()
 {
-	this->root_index = this->imHere + this->_root + HTML_FILES + "/" + this->_index;
+	this->root_index = this->_root + this->_index;
 }
 
 void ServerConfiguration::setInterpreterMap(std::string page, std::string interpreter)
@@ -59,6 +60,11 @@ void ServerConfiguration::setInterpreterMap(std::string page, std::string interp
 void ServerConfiguration::setAllowedMethods(std::string method, int code)
 {
 	this->_allowed_methods[method] = code;
+}
+
+void ServerConfiguration::setPortList(std::string address, std::string port)
+{
+	this->_portList[address] = port;
 }
 
 void ServerConfiguration::setPort(std::string str)
@@ -132,11 +138,6 @@ void	ServerConfiguration::setLocationMap(std::string location_key, t_location ne
 	this->_locations_map[location_key] = new_location;
 }
 
-void ServerConfiguration::setIpAdress(std::string ipAdress)
-{
-	this->_ipAdress = ipAdress;
-}
-
 void ServerConfiguration::setIndex(std::string str)
 {
 	this->_index = str;
@@ -145,6 +146,11 @@ void ServerConfiguration::setIndex(std::string str)
 std::vector<int> ServerConfiguration::getPortTab(void) const
 {
 	return (this->_port);
+}
+
+std::map<std::string, std::string> ServerConfiguration::getPortList(void) const
+{
+	return (this->_portList);
 }
 
 std::string ServerConfiguration::getHostName(void) const
@@ -259,9 +265,9 @@ std::map<std::string, t_location> ServerConfiguration::getLocationMap() const
 	return (this->_locations_map);
 }
 
-std::string ServerConfiguration::getIpAdress()
+std::vector<Location> ServerConfiguration::getLocation() const
 {
-	return (this->_ipAdress);
+	return (this->_location);
 }
 
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)

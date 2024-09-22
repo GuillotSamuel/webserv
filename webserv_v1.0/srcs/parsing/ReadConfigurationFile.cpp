@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ReadConfigurationFile.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 20:01:59 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/18 13:57:39 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/21 15:19:16 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,17 @@
 
 void Server::readConfigurationFile(const char *arg)
 {
-	int fd = open(arg, O_RDONLY);
+	int fd = open(arg, O_RDONLY); 
 	if (fd == -1)
 	{
 		error("Error: Could not open the configuration file [./webserv --help]");
 	}
+
+	/*std::ifstream configFile(arg); // utiliser plutot une fonction ccp
+	if (configFile.fail())
+	{
+		error("Error: Could not open the configuration file [./webserv --help]");
+	}*/
 
 	ssize_t bytes_read = 1;
 	char buffer[1];
@@ -29,7 +35,55 @@ void Server::readConfigurationFile(const char *arg)
 	this->insideParamBlock = false;
 	this->fd_config = fd;
 
-	while ((bytes_read = read(this->fd_config, buffer, 1)) > 0)
+	// //voir pour utiliser getline() // lis automatiquement jusqu'a newline
+	/*while (getline(configFile, line))
+	{
+		int i = 0;
+		for (i = 0; std::isspace(line[i]); i++);
+		if (line[i] != '#' && !line.empty())
+		{
+			if (this->insideServerBlock)
+			{
+				if (this->insideParamBlock == false && line.find("}") != std::string::npos)
+				{
+					this->insideServerBlock = false;
+					this->tab_serv.push_back(*this->currentConfig);
+					delete this->currentConfig;
+					this->currentConfig = NULL;
+				}
+				else if (this->insideParamBlock == true && line.find("}") != std::string::npos)
+				{
+					this->insideParamBlock = false;
+					ft_tokenizer(line);
+				}
+				else if (this->insideParamBlock == false && line.find("{") != std::string::npos)
+				{
+					this->insideParamBlock = true;
+					ft_tokenizer(line);
+				}
+				else
+				{
+					ft_tokenizer(line);
+				}
+			}
+			else
+			{
+				if (line.find("server {") != std::string::npos)
+				{
+					this->currentConfig = new ServerConfiguration();
+					this->location_started = false;
+					if (!this->currentConfig) // inutile sauf si tu precise a new que tu veux pas d'exception (new(std::nothrow))
+					{
+						error("Error: Unable to allocate memory for ServerConfiguration");
+					}
+					insideServerBlock = true;
+				}
+			}
+			line.clear();
+		}
+		line.clear();
+	}*/
+	while ((bytes_read = read(this->fd_config, buffer, 1)) > 0) // pareil ici plutot cpp
 	{
 		if (bytes_read == -1)
 		{

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:29 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/13 11:47:19 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/22 12:06:40 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@ class ListeningSocket
 		/*---------------------------------------------------------------*/
 		// ServerConfiguration	&_serv;
 		int					port;
+		std::string			_portStr;
 		struct sockaddr_in	_server_address;
 		struct protoent		*_proto;
 		int					_socket_fd;
+		std::string			ipAddress;
 		
 
 	public:
@@ -34,6 +36,7 @@ class ListeningSocket
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
 		/*---------------------------------------------------------------*/
 		ListeningSocket(int port);
+		ListeningSocket(std::string address, std::string port);
 		~ListeningSocket();
 
 		/*---------------------------------------------------------------*/
@@ -42,6 +45,8 @@ class ListeningSocket
 		int					getSocket_fd() const;
 		void				set_nonblocking(int sockfd);
 		int					getPort() const;
+		std::string			getPortStr() const;
+		std::string			getIpAddress() const;
 		/*---------------------------------------------------------------*/
 		/*                         OVERLOADED                            */
 		/*---------------------------------------------------------------*/

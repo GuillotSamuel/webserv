@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/19 22:49:46 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/22 12:50:10 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ class ServerConfiguration
 
 		/* --- General informations from configuration file --- */
 		std::string							_serverName; // ok
-		std::string							_hostName; // ok
-		//ajout
-		std::string							_ipAdress;
+		std::string							_hostName; // ok // a supprime
 		
-		std::vector<int>					_port; // ok
+		std::vector<int>					_port; // ok // a supprime
+		//ajout
+		std::map<std::string, std::string>	_portList; // [ipAddress] = port;
 		std::string							_root;  // ok //Path_du_site
 		std::string							_index; // ok
 		int									_clientMaxBodySize; // ok
@@ -54,6 +54,10 @@ class ServerConfiguration
 		int									_autoIndex; // ok
 
 		/* --- Locations from configuration file --- */
+		
+		//ajout
+		std::vector<Location>				_location; // Toute nos locations doivent aller dans ce vector
+		
 		std::string							_errorPagesLocation; // ok
 		std::string							_cgiBin_location; // ok
 		std::string							_uploadsLocation; // ok
@@ -64,7 +68,7 @@ class ServerConfiguration
 		std::string							root_index; // ok
 		std::string							imHere; // ok // ou est ce que je suis
 
-		/* --- WE DON'T KNOW YET (because Marianne is trop forte) --- */
+		/* --- WE DON'T KNOW YET (because Marianne is vraiment teube sa mere) --- */
 		std::map<std::string, std::string>	_pathInfoMime; // TO REMOVE ???
 		std::string							strPort; // a check
 
@@ -82,6 +86,7 @@ class ServerConfiguration
 		/*---------------------------------------------------------------*/
 		/*                            SETTER                             */
 		/*---------------------------------------------------------------*/
+		void								setPortList(std::string address, std::string port);
 		void								setPort(std::string str);
 		void								setHostName(std::string str);
 		void								setServerName(std::string str);
@@ -99,17 +104,14 @@ class ServerConfiguration
 		void								setAutoIndex(std::string str);
 		void								setLocationMap(std::string location_key, t_location new_location);
 
-		//ajout
-		void								setIpAdress(std::string IpAdress);
-		
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
 		/*---------------------------------------------------------------*/
 		std::string							getStrPort(void) const;
 		std::string							getRoot(void) const;
 		std::string							getRootIndex(void) const;
-		int									getPort(void) const;
-		std::vector<int>					getPortTab(void) const;
+		std::map<std::string, std::string>	getPortList(void) const;
+		std::vector<int>					getPortTab(void) const; // a supprime
 		std::string							getHostName(void) const;
 		std::string							getServerName(void) const;
 		std::string							getErrorPage(int code) const;
@@ -129,8 +131,8 @@ class ServerConfiguration
 		std::map<std::string, t_location>	getLocationMap() const;
 
 		//ajout
-		std::string							getIpAdress();
-		
+		std::vector<Location>				getLocation() const;
+
 		/*---------------------------------------------------------------*/
 		/*                            UTILS                              */
 		/*---------------------------------------------------------------*/

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/20 15:06:26 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/22 22:47:31 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct s_location
 #include "Client.hpp"
 #include "Cgi.hpp"
 #include "Location.hpp"
+#include "Response.hpp"
 
 /* -------------------------------------------------------------------------- */
 /*                                    UTILS                                   */

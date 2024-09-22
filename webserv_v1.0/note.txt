@@ -24,6 +24,14 @@ server{
 -si aucune adress est specifie, alors on va pouvoir ecouter a toute
 les adresses possible.
 
+idee : 
+-verifier si adress ip > 255 ou < 0.
+-verifier si sur plusieurs block serveur meme address.
+-faire passer le vector<int> de port en vector<std::string>
+-
+
+-------------------------------------------------------------------
+
 
 
 -exemple pour une requete

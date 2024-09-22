@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/19 22:22:20 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/22 22:00:57 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ class Server
 		std::map<std::string, std::string>					extpath;
 		std::map<std::string, std::string>					mimePath;
 		ServerConfiguration									*currentConfig;
+		Location											*_currentLocation;
 		int													fd_config;
 
 					/*-------------PARSING HANDLING-------------*/		
@@ -60,11 +61,15 @@ class Server
 		/*                            METHOD                             */
 		/*---------------------------------------------------------------*/
 
+		//ajout
+		void												getLocationBlock(Client *client);
 		void												acceptConnexion(int sock);
 		void												inConnexion(ListeningSocket *list, int connexionFD);
 		void												outConnexionClient(int connexionFD);
 		void												outConnexionServer(int connexionFD);
+		void												applyConfig(Client *client);
 
+	
 		void												creatAllListeningSockets();
 		void												handle_client(ListeningSocket *list, int current_fd);
 		void												ft_get(Client *client);

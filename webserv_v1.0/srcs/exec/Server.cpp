@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/20 10:56:52 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/22 22:08:37 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,35 @@ void	Server::creatAllListeningSockets()
 			if (boul != 1)
 			{
 				_listSockets.push_back(new ListeningSocket(*itTabPort));
+			}
+		}
+	}
+}
+
+void	Server::creatAllListeningSockets()
+{
+	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
+	for (; it < this->tab_serv.end(); it++)
+	{
+		int boul = 0;
+		it->setRootIndex();
+		std::map<std::string, std::string> port = it->getPortList();
+		std::map<std::string, std::string>::iterator itTabPort = port.begin();
+		for (; itTabPort != port.end(); itTabPort++)
+		{
+			std::vector<ListeningSocket*>::iterator itList = _listSockets.begin();
+			for (int i = 0; itList < _listSockets.end(); itList++, i++)
+			{
+				if ((*itList)->getIpAddress() == itTabPort->first
+					&& (*itList)->getPortStr() == itTabPort->second)
+				{
+					boul = 1;
+					break;
+				}
+			}
+			if (boul != 1)
+			{
+				_listSockets.push_back(new ListeningSocket(itTabPort->first, itTabPort->second));
 			}
 		}
 	}
@@ -246,16 +275,19 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 
 	
 	getServBlock(client, list); // Bad way to find server even if it's working well
-	// getLocationBloc();
+	// getLocationBlock();
 
+	
 	/*Application des directives de configuration
 	-redirection
 	-acces aux fichiers statique
 	-execution CGI
 	*/
 	/*generation de la reponse*/
-	if (this->currentConfig == NULL)
-		return ;
+
+	applyConfig(client);
+
+	
 	if (client->getMethod() == "GET")
 		ft_get(client);
 	else if (client->getMethod() == "POST")
@@ -266,6 +298,33 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 		ft_badRequest();
 	delete client;
 	log("End of the request.", 1);
+}
+
+void	Server::getLocationBlock(Client *client)
+{
+	//gerer la correspondance exacte
+	std::vector<Location> tab = this->currentConfig->getLocation();
+	std::vector<Location>::iterator it = tab.begin();
+	for (; it != tab.end(); it++)
+	{
+		if (client->getPath() == it->getBlockName() && it->getBlockType() == "equal")
+		{
+			this->_currentLocation = &(*it);
+			return ;
+		}
+	}
+
+	//gerer la correspondance par prefixe
+	std::vector<Location>::iterator it = tab.begin();
+	for (; it != tab.end(); it++)
+	{
+		// if (it->getBlockType() == "prefix")
+		// {
+		// 	this->_currentLocation = &(*it);
+		// 	return ;
+		// }
+	}
+	this->_currentLocation = NULL;
 }
 
 std::string	Server::readHead(Client *client)
@@ -296,11 +355,19 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 	-Block par default
 	*/
 
-
-
-
-
 	this->currentConfig = NULL;
+	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
+	for (; it < this->tab_serv.end(); it++)
+	{
+		std::map<std::string, std::string> portList = it->getPortList();
+		std::map<std::string, std::string>::iterator it2 = portList.begin();
+		if (it2->first == list->getIpAddress() && it2->second == list->getPortStr())
+		{
+			this->currentConfig = &(*it);
+			return ;
+		}
+	}
+
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
 	for (; it < this->tab_serv.end(); it++)
 	{
@@ -311,30 +378,8 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 		}
 	}
 	
-	it = this->tab_serv.begin();
-	for (; it < this->tab_serv.end(); it++)
-	{
-		if (it->getIpAdress() == client->getHost())
-		{
-			this->currentConfig = &(*it);
-			return ;
-		}
-	}
-
-	it = this->tab_serv.begin();
-	for (; it < this->tab_serv.end(); it++)
-	{
-		std::vector<int> tab = it->getPortTab();
-		std::vector<int>::iterator itPort = tab.begin();
-		for (; itPort < tab.end(); itPort++)
-		{
-			if (*itPort == list->getPort())
-			{
-				this->currentConfig = &(*it);
-				return ;
-			}
-		}
-	}
+	//prendre le block par default
+	
 	this->currentConfig = NULL;
 }
 
