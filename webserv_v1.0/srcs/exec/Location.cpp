@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:40:40 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/23 17:44:26 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:53:12 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ Location::Location(/* args */)
 	this->_uploadsLocation = "";
 	this->_allowed_methods["GET"] = -1;
 	this->_allowed_methods["POST"] = -1;
-	this->allowd_methods["DELETE"] = -1;
+	this->_allowed_methods["DELETE"] = -1;
 }
 
 Location::~Location()
@@ -158,6 +158,11 @@ std::map<int, std::string> Location::getRedirection() const
 	return (this->_redirection);
 }
 
-int Location::getAllowedMethods(std::string wichOne)
+int Location::getAllowedMethods(std::string whichOne)
 {
+	std::map<std::string, int>::iterator it = _allowed_methods.find(whichOne);
+	if (it != _allowed_methods.end()) {
+        return (it->second);
+    }
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/23 17:40:31 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:49:54 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ void	Response::setInfo(ServerConfiguration *serv, Location *location)
 			this->_uploadsLocation = location->getUploadsLocation();
 		else
 			this->_uploadsLocation = serv->getUploadLocation();
-		if (!location->getRedirection().empty())
-			this->_redirection = location->getRedirection();
-		else
-			this->_redirection = serv->getRedirection();
+		// if (!location->getRedirection().empty())
+		// 	this->_redirection = location->getRedirection();
+		// else
+		// 	this->_redirection = serv->getRedirection();
 	}
 	else {
 		this->_root = serv->getRoot();
@@ -85,7 +85,7 @@ void	Response::setInfo(ServerConfiguration *serv, Location *location)
 		this->_errorPages = serv->getErrorPages();
 		this->_autoIndex = serv->getAutoIndex();
 		this->_uploadsLocation = serv->getUploadLocation();
-		this->_redirection = serv->getRedirection();
+		// this->_redirection = serv->getRedirection();
 	}
 }
 
