@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:40:40 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/23 10:47:55 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:44:26 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ Location::Location(/* args */)
 	this->_uploadsLocation = "";
 	this->_allowed_methods["GET"] = -1;
 	this->_allowed_methods["POST"] = -1;
+	this->allowd_methods["DELETE"] = -1;
 }
 
 Location::~Location()
@@ -93,7 +94,8 @@ void Location::setRedirection(int code, std::string to)
 
 void Location::setAllowedMethods(std::string whichOne, int allow)
 {
-	
+	(void)whichOne; // TEST
+	(void)allow; // TEST
 }
 
 std::string Location::getBlockName() const
