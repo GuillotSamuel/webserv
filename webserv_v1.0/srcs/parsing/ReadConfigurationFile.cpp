@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ReadConfigurationFile.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 20:01:59 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/23 10:59:36 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 15:18:04 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void Server::readConfigurationFile(const char *arg)
 			{
 				if (line.find("server {") != std::string::npos)
 				{
-					this->currentConfig = new ServerConfiguration();
+					this->currentConfig = new(std::nothrow) ServerConfiguration(); // marche pas = throw
 					this->location_started = false;
 					if (!this->currentConfig)
 					{

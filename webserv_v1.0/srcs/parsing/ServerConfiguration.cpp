@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/23 14:27:11 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:34:34 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ ServerConfiguration::ServerConfiguration()
 	char *tmp = getcwd(NULL, 0);
 	std::string tmp2(tmp, strlen(tmp));
 	free(tmp);
-	this->_hostName = "";
 	this->strPort = "";
 	this->imHere = tmp2 + "/";
 	this->_root = "";
@@ -40,7 +39,6 @@ ServerConfiguration::~ServerConfiguration(void)
 	this->_pathInfoMime.clear();
 	this->_errorPages.clear();
 	this->_interpreter_map.clear();
-	this->_port.clear();
 	this->_allowed_methods.clear();
 	this->_locations_map.clear();
 	// this->_location.clear();
@@ -61,18 +59,6 @@ void ServerConfiguration::setAllowedMethods(std::string method, int code)
 	this->_allowed_methods[method] = code;
 }
 
-void ServerConfiguration::setPortList(std::string address, std::string port)
-{
-	this->_portList[address] = port;
-}
-
-void ServerConfiguration::setPort(std::string str)
-{
-	int n;
-	std::istringstream(str) >> n;
-	this->_port.push_back(n);
-}
-
 void ServerConfiguration::setUploadsLocation(std::string str)
 {
 	this->_uploadsLocation = str;
@@ -91,16 +77,6 @@ void ServerConfiguration::setPathInfoCgi(std::string extension, std::string inte
 void ServerConfiguration::setCgiBinLocation(std::string str)
 {
 	this->_cgiBin_location = str;
-}
-
-void ServerConfiguration::setHostName(std::string str)
-{
-	this->_hostName = str;
-}
-
-void ServerConfiguration::setServerName(std::string str)
-{
-	this->_serverName = str;
 }
 
 void ServerConfiguration::setErrorPages(int code, std::string str)
@@ -142,19 +118,9 @@ void ServerConfiguration::setIndex(std::string str)
 	this->_index = str;
 }
 
-std::vector<int> ServerConfiguration::getPortTab(void) const
-{
-	return (this->_port);
-}
-
-std::map<std::string, std::string> ServerConfiguration::getPortList(void) const
+std::multimap<std::string, std::string> ServerConfiguration::getPortList(void) const
 {
 	return (this->_portList);
-}
-
-std::string ServerConfiguration::getHostName(void) const
-{
-	return (this->_hostName);
 }
 
 std::vector<std::string> ServerConfiguration::getServerName(void) const
@@ -278,7 +244,12 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 {
 	Cout << YELLOW << "\n---------------------------------------------------------------------\n\n" << RESET;
 
-	Cout << WHITE << "Server name : " << RESET << CYAN << BOLD << sc.getServerName() << RESET << "\n\n\n";
+	Cout << WHITE << "Server name : \n";
+	std::vector<std::string> server_name_tab = sc.getServerName();
+	std::vector<std::string>::iterator server_name_it = server_name_tab.begin();
+	for(; server_name_it != server_name_tab.end(); server_name_it++)
+		Cout << CYAN << *server_name_it << RESET << "\n";
+	Cout << "\n";
 
 	Cout << WHITE << "Host name : " << RESET << CYAN << sc.getHostName() << RESET << "\n\n";
 

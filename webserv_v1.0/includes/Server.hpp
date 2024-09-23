@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/22 22:00:57 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 15:30:26 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ class Server
 		void												ft_set_client_max_body_param(std::vector<std::string> tokens);
 		void												ft_set_location_param(std::vector<std::string> tokens);
 		void												ft_set_listen_param(std::vector<std::string> tokens);
-		void												ft_set_host_name_param(std::vector<std::string> tokens);
 		void												ft_set_error_page_param(std::vector<std::string> tokens);
 		void												ft_set_root_param(std::vector<std::string> tokens);
 		void												ft_set_index_param(std::vector<std::string> tokens);
@@ -119,6 +118,8 @@ class Server
 		void												ft_set_uploads_location(std::vector<std::string> tokens);
 		void												ft_location_pages(std::vector<std::string> tokens);
 		void												ft_location_pages_dispatch(std::vector<std::string> current_param, t_location  &new_location);
+		void												ft_checkIp(const std::string &ip_str);
+		void												ft_checkPort(const std::string port_str);
 
 	public:
 		void												startingServer();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/23 11:22:00 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:57:55 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ Server::Server(int argc, char **argv)
 	}
 	this->_status_code = 0;
 	parsing_g(argc, argv);
-	creatAllListeningSockets();
-	log("Starting Server.", 3);
-	this->_epoll_fd = -1;
-	memset(&_address, 0, sizeof(struct sockaddr_in));
-	memset(&_clientAdress, 0, sizeof(struct sockaddr));
-	memset(&_event, 0, sizeof(struct epoll_event));
- 	memset(received_line, 0, BUFFER_SIZE);
-	memset(socket_buffer, 0, BUFFER_SIZE);
+	// creatAllListeningSockets();
+	// log("Starting Server.", 3);
+	// this->_epoll_fd = -1;
+	// memset(&_address, 0, sizeof(struct sockaddr_in));
+	// memset(&_clientAdress, 0, sizeof(struct sockaddr));
+	// memset(&_event, 0, sizeof(struct epoll_event));
+ 	// memset(received_line, 0, BUFFER_SIZE);
+	// memset(socket_buffer, 0, BUFFER_SIZE);
 }
 
 /* CREAT SOCKET
