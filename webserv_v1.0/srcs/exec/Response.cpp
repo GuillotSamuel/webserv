@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/23 10:52:40 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:32:59 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ Response::Response()
 
 void	Response::setInfo(ServerConfiguration *serv, Location *location)
 {
-	this->_serverName = serv->getServerName();
+	this->_serverName = *serv->getServerName().begin();
 	if (location)
 	{
 		if (location->getRoot() != "")
@@ -37,7 +37,7 @@ void	Response::setInfo(ServerConfiguration *serv, Location *location)
 			this->_root = location->getIndex();
 		else
 			this->_root = serv->getIndex();
-		if (location->getClientMaxBodySize() != 0)
+		if (location->getClientMaxBodySize() != -1)
 			this->_clientMaxBodySize = location->getClientMaxBodySize();
 		else
 			this->_clientMaxBodySize = serv->getClientMaxBodySize();

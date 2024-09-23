@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/23 10:46:37 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:33:11 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ class ServerConfiguration
 		std::map<std::string, std::string>	getPortList(void) const;
 		std::vector<int>					getPortTab(void) const; // a supprime
 		std::string							getHostName(void) const;
-		std::string							getServerName(void) const;
+		std::vector<std::string>			getServerName(void) const;
 		std::string							getErrorPage(int code) const;
 		std::map<int, std::string>			getErrorPages(void) const;
 		int									getClientMaxBodySize(void) const;
@@ -127,7 +127,8 @@ class ServerConfiguration
 		std::map<std::string, t_location>	getTabLocation(void) const;
 		std::map<std::string, int>			getAllowedMethods(void)const;
 		std::string							getimHere() const;
-		std::string							getAutoIndex() const;
+		std::string							getAutoIndexStr() const;
+		int									getAutoIndex() const;
 		std::map<std::string, t_location>	getLocationMap() const;
 
 		//ajout

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/23 10:57:52 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 14:27:11 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ ServerConfiguration::ServerConfiguration()
 	std::string tmp2(tmp, strlen(tmp));
 	free(tmp);
 	this->_hostName = "";
-	this->_serverName = "";
 	this->strPort = "";
 	this->imHere = tmp2 + "/";
 	this->_root = "";
@@ -158,7 +157,7 @@ std::string ServerConfiguration::getHostName(void) const
 	return (this->_hostName);
 }
 
-std::string ServerConfiguration::getServerName(void) const
+std::vector<std::string> ServerConfiguration::getServerName(void) const
 {
 	return (this->_serverName);
 }
@@ -183,12 +182,17 @@ std::string ServerConfiguration::getUploadLocation() const
 	return (this->_uploadsLocation);
 }
 
-std::string ServerConfiguration::getAutoIndex() const
+std::string ServerConfiguration::getAutoIndexStr() const
 {
 	if (this->_autoIndex == 1)
 		return ("on");
 	else
 		return ("off");
+}
+
+int ServerConfiguration::getAutoIndex() const
+{
+	return (this->_autoIndex);
 }
 
 std::string ServerConfiguration::getErrorPage(int code) const

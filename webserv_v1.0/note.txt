@@ -87,7 +87,7 @@ server {
 	location / {
 		
 	}
-}
+
 
 il faut le nom du script dans le fichier de config.
 
@@ -118,15 +118,16 @@ Chercher le bloc location
 	Note importante : si plusieurs blocs location correspondent à un URI,
 	Nginx sélectionne celui avec la correspondance la plus longue.
 
-3 - correspondance avec expression reguliere 
+3 - correspondance avec expression reguliere // NOT TO DO
 
 	-ex : ~ sensible a la casse.
-	location ~ \.php$ {
+	location ~ .php {
 		# directives pour traiter les fichiers PHP
 	}
 	-ex : ~* insensible a la casse.
-	location ~* \.(gif|jpg|jpeg)$ {
+	location ~* .(gif|jpg|jpeg) {
     # directives pour tous les fichiers d'images .gif, .jpg, .jpeg,
+	.GIF .JpG
 		insensibles à la casse
 	}
 

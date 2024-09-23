@@ -17,7 +17,7 @@ class Location
 {
 	private:
 		std::string							_blockName;
-		std::string							_blockType; // equal / prefixe / etc
+		std::string							_blockType; // equal / prefixe
 		std::string                 		_alias; // remplace l'URI par cette variable
 		std::string                 		_root; // permet de trouver le path qui mene a ce fichier
 		int                 				_clientMaxBodySize;

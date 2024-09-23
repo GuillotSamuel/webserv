@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/23 10:52:29 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 11:22:00 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,38 +38,11 @@ Server::Server(int argc, char **argv)
  	memset(received_line, 0, BUFFER_SIZE);
 	memset(socket_buffer, 0, BUFFER_SIZE);
 }
+
 /* CREAT SOCKET
 - Creat all our listening socket
 - Making care to never try to creat socket with the same port twice
 */
-void	Server::creatAllListeningSockets()
-{
-	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
-	for (; it < this->tab_serv.end(); it++)
-	{
-		int boul = 0;
-		it->setRootIndex();
-		std::vector<int> port = it->getPortTab();
-		std::vector<int>::iterator itTabPort = port.begin();
-		for (; itTabPort < port.end(); itTabPort++)
-		{
-			std::vector<ListeningSocket*>::iterator itList = _listSockets.begin();
-			for (int i = 0; itList < _listSockets.end(); itList++, i++)
-			{
-				if ((*itList)->getPort() == *itTabPort)
-				{
-					boul = 1;
-					break;
-				}
-			}
-			if (boul != 1)
-			{
-				_listSockets.push_back(new ListeningSocket(*itTabPort));
-			}
-		}
-	}
-}
-
 void	Server::creatAllListeningSockets()
 {
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
@@ -273,21 +246,17 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 		return ;
 	}
 
+	getServBlock(client, list);
+	getLocationBlock(client);
 	
-	getServBlock(client, list); // Bad way to find server even if it's working well
-	// getLocationBlock();
-
-	
+	Response *response = new Response;
+	response->setInfo(this->currentConfig, this->_currentLocation);
 	/*Application des directives de configuration
 	-redirection
 	-acces aux fichiers statique
 	-execution CGI
 	*/
 	/*generation de la reponse*/
-
-	Response *response = new Response;
-	response->setInfo(this->currentConfig, this->_currentLocation);
-	
 	if (client->getMethod() == "GET")
 		ft_get(client);
 	else if (client->getMethod() == "POST")
@@ -374,10 +343,15 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
 	for (; it < this->tab_serv.end(); it++)
 	{
-		if (it->getServerName() == client->getPath())
+		std::vector<std::string> server_name = it->getServerName();
+		std::vector<std::string>::iterator itServ = server_name.begin();
+		for (; itServ != server_name.end(); itServ++)
 		{
-			this->currentConfig = &(*it);
-			return ;
+			if (*itServ == client->getPath())
+			{
+				this->currentConfig = &(*it);
+				return ;
+			}
 		}
 	}
 	
@@ -441,7 +415,7 @@ void	Server::cgiExecution(std::string filePath, Client client)
 	oss << content.size();
 	response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
-	response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+	response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
 	response += content;
 
 	this->_response = response;
@@ -489,7 +463,7 @@ void Server::ft_get(Client *client) // a revoir
 			oss << content.size();
 			response += "Content-Length: " + oss.str() + "\r\n";
 			response += "Connection: close\r\n";
-			response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+			response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
 			response += content;
 		}
 		this->_response = response;
@@ -536,7 +510,7 @@ void Server::ft_post(Client *client) // a revoir surtout au niveau de la requete
 			oss << content.size();
 			response += "Content-Length: " + oss.str() + "\r\n";
 			response += "Connection: close\r\n";
-			response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+			response += "Server: " +*this->currentConfig->getServerName().begin() + "\r\n\r\n";
 			response += content;
 		}
 		this->_response = response;
@@ -557,7 +531,7 @@ void Server::ft_delete(Client *client) // a revoir
 		oss << content.size();
 		response += "Content-Length: " + oss.str() + "\r\n";
 		response += "Connection: close\r\n";
-		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+		response += "Server: " +*this->currentConfig->getServerName().begin() + "\r\n\r\n";
 		response += "File not found";
 
 		this->_response = response;
@@ -568,7 +542,7 @@ void Server::ft_delete(Client *client) // a revoir
 	{
 		std::string response = "HTTP/1.1 204 No Content\r\n";
 		response += "Connection: close\r\n";
-		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+		response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
 
 		this->_response = response;
 	} 
@@ -587,7 +561,7 @@ void Server::ft_badRequest()
     oss << content.size();
     response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
-	response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+	response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
 	response += content;
 
 	this->_response = response;
