@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/22 12:50:10 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 10:46:37 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ class ServerConfiguration
 		/*---------------------------------------------------------------*/
 
 		/* --- General informations from configuration file --- */
-		std::string							_serverName; // ok
+		std::vector<std::string>			_serverName; // ok
 		std::string							_hostName; // ok // a supprime
 		
 		std::vector<int>					_port; // ok // a supprime
 		//ajout
-		std::map<std::string, std::string>	_portList; // [ipAddress] = port;
+		std::multimap<std::string, std::string>	_portList; // [ipAddress] = port; // voir std::multimap
 		std::string							_root;  // ok //Path_du_site
 		std::string							_index; // ok
 		int									_clientMaxBodySize; // ok

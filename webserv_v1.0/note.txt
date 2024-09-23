@@ -25,10 +25,10 @@ server{
 les adresses possible.
 
 idee : 
--verifier si adress ip > 255 ou < 0.
+-verifier si adress ip > 255 ou < 0. 
 -verifier si sur plusieurs block serveur meme address.
--faire passer le vector<int> de port en vector<std::string>
 -
+
 
 -------------------------------------------------------------------
 
@@ -84,6 +84,9 @@ server {
         fastcgi_param SCRIPT_FILENAME /usr/lib/cgi-bin/$fastcgi_script_name;
         include fastcgi_params;
     }
+	location / {
+		
+	}
 }
 
 il faut le nom du script dans le fichier de config.

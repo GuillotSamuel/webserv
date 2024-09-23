@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/22 22:08:37 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 10:52:29 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,8 +285,8 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 	*/
 	/*generation de la reponse*/
 
-	applyConfig(client);
-
+	Response *response = new Response;
+	response->setInfo(this->currentConfig, this->_currentLocation);
 	
 	if (client->getMethod() == "GET")
 		ft_get(client);
@@ -297,6 +297,7 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 	else
 		ft_badRequest();
 	delete client;
+	delete response;
 	log("End of the request.", 1);
 }
 
@@ -324,6 +325,8 @@ void	Server::getLocationBlock(Client *client)
 		// 	return ;
 		// }
 	}
+
+	//block default
 	this->_currentLocation = NULL;
 }
 

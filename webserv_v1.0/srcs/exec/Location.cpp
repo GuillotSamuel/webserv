@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:40:40 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/22 22:38:09 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/23 10:47:55 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void Location::setRedirection(int code, std::string to)
 	this->_redirection[code] = to;
 }
 
-void Location::setAllowedMathods(std::string whichOne, int allow)
+void Location::setAllowedMethods(std::string whichOne, int allow)
 {
 	
 }

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/22 22:47:39 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/22 22:50:07 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ class Response
 
 	public:
 		Response();
-		void	setInfo(ServerConfiguration *serv, Location *location);
 		~Response();
+		void	setInfo(ServerConfiguration *serv, Location *location);
 };

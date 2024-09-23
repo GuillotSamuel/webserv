@@ -25,6 +25,7 @@ class Location
 		std::string                 		_path_info;
 		std::string                 		_index;
 		std::string                 		_uploadsLocation;
+		std::string							_pathCgi;
 		std::map<std::string, std::string>	_cgi;
 		std::map<int, std::string>			_error_page;
 		std::map<int, std::string>			_redirection;
@@ -32,8 +33,8 @@ class Location
 	public:
 		Location(/* args */);
 		~Location();
-
-		void							void	Server::applyConfig(Client *client)	setBlockName(std::string blockName);
+		
+		void								setBlockName(std::string blockName);
 		void								setBlockType(std::string blockType);
 		void								setAlias(std::string alias);
 		void								setRoot(std::string root);
@@ -44,7 +45,7 @@ class Location
 		void								setCgi(std::string first, std::string second);
 		void								setErrorPage(int code, std::string errorPage);
 		void								setRedirection(int code, std::string to);
-		void								setAllowedMathods(std::string whichOne, int allow);
+		void								setAllowedMethods(std::string whichOne, int allow);
 
 		std::string							getBlockName() const;
 		std::string							getBlockType() const;
