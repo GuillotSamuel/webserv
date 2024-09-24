@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/18 20:32:16 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/24 12:27:18 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,20 @@ Server::Server(int argc, char **argv)
 	}
 	this->_status_code = 0;
 	parsing_g(argc, argv);
-	creatAllListeningSockets();
-	log("Starting Server.", 3);
-	this->_epoll_fd = -1;
-	this->extpath = createExtPath();
-	this->mimePath = createMimePath();
-	memset(&_address, 0, sizeof(struct sockaddr_in));
-	memset(&_clientAdress, 0, sizeof(struct sockaddr));
-	memset(&_event, 0, sizeof(struct epoll_event));
- 	memset(received_line, 0, BUFFER_SIZE);
-	memset(socket_buffer, 0, BUFFER_SIZE);
+	// creatAllListeningSockets();
+	// log("Starting Server.", 3);
+	// this->_epoll_fd = -1;
+	// memset(&_address, 0, sizeof(struct sockaddr_in));
+	// memset(&_clientAdress, 0, sizeof(struct sockaddr));
+	// memset(&_event, 0, sizeof(struct epoll_event));
+ 	// memset(received_line, 0, BUFFER_SIZE);
+	// memset(socket_buffer, 0, BUFFER_SIZE);
 }
 
+/* CREAT SOCKET
+- Creat all our listening socket
+- Making care to never try to creat socket with the same port twice
+*/
 void	Server::creatAllListeningSockets()
 {
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
@@ -48,14 +50,15 @@ void	Server::creatAllListeningSockets()
 	{
 		int boul = 0;
 		it->setRootIndex();
-		std::vector<int> port = it->getPortTab();
-		std::vector<int>::iterator itTabPort = port.begin();
-		for (; itTabPort < port.end(); itTabPort++)
+		std::multimap<std::string, std::string> port = it->getPortList();
+		std::multimap<std::string, std::string>::iterator itTabPort = port.begin();
+		for (; itTabPort != port.end(); itTabPort++)
 		{
 			std::vector<ListeningSocket*>::iterator itList = _listSockets.begin();
 			for (int i = 0; itList < _listSockets.end(); itList++, i++)
 			{
-				if ((*itList)->getPort() == *itTabPort)
+				if ((*itList)->getIpAddress() == itTabPort->first
+					&& (*itList)->getPortStr() == itTabPort->second)
 				{
 					boul = 1;
 					break;
@@ -63,7 +66,7 @@ void	Server::creatAllListeningSockets()
 			}
 			if (boul != 1)
 			{
-				_listSockets.push_back(new ListeningSocket(*itTabPort));
+				_listSockets.push_back(new ListeningSocket(itTabPort->first, itTabPort->second));
 			}
 		}
 	}
@@ -73,9 +76,10 @@ void	Server::creatAllListeningSockets()
 /*                              METHOD/SERVER                                 */
 /*----------------------------------------------------------------------------*/
 
-/*
-Creation of our instance of epoll and add all of our listening socket to the
-instance so epoll_wait can watch all of them.
+/* STARTING SERVER
+- Creat Epoll Instance 
+- Add Socket_fd to Epoll Instance
+- Watching state : EPOLLIN
 */
 void	Server::startingServer()
 {
@@ -99,10 +103,8 @@ void	Server::startingServer()
 	log("The server construction is now complete. The server is ready to accept incoming connections.", 1);
 }
 
-/*
--Waiting for new connexions
--create disposable socket with accept 
--handle request
+/* MANAGER ALGORITHM
+- Managing every attemp of connexions
 */
 void Server::serverExecution()
 {
@@ -118,86 +120,108 @@ void Server::serverExecution()
 		{
 			int	sock = 0;
 			std::vector<ListeningSocket*>::iterator it = _listSockets.begin();
-			for (; it < _listSockets.end(); it++)
-			{
-				if (this->_events[i].data.fd == (*it)->getSocket_fd())
-				{
+			for (; it < _listSockets.end(); it++) {
+				if (this->_events[i].data.fd == (*it)->getSocket_fd()) {
 					sock = (*it)->getSocket_fd();
 					list = (*it);
 					break;
 				}
 			}
-			if (sock == 0)	
-			{
+			if (sock == 0) {
 				std::vector<uint32_t>::iterator confd = this->_connexion_fd.begin();
-				for(; confd != this->_connexion_fd.end(); confd++)
-				{
+				for(; confd != this->_connexion_fd.end(); confd++) {
 					if (*confd == (uint32_t)this->_events[i].data.fd)
-					{
 						break;
-					}
 				}
-				if (this->_events[i].events & EPOLLIN)
-				{
-					handle_client(list, *confd);
-					this->_event.events = EPOLLOUT | EPOLLRDHUP | EPOLLHUP;
-					this->_event.data.fd = *confd;
-					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_MOD, *confd, &this->_event) == -1)
-					{
-						log("Epoll_ctl failed.", 2);
-					}	
-				}
-				else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP))
-				{
-					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, *confd, &this->_event) == -1)
-					{
-						log("Epoll_ctl failed.", 2);
-					}
-					close(*confd);
+				if (this->_events[i].events & EPOLLIN) {
+					inConnexion(list, *confd);
+				} else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP)) {
+					outConnexionClient(*confd);
 					list = NULL;
-					
-					log("Client has been successfuly closed.", 1);
-				}
-				else if (this->_events[i].events & EPOLLOUT)
-				{
-					send(*confd, this->_response.c_str(), this->_response.size(), 0);
-					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, *confd, &this->_event) == -1)
-					{
-						log("Epoll_ctl failed.", 2);
-					}
-					close(*confd);
+				} else if (this->_events[i].events & EPOLLOUT) {
+					outConnexionServer(*confd);
 					list = NULL;
-				}
-				else
+				} else
 					log("Inexpected event has been detected.", 2);
-			}
-			else
-			{
-				if (this->_events[i].data.fd == sock)
-				{
-					socklen_t client_addrlen = sizeof(this->_clientAdress);
-					this->_connexion_fd.push_back(accept(sock, (struct sockaddr *)&this->_clientAdress, &client_addrlen));
-					if ((int)(this->_connexion_fd.back()) == -1)
-					{
-						log("The call to accept function failed for unknown reason.", 2);
-					}
-					log("[NEW REQUEST]", 3);
-					log("Server did accept the connection.", 1);
-
-					set_nonblocking(this->_connexion_fd.back());
-
-					this->_event.events = EPOLLIN;
-					this->_event.data.fd = this->_connexion_fd.back();
-					if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_connexion_fd.back(), &this->_event) == -1)
-					{
-						log("Epoll_ctl failed.", 2);
-					}
+			} else {
+				if (this->_events[i].data.fd == sock) {
+					acceptConnexion(sock);
 				}
 			}
 		}
 	}
 }
 
+/*STEP THREE (EPOLLRDHUP/EPOLLHUP):
+-Client close the connexion from his side
+-Deleting connexionFD from Epoll Instance
+*/
+void	Server::outConnexionClient(int connexionFD)
+{
+	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, connexionFD, &this->_event) == -1)
+	{
+		log("Epoll_ctl failed.", 2);
+	}
+	close(connexionFD);
+	log("Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.", 1);
+}
+
+/*STEP THREE (EPOLLOUT):
+-Sending response
+-Deleting connexionFD from Epoll Instance
+*/
+void	Server::outConnexionServer(int connexionFD)
+{
+	send(connexionFD, this->_response.c_str(), this->_response.size(), 0);
+	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, connexionFD, &this->_event) == -1)
+	{
+		log("Epoll_ctl failed.", 2);
+	}
+	close(connexionFD);
+	log("Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.", 1);
+}
+
+/*STEP TWO:
+-Generate response
+-Modif of watching state on connexionDF
+-Watching state : EPOLLOUT / EPOLLRDHUP / EPOLLHUP
+*/
+void	Server::inConnexion(ListeningSocket *list, int connexionFD)
+{
+		handle_client(list, connexionFD);
+		this->_event.events = EPOLLOUT | EPOLLRDHUP | EPOLLHUP;
+		this->_event.data.fd = connexionFD;
+		if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_MOD, connexionFD, &this->_event) == -1)
+		{
+			log("Epoll_ctl failed.", 2);
+		}
+}
+
+/*STEP ONE:
+-Accept the connexion
+-Adding the ConnexionFD to instance Epoll
+-Watching state : EPOLLIN
+*/
+void	Server::acceptConnexion(int sock)
+{
+	socklen_t client_addrlen = sizeof(this->_clientAdress);
+	this->_connexion_fd.push_back(accept(sock, (struct sockaddr *)&this->_clientAdress, &client_addrlen));
+	if ((int)(this->_connexion_fd.back()) == -1)
+	{
+		log("The call to accept function failed for unknown reason.", 2);
+	}
+	log("[NEW REQUEST]", 3);
+	log("Server did accept the connection.", 1);
+
+	set_nonblocking(this->_connexion_fd.back());
+
+	this->_event.events = EPOLLIN;
+	this->_event.data.fd = this->_connexion_fd.back();
+	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_connexion_fd.back(), &this->_event) == -1)
+	{
+		log("Epoll_ctl failed.", 2);
+	}
+}
 
 /*
 -Parsing request, download file if needed 
@@ -206,7 +230,7 @@ and chose what method to use
 void Server::handle_client(ListeningSocket *list, int current_fd)
 {
 	Client *client = new Client();
-
+	//recuperation de toute les donnes possible et recherche de server block/location block
 	char client_ip[INET_ADDRSTRLEN];
 	
 	memset(client_ip, 0, INET_ADDRSTRLEN);
@@ -221,10 +245,18 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 		log("Server could not read anything from client. The client will be remove.", 2);
 		return ;
 	}
-	getServConfig(client, list);
-	if (this->currentConfig == NULL)
-		return ;
-	client->setFilePath(findPath(client));
+
+	getServBlock(client, list);
+	getLocationBlock(client);
+	
+	Response *response = new Response;
+	response->setInfo(this->currentConfig, this->_currentLocation);
+	/*Application des directives de configuration
+	-redirection
+	-acces aux fichiers statique
+	-execution CGI
+	*/
+	/*generation de la reponse*/
 	if (client->getMethod() == "GET")
 		ft_get(client);
 	else if (client->getMethod() == "POST")
@@ -234,7 +266,37 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 	else
 		ft_badRequest();
 	delete client;
+	delete response;
 	log("End of the request.", 1);
+}
+
+void	Server::getLocationBlock(Client *client)
+{
+	//gerer la correspondance exacte
+	std::vector<Location> tab = this->currentConfig->getLocation();
+	std::vector<Location>::iterator it = tab.begin();
+	for (; it != tab.end(); it++)
+	{
+		if (client->getPath() == it->getBlockName() && it->getBlockType() == "equal")
+		{
+			this->_currentLocation = &(*it);
+			return ;
+		}
+	}
+
+	//gerer la correspondance par prefixe
+	it = tab.begin();
+	for (; it != tab.end(); it++)
+	{
+		// if (it->getBlockType() == "prefix")
+		// {
+		// 	this->_currentLocation = &(*it);
+		// 	return ;
+		// }
+	}
+
+	//block default
+	this->_currentLocation = NULL;
 }
 
 std::string	Server::readHead(Client *client)
@@ -257,23 +319,21 @@ std::string	Server::readHead(Client *client)
 }
 
 
-void	Server::getServConfig(Client *client, ListeningSocket *list)
+void	Server::getServBlock(Client *client, ListeningSocket *list)
 {
+	/*
+	-Adresse IP - Port de la requete
+	-le nom de Domaine
+	-Block par default
+	*/
+
 	this->currentConfig = NULL;
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
 	for (; it < this->tab_serv.end(); it++)
 	{
-		if (it->getServerName() == client->getPath())
-		{
-			this->currentConfig = &(*it);
-			return ;
-		}
-	}
-	
-	it = this->tab_serv.begin();
-	for (; it < this->tab_serv.end(); it++)
-	{
-		if (it->getHostName() == client->getHost())
+		std::multimap<std::string, std::string> portList = it->getPortList();
+		std::multimap<std::string, std::string>::iterator it2 = portList.begin();
+		if (it2->first == list->getIpAddress() && it2->second == list->getPortStr())
 		{
 			this->currentConfig = &(*it);
 			return ;
@@ -283,17 +343,20 @@ void	Server::getServConfig(Client *client, ListeningSocket *list)
 	it = this->tab_serv.begin();
 	for (; it < this->tab_serv.end(); it++)
 	{
-		std::vector<int> tab = it->getPortTab();
-		std::vector<int>::iterator itPort = tab.begin();
-		for (; itPort < tab.end(); itPort++)
+		std::vector<std::string> server_name = it->getServerName();
+		std::vector<std::string>::iterator itServ = server_name.begin();
+		for (; itServ != server_name.end(); itServ++)
 		{
-			if (*itPort == list->getPort())
+			if (*itServ == client->getPath())
 			{
 				this->currentConfig = &(*it);
 				return ;
 			}
 		}
 	}
+	
+	//prendre le block par default
+	
 	this->currentConfig = NULL;
 }
 
@@ -352,7 +415,7 @@ void	Server::cgiExecution(std::string filePath, Client client)
 	oss << content.size();
 	response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
-	response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+	response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
 	response += content;
 
 	this->_response = response;
@@ -400,7 +463,7 @@ void Server::ft_get(Client *client) // a revoir
 			oss << content.size();
 			response += "Content-Length: " + oss.str() + "\r\n";
 			response += "Connection: close\r\n";
-			response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+			response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
 			response += content;
 		}
 		this->_response = response;
@@ -447,7 +510,7 @@ void Server::ft_post(Client *client) // a revoir surtout au niveau de la requete
 			oss << content.size();
 			response += "Content-Length: " + oss.str() + "\r\n";
 			response += "Connection: close\r\n";
-			response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+			response += "Server: " +*this->currentConfig->getServerName().begin() + "\r\n\r\n";
 			response += content;
 		}
 		this->_response = response;
@@ -468,7 +531,7 @@ void Server::ft_delete(Client *client) // a revoir
 		oss << content.size();
 		response += "Content-Length: " + oss.str() + "\r\n";
 		response += "Connection: close\r\n";
-		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+		response += "Server: " +*this->currentConfig->getServerName().begin() + "\r\n\r\n";
 		response += "File not found";
 
 		this->_response = response;
@@ -479,7 +542,7 @@ void Server::ft_delete(Client *client) // a revoir
 	{
 		std::string response = "HTTP/1.1 204 No Content\r\n";
 		response += "Connection: close\r\n";
-		response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+		response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
 
 		this->_response = response;
 	} 
@@ -498,7 +561,7 @@ void Server::ft_badRequest()
     oss << content.size();
     response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
-	response += "Server: " + this->currentConfig->getServerName() + "\r\n\r\n";
+	response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
 	response += content;
 
 	this->_response = response;
@@ -581,7 +644,7 @@ std::string	Server::readFileContent(std::string path)
 
 	if (!file.is_open())
 	{
-		return (readFileContent(findErrorPage(404)));
+		return ("");
 	}
 
 	std::ostringstream oss;
@@ -606,7 +669,7 @@ void	Server::saveFile(const std::string &filename, const std::string &data) // P
 
 std::string	Server::getMimeType(Client *client)
 {
-	if (client->getFullPath() == ("/" + this->currentConfig->getServerName())
+	if (client->getFullPath() == ("/" + *this->currentConfig->getServerName().begin())
 		|| client->getFullPath() == "/" )
 		return ("text/html");
 	
@@ -615,108 +678,6 @@ std::string	Server::getMimeType(Client *client)
 
 	log("Extension of the file cannot be found.", 2);
 	return ("application/octet-stream");
-}
-
-
-std::string Server::findPath(Client *client)
-{	
-	std::string receivedLine;
-	/*---------------------------------------------------------------*/
-	/*                  IS IT SPECIFIC LOCATION?                     */
-	/*---------------------------------------------------------------*/
-	if (this->currentConfig->getUploadLocation() == client->getFullPath())
-	{
-		//c'est pas un cgi et il faut dl
-		//ici on telecharge
-		//on stock
-		//une redirection temporaire 304 vers une page success
-		//si elle existe pas, peut etre en prendre une par default
-		readBody(client, &receivedLine);
-	}
-	// std::map<std::string, t_location> obj = this->currentConfig->getTabLocation();
-	// if (obj.find(client->getPath()) != obj.end())
-	// {
-	// 	t_location loc = obj[client->getPath()];
-
-	// 	client->setFullPath(loc.alias);
-	// 	// if (client->getMethod() != )
-	// }
-	
-	/*---------------------------------------------------------------*/
-	/*                   IS THIS AN ALLOWED METHOD ?                 */
-	/*---------------------------------------------------------------*/
-	std::map<std::string, int> method = this->currentConfig->getAllowedMethods();
-	if (method.find(client->getMethod()) == method.end())
-		return (findErrorPage(403));
-	else
-	{
-		if (method[client->getMethod()] == 0)
-			return (findErrorPage(403));
-	}
-	/*---------------------------------------------------------------*/
-	/*                         IS IT INDEX ?                         */
-	/*---------------------------------------------------------------*/
-	if (client->getFullPath() == ("/" + this->currentConfig->getServerName())
-	|| client->getFullPath() == "/")
-	{
-		this->_status_code = 0;
-		return (this->currentConfig->getRootIndex());
-	}
-	/*---------------------------------------------------------------*/
-	/*             		  DOES IT HAVE EXTENSION?	                 */
-	/*---------------------------------------------------------------*/
-	size_t ext = client->getFullPath().rfind(".");
-	if (ext != std::string::npos)
-	{
-		size_t extend = client->getFullPath().size();
-		std::string extension = client->getFullPath().substr(ext, (extend - ext));
-		/*---------------------------------------------------------------*/
-		/*                 LOOKING FOR STATIC EXTENSION                  */
-		/*---------------------------------------------------------------*/
-		if (!this->extpath.empty() && this->extpath.find(extension) != this->extpath.end())
-		{
-			this->_extensionPath = extension;
-			this->_status_code = 0;
-			return (this->currentConfig->getimHere() + this->currentConfig->getRoot()
-				+ this->extpath[extension] + client->getFullPath());
-		}
-		/*---------------------------------------------------------------*/
-		/*                   LOOKING FOR CGI EXTENSION                   */
-		/*---------------------------------------------------------------*/
-		this->_is_cgi = 0;
-		std::map<std::string, std::string> cgi_ext = this->currentConfig->getPathInfoCgi();		
-		if (!cgi_ext.empty() && cgi_ext.find(extension) != this->extpath.end())
-		{
-			this->_extensionPath = extension;
-			this->_status_code = 0;
-			this->_is_cgi = 1;
-			this->_executer_cgi = cgi_ext[extension];
-			return (this->currentConfig->getimHere() + this->currentConfig->getRoot()
-				+ CGI_FILES + client->getFullPath());
-		}
-	}
-	/*---------------------------------------------------------------*/
-	/*                       PAGE NOT FOUND                          */
-	/*---------------------------------------------------------------*/
-	log("Extension of the files was not recognize.", 1);
-	return (findErrorPage(400));
-}
-
-std::string	Server::findErrorPage(int code)
-{
-	std::string absolutPath;
-	if (this->currentConfig->getErrorPageLocation() == "")
-		absolutPath = this->currentConfig->getimHere()
-					+ DEFAULT_PATH_ERROR
-					+ this->currentConfig->getErrorPage(code);
-	else
-	{
-		absolutPath = this->currentConfig->getimHere()
-					+ this->currentConfig->getRoot()
-					+ this->currentConfig->getErrorPageLocation()
-					+ this->currentConfig->getErrorPage(code);
-	}
-	return (absolutPath);
 }
 
 void   	Server::log(std::string error, int type)
@@ -772,66 +733,3 @@ void	Server::error(std::string errorType)
 	throw(std::runtime_error(errorType));
 }
 
-/*----------------------------------------------------------------------------*/
-/*                             INITIALISATION                                 */
-/*----------------------------------------------------------------------------*/
-
-std::map<std::string, std::string>	Server::createExtPath()
-{
-	std::map<std::string, std::string> extPath;
-
-	extPath[".html"] = HTML_FILES;
-	extPath[".css"] = CSS_FILES;
-	extPath[".js"] = JS_FILES;
-	extPath[".json"] = JSON_FILES;
-	extPath[".jpg"] = IMAGE_FILES;
-	extPath[".jpeg"] = IMAGE_FILES;
-	extPath[".png"] = IMAGE_FILES;
-	extPath[".gif"] = IMAGE_FILES;
-	extPath[".bmp"] = IMAGE_FILES;
-	extPath[".ico"] = ICONS_FILES;
-	extPath[".webp"] = IMAGE_FILES;
-	extPath[".svg"] = IMAGE_FILES;
-	extPath[".mp4"] = VIDEO_FILES;
-	extPath[".webm"] = VIDEO_FILES;
-	extPath[".avi"] = VIDEO_FILES;
-	extPath[".mp3"] = AUDIO_FILES;
-	extPath[".pdf"] = PDF_FILES;
-	extPath[".xml"] = XML_FILES;
-	extPath[".ttf"] = FONT_FILES;
-	extPath[".woff"] = FONT_FILES;
-	extPath[".woff2"] = FONT_FILES;
-	extPath[".csv"] = CSV_FILES;
-	return (extPath);
-}
-
-std::map<std::string, std::string>	Server::createMimePath()
-{
-	std::map<std::string, std::string> mimePath;
-
-	mimePath[".sh"] = "text/html";
-	mimePath[".py"] = "text/html";
-	mimePath[".html"] = "text/html";
-	mimePath[".css"] = "text/css";
-	mimePath[".js"] = "application/javascript";
-	mimePath[".json"] = "application/json";
-	mimePath[".jpg"] = "image/jpeg";
-	mimePath[".jpeg"] = "image/jpeg";
-	mimePath[".png"] = "image/png";
-	mimePath[".gif"] = "image/gif";
-	mimePath[".bmp"] = "image/bmp";
-	mimePath[".ico"] = "images/icons";
-	mimePath[".webp"] = "image/webp";
-	mimePath[".svg"] = "image/svg+xml";
-	mimePath[".mp4"] = "video/mp4";
-	mimePath[".webm"] = "video/webm";
-	mimePath[".avi"] = "video/x-msvideo";
-	mimePath[".mp3"] = "audio/mpeg";
-	mimePath[".pdf"] = "application/pdf";
-	mimePath[".xml"] = "application/xml";
-	mimePath[".ttf"] = "font/ttf";
-	mimePath[".woff"] = "font/woff";
-	mimePath[".woff2"] = "font/woff2";
-	mimePath[".csv"] = "text/csv";
-	return (mimePath);
-}

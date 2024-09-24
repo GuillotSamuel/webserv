@@ -6,13 +6,14 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/18 20:25:27 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/24 21:18:25 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "listeningSocket.hpp"
+// #include "listeningSocket.hpp"
+#include "webserv.hpp"
 
 class ListeningSocket;
 class ServerConfiguration;
@@ -44,6 +45,7 @@ class Server
 		std::map<std::string, std::string>					extpath;
 		std::map<std::string, std::string>					mimePath;
 		ServerConfiguration									*currentConfig;
+		Location											*_currentLocation;
 		int													fd_config;
 
 					/*-------------PARSING HANDLING-------------*/		
@@ -60,12 +62,17 @@ class Server
 		/*                            METHOD                             */
 		/*---------------------------------------------------------------*/
 
-		std::map<std::string, std::string>					createExtPath();
-		std::map<std::string, std::string>					createMimePath();
+		//ajout
+		void												getLocationBlock(Client *client);
+		void												acceptConnexion(int sock);
+		void												inConnexion(ListeningSocket *list, int connexionFD);
+		void												outConnexionClient(int connexionFD);
+		void												outConnexionServer(int connexionFD);
+		void												applyConfig(Client *client);
+
+	
 		void												creatAllListeningSockets();
 		void												handle_client(ListeningSocket *list, int current_fd);
-		std::string											findPath(Client *client);
-		std::string											findErrorPage(int code);
 		void												ft_get(Client *client);
 		void												ft_post(Client *client);
 		void												ft_delete(Client *client);
@@ -76,7 +83,7 @@ class Server
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
 		std::string											readHead(Client *client);
-		void												getServConfig(Client *client, ListeningSocket *list);
+		void												getServBlock(Client *client, ListeningSocket *list);
 		std::string											readBody(Client *client, std::string *receivedLine);
 		void												closeServer();
 		void												dlFile(std::string *receivedLine, Client *client);
@@ -103,7 +110,6 @@ class Server
 		void												ft_set_client_max_body_param(std::vector<std::string> tokens);
 		void												ft_set_location_param(std::vector<std::string> tokens);
 		void												ft_set_listen_param(std::vector<std::string> tokens);
-		void												ft_set_host_name_param(std::vector<std::string> tokens);
 		void												ft_set_error_page_param(std::vector<std::string> tokens);
 		void												ft_set_root_param(std::vector<std::string> tokens);
 		void												ft_set_index_param(std::vector<std::string> tokens);
@@ -112,7 +118,9 @@ class Server
 		void												ft_set_errors_location(std::vector<std::string> tokens);
 		void												ft_set_uploads_location(std::vector<std::string> tokens);
 		void												ft_location_pages(std::vector<std::string> tokens);
-		void												ft_location_pages_dispatch(std::vector<std::string> current_param, t_location  &new_location);
+		void												ft_location_pages_dispatch(std::vector<std::string> current_param, Location &new_location);
+		void												ft_checkIp(const std::string &ip_str);
+		void												ft_checkPort(const std::string port_str);
 
 	public:
 		void												startingServer();

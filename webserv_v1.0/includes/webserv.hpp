@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/17 16:48:56 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/24 14:20:21 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,20 @@ typedef struct s_location
     std::map<std::string, int>  allowed_methods;
 }               t_location;
 
-#include "ServerConfiguration.hpp"
+/* -------------------------------------------------------------------------- */
+/*                                FORWARD DECLARATIONS                        */
+/* -------------------------------------------------------------------------- */
+
+
+#include "Location.hpp"
 #include "Server.hpp"
+#include "ServerConfiguration.hpp"
+#include "listeningSocket.hpp"
+
+
 #include "Client.hpp"
 #include "Cgi.hpp"
+#include "Response.hpp"
 
 /* -------------------------------------------------------------------------- */
 /*                                    UTILS                                   */
