@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:40:40 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/23 17:53:12 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/24 13:44:32 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,11 @@ void Location::setUploadsLocation(std::string uploadsLocation)
 	this->_uploadsLocation = uploadsLocation;
 }
 
+void Location::setPathCgi(std::string pathCgi)
+{
+	this->_pathCgi = pathCgi;
+}
+
 void Location::setCgi(std::string first, std::string second)
 {
 	this->_cgi[first] = second;
@@ -143,6 +148,11 @@ std::string Location::getUploadsLocation() const
 	return (this->_uploadsLocation);
 }
 
+std::string Location::getPathCgi() const
+{
+	return (this->_pathCgi);
+}
+
 std::map<std::string, std::string> Location::getCgi() const
 {
 	return (this->_cgi);
@@ -165,4 +175,9 @@ int Location::getAllowedMethods(std::string whichOne)
         return (it->second);
     }
 	return (0);
+}
+
+std::map<std::string, int> Location::getAllowedMethodsTab() const
+{
+	return (this->_allowed_methods);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_allowed_methods.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 15:38:20 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/18 00:26:44 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/24 12:54:03 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 void Server::ft_set_allowed_methods(std::vector<std::string> tokens)
 {
+	this->currentConfig->setAllowedMethods("GET", 0);
+	this->currentConfig->setAllowedMethods("POST", 0);
+	this->currentConfig->setAllowedMethods("DELETE", 0);
+
 	for (size_t i = 1; i < tokens.size(); i++)
 	{
 		if (tokens[i].empty() || (tokens[i] != "GET" && tokens[i] != "POST" && tokens[i] != "DELETE") || this->location_started)

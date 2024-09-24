@@ -42,6 +42,7 @@ class Location
 		void								setAutoIndex(int autoIndex);
 		void								setIndex(std::string index);
 		void								setUploadsLocation(std::string uploadsLocation);
+		void								setPathCgi(std::string pathCgi);
 		void								setCgi(std::string first, std::string second);
 		void								setErrorPage(int code, std::string errorPage);
 		void								setRedirection(int code, std::string to);
@@ -56,8 +57,11 @@ class Location
 		std::string							getPathInfo() const;
 		std::string							getIndex() const;
 		std::string							getUploadsLocation() const;
+		std::string							getPathCgi() const;
 		std::map<std::string, std::string>	getCgi() const;
 		std::map<int, std::string>			getErrorPage() const;
 		std::map<int, std::string>			getRedirection() const;
 		int									getAllowedMethods(std::string wichOne);
+		std::map<std::string, int>			getAllowedMethodsTab() const;
+
 };

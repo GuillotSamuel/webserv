@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/23 17:34:34 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/24 13:50:02 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "webserv.hpp"
 #include "ServerConfiguration.hpp"
+#include "webserv.hpp"
 
 ServerConfiguration::ServerConfiguration()
 {
@@ -79,6 +79,16 @@ void ServerConfiguration::setCgiBinLocation(std::string str)
 	this->_cgiBin_location = str;
 }
 
+void ServerConfiguration::setListen(std::string address, std::string port)
+{
+	this->_portList.insert(std::make_pair(address, port));
+}
+
+void ServerConfiguration::setServerName(std::string str)
+{
+	this->_serverName.push_back(str);
+}
+
 void ServerConfiguration::setErrorPages(int code, std::string str)
 {
 	this->_errorPages[code] = str;
@@ -108,14 +118,14 @@ void ServerConfiguration::setAutoIndex(std::string str)
 	}
 }
 
-void	ServerConfiguration::setLocationMap(std::string location_key, t_location new_location)
-{
-	this->_locations_map[location_key] = new_location;
-}
-
 void ServerConfiguration::setIndex(std::string str)
 {
 	this->_index = str;
+}
+
+void ServerConfiguration::setBlockLocation(Location new_location)
+{
+	this->_location.push_back(new_location);
 }
 
 std::multimap<std::string, std::string> ServerConfiguration::getPortList(void) const
@@ -230,11 +240,6 @@ std::string ServerConfiguration::getIndex() const
 	return (this->_index);
 }
 
-std::map<std::string, t_location> ServerConfiguration::getLocationMap() const
-{
-	return (this->_locations_map);
-}
-
 std::vector<Location> ServerConfiguration::getLocation() const
 {
 	return (this->_location);
@@ -242,22 +247,24 @@ std::vector<Location> ServerConfiguration::getLocation() const
 
 std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 {
-	Cout << YELLOW << "\n---------------------------------------------------------------------\n\n" << RESET;
+	Cout << YELLOW << "\n---------------------------------------------------------------------\n\n"
+		 << RESET;
 
 	Cout << WHITE << "Server name : \n";
 	std::vector<std::string> server_name_tab = sc.getServerName();
 	std::vector<std::string>::iterator server_name_it = server_name_tab.begin();
-	for(; server_name_it != server_name_tab.end(); server_name_it++)
+	for (; server_name_it != server_name_tab.end(); server_name_it++)
 		Cout << CYAN << *server_name_it << RESET << "\n";
 	Cout << "\n";
 
-	Cout << WHITE << "Host name : " << RESET << CYAN << sc.getHostName() << RESET << "\n\n";
+	// Cout << WHITE << "Host name : " << RESET << CYAN << sc.getHostName() << RESET << "\n\n";
 
-	Cout << WHITE << "Port vector : \n" << RESET;
-	std::vector<int> port_tab = sc.getPortTab();
-	std::vector<int>::iterator port_it = port_tab.begin();
-	for (; port_it < port_tab.end(); port_it++)
-		Cout << CYAN << *port_it << RESET << "\n";
+	Cout << WHITE << "Port vector : \n"
+		 << RESET;
+	std::multimap<std::string, std::string> port_tab = sc.getPortList();
+	std::multimap<std::string, std::string>::iterator port_it = port_tab.begin();
+	for (; port_it != port_tab.end(); port_it++)
+		Cout << CYAN << port_it->first << ":" << port_it->second << RESET << "\n";
 	Cout << "\n";
 
 	Cout << WHITE << "Root : " << RESET << CYAN << sc.getRoot() << RESET << "\n\n";
@@ -266,7 +273,8 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 
 	Cout << WHITE << "Client max body size : " << RESET << CYAN << sc.getClientMaxBodySize() << RESET << "\n\n";
 
-	Cout << WHITE << "Path info cgi map : \n" << RESET;
+	Cout << WHITE << "Path info cgi map : \n"
+		 << RESET;
 	std::map<std::string, std::string> path_info_tab = sc.getPathInfoCgi();
 	std::map<std::string, std::string>::iterator path_info_it = path_info_tab.begin();
 	for (; path_info_it != path_info_tab.end(); path_info_it++)
@@ -288,7 +296,8 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		Cout << CYAN << allowed_methods_it->first << " : " << allowed_methods_it->second << RESET << "\n";
 	Cout << "\n";
 
-	Cout << WHITE << "Error pages map: \n" << RESET;
+	Cout << WHITE << "Error pages map: \n"
+		 << RESET;
 	std::map<int, std::string> error_pages_tab = sc.getErrorPages();
 	std::map<int, std::string>::iterator error_pages_it = error_pages_tab.begin();
 	for (; error_pages_it != error_pages_tab.end(); error_pages_it++)
@@ -303,29 +312,31 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 
 	Cout << WHITE << "Upload interpreter : " << RESET << CYAN << sc.getUploadLocation() << RESET << "\n\n";
 
-	Cout << WHITE << "Interpreters path map : \n" << RESET;
+	Cout << WHITE << "Interpreters path map : \n"
+		 << RESET;
 	std::map<std::string, std::string> interpreter_tab = sc.getInterpreterMap();
 	std::map<std::string, std::string>::iterator interpreter_it = interpreter_tab.begin();
 	for (; interpreter_it != interpreter_tab.end(); interpreter_it++)
 		Cout << CYAN << interpreter_it->first << " : " << interpreter_it->second << RESET << "\n";
 	Cout << "\n";
 
-	Cout << WHITE << "Location map : \n"<< RESET;
-	std::map<std::string, t_location> location_tab = sc.getLocationMap();
-	std::map<std::string, t_location>::iterator location_it = location_tab.begin();
+	Cout << WHITE << "Location map : \n"
+		 << RESET;
+	std::vector<Location> location_tab = sc.getLocation();
+	std::vector<Location>::iterator location_it = location_tab.begin();
 	for (; location_it != location_tab.end(); location_it++)
 	{
 		Cout << GREEN << "*****************************" << RESET << "\n";
-		Cout << "Page : " << GREEN << BOLD << location_it->first << RESET << "\n\n";
-		Cout << "Alias : " << GREEN << location_it->second.alias << RESET << "\n";
-		Cout << "Root : " << GREEN << location_it->second.root << RESET << "\n";
-		Cout << "Client Max Body Size : " << GREEN << location_it->second.clientMaxBodySize << RESET << "\n";
-		Cout << "Auto index : " << GREEN << location_it->second.autoindex << RESET << "\n";
-		Cout << "Path Info : " << GREEN << location_it->second.path_info << RESET << "\n";
-		Cout << "Index : " << GREEN << location_it->second.index << RESET << "\n";
-		Cout << "Uploads location : " << GREEN << location_it->second.uploadsLocation << RESET << "\n";
+		Cout << "Block name : " << GREEN << BOLD << location_it->getBlockName() << RESET << "\n\n";
+		Cout << "Alias : " << GREEN << location_it->getAlias() << RESET << "\n";
+		Cout << "Root : " << GREEN << location_it->getRoot() << RESET << "\n";
+		Cout << "Client Max Body Size : " << GREEN << location_it->getClientMaxBodySize() << RESET << "\n";
+		Cout << "Auto index : " << GREEN << location_it->getAutoIndex() << RESET << "\n";
+		// Cout << "Path Info : " << GREEN << location_it->getPathInfo() << RESET << "\n";
+		Cout << "Index : " << GREEN << location_it->getIndex() << RESET << "\n";
+		Cout << "Uploads location : " << GREEN << location_it->getUploadsLocation() << RESET << "\n";
 		Cout << WHITE << "Allowed methods map : \n" << RESET;
-		std::map<std::string, int> location_allowed_methods_tab = location_it->second.allowed_methods;
+		std::map<std::string, int> location_allowed_methods_tab = location_it->getAllowedMethodsTab();
 		std::map<std::string, int>::iterator location_allowed_methods_it = location_allowed_methods_tab.begin();
 		for (; location_allowed_methods_it != location_allowed_methods_tab.end(); location_allowed_methods_it++)
 			Cout << GREEN << location_allowed_methods_it->first << " : " << location_allowed_methods_it->second << RESET << "\n";
@@ -334,7 +345,8 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 	}
 	Cout << "\n";
 
-	Cout << YELLOW << "---------------------------------------------------------------------\n" << RESET;
+	Cout << YELLOW << "---------------------------------------------------------------------\n"
+		 << RESET;
 
 	return (Cout);
 }

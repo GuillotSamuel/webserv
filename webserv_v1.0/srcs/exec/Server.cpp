@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/23 14:57:55 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/24 12:27:18 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ void	Server::creatAllListeningSockets()
 	{
 		int boul = 0;
 		it->setRootIndex();
-		std::map<std::string, std::string> port = it->getPortList();
-		std::map<std::string, std::string>::iterator itTabPort = port.begin();
+		std::multimap<std::string, std::string> port = it->getPortList();
+		std::multimap<std::string, std::string>::iterator itTabPort = port.begin();
 		for (; itTabPort != port.end(); itTabPort++)
 		{
 			std::vector<ListeningSocket*>::iterator itList = _listSockets.begin();
@@ -285,7 +285,7 @@ void	Server::getLocationBlock(Client *client)
 	}
 
 	//gerer la correspondance par prefixe
-	std::vector<Location>::iterator it = tab.begin();
+	it = tab.begin();
 	for (; it != tab.end(); it++)
 	{
 		// if (it->getBlockType() == "prefix")
@@ -331,8 +331,8 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
 	for (; it < this->tab_serv.end(); it++)
 	{
-		std::map<std::string, std::string> portList = it->getPortList();
-		std::map<std::string, std::string>::iterator it2 = portList.begin();
+		std::multimap<std::string, std::string> portList = it->getPortList();
+		std::multimap<std::string, std::string>::iterator it2 = portList.begin();
 		if (it2->first == list->getIpAddress() && it2->second == list->getPortStr())
 		{
 			this->currentConfig = &(*it);
@@ -340,7 +340,7 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 		}
 	}
 
-	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
+	it = this->tab_serv.begin();
 	for (; it < this->tab_serv.end(); it++)
 	{
 		std::vector<std::string> server_name = it->getServerName();
@@ -644,7 +644,7 @@ std::string	Server::readFileContent(std::string path)
 
 	if (!file.is_open())
 	{
-		return (readFileContent(findErrorPage(404)));
+		return ("");
 	}
 
 	std::ostringstream oss;
@@ -667,18 +667,18 @@ void	Server::saveFile(const std::string &filename, const std::string &data) // P
     }
 }
 
-// std::string	Server::getMimeType(Client *client)
-// {
-// 	if (client->getFullPath() == ("/" + this->currentConfig->getServerName())
-// 		|| client->getFullPath() == "/" )
-// 		return ("text/html");
+std::string	Server::getMimeType(Client *client)
+{
+	if (client->getFullPath() == ("/" + *this->currentConfig->getServerName().begin())
+		|| client->getFullPath() == "/" )
+		return ("text/html");
 	
-// 	if (this->mimePath.find(this->_extensionPath) != this->mimePath.end())
-// 		return (this->mimePath[this->_extensionPath]);
+	if (this->mimePath.find(this->_extensionPath) != this->mimePath.end())
+		return (this->mimePath[this->_extensionPath]);
 
-// 	log("Extension of the file cannot be found.", 2);
-// 	return ("application/octet-stream");
-// }
+	log("Extension of the file cannot be found.", 2);
+	return ("application/octet-stream");
+}
 
 void   	Server::log(std::string error, int type)
 {

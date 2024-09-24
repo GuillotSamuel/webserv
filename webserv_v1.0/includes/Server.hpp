@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/23 15:30:26 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/24 14:20:13 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "listeningSocket.hpp"
+// #include "listeningSocket.hpp"
+#include "webserv.hpp"
 
 class ListeningSocket;
 class ServerConfiguration;
@@ -78,7 +79,7 @@ class Server
 		void												ft_badRequest();
 		void												cgiExecution(std::string filePath, Client client);
 		std::string											readFileContent(std::string path);
-		// std::string 										getMimeType(Client *client);
+		std::string 										getMimeType(Client *client);
 		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
 		std::string											readHead(Client *client);
@@ -117,7 +118,7 @@ class Server
 		void												ft_set_errors_location(std::vector<std::string> tokens);
 		void												ft_set_uploads_location(std::vector<std::string> tokens);
 		void												ft_location_pages(std::vector<std::string> tokens);
-		void												ft_location_pages_dispatch(std::vector<std::string> current_param, t_location  &new_location);
+		void												ft_location_pages_dispatch(std::vector<std::string> current_param, Location new_location);
 		void												ft_checkIp(const std::string &ip_str);
 		void												ft_checkPort(const std::string port_str);
 

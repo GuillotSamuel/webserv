@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/23 17:36:45 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/24 13:59:11 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ class ServerConfiguration
 		/*                            SETTER                             */
 		/*---------------------------------------------------------------*/
 		void									setListen(std::string address, std::string port);
-		void									setPort(std::string str);
-		void									setHostName(std::string str);
 		void									setServerName(std::string str);
 		void									setErrorPages(int code, std::string str);
 		void									setClientMaxBodySize(std::string str);
@@ -98,7 +96,7 @@ class ServerConfiguration
 		void									setCgiBinLocation(std::string str);
 		void									setRootIndex();
 		void									setAutoIndex(std::string str);
-		void									setLocationMap(std::string location_key, t_location new_location);
+		void									setBlockLocation(Location new_location);
 
 		/*---------------------------------------------------------------*/
 		/*                            GETTER                             */
@@ -107,8 +105,6 @@ class ServerConfiguration
 		std::string								getRoot(void) const;
 		std::string								getRootIndex(void) const;
 		std::multimap<std::string, std::string>	getPortList(void) const;
-		std::vector<int>						getPortTab(void) const; // a supprime
-		std::string								getHostName(void) const;
 		std::vector<std::string>				getServerName(void) const;
 		std::string								getErrorPage(int code) const;
 		std::map<int, std::string>				getErrorPages(void) const;
@@ -125,7 +121,6 @@ class ServerConfiguration
 		std::string								getimHere() const;
 		std::string								getAutoIndexStr() const;
 		int										getAutoIndex() const;
-		std::map<std::string, t_location>		getLocationMap() const;
 
 		//ajout
 		std::vector<Location>					getLocation() const;
