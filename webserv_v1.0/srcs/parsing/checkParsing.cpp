@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/25 17:54:10 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/25 18:11:22 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,57 @@
 
 void Server::check_error_page(ServerConfiguration server_conf)
 {
-	// check : if no location , what to do with pages / opo situation also
-	(void)server_conf;
+	struct stat info;
+	char absolute_path[PATH_MAX];
+
+	if (!server_conf.getErrorPageLocation().empty())
+	{
+		char current_dir[PATH_MAX];
+		if (getcwd(current_dir, sizeof(current_dir)) == NULL)
+		{
+			error("Error: Cannot get current working directory: " + std::string(strerror(errno)));
+		}
+
+		if (chdir(server_conf.getErrorPageLocation().c_str()) != 0)
+		{
+			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
+			error("Error: Cannot access root directory: " + std::string(strerror(errno)) +
+				  " (" + server_conf.getErrorPageLocation() + ") / server name -> " + serverName);
+		}
+
+		if (getcwd(absolute_path, sizeof(absolute_path)) == NULL)
+		{
+			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
+			error("Error: Cannot get absolute path: " + std::string(strerror(errno)) +
+				  " / server name -> " + serverName);
+		}
+
+		if (chdir(current_dir) != 0)
+		{
+			error("Error: Cannot restore original working directory: " + std::string(strerror(errno)));
+		}
+
+		if (stat(absolute_path, &info) != 0)
+		{
+			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
+			error("Error: Cannot access root directory: " + std::string(strerror(errno)) +
+				  " (" + std::string(absolute_path) + ") / server name -> " + serverName);
+		}
+
+		if (S_ISDIR(info.st_mode))
+		{
+			if (!(info.st_mode & S_IRUSR) || !(info.st_mode & S_IXUSR))
+			{
+				std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
+				error("Error: Insufficient permissions on root directory / server name -> " + serverName);
+			}
+		}
+		else
+		{
+			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
+			error("Error: The root path is not a directory / server name -> " + serverName);
+		}
+	}
 }
 
 void Server::check_host_page(ServerConfiguration server_conf)
