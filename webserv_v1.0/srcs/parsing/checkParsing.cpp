@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/24 22:57:09 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/25 11:56:31 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,16 @@ void Server::check_server_name(ServerConfiguration server_conf)
 	}
 }
 
+void Server::check_path_cgi(ServerConfiguration server_conf)
+{
+	(void)server_conf;
+}
+
+void Server::check_interpreter_map(ServerConfiguration server_conf)
+{
+	(void)server_conf;
+}
+
 void Server::check_parsing()
 {
 	std::vector<ServerConfiguration> current_tab_serv = this->tab_serv;
@@ -146,7 +156,9 @@ void Server::check_parsing()
 		check_host_page(*iterator_tab_serv);
 		check_index(*iterator_tab_serv);
 		check_listen(*iterator_tab_serv);
-		check_location(*iterator_tab_serv);
 		check_max_body(*iterator_tab_serv);
+		check_path_cgi(*iterator_tab_serv);
+		check_interpreter_map(*iterator_tab_serv);
+		check_location(*iterator_tab_serv);
 	}
 }
