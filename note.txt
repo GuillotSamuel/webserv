@@ -1,2 +1,5 @@
 autoindex on / off
 regarder ce que c'est 
+
+
+checker _interpreter_map
