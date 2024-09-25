@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:40:40 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/24 13:44:32 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:03:54 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,7 @@ void Location::setRedirection(int code, std::string to)
 
 void Location::setAllowedMethods(std::string whichOne, int allow)
 {
-	(void)whichOne; // TEST
-	(void)allow; // TEST
+	this->_allowed_methods[whichOne] = allow;
 }
 
 std::string Location::getBlockName() const

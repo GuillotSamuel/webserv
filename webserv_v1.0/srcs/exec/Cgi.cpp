@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:25:35 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/23 17:53:59 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/25 12:26:47 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void		Cgi::setEnv(ServerConfiguration *server, Client client)
 
 	//SERVEUR_VAR
 	this->_env["SERVER_SOFTWARE"] = std::string("Webserv/1.0");
-	// this->_env["SERVER_NAME"] = server->getServerName();
+	this->_env["SERVER_NAME"] = *server->getServerName().begin();
 	this->_env["GATEWAY_INTERFACE"] = std::string("CGI/1.1");
 
 	//REQUEST_VAR

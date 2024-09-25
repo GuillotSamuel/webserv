@@ -6,13 +6,13 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/24 13:31:12 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:04:28 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, Location new_location)
+void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, Location &new_location)
 {
 	std::vector<std::string>::iterator current_param_it = current_param.begin();
 
@@ -80,7 +80,22 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, 
 			}
 		}
 	}
-	// adding : setErrorPage setCgi setRedirection
+	else if (*current_param_it == "error_page" && current_param.size() == 3 && !current_param[1].empty() && !current_param[2].empty())
+	{
+		new_location.setErrorPage(atoi(current_param[1].c_str()), current_param[2]);
+	}
+	else if (*current_param_it == "return" && current_param.size() == 3 && !current_param[1].empty() && !current_param[2].empty())
+	{
+		new_location.setRedirection(atoi(current_param[1].c_str()), current_param[2]);
+	}
+	else if (*current_param_it == "cgi-bin" && current_param.size() == 2 && !current_param[1].empty())
+	{
+		new_location.setPathCgi(current_param[1]);
+	}
+	else if (*current_param_it == "cgi" && current_param.size() == 3 && !current_param[1].empty() && !current_param[2].empty())
+	{
+		new_location.setCgi(current_param[1], current_param[2]);
+	}
 	else
 	{
 		ft_invalid_line(current_param);
@@ -97,8 +112,19 @@ void Server::ft_location_pages(std::vector<std::string> tokens)
 		ft_invalid_line(tokens);
 	}
 
+	std::string blockName = tokens[1];
+
+	std::vector<Location> existing_locations = this->currentConfig->getLocation();
+	for (size_t i = 0; i < existing_locations.size(); i++)
+	{
+		if (existing_locations[i].getBlockName() == blockName)
+		{
+			error ("Error : Block name '" + blockName + "' already exists.");
+		}
+	}
+
 	new_location.setBlockName(tokens[1]);
-	// adding setter blocktype
+
 	for (size_t i = 3; i < tokens.size(); i++)
 	{
 		current_param.clear();

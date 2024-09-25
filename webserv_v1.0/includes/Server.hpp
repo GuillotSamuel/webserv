@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/24 14:20:13 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:03:38 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,15 @@ class Server
 		void												check_max_body(ServerConfiguration server_conf);
 		void												check_root(ServerConfiguration server_conf);
 		void												check_server_name(ServerConfiguration server_conf);
+		void												check_interpreter_map(ServerConfiguration server_conf);
+		void												check_path_cgi(ServerConfiguration server_conf);
 		void 												readConfigurationFile(const char *arg);
 		void												ft_tokenizer(std::string line);
 		void												error(std::string errorType);
 		void												ft_param_set_tokens(std::vector<std::string> tokens);
 		void												ft_invalid_line(std::vector<std::string> tokens);
 		void 												ft_set_tokens(std::vector<std::string> tokens);
-		void    											ft_set_auto_index(std::vector<std::string> tokens);
+		void												ft_set_auto_index(std::vector<std::string> tokens);
 		void 												ft_set_server_name_param(std::vector<std::string> tokens);
 		void												ft_set_client_max_body_param(std::vector<std::string> tokens);
 		void												ft_set_location_param(std::vector<std::string> tokens);
@@ -118,7 +120,7 @@ class Server
 		void												ft_set_errors_location(std::vector<std::string> tokens);
 		void												ft_set_uploads_location(std::vector<std::string> tokens);
 		void												ft_location_pages(std::vector<std::string> tokens);
-		void												ft_location_pages_dispatch(std::vector<std::string> current_param, Location new_location);
+		void												ft_location_pages_dispatch(std::vector<std::string> current_param, Location &new_location);
 		void												ft_checkIp(const std::string &ip_str);
 		void												ft_checkPort(const std::string port_str);
 

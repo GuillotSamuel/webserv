@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/24 13:50:02 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:05:39 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,12 +335,39 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		// Cout << "Path Info : " << GREEN << location_it->getPathInfo() << RESET << "\n";
 		Cout << "Index : " << GREEN << location_it->getIndex() << RESET << "\n";
 		Cout << "Uploads location : " << GREEN << location_it->getUploadsLocation() << RESET << "\n";
-		Cout << WHITE << "Allowed methods map : \n" << RESET;
+		Cout << WHITE << "Allowed methods map : \n"
+			 << RESET;
 		std::map<std::string, int> location_allowed_methods_tab = location_it->getAllowedMethodsTab();
 		std::map<std::string, int>::iterator location_allowed_methods_it = location_allowed_methods_tab.begin();
 		for (; location_allowed_methods_it != location_allowed_methods_tab.end(); location_allowed_methods_it++)
 			Cout << GREEN << location_allowed_methods_it->first << " : " << location_allowed_methods_it->second << RESET << "\n";
 		Cout << "\n";
+		
+		Cout << WHITE << "Error pages : \n"
+			 << RESET;
+		std::map<int, std::string> error_tab = location_it->getErrorPage();
+		std::map<int, std::string>::iterator error_it = error_tab.begin();
+		for (; error_it != error_tab.end(); error_it++)
+			Cout << GREEN << error_it->first << " : " << error_it->second << RESET << "\n";
+		Cout << "\n";
+		
+		Cout << WHITE << "Redirections : \n";
+		std::map<int, std::string> redirection_tab = location_it->getRedirection();
+		std::map<int, std::string>::iterator redirection_it = redirection_tab.begin();
+		for (; redirection_it != redirection_tab.end(); redirection_it++)
+			Cout << GREEN << redirection_it->first << " : " << redirection_it->second << RESET << "\n";
+		Cout << "\n";
+		
+		Cout << "Cgi path : " << GREEN << location_it->getPathCgi() << RESET << "\n\n";
+		
+		Cout << WHITE << "Cgi : \n"
+			 << RESET;
+		std::map<std::string, std::string> cgi_tab = location_it->getCgi();
+		std::map<std::string, std::string>::iterator cgi_it = cgi_tab.begin();
+		for (; cgi_it != cgi_tab.end(); cgi_it++)
+			Cout << GREEN << cgi_it->first << " : " << cgi_it->second << RESET << "\n";
+		Cout << "\n";
+
 		Cout << GREEN << "*****************************" << RESET << "\n";
 	}
 	Cout << "\n";
