@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/26 16:38:56 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:45:00 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,12 +130,6 @@ void Server::check_error_page(ServerConfiguration server_conf)
 	}
 }
 
-void Server::check_host_page(ServerConfiguration server_conf)
-{
-	(void)server_conf;
-	// check: possible de mettre plusieurs hostnames en commun sur plusieurs servers + plusieurs hostnames par server ?
-}
-
 void Server::check_index(ServerConfiguration server_conf)
 {
 	std::string root_path = server_conf.getRoot();
@@ -234,6 +228,16 @@ void Server::check_path_cgi(ServerConfiguration server_conf)
 	}
 }
 
+void Server::check_uploads(ServerConfiguration server_conf)
+{
+	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
+
+	if (!server_conf.getUploadLocation().empty())
+	{
+		check_folder(server_conf.getUploadLocation(), serverName);
+	}
+}
+
 void Server::check_language(const std::string interpreter_language, const std::string &server_name)
 {
 	const char *valid_languages_array[] = {".py", ".c", ".php", ".pl", ".rs", ".sh", ".cpp"};
@@ -277,7 +281,7 @@ void Server::check_parsing()
 		check_server_name(*iterator_tab_serv);
 		check_root(*iterator_tab_serv);
 		check_error_page(*iterator_tab_serv);
-		check_host_page(*iterator_tab_serv);
+		check_uploads(*iterator_tab_serv);
 		check_index(*iterator_tab_serv);
 		check_listen(*iterator_tab_serv);
 		check_max_body(*iterator_tab_serv);
