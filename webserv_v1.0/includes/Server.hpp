@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/26 16:45:17 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/26 18:57:40 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,15 @@ class Server
 		void												check_file(const std::string &folder_path, const std::string &file_path, const std::string &server_name);
 		void 												check_error_code(int error_code, const std::string &server_name);
 		void 												check_language(const std::string interpreter_language, const std::string &server_name);
+		void 												location_check_blockName(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_alias(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_root(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_maxBodySize(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_index(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_uploadsLocation(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_errorPages(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_cgiPath(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_cgi(Location location_conf, ServerConfiguration server_conf);
 		void 												readConfigurationFile(const char *arg);
 		void												ft_tokenizer(std::string line);
 		void												error(std::string errorType);

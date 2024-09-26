@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/24 13:59:11 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/26 18:38:17 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,6 @@ class ServerConfiguration
 		std::string								getimHere() const;
 		std::string								getAutoIndexStr() const;
 		int										getAutoIndex() const;
-
-		//ajout
 		std::vector<Location>					getLocation() const;
 
 		/*---------------------------------------------------------------*/

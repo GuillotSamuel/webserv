@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/24 21:57:54 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/26 19:02:43 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void Server::ft_location_pages(std::vector<std::string> tokens)
 		}
 	}
 
-	new_location.setBlockName(tokens[1]);
+	new_location.setBlockName(tokens[1].substr(1));
 
 	for (size_t i = 3; i < tokens.size(); i++)
 	{

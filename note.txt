@@ -3,3 +3,6 @@ regarder ce que c'est
 
 
 checker _interpreter_map
+
+
+checker si parsing des fichiers de cgi est mis en place
