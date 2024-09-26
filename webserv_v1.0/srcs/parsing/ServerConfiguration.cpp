@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/24 21:55:21 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/26 15:23:00 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ ServerConfiguration::ServerConfiguration()
 	this->_index = "";
 	this->_uploadsLocation = "";
 	this->_errorPagesLocation = "";
-	this->_errorPages[400] = "400.html";
-	this->_errorPages[404] = "404.html";
+	// this->_errorPages[400] = "400.html";
+	// this->_errorPages[404] = "404.html";
 	this->_cgiBin_location = "";
 	this->_allowed_methods["GET"] = -1;
 	this->_allowed_methods["POST"] = -1;

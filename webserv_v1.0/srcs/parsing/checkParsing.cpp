@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/25 18:11:22 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/26 15:19:07 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,57 +15,111 @@
 #include <sys/stat.h>
 #include <errno.h>
 
-void Server::check_error_page(ServerConfiguration server_conf)
+void Server::check_folder(const std::string &folder_path, const std::string &server_name)
 {
 	struct stat info;
 	char absolute_path[PATH_MAX];
+	char current_dir[PATH_MAX];
+
+	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
+	{
+		error("Error: Cannot get current working directory: " + std::string(strerror(errno)));
+	}
+
+	if (chdir(folder_path.c_str()) != 0)
+	{
+		error("Error: Cannot access directory: " + std::string(strerror(errno)) +
+			  " (" + folder_path + ") / server name -> " + server_name);
+	}
+
+	if (getcwd(absolute_path, sizeof(absolute_path)) == NULL)
+	{
+		error("Error: Cannot get absolute path: " + std::string(strerror(errno)) +
+			  " (" + folder_path + ") / server name -> " + server_name);
+	}
+
+	if (chdir(current_dir) != 0)
+	{
+		error("Error: Cannot restore original working directory: " + std::string(strerror(errno)));
+	}
+
+	if (stat(absolute_path, &info) != 0)
+	{
+		error("Error: Cannot access directory: " + std::string(strerror(errno)) +
+			  " (" + std::string(absolute_path) + ") / server name -> " + server_name);
+	}
+
+	if (S_ISDIR(info.st_mode))
+	{
+		if (!(info.st_mode & S_IRUSR) || !(info.st_mode & S_IXUSR))
+		{
+			error("Error: Insufficient permissions on directory: (" + std::string(absolute_path) +
+				  ") / server name -> " + server_name);
+		}
+	}
+	else
+	{
+		error("Error: The path is not a directory: (" + std::string(absolute_path) + ") / server name -> " + server_name);
+	}
+}
+
+void Server::check_file(const std::string &folder_path, const std::string &error_page_path, const std::string &server_name)
+{
+	struct stat info;
+	std::string full_path = folder_path + "/" + error_page_path;
+
+	if (stat(full_path.c_str(), &info) != 0)
+	{
+		error("Error: Cannot access error page file: " + std::string(strerror(errno)) +
+			  " (" + full_path + ") / server name -> " + server_name);
+	}
+
+	if (!S_ISREG(info.st_mode))
+	{
+		error("Error: The error page path is not a regular file: (" + full_path + ") / server name -> " + server_name);
+	}
+
+	if (!(info.st_mode & S_IRUSR))
+	{
+		error("Error: Insufficient permissions to read the error page file: (" + full_path + ") / server name -> " + server_name);
+	}
+}
+
+void Server::check_error_code(int error_code, const std::string &server_name)
+{
+	int valid_error_codes_array[] = {400, 401, 403, 404, 405, 408, 410, 413, 414, 429,
+									 500, 501, 502, 503, 504, 505};
+
+	std::set<int> valid_error_codes(valid_error_codes_array, valid_error_codes_array + sizeof(valid_error_codes_array) / sizeof(int));
+
+	if (valid_error_codes.find(error_code) == valid_error_codes.end())
+	{
+		std::stringstream ss;
+		ss << "Error: Invalid error code: " << error_code << " / server name -> " << server_name;
+		error(ss.str());
+	}
+}
+
+void Server::check_error_page(ServerConfiguration server_conf)
+{
+	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
 
 	if (!server_conf.getErrorPageLocation().empty())
 	{
-		char current_dir[PATH_MAX];
-		if (getcwd(current_dir, sizeof(current_dir)) == NULL)
-		{
-			error("Error: Cannot get current working directory: " + std::string(strerror(errno)));
-		}
+		check_folder(server_conf.getErrorPageLocation(), serverName);
+	}
 
-		if (chdir(server_conf.getErrorPageLocation().c_str()) != 0)
+	if (!server_conf.getErrorPages().empty())
+	{
+		std::map<int, std::string> errorPage_map = server_conf.getErrorPages();
+		std::map<int, std::string>::iterator errorPage_it = errorPage_map.begin();
+		for (; errorPage_it != errorPage_map.end(); ++errorPage_it)
 		{
-			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-			error("Error: Cannot access root directory: " + std::string(strerror(errno)) +
-				  " (" + server_conf.getErrorPageLocation() + ") / server name -> " + serverName);
-		}
+			int error_code = errorPage_it->first;
+			const std::string &error_page_path = errorPage_it->second;
 
-		if (getcwd(absolute_path, sizeof(absolute_path)) == NULL)
-		{
-			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-			error("Error: Cannot get absolute path: " + std::string(strerror(errno)) +
-				  " / server name -> " + serverName);
-		}
-
-		if (chdir(current_dir) != 0)
-		{
-			error("Error: Cannot restore original working directory: " + std::string(strerror(errno)));
-		}
-
-		if (stat(absolute_path, &info) != 0)
-		{
-			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-			error("Error: Cannot access root directory: " + std::string(strerror(errno)) +
-				  " (" + std::string(absolute_path) + ") / server name -> " + serverName);
-		}
-
-		if (S_ISDIR(info.st_mode))
-		{
-			if (!(info.st_mode & S_IRUSR) || !(info.st_mode & S_IXUSR))
-			{
-				std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-				error("Error: Insufficient permissions on root directory / server name -> " + serverName);
-			}
-		}
-		else
-		{
-			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-			error("Error: The root path is not a directory / server name -> " + serverName);
+			check_error_code(error_code, serverName);
+			check_file(server_conf.getErrorPageLocation(), error_page_path, serverName);
 		}
 	}
 }
@@ -164,7 +218,6 @@ void Server::check_root(ServerConfiguration server_conf)
 		}
 	}
 }
-
 
 void Server::check_server_name(ServerConfiguration server_conf)
 {

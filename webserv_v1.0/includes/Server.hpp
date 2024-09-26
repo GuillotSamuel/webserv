@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/25 14:00:57 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/26 15:13:49 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,9 @@ class Server
 		void												check_server_name(ServerConfiguration server_conf);
 		void												check_interpreter_map(ServerConfiguration server_conf);
 		void												check_path_cgi(ServerConfiguration server_conf);
+		void												check_folder(const std::string &folder_path, const std::string &server_name);
+		void												check_file(const std::string &folder_path, const std::string &error_page_path, const std::string &server_name);
+		void 												check_error_code(int error_code, const std::string &server_name);
 		void 												readConfigurationFile(const char *arg);
 		void												ft_tokenizer(std::string line);
 		void												error(std::string errorType);

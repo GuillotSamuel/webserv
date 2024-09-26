@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/25 14:47:29 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/26 15:14:14 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@
 #include <signal.h>
 #include <ctime>
 #include <limits.h>
+#include <set>
 
 #define MAX_EVENTS 10
 #define BUFFER_SIZE 4096
