@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/26 15:23:00 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:12:42 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,7 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 
 	Cout << WHITE << "Error Page Location : " << RESET << CYAN << sc.getErrorPageLocation() << RESET << "\n\n";
 
-	Cout << WHITE << "Cgi-bin interpreter : " << RESET << CYAN << sc.getCgiLocation() << RESET << "\n\n";
+	Cout << WHITE << "Cgi-bin : " << RESET << CYAN << sc.getCgiLocation() << RESET << "\n\n";
 
 	Cout << WHITE << "Upload interpreter : " << RESET << CYAN << sc.getUploadLocation() << RESET << "\n\n";
 

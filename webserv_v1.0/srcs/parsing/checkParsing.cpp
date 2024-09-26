@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/26 15:19:07 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:38:56 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,16 @@ void Server::check_folder(const std::string &folder_path, const std::string &ser
 	}
 }
 
-void Server::check_file(const std::string &folder_path, const std::string &error_page_path, const std::string &server_name)
+void Server::check_file(const std::string &folder_path, const std::string &file_path, const std::string &server_name)
 {
 	struct stat info;
-	std::string full_path = folder_path + "/" + error_page_path;
+	
+	std::string full_path;
+
+	if (folder_path.length() > 0)
+		full_path = folder_path + "/" + file_path;
+	else
+		full_path = file_path;
 
 	if (stat(full_path.c_str(), &info) != 0)
 	{
@@ -166,56 +172,11 @@ void Server::check_max_body(ServerConfiguration server_conf)
 
 void Server::check_root(ServerConfiguration server_conf)
 {
-	struct stat info;
-	char absolute_path[PATH_MAX];
+	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
 
 	if (!server_conf.getRoot().empty())
 	{
-		char current_dir[PATH_MAX];
-		if (getcwd(current_dir, sizeof(current_dir)) == NULL)
-		{
-			error("Error: Cannot get current working directory: " + std::string(strerror(errno)));
-		}
-
-		if (chdir(server_conf.getRoot().c_str()) != 0)
-		{
-			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-			error("Error: Cannot access root directory: " + std::string(strerror(errno)) +
-				  " (" + server_conf.getRoot() + ") / server name -> " + serverName);
-		}
-
-		if (getcwd(absolute_path, sizeof(absolute_path)) == NULL)
-		{
-			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-			error("Error: Cannot get absolute path: " + std::string(strerror(errno)) +
-				  " / server name -> " + serverName);
-		}
-
-		if (chdir(current_dir) != 0)
-		{
-			error("Error: Cannot restore original working directory: " + std::string(strerror(errno)));
-		}
-
-		if (stat(absolute_path, &info) != 0)
-		{
-			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-			error("Error: Cannot access root directory: " + std::string(strerror(errno)) +
-				  " (" + std::string(absolute_path) + ") / server name -> " + serverName);
-		}
-
-		if (S_ISDIR(info.st_mode))
-		{
-			if (!(info.st_mode & S_IRUSR) || !(info.st_mode & S_IXUSR))
-			{
-				std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-				error("Error: Insufficient permissions on root directory / server name -> " + serverName);
-			}
-		}
-		else
-		{
-			std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-			error("Error: The root path is not a directory / server name -> " + serverName);
-		}
+		check_folder(server_conf.getRoot(), serverName);
 	}
 }
 
@@ -265,12 +226,46 @@ void Server::check_server_name(ServerConfiguration server_conf)
 
 void Server::check_path_cgi(ServerConfiguration server_conf)
 {
-	(void)server_conf;
+	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
+
+	if (!server_conf.getCgiLocation().empty())
+	{
+		check_folder(server_conf.getCgiLocation(), serverName);
+	}
+}
+
+void Server::check_language(const std::string interpreter_language, const std::string &server_name)
+{
+	const char *valid_languages_array[] = {".py", ".c", ".php", ".pl", ".rs", ".sh", ".cpp"};
+
+	std::set<std::string> valid_languages(valid_languages_array, valid_languages_array + (sizeof(valid_languages_array) / sizeof(valid_languages_array[0])));
+
+	if (valid_languages.find(interpreter_language) == valid_languages.end())
+	{
+		std::stringstream ss;
+		ss << "Error: Non accepted programming language for CGI: " << interpreter_language << " / server name -> " << server_name;
+		error(ss.str());
+	}
 }
 
 void Server::check_interpreter_map(ServerConfiguration server_conf)
 {
-	(void)server_conf;
+	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
+
+	if (!server_conf.getInterpreterMap().empty())
+	{
+		std::map<std::string, std::string> interpreter_tab = server_conf.getInterpreterMap();
+		std::map<std::string, std::string>::iterator interpreter_it = interpreter_tab.begin();
+
+		for (; interpreter_it != interpreter_tab.end(); interpreter_it++)
+		{
+			const std::string interpreter_language = interpreter_it->first;
+			const std::string &interpreter_path = interpreter_it->second;
+
+			check_language(interpreter_language, serverName);
+			check_file("", interpreter_path, serverName);
+		}
+	}
 }
 
 void Server::check_parsing()
