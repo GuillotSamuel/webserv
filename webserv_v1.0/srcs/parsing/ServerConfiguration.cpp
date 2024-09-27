@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/25 20:43:55 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/27 12:33:05 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ ServerConfiguration::ServerConfiguration()
 	this->_index = "";
 	this->_uploadsLocation = "";
 	this->_errorPagesLocation = "";
-	this->_errorPages[400] = "400.html";
-	this->_errorPages[404] = "404.html";
+	// this->_errorPages[400] = "400.html";
+	// this->_errorPages[404] = "404.html";
 	this->_cgiBin_location = "";
 	this->_allowed_methods["GET"] = -1;
 	this->_allowed_methods["POST"] = -1;
@@ -308,7 +308,7 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 
 	Cout << WHITE << "Error Page Location : " << RESET << CYAN << sc.getErrorPageLocation() << RESET << "\n\n";
 
-	Cout << WHITE << "Cgi-bin interpreter : " << RESET << CYAN << sc.getCgiLocation() << RESET << "\n\n";
+	Cout << WHITE << "Cgi-bin : " << RESET << CYAN << sc.getCgiLocation() << RESET << "\n\n";
 
 	Cout << WHITE << "Upload interpreter : " << RESET << CYAN << sc.getUploadLocation() << RESET << "\n\n";
 

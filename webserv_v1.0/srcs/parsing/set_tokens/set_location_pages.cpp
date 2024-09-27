@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/25 18:12:56 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/27 12:33:13 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void Server::ft_location_pages(std::vector<std::string> tokens)
 		}
 	}
 
-	new_location.setBlockName(tokens[1]);
+	new_location.setBlockName(tokens[1].substr(1));
 
 	for (size_t i = 3; i < tokens.size(); i++)
 	{

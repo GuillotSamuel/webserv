@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/26 14:41:41 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/27 12:32:35 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ class Server
 		void												parsing_g(int argc, char **argv);
 		void												check_parsing(void);
 		void												check_error_page(ServerConfiguration server_conf);
-		void												check_host_page(ServerConfiguration server_conf);
 		void												check_index(ServerConfiguration server_conf);
 		void												check_listen(ServerConfiguration server_conf);
 		void												check_location(ServerConfiguration server_conf);
@@ -93,7 +92,21 @@ class Server
 		void												check_root(ServerConfiguration server_conf);
 		void												check_server_name(ServerConfiguration server_conf);
 		void												check_interpreter_map(ServerConfiguration server_conf);
+		void 												check_uploads(ServerConfiguration server_conf);
 		void												check_path_cgi(ServerConfiguration server_conf);
+		void												check_folder(const std::string &folder_path, const std::string &server_name);
+		void												check_file(const std::string &folder_path, const std::string &file_path, const std::string &server_name);
+		void 												check_error_code(int error_code, const std::string &server_name);
+		void 												check_language(const std::string interpreter_language, const std::string &server_name);
+		void 												location_check_blockName(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_alias(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_root(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_maxBodySize(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_index(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_uploadsLocation(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_errorPages(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_cgiPath(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_cgi(Location location_conf, ServerConfiguration server_conf);
 		void 												readConfigurationFile(const char *arg);
 		void												ft_tokenizer(std::string line);
 		void												error(std::string errorType);
