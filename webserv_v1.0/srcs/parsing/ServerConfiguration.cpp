@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/25 14:05:39 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/25 20:43:55 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ ServerConfiguration::~ServerConfiguration(void)
 	this->_interpreter_map.clear();
 	this->_allowed_methods.clear();
 	this->_locations_map.clear();
-	// this->_location.clear();
+	this->_location.clear();
 }
 
 void ServerConfiguration::setRootIndex()

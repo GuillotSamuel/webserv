@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:44 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/24 14:21:04 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/27 12:11:16 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ class Client
 		std::string	_contentLength;
 		std::string	_boundary;
 		std::string	_host;
-		std::string	_fullPath; // path with the '/' at start
-		std::string	_path; // path without the '/' at start
-		std::string	_filePath; // absoluth path of the file requested
+		std::string	_path; // path with the '/' at start
 		int			_currentFd; // fd of the current socketclient
 		
 
@@ -63,10 +61,8 @@ class Client
 		std::string getContentType() const;
 		std::string getContentLength() const;
 		std::string getBoundary() const;
-		std::string getPath() const;
 		std::string	getHost() const;
-		std::string	getFullPath() const;
-		std::string	getFilePath() const;
+		std::string	getPath() const;
 		int			getCurrentFd() const;
 
 		/*---------------------------------------------------------------*/
@@ -82,9 +78,7 @@ class Client
 		void		setContentLength(std::string contentLength);
 		void		setBoundary(std::string boundary);
 		void		setHost(std::string host);
-		void		setFullPath(std::string str);
 		void		setCurrentFd(int currentFd);
-		void		setFilePath(std::string filePath);
 
 };
 

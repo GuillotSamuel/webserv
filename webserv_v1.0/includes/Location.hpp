@@ -63,5 +63,6 @@ class Location
 		std::map<int, std::string>			getRedirection() const;
 		int									getAllowedMethods(std::string wichOne);
 		std::map<std::string, int>			getAllowedMethodsTab() const;
-
 };
+
+std::ostream 	&operator<<(std::ostream &Cout, Location const &list);

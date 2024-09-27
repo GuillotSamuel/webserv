@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/25 12:27:21 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/27 12:30:37 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,11 @@ void	Server::creatAllListeningSockets()
 /*                              METHOD/SERVER                                 */
 /*----------------------------------------------------------------------------*/
 
-/* STARTING SERVER
-- Creat Epoll Instance 
-- Add Socket_fd to Epoll Instance
-- Watching state : EPOLLIN
-*/
+// /* STARTING SERVER
+// - Creat Epoll Instance 
+// - Add Socket_fd to Epoll Instance
+// - Watching state : EPOLLIN
+// */
 void	Server::startingServer()
 {
 	if ((this->_epoll_fd = epoll_create(1)) == -1)
@@ -108,6 +108,7 @@ void	Server::startingServer()
 */
 void Server::serverExecution()
 {
+	ListeningSocket *list = NULL;
 	while (true)
 	{
 		int nfds = epoll_wait(this->_epoll_fd, this->_events, MAX_EVENTS, -1);
@@ -115,12 +116,11 @@ void Server::serverExecution()
 			log("The call to epoll_wait failed.", 2);
 		if (g_signal == SIGNAL)
 			closeServer();
-		ListeningSocket *list = NULL;
 		for (int i = 0; i < nfds; i++)
 		{
 			int	sock = 0;
 			std::vector<ListeningSocket*>::iterator it = _listSockets.begin();
-			for (; it < _listSockets.end(); it++) {
+			for (; it != _listSockets.end(); it++) {
 				if (this->_events[i].data.fd == (*it)->getSocket_fd()) {
 					sock = (*it)->getSocket_fd();
 					list = (*it);
@@ -188,13 +188,14 @@ void	Server::outConnexionServer(int connexionFD)
 */
 void	Server::inConnexion(ListeningSocket *list, int connexionFD)
 {
-		handle_client(list, connexionFD);
-		this->_event.events = EPOLLOUT | EPOLLRDHUP | EPOLLHUP;
-		this->_event.data.fd = connexionFD;
-		if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_MOD, connexionFD, &this->_event) == -1)
-		{
-			log("Epoll_ctl failed.", 2);
-		}
+	handle_client(list, connexionFD);
+	this->_event.events = EPOLLOUT | EPOLLRDHUP | EPOLLHUP;
+	this->_event.data.fd = connexionFD;
+	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_MOD, connexionFD, &this->_event) == -1)
+	{
+		log("Epoll_ctl failed.", 2);
+	}
+	log("Got a EPOLLIN attempt.", 1);
 }
 
 /*STEP ONE:
@@ -232,7 +233,6 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 	Client *client = new Client();
 	//recuperation de toute les donnes possible et recherche de server block/location block
 	char client_ip[INET_ADDRSTRLEN];
-	
 	memset(client_ip, 0, INET_ADDRSTRLEN);
     inet_ntop(AF_INET, &this->_address.sin_addr, client_ip, INET_ADDRSTRLEN);
 	std::string ipAdress(client_ip);
@@ -245,26 +245,16 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 		log("Server could not read anything from client. The client will be remove.", 2);
 		return ;
 	}
-
 	getServBlock(client, list);
+	if (!this->currentConfig)
+		exit(EXIT_FAILURE);
 	getLocationBlock(client);
 	
-	Response *response = new Response;
+	Response *response = new Response(client);
 	response->setInfo(this->currentConfig, this->_currentLocation);
-	/*Application des directives de configuration
-	-redirection
-	-acces aux fichiers statique
-	-execution CGI
-	*/
-	/*generation de la reponse*/
-	if (client->getMethod() == "GET")
-		ft_get(client);
-	else if (client->getMethod() == "POST")
-		ft_post(client);
-	else if (client->getMethod() == "DELETE")
-		ft_delete(client);
-	else
-		ft_badRequest();
+	std::cout << *response << std::endl;
+	return ;
+	this->_response = response->generateResponse();
 	delete client;
 	delete response;
 	log("End of the request.", 1);
@@ -274,28 +264,45 @@ void	Server::getLocationBlock(Client *client)
 {
 	//gerer la correspondance exacte
 	std::vector<Location> tab = this->currentConfig->getLocation();
-	std::vector<Location>::iterator it = tab.begin();
-	for (; it != tab.end(); it++)
+	if (!tab.empty())
 	{
-		if (client->getPath() == it->getBlockName() && it->getBlockType() == "equal")
+		std::vector<Location>::iterator it = tab.begin();
+		for (; it != tab.end(); it++)
 		{
-			this->_currentLocation = &(*it);
-			return ;
+			if (client->getPath() == it->getBlockName() && it->getBlockType() == "equal")
+			{
+				this->_currentLocation = &(*it);
+				return ;
+			}
 		}
-	}
 
-	//gerer la correspondance par prefixe
-	it = tab.begin();
-	for (; it != tab.end(); it++)
-	{
-		// if (it->getBlockType() == "prefix")
-		// {
-		// 	this->_currentLocation = &(*it);
-		// 	return ;
-		// }
-	}
+		Location *bestMatch = NULL;
+        size_t longestPrefix = 0;
 
-	//block default
+        it = tab.begin();
+        for (; it != tab.end(); ++it)
+        {
+            if (it->getBlockType() == "prefix")
+            {
+                std::string blockName = it->getBlockName();
+                if (client->getPath().compare(0, blockName.length(), blockName) == 0)
+                {
+                    if (blockName.length() > longestPrefix)
+                    {
+                        longestPrefix = blockName.length();
+                        bestMatch = &(*it);
+                    }
+                }
+            }
+        }
+
+        // Si une correspondance par préfixe a été trouvée
+        if (bestMatch != NULL)
+        {
+            this->_currentLocation = bestMatch;
+            return;
+        }
+    }
 	this->_currentLocation = NULL;
 }
 
@@ -326,20 +333,21 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 	-le nom de Domaine
 	-Block par default
 	*/
-
 	this->currentConfig = NULL;
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
-	for (; it < this->tab_serv.end(); it++)
+	for (; it != this->tab_serv.end(); it++)
 	{
 		std::multimap<std::string, std::string> portList = it->getPortList();
 		std::multimap<std::string, std::string>::iterator it2 = portList.begin();
-		if (it2->first == list->getIpAddress() && it2->second == list->getPortStr())
+		for (; it2 != portList.end(); it2++)
 		{
-			this->currentConfig = &(*it);
-			return ;
+			if (it2->first == list->getIpAddress() && it2->second == list->getPortStr())
+			{
+				this->currentConfig = &(*it);
+				return ;
+			}
 		}
 	}
-
 	it = this->tab_serv.begin();
 	for (; it < this->tab_serv.end(); it++)
 	{
@@ -407,7 +415,7 @@ void	Server::cgiExecution(std::string filePath, Client client)
 	cgi->setEnv(this->currentConfig, client); 
 	std::string content = cgi->executeCgi();
 
-	std::string mimeType = getMimeType(&client);
+	// std::string mimeType = getMimeType(&client);
 
 	std::string response = "HTTP/1.1 200 OK\r\n";
 	response += "Content-Type: text/html\r\n";
@@ -420,151 +428,6 @@ void	Server::cgiExecution(std::string filePath, Client client)
 
 	this->_response = response;
 	delete cgi;
-}
-
-/*response to a GET request*/
-void Server::ft_get(Client *client) // a revoir
-{
-	log("Server's receive a GET request.", 1);
-	
-	if (this->_is_cgi == 1)
-	{
-		cgiExecution(client->getFilePath(), *client);
-	}
-	else
-	{
-		std::string content = readFileContent(client->getFilePath());
-		std::string response = "";
-		std::stringstream ss;
-		ss << this->_status_code;
-		std::string _code = ss.str();
-		if (this->_status_code != 0)
-		{
-			log("The file requested \"" + client->getFilePath() + "\" was found empty.", 1);
-			content = readFileContent(client->getFilePath());
-
-			response = "HTTP/1.1 " + _code + " Bad Request\r\n";
-			response += "Content-Type: text/html\r\n";
-			std::ostringstream oss;
-			oss << content.size();
-			response += "Content-Length: " + oss.str() + "\r\n";
-			response += "Connection: close\r\n";
-			response += "Server: webserv/1.0\r\n\r\n";
-			response += content;
-		}
-		else
-		{
-			log("The file requested \"" + client->getFilePath() + "\" was found.", 1);
-			std::string mimeType = getMimeType(client);
-
-			response = "HTTP/1.1 200 OK\r\n";
-			response += "Content-Type: " + mimeType + "\r\n";
-			std::ostringstream oss;
-			oss << content.size();
-			response += "Content-Length: " + oss.str() + "\r\n";
-			response += "Connection: close\r\n";
-			response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
-			response += content;
-		}
-		this->_response = response;
-	}
-}
-
-/*response to a POST request*/
-void Server::ft_post(Client *client) // a revoir surtout au niveau de la requete
-{
-	log("Server's receive a POST request.", 1);
-	if (this->_is_cgi == 1)
-	{
-		cgiExecution(client->getFilePath(), *client);
-	}
-	else
-	{
-		std::string content = readFileContent(client->getFilePath());
-		std::string response = "";
-		std::stringstream ss;
-		ss << this->_status_code;
-		std::string _code = ss.str();
-		if (this->_status_code != 0)
-		{
-			log("The file requested \"" + client->getFilePath() + "\" was found empty.", 1);
-			content = readFileContent(client->getFilePath());
-
-			response = "HTTP/1.1 " + _code + " Bad Request\r\n";
-			response += "Content-Type: text/html\r\n";
-			std::ostringstream oss;
-			oss << content.size();
-			response += "Content-Length: " + oss.str() + "\r\n";
-			response += "Connection: close\r\n";
-			response += "Server: webserv/1.0\r\n\r\n";
-			response += content;
-		}
-		else
-		{
-			log("The file requested \"" + client->getFilePath() + "\" was found.", 1);
-			std::string mimeType = getMimeType(client);
-
-			response = "HTTP/1.1 200 OK\r\n";
-			response += "Content-Type: " + mimeType + "\r\n";
-			std::ostringstream oss;
-			oss << content.size();
-			response += "Content-Length: " + oss.str() + "\r\n";
-			response += "Connection: close\r\n";
-			response += "Server: " +*this->currentConfig->getServerName().begin() + "\r\n\r\n";
-			response += content;
-		}
-		this->_response = response;
-	}
-}
-
-/*response to a DELETE request*/
-void Server::ft_delete(Client *client) // a revoir
-{
-	log("Server's receive a DELETE request.", 1);
-
-	if (access(client->getFilePath().c_str(), F_OK) != 0)
-	{
-		std::string response = "HTTP/1.1 404 Not Found\r\n";
-		response += "Content-Type: text/html\r\n";
-		std::string content = "File not found";
-		std::ostringstream oss;
-		oss << content.size();
-		response += "Content-Length: " + oss.str() + "\r\n";
-		response += "Connection: close\r\n";
-		response += "Server: " +*this->currentConfig->getServerName().begin() + "\r\n\r\n";
-		response += "File not found";
-
-		this->_response = response;
-		return;
-	}
-
-	if (unlink(client->getFilePath().c_str()) == 0)
-	{
-		std::string response = "HTTP/1.1 204 No Content\r\n";
-		response += "Connection: close\r\n";
-		response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
-
-		this->_response = response;
-	} 
-	else
-		log("Server failed to respond at the DELETE request.", 2);
-}
-
-/*response to a bad request*/
-void Server::ft_badRequest()
-{
-	std::string content = readFileContent("");
-
-	std::string response = "HTTP/1.1 400 Bad Request\r\n";
-	response += "Content-Type: text/html\r\n";
-	std::ostringstream oss;
-    oss << content.size();
-    response += "Content-Length: " + oss.str() + "\r\n";
-	response += "Connection: close\r\n";
-	response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
-	response += content;
-
-	this->_response = response;
 }
 
 //Closing The server using key CTRL /C.
@@ -638,19 +501,6 @@ void	Server::dlFile(std::string *receivedLine, Client *client)
 		log("Filename cannot be found.", 2);
 }
 
-std::string	Server::readFileContent(std::string path)
-{
-	std::ifstream file(path.c_str());
-
-	if (!file.is_open())
-	{
-		return ("");
-	}
-
-	std::ostringstream oss;
-	oss << file.rdbuf();
-	return (oss.str());
-}
 
 void	Server::saveFile(const std::string &filename, const std::string &data) // POST UPLOAD
 {
@@ -667,18 +517,7 @@ void	Server::saveFile(const std::string &filename, const std::string &data) // P
     }
 }
 
-std::string	Server::getMimeType(Client *client)
-{
-	if (client->getFullPath() == ("/" + *this->currentConfig->getServerName().begin())
-		|| client->getFullPath() == "/" )
-		return ("text/html");
-	
-	if (this->mimePath.find(this->_extensionPath) != this->mimePath.end())
-		return (this->mimePath[this->_extensionPath]);
 
-	log("Extension of the file cannot be found.", 2);
-	return ("application/octet-stream");
-}
 
 void   	Server::log(std::string error, int type)
 {

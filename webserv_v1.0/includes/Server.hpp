@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/25 14:03:38 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/26 14:41:41 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,30 +62,23 @@ class Server
 		/*                            METHOD                             */
 		/*---------------------------------------------------------------*/
 
-		//ajout
-		void												getLocationBlock(Client *client);
+		void												creatAllListeningSockets();
 		void												acceptConnexion(int sock);
+		void												set_nonblocking(int sockfd);
 		void												inConnexion(ListeningSocket *list, int connexionFD);
 		void												outConnexionClient(int connexionFD);
 		void												outConnexionServer(int connexionFD);
-		void												applyConfig(Client *client);
+		void												handle_client(ListeningSocket *list, int current_fd);
+		void												getServBlock(Client *client, ListeningSocket *list);
+		void												getLocationBlock(Client *client);
+		void												closeServer();
 
 	
-		void												creatAllListeningSockets();
-		void												handle_client(ListeningSocket *list, int current_fd);
-		void												ft_get(Client *client);
-		void												ft_post(Client *client);
-		void												ft_delete(Client *client);
-		void												ft_badRequest();
 		void												cgiExecution(std::string filePath, Client client);
-		std::string											readFileContent(std::string path);
 		std::string 										getMimeType(Client *client);
-		void												set_nonblocking(int sockfd);
 		void												saveFile(const std::string &filename, const std::string &data);
 		std::string											readHead(Client *client);
-		void												getServBlock(Client *client, ListeningSocket *list);
 		std::string											readBody(Client *client, std::string *receivedLine);
-		void												closeServer();
 		void												dlFile(std::string *receivedLine, Client *client);
 
 					/*-------------PARSING HANDLING-------------*/

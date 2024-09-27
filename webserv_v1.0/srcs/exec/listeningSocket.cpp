@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 14:00:34 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/24 14:18:25 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:34:33 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,4 +186,13 @@ bool	ListeningSocket::operator==(const ListeningSocket& other) const {
 
 bool	ListeningSocket::operator<(const ListeningSocket& other) const {    
 	return (other.getSocket_fd() < this->getSocket_fd());
+}
+
+std::ostream &operator<<(std::ostream &Cout, ListeningSocket const &list)
+{
+	Cout << "ip address	: " << list.getIpAddress() << std::endl;
+	Cout << "sock fd		: " << list.getSocket_fd() << std::endl;
+	Cout << "port		: " << list.getPort() << std::endl;
+	Cout << "portstr		: " << list.getPortStr() << std::endl;
+	return (Cout);
 }
