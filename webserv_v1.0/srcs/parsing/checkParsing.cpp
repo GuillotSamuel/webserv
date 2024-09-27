@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/26 21:58:20 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/27 10:24:29 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,7 +351,7 @@ void Server::location_check_index(Location location_conf, ServerConfiguration se
 	if (!file.good())
 	{
 		error("Error : Index file does not exist: " + index_path);
-	} // TO CORRECT ? 
+	}
 }
 
 void Server::location_check_uploadsLocation(Location location_conf, ServerConfiguration server_conf)
@@ -399,6 +399,15 @@ void Server::location_check_cgi(Location location_conf, ServerConfiguration serv
 	(void)server_conf;
 }
 
+void Server::location_check_incompabilities(Location location_conf, ServerConfiguration server_conf)
+{
+	/* Check Alias and Root */
+	if (!(location_conf.getAlias()).empty() && !(location_conf.getRoot()).empty())
+	{
+		error("Error : Root and Alias are not compatible / server name -> " + server_conf.getServerName()[0]);
+	}
+}
+
 void Server::check_location(ServerConfiguration server_conf)
 {
 	std::vector<Location> location_vector = server_conf.getLocation();
@@ -414,6 +423,7 @@ void Server::check_location(ServerConfiguration server_conf)
 		location_check_errorPages(*location_it, server_conf);
 		location_check_cgiPath(*location_it, server_conf);
 		location_check_cgi(*location_it, server_conf);
+		location_check_incompabilities(*location_it, server_conf);
 	}
 }
 
