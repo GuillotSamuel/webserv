@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 12:21:38 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/27 14:30:57 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/28 16:10:50 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void Server::ft_set_location_param(std::vector<std::string> tokens)
     {
         ft_set_cgi_bin_location(tokens);
     }
-    else if (tokens[1][0] == '/')
+    else if (tokens[1][0] == '/' || (tokens[1] == "=" && tokens[1][0] == '/'))
     {
         ft_location_pages(tokens);
     }

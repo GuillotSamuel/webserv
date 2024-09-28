@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/27 12:32:35 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/28 16:10:27 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ class Server
 		void 												location_check_errorPages(Location location_conf, ServerConfiguration server_conf);
 		void 												location_check_cgiPath(Location location_conf, ServerConfiguration server_conf);
 		void 												location_check_cgi(Location location_conf, ServerConfiguration server_conf);
+		void 												location_check_incompabilities(Location location_conf, ServerConfiguration server_conf);
 		void 												readConfigurationFile(const char *arg);
 		void												ft_tokenizer(std::string line);
 		void												error(std::string errorType);
