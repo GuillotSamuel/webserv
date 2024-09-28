@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/26 19:02:43 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/28 16:04:43 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, 
 		else
 		{
 			ft_invalid_line(current_param);
-		}	
+		}
 	}
 	// C KOI CE TRUK ?
 	// else if (*current_param_it == "path_info" && current_param.size() == 2 && !current_param[1].empty())
@@ -107,23 +107,33 @@ void Server::ft_location_pages(std::vector<std::string> tokens)
 	std::vector<std::string> current_param;
 	Location new_location;
 
-	if (tokens.size() < 5 || tokens[2] != "|")
+	if (tokens.size() < 5 || (tokens[2] != "|" && tokens[1][0] == '/') || (tokens[3] != "|" && tokens[1] == "=" && tokens[2][0] == '/'))
 	{
 		ft_invalid_line(tokens);
 	}
-
+		
 	std::string blockName = tokens[1];
 
 	std::vector<Location> existing_locations = this->currentConfig->getLocation();
+
 	for (size_t i = 0; i < existing_locations.size(); i++)
 	{
 		if (existing_locations[i].getBlockName() == blockName)
 		{
-			error ("Error : Block name '" + blockName + "' already exists.");
+			error("Error : Block name '" + blockName + "' already exists.");
 		}
 	}
 
-	new_location.setBlockName(tokens[1].substr(1));
+	new_location.setBlockName(tokens[1] /* .substr(1) */);
+
+	if (tokens[1][0] == '/')
+	{
+		new_location.setBlockType("prefixe");
+	}
+	else if (tokens[1] == "=" && tokens[2][0] == '/')
+	{
+		new_location.setBlockType("equal");
+	}
 
 	for (size_t i = 3; i < tokens.size(); i++)
 	{
