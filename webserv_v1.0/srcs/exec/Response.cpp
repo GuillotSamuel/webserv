@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/27 12:28:21 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/28 15:55:43 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Response::Response(Client *client)
 
 Response::~Response()
 {
-	this->_pathInfoCgi.clear();
+	this->_interpreterMap.clear();
 	this->_allowed_methods.clear();
 	this->_errorPages.clear();
 	this->_redirection.clear();
@@ -46,6 +46,7 @@ void	Response::setInfo(ServerConfiguration *serv, Location *location)
 	this->_serverName = *serv->getServerName().begin();
 	if (location)
 	{
+		std::cout << location->getRoot() << std::endl;
 		if (location->getRoot() != "")
 			this->_root = location->getRoot();
 		else
@@ -63,9 +64,9 @@ void	Response::setInfo(ServerConfiguration *serv, Location *location)
 		else
 			this->_cgiPath = serv->getCgiLocation();
 		if (!location->getCgi().empty())
-			this->_pathInfoCgi = location->getCgi();
+			this->_interpreterMap = location->getCgi();
 		else
-			this->_pathInfoCgi = serv->getPathInfoCgi();
+			this->_interpreterMap = serv->getPathInfoCgi();
 		if (location->getAllowedMethods("GET") != -1
 			&& location->getAllowedMethods("POST") != -1)
 		{
@@ -87,8 +88,8 @@ void	Response::setInfo(ServerConfiguration *serv, Location *location)
 			this->_uploadsLocation = location->getUploadsLocation();
 		else
 			this->_uploadsLocation = serv->getUploadLocation();
-		// if (!location->getRedirection().empty())
-		// 	this->_redirection = location->getRedirection();
+		if (!location->getRedirection().empty())
+			this->_redirection = location->getRedirection();
 		// else
 		// 	this->_redirection = serv->getRedirection();
 	}
@@ -97,7 +98,7 @@ void	Response::setInfo(ServerConfiguration *serv, Location *location)
 		this->_index = serv->getIndex();
 		this->_clientMaxBodySize = serv->getClientMaxBodySize();
 		this->_cgiPath = serv->getCgiLocation();
-		this->_pathInfoCgi = serv->getPathInfoCgi();
+		this->_interpreterMap = serv->getPathInfoCgi();
 		this->_allowed_methods = serv->getAllowedMethods();
 		this->_errorPages = serv->getErrorPages();
 		this->_autoIndex = serv->getAutoIndex();
@@ -112,12 +113,27 @@ std::string	Response::generateResponse()
 		return (ft_forbidden());
 	/*1
 	*/
+	//find_path
 	if (this->_alias != "")
+	{
+		///images/bla.jpg
+		//je dois prendre l'alias et modifier l'URI 
+	}
+	// if (this->_root)
+	// {
+		
+	// }
+	
+	trouver le fichier en question si tu trouve pas le fichier
+	not found
+	-> comparer lextension avec les extension genre cgi 
+	if (!this->_interpreterMap.empty())
 	{
 		
 	}
+	-> la methods requested -> content length ?
 	/*2
-	->regarder si c'est une redirection 
+	->regarder si cest une redirection 
 	->renvoye un status 3XX
 	*/
 
@@ -361,7 +377,7 @@ int	Response::getClientMaxBodySize() const
 
 std::map<std::string, std::string>	Response::getCgi() const
 {
-	return (this->_pathInfoCgi);
+	return (this->_interpreterMap);
 }
 
 // int	Response::getAllowedMethods(std::string wichOne)const
@@ -433,12 +449,12 @@ std::ostream &operator<<(std::ostream &Cout, Response const &response)
 	{
 		Cout << it3->first << " | " << it3->second << std::endl;
 	}
-	Cout << "redirection map		: " << std::endl;
-	std::map<int, std::string> redir = response.getRedirection();
-	std::map<int, std::string>::iterator it4 = redir.begin();
-	for (; it4 != error.end(); it4++)
-	{
-		Cout << it4->first << " | " << it4->second << std::endl;
-	}
+	// Cout << "redirection map		: " << std::endl;
+	// std::map<int, std::string> redir = response.getRedirection();
+	// std::map<int, std::string>::iterator it4 = redir.begin();
+	// for (; it4 != error.end(); it4++)
+	// {
+	// 	Cout << it4->first << " | " << it4->second << std::endl;
+	// }
 	return (Cout);
 }

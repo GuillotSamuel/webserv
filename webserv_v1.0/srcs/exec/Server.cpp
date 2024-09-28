@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/27 12:30:37 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/28 12:42:50 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 	
 	Response *response = new Response(client);
 	response->setInfo(this->currentConfig, this->_currentLocation);
-	std::cout << *response << std::endl;
+	// std::cout << *response << std::endl;
 	return ;
 	this->_response = response->generateResponse();
 	delete client;
@@ -263,46 +263,45 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 void	Server::getLocationBlock(Client *client)
 {
 	//gerer la correspondance exacte
-	std::vector<Location> tab = this->currentConfig->getLocation();
-	if (!tab.empty())
+	std::vector<Location> tab = currentConfig->getLocation();
+	std::vector<Location>::iterator it = tab.begin();
+	for (; it != tab.end(); it++)
 	{
-		std::vector<Location>::iterator it = tab.begin();
-		for (; it != tab.end(); it++)
+		if (client->getPath() == it->getBlockName() && it->getBlockType() == "equal")
 		{
-			if (client->getPath() == it->getBlockName() && it->getBlockType() == "equal")
-			{
-				this->_currentLocation = &(*it);
-				return ;
-			}
+			this->_currentLocation = &(*it);
+			return ;
 		}
+	}
 
-		Location *bestMatch = NULL;
-        size_t longestPrefix = 0;
+	Location	*bestMatch = NULL;
+	size_t		longestPrefix = 0;
 
-        it = tab.begin();
-        for (; it != tab.end(); ++it)
-        {
-            if (it->getBlockType() == "prefix")
-            {
-                std::string blockName = it->getBlockName();
-                if (client->getPath().compare(0, blockName.length(), blockName) == 0)
-                {
-                    if (blockName.length() > longestPrefix)
-                    {
-                        longestPrefix = blockName.length();
-                        bestMatch = &(*it);
-                    }
-                }
-            }
-        }
+	it = tab.begin();
+	for (; it != tab.end(); ++it)
+	{
+		// std::cout << it->getBlockType() << std::endl;
+		// if (it->getBlockType() == "prefix")
+		// {
+			std::string blockName = it->getBlockName();
+			if (client->getPath().compare(0, blockName.length(), blockName) == 0)
+			{
+				if (blockName.length() > longestPrefix)
+				{
+					longestPrefix = blockName.length();
+					bestMatch = &(*it);
+				}
+			}
+		// }
+	}
 
-        // Si une correspondance par préfixe a été trouvée
-        if (bestMatch != NULL)
-        {
-            this->_currentLocation = bestMatch;
-            return;
-        }
-    }
+	// Si une correspondance par préfixe a été trouvée
+	if (bestMatch != NULL)
+	{
+		this->_currentLocation = bestMatch;
+		std::cout << this->_currentLocation->getRoot() << std::endl;
+		return;
+	}
 	this->_currentLocation = NULL;
 }
 

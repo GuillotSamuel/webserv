@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/26 18:38:17 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/27 14:51:02 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ class ServerConfiguration
 
 		/* --- General informations from configuration file --- */
 		std::vector<std::string>				_serverName; // ok
-		std::multimap<std::string, std::string>	_portList; // [ipAddress] = port; // voir std::multimap
+		std::multimap<std::string, std::string>	_portList; // [ipAddress] = port;
 		std::string								_root;  // ok //Path_du_site
 		std::string								_index; // ok
 		int										_clientMaxBodySize; // ok
-		std::map<std::string, std::string>		_pathInfoCgi; // ok
+		std::map<std::string, std::string>		_pathInfoCgi; // ok -> pas ok
 		std::map<std::string, int>				_allowed_methods; // ok
 		std::map<int, std::string>				_errorPages; // ok
 		int										_autoIndex; // ok

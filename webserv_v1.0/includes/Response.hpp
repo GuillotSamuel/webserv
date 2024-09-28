@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/27 12:26:17 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/28 15:55:20 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class Response
 		std::map<std::string, int>			_allowed_methods;
 		std::map<int, std::string>			_errorPages;
 		std::map<int, std::string>			_redirection;
-		std::map<std::string, std::string>	_pathInfoCgi;
+		std::map<std::string, std::string>	_interpreterMap;
 		int									_clientMaxBodySize;
 		int									_autoIndex;
 		int									_status;
