@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/28 16:10:24 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/29 00:27:49 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@ class Response
 		/*                   ATTRIBUT SERVER/LOCATION             		 */
 		/*---------------------------------------------------------------*/
 		std::string							_serverName;
+		std::string							_blockName;
+		std::string							_locationType;
 		std::string                 		_alias; // vrai root vers mais ne remplace le root du serveur
 		std::string							_root;
 		std::string							_index;
 		std::string							_cgiPath;
-		std::string							_uploadsLocation;
 		std::string							_filePath; // absolute path to file requested
 		std::map<std::string, int>			_allowed_methods;
 		std::map<int, std::string>			_errorPages;
@@ -55,7 +56,6 @@ class Response
 		std::string							getAlias() const;
 		std::string							getRoot() const;
 		std::string							getIndex() const;
-		std::string							getPathCgi() const;
 		std::string							getUploadsLocation() const;
 		std::string							getFilePath() const;
 		std::string							getServerName() const;

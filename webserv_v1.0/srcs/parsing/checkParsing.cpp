@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/28 16:10:55 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/28 16:58:48 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,30 +110,6 @@ void Server::check_error_code(int error_code, const std::string &server_name)
 
 /* Check servers configurations */
 
-void Server::check_error_page(ServerConfiguration server_conf)
-{
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	if (!server_conf.getErrorPageLocation().empty())
-	{
-		check_folder(server_conf.getErrorPageLocation(), serverName);
-	}
-
-	if (!server_conf.getErrorPages().empty())
-	{
-		std::map<int, std::string> errorPage_map = server_conf.getErrorPages();
-		std::map<int, std::string>::iterator errorPage_it = errorPage_map.begin();
-		for (; errorPage_it != errorPage_map.end(); ++errorPage_it)
-		{
-			int error_code = errorPage_it->first;
-			const std::string &error_page_path = errorPage_it->second;
-
-			check_error_code(error_code, serverName);
-			check_file(server_conf.getErrorPageLocation(), error_page_path, serverName);
-		}
-	}
-}
-
 void Server::check_index(ServerConfiguration server_conf)
 {
 	std::string root_path = server_conf.getRoot();
@@ -214,26 +190,6 @@ void Server::check_server_name(ServerConfiguration server_conf)
 				error("Error: Each label in the server name must not exceed 63 characters.");
 			}
 		}
-	}
-}
-
-void Server::check_path_cgi(ServerConfiguration server_conf)
-{
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	if (!server_conf.getCgiLocation().empty())
-	{
-		check_folder(server_conf.getCgiLocation(), serverName);
-	}
-}
-
-void Server::check_uploads(ServerConfiguration server_conf)
-{
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	if (!server_conf.getUploadLocation().empty())
-	{
-		check_folder(server_conf.getUploadLocation(), serverName);
 	}
 }
 
@@ -354,45 +310,6 @@ void Server::location_check_index(Location location_conf, ServerConfiguration se
 	}
 }
 
-void Server::location_check_uploadsLocation(Location location_conf, ServerConfiguration server_conf)
-{
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	if (!location_conf.getUploadsLocation().empty())
-	{
-		check_folder(location_conf.getUploadsLocation(), serverName);
-	}
-}
-
-void Server::location_check_errorPages(Location location_conf, ServerConfiguration server_conf)
-{
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	std::map<int, std::string> errorPage_map = location_conf.getErrorPage();
-	std::map<int, std::string>::iterator errorPage_it = errorPage_map.begin();
-	for (; errorPage_it != errorPage_map.end(); ++errorPage_it)
-	{
-		int error_code = errorPage_it->first;
-		const std::string &error_page_path = errorPage_it->second;
-
-		check_error_code(error_code, serverName);
-		check_file(server_conf.getErrorPageLocation(), error_page_path, serverName);
-	}
-}
-
-void Server::location_check_cgiPath(Location location_conf, ServerConfiguration server_conf)
-{
-	(void)location_conf;
-	(void)server_conf;
-
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	if (!location_conf.getPathCgi().empty())
-	{
-		check_folder(location_conf.getPathCgi(), serverName);
-	}
-}
-
 void Server::location_check_cgi(Location location_conf, ServerConfiguration server_conf)
 {
 	(void)location_conf;
@@ -419,9 +336,6 @@ void Server::check_location(ServerConfiguration server_conf)
 		location_check_root(*location_it, server_conf);
 		location_check_maxBodySize(*location_it, server_conf);
 		location_check_index(*location_it, server_conf);
-		location_check_uploadsLocation(*location_it, server_conf);
-		location_check_errorPages(*location_it, server_conf);
-		location_check_cgiPath(*location_it, server_conf);
 		location_check_cgi(*location_it, server_conf);
 		location_check_incompabilities(*location_it, server_conf);
 	}
@@ -437,12 +351,9 @@ void Server::check_parsing()
 	{
 		check_server_name(*iterator_tab_serv);
 		check_root(*iterator_tab_serv);
-		check_error_page(*iterator_tab_serv);
-		check_uploads(*iterator_tab_serv);
 		check_index(*iterator_tab_serv);
 		check_listen(*iterator_tab_serv);
 		check_max_body(*iterator_tab_serv);
-		check_path_cgi(*iterator_tab_serv);
 		check_interpreter_map(*iterator_tab_serv);
 		check_location(*iterator_tab_serv);
 	}

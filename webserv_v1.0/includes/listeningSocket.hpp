@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:29 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/25 14:29:33 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/28 17:24:08 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ class ListeningSocket
 		struct protoent		*_proto;
 		int					_socket_fd;
 		std::string			ipAddress;
-		
 
 	public:
 

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:40:40 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/26 13:42:21 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/28 16:43:55 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ Location::Location(/* args */)
 	this->_autoindex = 0;
 	this->_path_info = "";
 	this->_index = "";
-	this->_uploadsLocation = "";
 	this->_allowed_methods["GET"] = -1;
 	this->_allowed_methods["POST"] = -1;
 	this->_allowed_methods["DELETE"] = -1;
@@ -73,14 +72,6 @@ void Location::setIndex(std::string index) {
 	this->_index = index;
 }
 
-void Location::setUploadsLocation(std::string uploadsLocation) {
-	this->_uploadsLocation = uploadsLocation;
-}
-
-void Location::setPathCgi(std::string pathCgi) {
-	this->_pathCgi = pathCgi;
-}
-
 void Location::setCgi(std::string first, std::string second) {
 	this->_cgi[first] = second;
 }
@@ -123,14 +114,6 @@ std::string Location::getPathInfo() const {
 
 std::string Location::getIndex() const {
 	return (this->_index);
-}
-
-std::string Location::getUploadsLocation() const {
-	return (this->_uploadsLocation);
-}
-
-std::string Location::getPathCgi() const {
-	return (this->_pathCgi);
 }
 
 std::map<std::string, std::string> Location::getCgi() const {

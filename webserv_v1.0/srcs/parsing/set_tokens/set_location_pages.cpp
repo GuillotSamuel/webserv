@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/28 16:10:45 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/29 15:06:42 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, 
 
 	if (*current_param_it == "alias" && current_param.size() == 2 && !current_param[1].empty())
 	{
+		std::cout << current_param[1] << std::endl;
 		new_location.setAlias(current_param[1]);
 	}
 	else if (*current_param_it == "root" && current_param.size() == 2 && !current_param[1].empty())
@@ -47,10 +48,6 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, 
 	else if (*current_param_it == "index" && current_param.size() == 2 && !current_param[1].empty())
 	{
 		new_location.setIndex(current_param[1]);
-	}
-	else if (*current_param_it == "uploads_location" && current_param.size() == 2 && !current_param[1].empty())
-	{
-		new_location.setUploadsLocation(current_param[1]);
 	}
 	else if (*current_param_it == "allowed_methods" && current_param.size() >= 2)
 	{
@@ -88,10 +85,6 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, 
 	{
 		new_location.setRedirection(atoi(current_param[1].c_str()), current_param[2]);
 	}
-	else if (*current_param_it == "cgi-bin" && current_param.size() == 2 && !current_param[1].empty())
-	{
-		new_location.setPathCgi(current_param[1]);
-	}
 	else if (*current_param_it == "cgi" && current_param.size() == 3 && !current_param[1].empty() && !current_param[2].empty())
 	{
 		new_location.setCgi(current_param[1], current_param[2]);
@@ -124,7 +117,7 @@ void Server::ft_location_pages(std::vector<std::string> tokens)
 		}
 	}
 
-	new_location.setBlockName(tokens[1] /* .substr(1) */);
+	new_location.setBlockName(tokens[1]);
 
 	if (tokens[1][0] == '/')
 	{

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/28 12:42:50 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/29 14:35:27 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ std::ofstream* Server::_log = NULL;
 Server::Server(int argc, char **argv)
 {
 	this->_response = "";
-	this->_is_cgi = 0;
 	_log = new std::ofstream("logfile.log", std::ios::out);
 	if (!_log->is_open())
 	{		
@@ -49,7 +48,6 @@ void	Server::creatAllListeningSockets()
 	for (; it < this->tab_serv.end(); it++)
 	{
 		int boul = 0;
-		it->setRootIndex();
 		std::multimap<std::string, std::string> port = it->getPortList();
 		std::multimap<std::string, std::string>::iterator itTabPort = port.begin();
 		for (; itTabPort != port.end(); itTabPort++)
@@ -246,14 +244,12 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 		return ;
 	}
 	getServBlock(client, list);
-	if (!this->currentConfig)
-		exit(EXIT_FAILURE);
+	if (!this->currentConfig) //TEST
+		exit(EXIT_FAILURE);//TEST
 	getLocationBlock(client);
 	
 	Response *response = new Response(client);
 	response->setInfo(this->currentConfig, this->_currentLocation);
-	// std::cout << *response << std::endl;
-	return ;
 	this->_response = response->generateResponse();
 	delete client;
 	delete response;
@@ -273,16 +269,13 @@ void	Server::getLocationBlock(Client *client)
 			return ;
 		}
 	}
-
 	Location	*bestMatch = NULL;
 	size_t		longestPrefix = 0;
-
 	it = tab.begin();
 	for (; it != tab.end(); ++it)
 	{
-		// std::cout << it->getBlockType() << std::endl;
-		// if (it->getBlockType() == "prefix")
-		// {
+		if (it->getBlockType() == "prefixe")
+		{
 			std::string blockName = it->getBlockName();
 			if (client->getPath().compare(0, blockName.length(), blockName) == 0)
 			{
@@ -292,14 +285,13 @@ void	Server::getLocationBlock(Client *client)
 					bestMatch = &(*it);
 				}
 			}
-		// }
+		}
 	}
 
 	// Si une correspondance par préfixe a été trouvée
 	if (bestMatch != NULL)
 	{
 		this->_currentLocation = bestMatch;
-		std::cout << this->_currentLocation->getRoot() << std::endl;
 		return;
 	}
 	this->_currentLocation = NULL;
@@ -324,14 +316,13 @@ std::string	Server::readHead(Client *client)
 	return (receivedLine);
 }
 
-
-void	Server::getServBlock(Client *client, ListeningSocket *list)
-{
-	/*
+/*
 	-Adresse IP - Port de la requete
 	-le nom de Domaine
 	-Block par default
 	*/
+void	Server::getServBlock(Client *client, ListeningSocket *list)
+{
 	this->currentConfig = NULL;
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
 	for (; it != this->tab_serv.end(); it++)
@@ -361,9 +352,7 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 			}
 		}
 	}
-	
-	//prendre le block par default
-	
+	//bloc par default
 	this->currentConfig = NULL;
 }
 
@@ -409,7 +398,7 @@ std::string	Server::readBody(Client *client, std::string *receivedLine)
 void	Server::cgiExecution(std::string filePath, Client client)
 {
 	Cgi *cgi = new Cgi();
-	cgi->setExecuter(this->_executer_cgi);
+	// cgi->setExecuter(this->_executer_cgi);
 	cgi->setPath(filePath.c_str());
 	cgi->setEnv(this->currentConfig, client); 
 	std::string content = cgi->executeCgi();
@@ -444,8 +433,6 @@ void	Server::closeServer()
 	this->tab_serv.clear();
 	std::vector<ListeningSocket*>().swap(_listSockets);
 	std::vector<ServerConfiguration>().swap(tab_serv);
-	this->mimePath.clear();
-	this->extpath.clear();
 	this->_connexion_fd.clear();
 	close(this->_epoll_fd);
 	exit(EXIT_SUCCESS);
@@ -484,7 +471,7 @@ void	Server::dlFile(std::string *receivedLine, Client *client)
 				{
 					body_content = (*receivedLine).substr(body, (endbody - body));
 					(*receivedLine).erase(body, (endbody - body));
-					saveFile(this->currentConfig->getUploadLocation() + file_name, body_content);
+					// saveFile(this->currentConfig->getUploadLocation() + file_name, body_content);
 				}
 				else
 					log("The request body cannot be found.", 2);
