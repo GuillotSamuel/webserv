@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 14:42:42 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 14:55:51 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ void Server::location_check_blockName(Location location_conf, ServerConfiguratio
 	for (size_t i = 0; i < blockName.length(); i++)
 	{
 		char c = blockName[i];
-		if (!isalnum(c) && c != '-' && c != '.')
+		if (!isalnum(c) && c != '-' && c != '.' && c != '/')
 		{
 			error("Error : Block name contains invalid characters. It must contains alphanumeric characters and '-' / '.' only.");
 		}

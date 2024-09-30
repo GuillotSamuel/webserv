@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_g.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:44:12 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/28 16:32:27 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 14:52:34 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,6 @@ void Server::parsing_g(int argc, char **argv)
         ++it;
     }
 
-    // check_parsing();
+    check_parsing();
     std::cout << "server size : " << this->tab_serv.size() << std::endl;
 }
