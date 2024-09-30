@@ -162,3 +162,43 @@ voulez pas voir supplantée par des expressions régulières.
 Ici, toute requête commençant par /images/ sera traitée par le premier bloc,
 même si le fichier demandé est une image (qui correspondrait aussi à
 l'expression régulière).
+
+---------------------------------------------------------------------------
+
+uri = /images/logo.jpg
+
+CONFIG :
+location /images/ {
+	alias /autre/chemin/
+}
+
+path = /autre/chemin/logo.jpg
+---------------------------------------------------------------------------
+
+uri = /index.html
+
+CONFIG:
+server {
+	root chemin/vers/site
+	location /downloads/ {
+		root /autre/chemin/files
+	}
+}
+
+path = chemin/vers/site/index.html
+
+---------------------------------------------------------------------------
+
+uri = /downloads/bla.c
+
+CONFIG:
+server {
+	root chemin/vers/site
+	location /downloads/ {
+		root /autre/chemin/files
+	}
+}
+
+path = /autre/chemin/files/downloads/bla.c
+
+IL EST INTERDIT D'AVOIR ROOT ET ALIAS DANS LE MEME BLOC LOCATION

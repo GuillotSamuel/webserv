@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:40:40 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/24 21:13:15 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 11:36:05 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 #include "Location.hpp"
+
+/*----------------------------------------------------------------------------*/
+/*                               CONSTRUCTOR                                  */
+/*----------------------------------------------------------------------------*/
 
 Location::Location(/* args */)
 {
@@ -23,7 +27,6 @@ Location::Location(/* args */)
 	this->_autoindex = 0;
 	this->_path_info = "";
 	this->_index = "";
-	this->_uploadsLocation = "";
 	this->_allowed_methods["GET"] = -1;
 	this->_allowed_methods["POST"] = -1;
 	this->_allowed_methods["DELETE"] = -1;
@@ -37,138 +40,117 @@ Location::~Location()
 	this->_allowed_methods.clear();
 }
 
-void Location::setBlockName(std::string blockName)
+/*----------------------------------------------------------------------------*/
+/*                                   SETTER                                   */
+/*----------------------------------------------------------------------------*/
+
+Location &Location::operator=(Location const &obj)
 {
-	this->_blockName = blockName;
+    this->_blockName = obj._blockName;
+	this->_blockType = obj._blockType;
+	this->_alias = obj._alias;
+	this->_root = obj._root;
+	this->_clientMaxBodySize = obj._clientMaxBodySize;
+	this->_autoindex = obj._autoindex;
+	this->_path_info = obj._path_info;
+	this->_index = obj._index;
+	this->_cgi = obj._cgi;
+	this->_error_page = obj._error_page;
+	this->_redirection = obj._redirection;
+	this->_allowed_methods = obj._allowed_methods;
+	return (*this);
 }
 
-void Location::setBlockType(std::string blockType)
+void Location::setBlockName(std::string blockName)
 {
+    this->_blockName = blockName;
+}
+
+void Location::setBlockType(std::string blockType) {
 	this->_blockType = blockType;
 }
 
-void Location::setAlias(std::string alias)
-{
+void Location::setAlias(std::string alias) {
 	this->_alias = alias;
 }
 
-void Location::setRoot(std::string root)
-{
+void Location::setRoot(std::string root) {
 	this->_root = root;
 }
 
-void Location::setClientMaxBodySize(int clientMaxBodySize)
-{
+void Location::setClientMaxBodySize(int clientMaxBodySize) {
 	this->_clientMaxBodySize = clientMaxBodySize;
 }
 
-void Location::setAutoIndex(int autoIndex)
-{
+void Location::setAutoIndex(int autoIndex) {
 	this->_autoindex = autoIndex;
 }
 
-void Location::setIndex(std::string index)
-{
+void Location::setIndex(std::string index) {
 	this->_index = index;
 }
 
-void Location::setUploadsLocation(std::string uploadsLocation)
-{
-	this->_uploadsLocation = uploadsLocation;
-}
-
-void Location::setPathCgi(std::string pathCgi)
-{
-	this->_pathCgi = pathCgi;
-}
-
-void Location::setCgi(std::string first, std::string second)
-{
+void Location::setCgi(std::string first, std::string second) {
 	this->_cgi[first] = second;
 }
 
-void Location::setErrorPage(int code, std::string errorPage)
-{
+void Location::setErrorPage(int code, std::string errorPage) {
 	this->_error_page[code] = errorPage;
 }
 
-void Location::setRedirection(int code, std::string to)
-{
+void Location::setRedirection(int code, std::string to) {
 	this->_redirection[code] = to;
 }
 
-void Location::setAllowedMethods(std::string whichOne, int allow)
-{
+void Location::setAllowedMethods(std::string whichOne, int allow) {
 	this->_allowed_methods[whichOne] = allow;
 }
 
-std::string Location::getBlockName() const
-{
+/*----------------------------------------------------------------------------*/
+/*                                   GETTER                                   */
+/*----------------------------------------------------------------------------*/
+
+std::string Location::getBlockName() const {
 	return (this->_blockName);
 }
 
-std::string Location::getBlockType() const
-{
+std::string Location::getBlockType() const {
 	return (this->_blockType);
 }
 
-std::string Location::getAlias() const
-{
+std::string Location::getAlias() const {
 	return (this->_alias);
 }
 
-std::string Location::getRoot() const
-{
+std::string Location::getRoot() const {
 	return (this->_root);
 }
 
-int Location::getClientMaxBodySize() const
-{
-	return (this->_clientMaxBodySize);
-}
-
-int Location::getAutoIndex() const
-{
-	return (this->_autoindex);
-}
-
-std::string Location::getPathInfo() const
-{
+std::string Location::getPathInfo() const {
 	return (this->_path_info);
 }
 
-std::string Location::getIndex() const
-{
+std::string Location::getIndex() const {
 	return (this->_index);
 }
 
-std::string Location::getUploadsLocation() const
-{
-	return (this->_uploadsLocation);
-}
-
-std::string Location::getPathCgi() const
-{
-	return (this->_pathCgi);
-}
-
-std::map<std::string, std::string> Location::getCgi() const
-{
+std::map<std::string, std::string> Location::getCgi() const {
 	return (this->_cgi);
 }
 
-std::map<int, std::string> Location::getErrorPage() const
-{
+std::map<int, std::string> Location::getErrorPage() const {
 	return (this->_error_page);
 }
 
-std::map<int, std::string> Location::getRedirection() const
-{
+std::map<int, std::string> Location::getRedirection() const {
 	return (this->_redirection);
 }
 
-int Location::getAllowedMethods(std::string whichOne)
-{
+std::map<std::string, int> Location::getAllowedMethodsTab() const {
+	return (this->_allowed_methods);
+}
+
+int Location::getAllowedMethods(std::string whichOne) {
 	std::map<std::string, int>::iterator it = _allowed_methods.find(whichOne);
 	if (it != _allowed_methods.end()) {
         return (it->second);
@@ -176,7 +158,22 @@ int Location::getAllowedMethods(std::string whichOne)
 	return (0);
 }
 
-std::map<std::string, int> Location::getAllowedMethodsTab() const
+int Location::getClientMaxBodySize() const {
+	return (this->_clientMaxBodySize);
+}
+
+int Location::getAutoIndex() const {
+	return (this->_autoindex);
+}
+
+/*----------------------------------------------------------------------------*/
+/*                                  UTILS                                     */
+/*----------------------------------------------------------------------------*/
+
+std::ostream &operator<<(std::ostream &Cout, Location const &location)
 {
-	return (this->_allowed_methods);
+	Cout << "alias	: " << location.getAlias() << std::endl;
+	Cout << "blockname		: " << location.getBlockName() << std::endl;
+	Cout << "blocktype		: " << location.getBlockType() << std::endl;
+	return (Cout);
 }

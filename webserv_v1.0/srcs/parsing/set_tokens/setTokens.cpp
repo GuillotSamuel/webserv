@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 21:06:16 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/23 14:58:32 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:15:22 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	Server::ft_invalid_line(std::vector<std::string> tokens)
 {
-    std::string error_message = "invalid line (no lines allowed after server configurations) [./webserv --help]: ";
+    std::string error_message = "invalid line [./webserv --help]: ";
     for (int i = 0; (long unsigned int)i < tokens.size(); i++)
     {
         error_message += tokens[i];

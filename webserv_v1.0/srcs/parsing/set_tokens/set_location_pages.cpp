@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/28 16:04:43 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:51:04 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, 
 
 	if (*current_param_it == "alias" && current_param.size() == 2 && !current_param[1].empty())
 	{
+		std::cout << current_param[1] << std::endl;
 		new_location.setAlias(current_param[1]);
 	}
 	else if (*current_param_it == "root" && current_param.size() == 2 && !current_param[1].empty())
@@ -35,22 +36,11 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, 
 		else if (current_param[1] == "off")
 			new_location.setAutoIndex(0);
 		else
-		{
 			ft_invalid_line(current_param);
-		}
 	}
-	// C KOI CE TRUK ?
-	// else if (*current_param_it == "path_info" && current_param.size() == 2 && !current_param[1].empty())
-	// {
-	// 	new_location.path_info = current_param[1];
-	// }
 	else if (*current_param_it == "index" && current_param.size() == 2 && !current_param[1].empty())
 	{
 		new_location.setIndex(current_param[1]);
-	}
-	else if (*current_param_it == "uploads_location" && current_param.size() == 2 && !current_param[1].empty())
-	{
-		new_location.setUploadsLocation(current_param[1]);
 	}
 	else if (*current_param_it == "allowed_methods" && current_param.size() >= 2)
 	{
@@ -88,13 +78,12 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, 
 	{
 		new_location.setRedirection(atoi(current_param[1].c_str()), current_param[2]);
 	}
-	else if (*current_param_it == "cgi-bin" && current_param.size() == 2 && !current_param[1].empty())
+	else if (*current_param_it == "cgi" && (current_param.size() % 2 == 1) && current_param.size() >= 3 && !current_param[1].empty() && !current_param[2].empty())
 	{
-		new_location.setPathCgi(current_param[1]);
-	}
-	else if (*current_param_it == "cgi" && current_param.size() == 3 && !current_param[1].empty() && !current_param[2].empty())
-	{
-		new_location.setCgi(current_param[1], current_param[2]);
+		for (size_t i = 0; (i + 2) < current_param.size(); i += 2)
+		{
+			new_location.setCgi(current_param[1 + i], current_param[2 + i]);
+		}
 	}
 	else
 	{
@@ -124,7 +113,7 @@ void Server::ft_location_pages(std::vector<std::string> tokens)
 		}
 	}
 
-	new_location.setBlockName(tokens[1] /* .substr(1) */);
+	new_location.setBlockName(tokens[1]);
 
 	if (tokens[1][0] == '/')
 	{

@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 14:38:18 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:37:13 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void Server::check_folder(const std::string &folder_path, const std::string &ser
 
 	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
 	{
-		error("Error: Cannot get current working directory: " + std::string(strerror(errno)));
+		error("Error: Cannot get current working directory: " + std::string(strerror(errno)) +
+			  " (" + folder_path + ") / server name -> " + server_name);
 	}
 
 	if (chdir(folder_path.c_str()) != 0)
@@ -42,7 +43,8 @@ void Server::check_folder(const std::string &folder_path, const std::string &ser
 
 	if (chdir(current_dir) != 0)
 	{
-		error("Error: Cannot restore original working directory: " + std::string(strerror(errno)));
+		error("Error: Cannot restore original working directory: " + std::string(strerror(errno)) +
+			  " (" + folder_path + ") / server name -> " + server_name);
 	}
 
 	if (stat(absolute_path, &info) != 0)
@@ -110,30 +112,6 @@ void Server::check_error_code(int error_code, const std::string &server_name)
 
 /* Check servers configurations */
 
-void Server::check_error_page(ServerConfiguration server_conf)
-{
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	if (!server_conf.getErrorPageLocation().empty())
-	{
-		check_folder(server_conf.getErrorPageLocation(), serverName);
-	}
-
-	if (!server_conf.getErrorPages().empty())
-	{
-		std::map<int, std::string> errorPage_map = server_conf.getErrorPages();
-		std::map<int, std::string>::iterator errorPage_it = errorPage_map.begin();
-		for (; errorPage_it != errorPage_map.end(); ++errorPage_it)
-		{
-			int error_code = errorPage_it->first;
-			const std::string &error_page_path = errorPage_it->second;
-
-			check_error_code(error_code, serverName);
-			check_file(server_conf.getErrorPageLocation(), error_page_path, serverName);
-		}
-	}
-}
-
 void Server::check_index(ServerConfiguration server_conf)
 {
 	std::string root_path = server_conf.getRoot();
@@ -143,8 +121,8 @@ void Server::check_index(ServerConfiguration server_conf)
 	std::ifstream file(index_path.c_str());
 	if (!file.good())
 	{
-		error("Error : Index file does not exist: " + index_path);
-	} // TO CORRECT ?
+		error("Error : Index file does not exist: " + index_path + " / server name -> " + server_conf.getServerName()[0]);
+	}
 }
 
 void Server::check_listen(ServerConfiguration server_conf)
@@ -159,7 +137,7 @@ void Server::check_max_body(ServerConfiguration server_conf)
 
 	if (maxBodySize < 0)
 	{
-		error("Error: Invalid max body size. Must be a positive value.");
+		error("Error: Invalid max body size. Must be a positive value. / server name -> " + server_conf.getServerName()[0]);
 	}
 }
 
@@ -188,21 +166,21 @@ void Server::check_server_name(ServerConfiguration server_conf)
 
 		if (serverName.length() > 253)
 		{
-			error("Error: Server name exceeds maximum length (253 characters allowed).");
+			error("Error: Server name exceeds maximum length (253 characters allowed). / server name -> " + server_conf.getServerName()[0]);
 		}
 
 		for (size_t i = 0; i < serverName.length(); i++)
 		{
 			char c = serverName[i];
-			if (!isalnum(c) && c != '-' && c != '.') // TEST : trop restrictif ?
+			if (!isalnum(c) && c != '-' && c != '.')
 			{
-				error("Error : Server name contains invalid characters. It must contains alphanumeric characters and '-' / '.' only.");
+				error("Error : Server name contains invalid characters. It must contains alphanumeric characters and '-' / '.' only. / server name -> " + server_conf.getServerName()[0]);
 			}
 		}
 
 		if (serverName[0] == '-' || serverName[serverName.length() - 1] == '-')
 		{
-			error("Error : Server name can not start or end with '-'.");
+			error("Error : Server name can not start or end with '-'. / server name -> " + server_conf.getServerName()[0]);
 		}
 
 		std::stringstream ss(serverName);
@@ -211,29 +189,9 @@ void Server::check_server_name(ServerConfiguration server_conf)
 		{
 			if (label.length() > 63)
 			{
-				error("Error: Each label in the server name must not exceed 63 characters.");
+				error("Error: Each label in the server name must not exceed 63 characters. / server name -> " + server_conf.getServerName()[0]);
 			}
 		}
-	}
-}
-
-void Server::check_path_cgi(ServerConfiguration server_conf)
-{
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	if (!server_conf.getCgiLocation().empty())
-	{
-		check_folder(server_conf.getCgiLocation(), serverName);
-	}
-}
-
-void Server::check_uploads(ServerConfiguration server_conf)
-{
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	if (!server_conf.getUploadLocation().empty())
-	{
-		check_folder(server_conf.getUploadLocation(), serverName);
 	}
 }
 
@@ -285,21 +243,21 @@ void Server::location_check_blockName(Location location_conf, ServerConfiguratio
 
 	if (blockName.length() > 253)
 	{
-		error("Error: Block name exceeds maximum length (253 characters allowed).");
+		error("Error: Block name exceeds maximum length (253 characters allowed). / server name -> " + server_conf.getServerName()[0]);
 	}
 
 	for (size_t i = 0; i < blockName.length(); i++)
 	{
 		char c = blockName[i];
-		if (!isalnum(c) && c != '-' && c != '.')
+		if (!isalnum(c) && c != '-' && c != '.' && c != '/')
 		{
-			error("Error : Block name contains invalid characters. It must contains alphanumeric characters and '-' / '.' only.");
+			error("Error : Block name contains invalid characters. It must contains alphanumeric characters and '-' / '.' only. / server name -> " + server_conf.getServerName()[0]);
 		}
 	}
 
 	if (blockName[0] == '-' || blockName[blockName.length() - 1] == '-')
 	{
-		error("Error : Block name can not start or end with '-'.");
+		error("Error : Block name can not start or end with '-'. / server name -> " + server_conf.getServerName()[0]);
 	}
 
 	std::stringstream ss(blockName);
@@ -308,7 +266,7 @@ void Server::location_check_blockName(Location location_conf, ServerConfiguratio
 	{
 		if (label.length() > 63)
 		{
-			error("Error: Each label in the block name must not exceed 63 characters.");
+			error("Error: Each label in the block name must not exceed 63 characters. / server name -> " + server_conf.getServerName()[0]);
 		}
 	}
 }
@@ -336,7 +294,7 @@ void Server::location_check_maxBodySize(Location location_conf, ServerConfigurat
 
 	if (maxBodySize < 0)
 	{
-		error("Error: Invalid max body size. Must be a positive value.");
+		error("Error: Invalid max body size. Must be a positive value. / server name -> " + server_conf.getServerName()[0]);
 	}
 }
 
@@ -350,53 +308,25 @@ void Server::location_check_index(Location location_conf, ServerConfiguration se
 	std::ifstream file(index_path.c_str());
 	if (!file.good())
 	{
-		error("Error : Index file does not exist: " + index_path);
-	}
-}
-
-void Server::location_check_uploadsLocation(Location location_conf, ServerConfiguration server_conf)
-{
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	if (!location_conf.getUploadsLocation().empty())
-	{
-		check_folder(location_conf.getUploadsLocation(), serverName);
-	}
-}
-
-void Server::location_check_errorPages(Location location_conf, ServerConfiguration server_conf)
-{
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	std::map<int, std::string> errorPage_map = location_conf.getErrorPage();
-	std::map<int, std::string>::iterator errorPage_it = errorPage_map.begin();
-	for (; errorPage_it != errorPage_map.end(); ++errorPage_it)
-	{
-		int error_code = errorPage_it->first;
-		const std::string &error_page_path = errorPage_it->second;
-
-		check_error_code(error_code, serverName);
-		check_file(server_conf.getErrorPageLocation(), error_page_path, serverName);
-	}
-}
-
-void Server::location_check_cgiPath(Location location_conf, ServerConfiguration server_conf)
-{
-	(void)location_conf;
-	(void)server_conf;
-
-	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
-
-	if (!location_conf.getPathCgi().empty())
-	{
-		check_folder(location_conf.getPathCgi(), serverName);
+		error("Error : Index file does not exist: " + index_path + " / server name -> " + server_conf.getServerName()[0]);
 	}
 }
 
 void Server::location_check_cgi(Location location_conf, ServerConfiguration server_conf)
 {
-	(void)location_conf;
-	(void)server_conf;
+    std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
+
+    const std::map<std::string, std::string> &cgi_map = location_conf.getCgi();
+
+    std::map<std::string, std::string>::const_iterator cgi_it = cgi_map.begin();
+    for (; cgi_it != cgi_map.end(); ++cgi_it)
+    {
+        const std::string cgi_language = cgi_it->first;
+        const std::string &cgi_path = cgi_it->second;
+        
+        check_language(cgi_language, serverName);
+        check_file("", cgi_path, serverName);
+    }
 }
 
 void Server::location_check_incompabilities(Location location_conf, ServerConfiguration server_conf)
@@ -419,15 +349,12 @@ void Server::check_location(ServerConfiguration server_conf)
 		location_check_root(*location_it, server_conf);
 		location_check_maxBodySize(*location_it, server_conf);
 		location_check_index(*location_it, server_conf);
-		location_check_uploadsLocation(*location_it, server_conf);
-		location_check_errorPages(*location_it, server_conf);
-		location_check_cgiPath(*location_it, server_conf);
 		location_check_cgi(*location_it, server_conf);
 		location_check_incompabilities(*location_it, server_conf);
 	}
 }
 
-/* Checking duplicates */
+ /* Checking duplicates */
 
 void Server::check_server_name_duplicate()
 {
@@ -476,9 +403,7 @@ void Server::check_listen_duplicate()
             }
         }
     }
-}
-
-
+} 
 
 /* Main checking function */
 
@@ -490,16 +415,12 @@ void Server::check_parsing()
 	{
 		check_server_name(*iterator_tab_serv);
 		check_root(*iterator_tab_serv);
-		check_error_page(*iterator_tab_serv);
-		check_uploads(*iterator_tab_serv);
 		check_index(*iterator_tab_serv);
 		check_listen(*iterator_tab_serv);
 		check_max_body(*iterator_tab_serv);
-		check_path_cgi(*iterator_tab_serv);
 		check_interpreter_map(*iterator_tab_serv);
 		check_location(*iterator_tab_serv);
 	}
-
 	check_server_name_duplicate();
 	check_listen_duplicate();
 }

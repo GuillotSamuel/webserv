@@ -24,8 +24,6 @@ class Location
 		int                         		_autoindex;
 		std::string                 		_path_info;
 		std::string                 		_index;
-		std::string                 		_uploadsLocation;
-		std::string							_pathCgi;
 		std::map<std::string, std::string>	_cgi;
 		std::map<int, std::string>			_error_page;
 		std::map<int, std::string>			_redirection;
@@ -33,7 +31,9 @@ class Location
 	public:
 		Location(/* args */);
 		~Location();
-		
+
+
+		Location							&operator=(Location const &obj);
 		void								setBlockName(std::string blockName);
 		void								setBlockType(std::string blockType);
 		void								setAlias(std::string alias);
@@ -41,8 +41,6 @@ class Location
 		void								setClientMaxBodySize(int clientMaxBodySize);
 		void								setAutoIndex(int autoIndex);
 		void								setIndex(std::string index);
-		void								setUploadsLocation(std::string uploadsLocation);
-		void								setPathCgi(std::string pathCgi);
 		void								setCgi(std::string first, std::string second);
 		void								setErrorPage(int code, std::string errorPage);
 		void								setRedirection(int code, std::string to);
@@ -56,12 +54,11 @@ class Location
 		int									getAutoIndex() const;
 		std::string							getPathInfo() const;
 		std::string							getIndex() const;
-		std::string							getUploadsLocation() const;
-		std::string							getPathCgi() const;
 		std::map<std::string, std::string>	getCgi() const;
 		std::map<int, std::string>			getErrorPage() const;
 		std::map<int, std::string>			getRedirection() const;
 		int									getAllowedMethods(std::string wichOne);
 		std::map<std::string, int>			getAllowedMethodsTab() const;
-
 };
+
+std::ostream 	&operator<<(std::ostream &Cout, Location const &list);

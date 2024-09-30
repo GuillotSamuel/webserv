@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/19 22:52:10 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/26 13:44:14 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ Client::Client()
 	this->_path = "";
 	this->_host = ""; // contient le nom du domaine -> (server_name);
 	this->_currentFd = -1;
-	this->_filePath = "";
 }
 
 Client::~Client()
@@ -44,22 +43,21 @@ Client::~Client()
 
 void Client::setInfo(std::string info)
 {	
+	/****METHOD****/
 	size_t methodEnd = info.find(" ");
 	if (methodEnd != std::string::npos)
 		this->setMethod(info.substr(0, methodEnd));
 
+	/****URI****/
 	size_t path_start = info.find('/');
 	if (path_start != std::string::npos)
 	{
 		size_t path_end = info.find(' ', path_start);
 		if (path_end != std::string::npos)
-		{
-			this->_fullPath = info.substr(path_start, path_end - path_start);
-			path_start += 1;
 			this->_path = info.substr(path_start, path_end - path_start);
-		}
 	}
-	
+
+	/****HOST****/
 	size_t host = info.find("Host: ");
 	if (host != std::string::npos)
 	{
@@ -75,7 +73,8 @@ void Client::setInfo(std::string info)
 				this->setHost(tmphost);
 		}
     }
-    
+
+    /****USER-AGENT****/
 	size_t userAgent = info.find("User-Agent: ");
 	if (userAgent != std::string::npos)
 	{
@@ -85,6 +84,7 @@ void Client::setInfo(std::string info)
 			this->setUserAgent(info.substr(userAgent, (endUserAgent - userAgent)));
 	}
 
+ 	/****ACCEPT****/
 	size_t accept = info.find("Accept: ");
 	if (accept != std::string::npos)
 	{
@@ -94,6 +94,7 @@ void Client::setInfo(std::string info)
 			this->setAcceptMime(info.substr(accept, (endAccept - accept)));
 	}
 
+	/****ACCEPT-LANGUAGE****/
 	size_t acceptLanguage = info.find("Accept-Language: ");
 	if (acceptLanguage != std::string::npos)
 	{
@@ -103,6 +104,7 @@ void Client::setInfo(std::string info)
 			this->setAcceptLanguage(info.substr(acceptLanguage, (endAcceptLanguage - acceptLanguage)));
 	}
 
+	/****REFERER****/
 	size_t referer = info.find("Referer: ");
 	if (referer != std::string::npos)
 	{
@@ -112,6 +114,7 @@ void Client::setInfo(std::string info)
 			this->setReferer(info.substr(referer, (endReferer - referer)));
 	}
 
+	/****CONTENT-TYPE****/
 	size_t contentType = info.find("Content-Type: ");
 	if (contentType != std::string::npos)
 	{
@@ -121,6 +124,7 @@ void Client::setInfo(std::string info)
 			this->setContentType(info.substr(contentType, (endContentType - contentType)));
 	}
 
+	/****CONTENT-LENGTH****/
 	size_t contentLength = info.find("Content-Length: ");
 	if (contentLength != std::string::npos)
 	{
@@ -130,7 +134,8 @@ void Client::setInfo(std::string info)
 			this->setContentLength(info.substr(contentLength, (endContentLength - contentLength)));
 	}
 
-		size_t boundary = info.find("boundary=");
+	/****BOUNDARY****/
+	size_t boundary = info.find("boundary=");
 	if (boundary != std::string::npos)
 	{
 		boundary += 9;
@@ -139,6 +144,7 @@ void Client::setInfo(std::string info)
 			this->setBoundary(info.substr(boundary, (endBoundary - boundary)));
 	}
 }
+
 /*----------------------------------------------------------------------------*/
 /*                                   ACCESSOR                                 */
 /*----------------------------------------------------------------------------*/
@@ -180,16 +186,6 @@ std::string	Client::getBoundary() const {
 
 std::string	Client::getHost() const {
 	return (this->_host);
-}
-
-std::string Client::getFullPath() const
-{
-	return (this->_fullPath);
-}
-
-std::string Client::getFilePath() const
-{
-	return (this->_filePath);
 }
 
 int Client::getCurrentFd() const
@@ -245,19 +241,9 @@ void	Client::setHost(std::string host)
 	this->_host = host;
 }
 
-void Client::setFullPath(std::string str)
-{
-	this->_fullPath = str;
-}
-
 void Client::setCurrentFd(int currentFd)
 {
 	this->_currentFd = currentFd;
-}
-
-void Client::setFilePath(std::string filePath)
-{
-	this->_filePath = filePath;
 }
 
 /*----------------------------------------------------------------------------*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/26 16:12:42 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/28 17:02:50 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,9 @@
 
 ServerConfiguration::ServerConfiguration()
 {
-	char *tmp = getcwd(NULL, 0);
-	std::string tmp2(tmp, strlen(tmp));
-	free(tmp);
-	this->strPort = "";
-	this->imHere = tmp2 + "/";
+	this->_strPort = "";
 	this->_root = "";
-	this->root_index = "";
 	this->_index = "";
-	this->_uploadsLocation = "";
-	this->_errorPagesLocation = "";
-	// this->_errorPages[400] = "400.html";
-	// this->_errorPages[404] = "404.html";
-	this->_cgiBin_location = "";
 	this->_allowed_methods["GET"] = -1;
 	this->_allowed_methods["POST"] = -1;
 	this->_allowed_methods["DELETE"] = -1;
@@ -35,23 +25,11 @@ ServerConfiguration::ServerConfiguration()
 
 ServerConfiguration::~ServerConfiguration(void)
 {
-	this->_pathInfoCgi.clear();
 	this->_pathInfoMime.clear();
 	this->_errorPages.clear();
-	this->_interpreter_map.clear();
+	this->_interpreterMap.clear();
 	this->_allowed_methods.clear();
-	this->_locations_map.clear();
-	// this->_location.clear();
-}
-
-void ServerConfiguration::setRootIndex()
-{
-	this->root_index = this->_root + this->_index;
-}
-
-void ServerConfiguration::setInterpreterMap(std::string page, std::string interpreter)
-{
-	this->_interpreter_map.insert(std::make_pair(page, interpreter));
+	this->_location.clear();
 }
 
 void ServerConfiguration::setAllowedMethods(std::string method, int code)
@@ -59,24 +37,9 @@ void ServerConfiguration::setAllowedMethods(std::string method, int code)
 	this->_allowed_methods[method] = code;
 }
 
-void ServerConfiguration::setUploadsLocation(std::string str)
+void ServerConfiguration::setInterpreterMap(std::string extension, std::string interpreter)
 {
-	this->_uploadsLocation = str;
-}
-
-void ServerConfiguration::setErrorPagesLocation(std::string str)
-{
-	this->_errorPagesLocation = str;
-}
-
-void ServerConfiguration::setPathInfoCgi(std::string extension, std::string interpreter)
-{
-	this->_interpreter_map.insert(std::make_pair(extension, interpreter));
-}
-
-void ServerConfiguration::setCgiBinLocation(std::string str)
-{
-	this->_cgiBin_location = str;
+	this->_interpreterMap.insert(std::make_pair(extension, interpreter));
 }
 
 void ServerConfiguration::setListen(std::string address, std::string port)
@@ -140,22 +103,12 @@ std::vector<std::string> ServerConfiguration::getServerName(void) const
 
 std::string ServerConfiguration::getStrPort(void) const
 {
-	return (this->strPort);
+	return (this->_strPort);
 }
 
 std::string ServerConfiguration::getRoot(void) const
 {
 	return (this->_root);
-}
-
-std::string ServerConfiguration::getRootIndex(void) const
-{
-	return (this->root_index);
-}
-
-std::string ServerConfiguration::getUploadLocation() const
-{
-	return (this->_uploadsLocation);
 }
 
 std::string ServerConfiguration::getAutoIndexStr() const
@@ -185,39 +138,14 @@ std::string ServerConfiguration::getErrorPage(int code) const
 	}
 }
 
-std::string ServerConfiguration::getCgiLocation(void) const
-{
-	return (this->_cgiBin_location);
-}
-
-std::string ServerConfiguration::getErrorPageLocation(void) const
-{
-	return (this->_errorPagesLocation);
-}
-
-std::map<std::string, std::string> ServerConfiguration::getInterpreterMap(void) const
-{
-	return (this->_interpreter_map);
-}
-
 std::map<std::string, int> ServerConfiguration::getAllowedMethods(void) const
 {
 	return (this->_allowed_methods);
 }
 
-std::string ServerConfiguration::getimHere() const
-{
-	return (this->imHere);
-}
-
 std::map<std::string, std::string> ServerConfiguration::getInfoMime(void) const
 {
 	return (this->_pathInfoMime);
-}
-
-std::map<std::string, t_location> ServerConfiguration::getTabLocation(void) const
-{
-	return (this->_locations_map);
 }
 
 std::map<int, std::string> ServerConfiguration::getErrorPages(void) const
@@ -230,9 +158,9 @@ int ServerConfiguration::getClientMaxBodySize(void) const
 	return (this->_clientMaxBodySize);
 }
 
-std::map<std::string, std::string> ServerConfiguration::getPathInfoCgi() const
+std::map<std::string, std::string> ServerConfiguration::getInterpreterMap() const
 {
-	return (this->_pathInfoCgi);
+	return (this->_interpreterMap);
 }
 
 std::string ServerConfiguration::getIndex() const
@@ -275,7 +203,7 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 
 	Cout << WHITE << "Path info cgi map : \n"
 		 << RESET;
-	std::map<std::string, std::string> path_info_tab = sc.getPathInfoCgi();
+	std::map<std::string, std::string> path_info_tab = sc.getInterpreterMap();
 	std::map<std::string, std::string>::iterator path_info_it = path_info_tab.begin();
 	for (; path_info_it != path_info_tab.end(); path_info_it++)
 		Cout << CYAN << path_info_it->first << " : " << path_info_it->second << RESET << "\n";
@@ -306,12 +234,6 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 
 	Cout << WHITE << "Auto Index : " << RESET << CYAN << sc.getAutoIndex() << RESET << "\n\n";
 
-	Cout << WHITE << "Error Page Location : " << RESET << CYAN << sc.getErrorPageLocation() << RESET << "\n\n";
-
-	Cout << WHITE << "Cgi-bin : " << RESET << CYAN << sc.getCgiLocation() << RESET << "\n\n";
-
-	Cout << WHITE << "Upload interpreter : " << RESET << CYAN << sc.getUploadLocation() << RESET << "\n\n";
-
 	Cout << WHITE << "Interpreters path map : \n"
 		 << RESET;
 	std::map<std::string, std::string> interpreter_tab = sc.getInterpreterMap();
@@ -334,7 +256,6 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		Cout << "Auto index : " << GREEN << location_it->getAutoIndex() << RESET << "\n";
 		// Cout << "Path Info : " << GREEN << location_it->getPathInfo() << RESET << "\n";
 		Cout << "Index : " << GREEN << location_it->getIndex() << RESET << "\n";
-		Cout << "Uploads location : " << GREEN << location_it->getUploadsLocation() << RESET << "\n";
 		Cout << WHITE << "Allowed methods map : \n"
 			 << RESET;
 		std::map<std::string, int> location_allowed_methods_tab = location_it->getAllowedMethodsTab();
@@ -342,7 +263,7 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		for (; location_allowed_methods_it != location_allowed_methods_tab.end(); location_allowed_methods_it++)
 			Cout << GREEN << location_allowed_methods_it->first << " : " << location_allowed_methods_it->second << RESET << "\n";
 		Cout << "\n";
-		
+
 		Cout << WHITE << "Error pages : \n"
 			 << RESET;
 		std::map<int, std::string> error_tab = location_it->getErrorPage();
@@ -350,16 +271,14 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		for (; error_it != error_tab.end(); error_it++)
 			Cout << GREEN << error_it->first << " : " << error_it->second << RESET << "\n";
 		Cout << "\n";
-		
+
 		Cout << WHITE << "Redirections : \n";
 		std::map<int, std::string> redirection_tab = location_it->getRedirection();
 		std::map<int, std::string>::iterator redirection_it = redirection_tab.begin();
 		for (; redirection_it != redirection_tab.end(); redirection_it++)
 			Cout << GREEN << redirection_it->first << " : " << redirection_it->second << RESET << "\n";
 		Cout << "\n";
-		
-		Cout << "Cgi path : " << GREEN << location_it->getPathCgi() << RESET << "\n\n";
-		
+
 		Cout << WHITE << "Cgi : \n"
 			 << RESET;
 		std::map<std::string, std::string> cgi_tab = location_it->getCgi();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:31:35 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/23 14:57:49 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/25 12:27:30 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	main(int argc, char **argv)
 	try
 	{
 		Server server_object(argc, argv);
-		// server_object.startingServer();
-		// server_object.serverExecution();
+		server_object.startingServer();
+		server_object.serverExecution();
 	}
 	catch (const std::exception &e)
 	{
