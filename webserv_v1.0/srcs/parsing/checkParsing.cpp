@@ -6,7 +6,11 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/09/30 14:55:51 by mmahfoud         ###   ########.fr       */
+=======
+/*   Updated: 2024/09/30 17:01:48 by sguillot         ###   ########.fr       */
+>>>>>>> cc53ce0aec0438c6cbc2c4f2f16c63a3030b7134
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +29,8 @@ void Server::check_folder(const std::string &folder_path, const std::string &ser
 
 	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
 	{
-		error("Error: Cannot get current working directory: " + std::string(strerror(errno)));
+		error("Error: Cannot get current working directory: " + std::string(strerror(errno)) +
+			  " (" + folder_path + ") / server name -> " + server_name);
 	}
 
 	if (chdir(folder_path.c_str()) != 0)
@@ -42,7 +47,8 @@ void Server::check_folder(const std::string &folder_path, const std::string &ser
 
 	if (chdir(current_dir) != 0)
 	{
-		error("Error: Cannot restore original working directory: " + std::string(strerror(errno)));
+		error("Error: Cannot restore original working directory: " + std::string(strerror(errno)) +
+			  " (" + folder_path + ") / server name -> " + server_name);
 	}
 
 	if (stat(absolute_path, &info) != 0)
@@ -116,11 +122,14 @@ void Server::check_index(ServerConfiguration server_conf)
 	std::string index = server_conf.getIndex();
 	std::string index_path = root_path + "/" + index;
 
-	std::ifstream file(index_path.c_str());
-	if (!file.good())
+	if (!index.empty())
 	{
-		error("Error : Index file does not exist: " + index_path);
-	} // TO CORRECT ?
+		std::ifstream file(index_path.c_str());
+		if (!file.good())
+		{
+			error("Error : Index file does not exist: " + index_path + " / server name -> " + server_conf.getServerName()[0]);
+		}
+	}
 }
 
 void Server::check_listen(ServerConfiguration server_conf)
@@ -135,7 +144,7 @@ void Server::check_max_body(ServerConfiguration server_conf)
 
 	if (maxBodySize < 0)
 	{
-		error("Error: Invalid max body size. Must be a positive value.");
+		error("Error: Invalid max body size. Must be a positive value. / server name -> " + server_conf.getServerName()[0]);
 	}
 }
 
@@ -164,21 +173,21 @@ void Server::check_server_name(ServerConfiguration server_conf)
 
 		if (serverName.length() > 253)
 		{
-			error("Error: Server name exceeds maximum length (253 characters allowed).");
+			error("Error: Server name exceeds maximum length (253 characters allowed). / server name -> " + server_conf.getServerName()[0]);
 		}
 
 		for (size_t i = 0; i < serverName.length(); i++)
 		{
 			char c = serverName[i];
-			if (!isalnum(c) && c != '-' && c != '.') // TEST : trop restrictif ?
+			if (!isalnum(c) && c != '-' && c != '.')
 			{
-				error("Error : Server name contains invalid characters. It must contains alphanumeric characters and '-' / '.' only.");
+				error("Error : Server name contains invalid characters. It must contains alphanumeric characters and '-' / '.' only. / server name -> " + server_conf.getServerName()[0]);
 			}
 		}
 
 		if (serverName[0] == '-' || serverName[serverName.length() - 1] == '-')
 		{
-			error("Error : Server name can not start or end with '-'.");
+			error("Error : Server name can not start or end with '-'. / server name -> " + server_conf.getServerName()[0]);
 		}
 
 		std::stringstream ss(serverName);
@@ -187,7 +196,7 @@ void Server::check_server_name(ServerConfiguration server_conf)
 		{
 			if (label.length() > 63)
 			{
-				error("Error: Each label in the server name must not exceed 63 characters.");
+				error("Error: Each label in the server name must not exceed 63 characters. / server name -> " + server_conf.getServerName()[0]);
 			}
 		}
 	}
@@ -241,7 +250,7 @@ void Server::location_check_blockName(Location location_conf, ServerConfiguratio
 
 	if (blockName.length() > 253)
 	{
-		error("Error: Block name exceeds maximum length (253 characters allowed).");
+		error("Error: Block name exceeds maximum length (253 characters allowed). / server name -> " + server_conf.getServerName()[0]);
 	}
 
 	for (size_t i = 0; i < blockName.length(); i++)
@@ -249,13 +258,13 @@ void Server::location_check_blockName(Location location_conf, ServerConfiguratio
 		char c = blockName[i];
 		if (!isalnum(c) && c != '-' && c != '.' && c != '/')
 		{
-			error("Error : Block name contains invalid characters. It must contains alphanumeric characters and '-' / '.' only.");
+			error("Error : Block name contains invalid characters. It must contains alphanumeric characters and '-' / '.' only. / server name -> " + server_conf.getServerName()[0]);
 		}
 	}
 
 	if (blockName[0] == '-' || blockName[blockName.length() - 1] == '-')
 	{
-		error("Error : Block name can not start or end with '-'.");
+		error("Error : Block name can not start or end with '-'. / server name -> " + server_conf.getServerName()[0]);
 	}
 
 	std::stringstream ss(blockName);
@@ -264,7 +273,7 @@ void Server::location_check_blockName(Location location_conf, ServerConfiguratio
 	{
 		if (label.length() > 63)
 		{
-			error("Error: Each label in the block name must not exceed 63 characters.");
+			error("Error: Each label in the block name must not exceed 63 characters. / server name -> " + server_conf.getServerName()[0]);
 		}
 	}
 }
@@ -292,7 +301,7 @@ void Server::location_check_maxBodySize(Location location_conf, ServerConfigurat
 
 	if (maxBodySize < 0)
 	{
-		error("Error: Invalid max body size. Must be a positive value.");
+		error("Error: Invalid max body size. Must be a positive value. / server name -> " + server_conf.getServerName()[0]);
 	}
 }
 
@@ -306,14 +315,29 @@ void Server::location_check_index(Location location_conf, ServerConfiguration se
 	std::ifstream file(index_path.c_str());
 	if (!file.good())
 	{
+<<<<<<< HEAD
 		error("Error : Index file does not exist: " + index_path);
+=======
+		error("Error : Index file does not exist: " + index_path + " / server name -> " + server_conf.getServerName()[0]);
+>>>>>>> cc53ce0aec0438c6cbc2c4f2f16c63a3030b7134
 	}
 }
 
 void Server::location_check_cgi(Location location_conf, ServerConfiguration server_conf)
 {
-	(void)location_conf;
-	(void)server_conf;
+	std::string serverName = !server_conf.getServerName().empty() ? server_conf.getServerName()[0] : "Unknown Server";
+
+	const std::map<std::string, std::string> &cgi_map = location_conf.getCgi();
+
+	std::map<std::string, std::string>::const_iterator cgi_it = cgi_map.begin();
+	for (; cgi_it != cgi_map.end(); ++cgi_it)
+	{
+		const std::string cgi_language = cgi_it->first;
+		const std::string &cgi_path = cgi_it->second;
+
+		check_language(cgi_language, serverName);
+		check_file("", cgi_path, serverName);
+	}
 }
 
 void Server::location_check_incompabilities(Location location_conf, ServerConfiguration server_conf)
@@ -341,6 +365,7 @@ void Server::check_location(ServerConfiguration server_conf)
 	}
 }
 
+<<<<<<< HEAD
  /* Checking duplicates */
 
 void Server::check_server_name_duplicate()
@@ -365,10 +390,37 @@ void Server::check_server_name_duplicate()
             }
         }
     }
+=======
+/* Checking duplicates */
+
+void Server::check_server_name_duplicate()
+{
+	std::vector<std::string> unique_server_names;
+
+	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
+	for (; it != this->tab_serv.end(); it++)
+	{
+		const std::vector<std::string> &server_names = it->getServerName();
+
+		std::vector<std::string>::const_iterator server_name_it = server_names.begin();
+		for (; server_name_it != server_names.end(); server_name_it++)
+		{
+			if (std::find(unique_server_names.begin(), unique_server_names.end(), *server_name_it) != unique_server_names.end())
+			{
+				error("Error: Multiple servers have the same name: " + *server_name_it);
+			}
+			else
+			{
+				unique_server_names.push_back(*server_name_it);
+			}
+		}
+	}
+>>>>>>> cc53ce0aec0438c6cbc2c4f2f16c63a3030b7134
 }
 
 void Server::check_listen_duplicate()
 {
+<<<<<<< HEAD
     std::vector<std::string> unique_listen;
 
     std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
@@ -391,6 +443,30 @@ void Server::check_listen_duplicate()
         }
     }
 } 
+=======
+	std::vector<std::string> unique_listen;
+
+	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
+	for (; it != this->tab_serv.end(); it++)
+	{
+		const std::multimap<std::string, std::string> &port_list = it->getPortList();
+
+		std::multimap<std::string, std::string>::const_iterator listen_it = port_list.begin();
+		for (; listen_it != port_list.end(); listen_it++)
+		{
+			std::string concat_listen = listen_it->first + listen_it->second;
+			if (std::find(unique_listen.begin(), unique_listen.end(), concat_listen) != unique_listen.end())
+			{
+				error("Error: Multiple servers have the listen parameter: " + concat_listen);
+			}
+			else
+			{
+				unique_listen.push_back(concat_listen);
+			}
+		}
+	}
+}
+>>>>>>> cc53ce0aec0438c6cbc2c4f2f16c63a3030b7134
 
 /* Main checking function */
 

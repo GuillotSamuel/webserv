@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 16:12:51 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 17:05:20 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,7 +329,6 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 	{
 		std::multimap<std::string, std::string> portList = it->getPortList();
 		std::multimap<std::string, std::string>::iterator it2 = portList.begin();
-		it2 = portList.begin();
 		for (; it2 != portList.end(); it2++)
 		{
 			if (it2->first == list->getIpAddress() && it2->second == list->getPortStr())
@@ -395,7 +394,6 @@ std::string	Server::readBody(Client *client, std::string *receivedLine)
 		log("Unable to open file.", 2);
 	return (*receivedLine);
 }
-
 
 //Closing The server using key CTRL /C.
 void	Server::closeServer()
