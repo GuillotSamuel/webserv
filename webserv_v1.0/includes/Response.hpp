@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 11:37:56 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 12:11:18 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ class Response
 		int									_autoIndex;
 		int									_status;
 		Client								*_client;
+		std::map<std::string, std::string>	_mimePath;
 
 		/*---------------------------------------------------------------*/
 		/*                   FONCTION GENERATE RESPONSE            		 */
@@ -47,7 +48,7 @@ class Response
 		std::string							readFileContent(std::string path);
 		std::string							getMimeType();
 		void								setFilePath(std::string root, std::string fileRequested);
-
+		std::map<std::string, std::string>	createMimePath();
 	public:
 											Response(Client *client);
 											~Response();

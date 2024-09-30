@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 12:03:30 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 12:11:27 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ Response::Response(Client *client)
 	this->_index = "";
 	this->_blockName = "";
 	this->_client = client;
+	createMimePath();
 }
 
 Response::~Response()
@@ -358,6 +359,38 @@ std::string	Response::getMimeType()
 
 	return ("application/octet-stream");
 }
+
+std::map<std::string, std::string>	Response::createMimePath()
+{
+	std::map<std::string, std::string> mimePath;
+
+	mimePath[".sh"] = "text/html";
+	mimePath[".py"] = "text/html";
+	mimePath[".html"] = "text/html";
+	mimePath[".css"] = "text/css";
+	mimePath[".js"] = "application/javascript";
+	mimePath[".json"] = "application/json";
+	mimePath[".jpg"] = "image/jpeg";
+	mimePath[".jpeg"] = "image/jpeg";
+	mimePath[".png"] = "image/png";
+	mimePath[".gif"] = "image/gif";
+	mimePath[".bmp"] = "image/bmp";
+	mimePath[".ico"] = "image/x-icon";
+	mimePath[".webp"] = "image/webp";
+	mimePath[".svg"] = "image/svg+xml";
+	mimePath[".mp4"] = "video/mp4";
+	mimePath[".webm"] = "video/webm";
+	mimePath[".avi"] = "video/x-msvideo";
+	mimePath[".mp3"] = "audio/mpeg";
+	mimePath[".pdf"] = "application/pdf";
+	mimePath[".xml"] = "application/xml";
+	mimePath[".ttf"] = "font/ttf";
+	mimePath[".woff"] = "font/woff";
+	mimePath[".woff2"] = "font/woff2";
+	mimePath[".csv"] = "text/csv";
+	return (mimePath);
+}
+
 
 /*----------------------------------------------------------------------------*/
 /*                                   SETTER                                   */
