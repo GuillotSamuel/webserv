@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 17:04:49 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 18:11:48 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 Response::Response(Client *client)
 {
-	this->_serverName = "";
 	this->_locationType = "";
 	this->_alias = "";
 	this->_root = "";
@@ -46,7 +45,12 @@ Response::~Response()
 
 void	Response::setInfo(ServerConfiguration *serv, Location location)
 {
-	this->_serverName = *serv->getServerName().begin();
+	std::vector<std::string> tab = serv->getServerName();
+	std::vector<std::string>::iterator it = tab.begin();
+	for (; it != tab.end(); it++)
+	{
+		this->_serverName.push_back(*it);
+	}
 	if (location.getBlockName() != "")
 	{
 		this->_locationType = location.getBlockType();
@@ -73,8 +77,7 @@ void	Response::setInfo(ServerConfiguration *serv, Location location)
 		else
 			this->_interpreterMap = serv->getInterpreterMap();
 			
-		if (location.getAllowedMethods("GET") != -1
-			&& location.getAllowedMethods("POST") != -1)
+		if (!location.getAllowedMethodsTab().empty())
 		{
 			this->_allowed_methods["GET"] = location.getAllowedMethods("GET");
 			this->_allowed_methods["POST"] = location.getAllowedMethods("POST");
@@ -107,7 +110,7 @@ void	Response::setInfo(ServerConfiguration *serv, Location location)
 
 std::string	Response::generateResponse()
 {
-	if (this->_allowed_methods[this->_client->getMethod()] == 0)
+	if (this->_allowed_methods[this->_client->getMethod()] != 1)
 	{
 		_code = "403";
 		return (ft_forbidden());
@@ -127,9 +130,12 @@ std::string	Response::generateResponse()
 			path_tmp.replace(stBlock, this->_blockName.size(), this->_alias);
 		_filePath = this->_root + path_tmp;
 	}
-	else if (!this->_redirection.empty())
+	else if (!this->_redirection.empty() && this->_client->getPath() == this->_blockName)
 	{
-		_code = this->_redirection.begin()->first;
+		std::stringstream ss;
+		ss << this->_redirection.begin()->first;
+		std::string str = ss.str();
+		_code = str;
 		_filePath = this->_redirection.begin()->second;
 	}
 	else if (this->_client->getPath() == "/")
@@ -139,12 +145,22 @@ std::string	Response::generateResponse()
 	}
 	else
 	{
-		_filePath = this->_root + this->_client->getPath();
-	}
-	if (access(_filePath.c_str(), F_OK) == 0) // trouver le fichier en question si tu trouve pas le fichier
-	{
-		if (!this->_interpreterMap.empty())//comparer avec l'extension 
+		_code = "200";
+		std::vector<std::string>::iterator it = this->_serverName.begin();
+		for (; it != _serverName.end(); it++)
 		{
+			if (_client->getPath() == "/" + *it)
+				_filePath = this->_root + this->_index;
+		}
+		if (_filePath == "")
+			_filePath = this->_root + this->_client->getPath();
+	}
+	if (access(_filePath.c_str(), F_OK) == 0)
+	{
+		std::cout << this->_filePath << std::endl;
+		if (!this->_interpreterMap.empty())
+		{
+			
 			size_t ext = this->_filePath.rfind(".");
 			if (ext != std::string::npos)
 			{
@@ -160,27 +176,11 @@ std::string	Response::generateResponse()
 			}
 		}
 	} else {
-		
-		return (ft_badRequest()); // not found
+		_code = "404";
+		return (ft_badRequest());
 	}
 	
-	
 	// -> la methods requested -> content length ?
-
-	/* 4
-	->servir un fichier static
-	->If the request is for a static file, find the file on disk using 
-	the combination of _root and _path.
-	If the file exists, set the appropriate headers (e.g., Content-Type 
-	based on the file extension) and send the file content
-	->Use _index to find a default file if the request is for a directory.
-	*/
-
-	/* 5
-	->If any error occurs (e.g., file not found, method not allowed),
-	serve an appropriate error page from _errorPages.
-	*/
-
 	/*7. Autoindex
     ->If _autoIndex is enabled for a directory, generate an index page listing the files and directories if no _index file is found.*/
 
@@ -194,23 +194,31 @@ std::string	Response::generateResponse()
 		return (ft_badRequest());
 }
 
+std::string	Response::firstHeader()
+{
+	if (_code == "301")
+		return ("HTTP/1.1 301 Moved Permanently\r\n");
+	else if (_code == "302")
+		return ("HTTP/1.1 302 Moved Temporarily\r\n");
+	return ("HTTP/1.1 200 OK\r\n");
+}
+
 std::string Response::ft_get() // a revoir
 {
 	Server::log("Server's receive a GET request.", 1);
-	
+	std::cout << this->_filePath << std::endl;
 	std::string content = readFileContent(this->_filePath);
 	std::string response = "";
-	std::stringstream ss;
 	Server::log("The file requested \"" + this->_filePath + "\" was found.", 1);
 	std::string mimeType = getMimeType();
 
-	response = "HTTP/1.1 " + _code + " OK\r\n";
+	response = firstHeader();
 	response += "Content-Type: " + mimeType + "\r\n";
 	std::ostringstream oss;
 	oss << content.size();
 	response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
-	response += "Server: " + this->_serverName + "\r\n\r\n";
+	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
 	response += content;
 	return (response);
 }
@@ -224,13 +232,13 @@ std::string Response::ft_post()
 
 	std::string mimeType = getMimeType();
 
-	response = "HTTP/1.1 " + _code + " OK\r\n";
+	response = firstHeader();
 	response += "Content-Type: " + mimeType + "\r\n";
 	std::ostringstream oss;
 	oss << content.size();
 	response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
-	response += "Server: " + this->_serverName + "\r\n\r\n";
+	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
 	response += content;
 
 	return (response);
@@ -250,7 +258,7 @@ std::string Response::ft_delete()
 		oss << content.size();
 		response += "Content-Length: " + oss.str() + "\r\n";
 		response += "Connection: close\r\n";
-		response += "Server: " + this->_serverName + "\r\n\r\n";
+		response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
 		response += "File not found";
 
 		return (response);
@@ -260,7 +268,7 @@ std::string Response::ft_delete()
 	{
 		std::string response = "HTTP/1.1 204 No Content\r\n";
 		response += "Connection: close\r\n";
-		response += "Server: " + this->_serverName + "\r\n\r\n";
+		response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
 
 		return (response);
 	}
@@ -286,7 +294,7 @@ std::string Response::ft_badRequest()
     oss << content.size();
     response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
-	response += "Server: " + this->_serverName + "\r\n\r\n";
+	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
 	response += content;
 	
 	return (response);
@@ -302,7 +310,7 @@ std::string Response::ft_forbidden()
     oss << content.size();
     response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
-	response += "Server: " + this->_serverName + "\r\n\r\n";
+	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
 	response += content;
 	
 	return (response);
@@ -331,6 +339,7 @@ std::string	Response::getMimeType()
 	if (ext != std::string::npos)
 	{
 		std::string extension = this->_filePath.substr(ext);
+		std::cout << extension << std::endl;
 		if (this->_mimePath.find(extension) != this->_mimePath.end())
 		{
 			return (this->_mimePath[extension]);
@@ -407,11 +416,6 @@ void Response::setFilePath(std::string root, std::string fileRequested)
 /*                                   GETTER                                   */
 /*----------------------------------------------------------------------------*/
 
-std::string Response::getServerName() const
-{
-	return (this->_serverName);
-}
-
 std::string	Response::getAlias() const
 {
 	return (this->_alias);
@@ -473,7 +477,7 @@ std::map<int, std::string>	Response::getRedirection() const
 
 std::ostream &operator<<(std::ostream &Cout, Response const &response)
 {
-	Cout << "server name	:" << response.getServerName() << std::endl;
+	// Cout << "server name	:" << response.getServerName() << std::endl;
 	Cout << "alias			:" << response.getAlias() << std::endl;
 	Cout << "root			:" << response.getRoot() << std::endl;
 	Cout << "index			:" << response.getIndex() << std::endl;

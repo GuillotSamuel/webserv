@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 17:03:51 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 17:51:11 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ class Response
 		/*---------------------------------------------------------------*/
 		/*                   ATTRIBUT SERVER/LOCATION             		 */
 		/*---------------------------------------------------------------*/
-		std::string							_serverName;
+		std::vector<std::string>			_serverName;
 		std::string							_blockName;
 		std::string							_locationType;
 		std::string                 		_alias; // vrai root vers mais ne remplace le root du serveur
@@ -50,6 +50,7 @@ class Response
 		std::string							getMimeType();
 		void								setFilePath(std::string root, std::string fileRequested);
 		std::map<std::string, std::string>	createMimePath();
+		std::string							firstHeader();
 		// void								cgiExecution();
 	public:
 											Response(Client *client);
@@ -59,7 +60,6 @@ class Response
 		std::string							getAlias() const;
 		std::string							getRoot() const;
 		std::string							getIndex() const;
-		std::string							getUploadsLocation() const;
 		std::string							getFilePath() const;
 		std::string							getServerName() const;
 		std::map<std::string, int>			getAllowedMethodsTab() const;
