@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 19:10:28 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:46:39 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,14 +247,11 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 	client->setIpAdressConnexion(list->getIpAddress());
 	client->setPortStr(list->getPortStr());
 	getServBlock(client, list);
-	if (!this->currentConfig) //TEST
-		exit(EXIT_FAILURE);//TEST
 	getLocationBlock(client);
-	
+
 	Response *response = new Response(client);
 	response->setInfo(this->currentConfig, this->_currentLocation);
 	this->_response = response->generateResponse();
-	std::cout << this->_response << std::endl;
 	delete client;
 	delete response;
 	log("End of the request.", 1);

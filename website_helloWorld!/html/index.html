@@ -23,33 +23,24 @@
             })
             .catch(error => console.error('Error: C interpreter not installed:', error));
 
-            // fetch('/cgi-bin/hello.cpp', {
-            //     method: 'POST'
-            // })
-            // .then(response => response.text())
-            // .then(data => {
-            //     document.getElementById("cgi-output-cpp").innerHTML = data;
-            // })
-            // .catch(error => console.error('Error: C++ interpreter not installed:', error));
+            fetch('/cgi-bin/hello.py', {
+                method: 'POST'
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output-py").innerHTML = data;
+            })
+            .catch(error => console.error('Error: Python interpreter not installed:', error));
 
-            // fetch('/cgi-bin/hello.py', {
-            //     method: 'POST'
-            // })
-            // .then(response => response.text())
-            // .then(data => {
-            //     document.getElementById("cgi-output-py").innerHTML = data;
-            // })
-            // .catch(error => console.error('Error: Python interpreter not installed:', error));
+            fetch('/cgi-bin/hello.rs', {
+                method: 'POST'
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output-rs").innerHTML = data;
+            })
+            .catch(error => console.error('Error: Rust interpreter not installed:', error));
 
-            // fetch('/cgi-bin/hello.rs', {
-            //     method: 'POST'
-            // })
-            // .then(response => response.text())
-            // .then(data => {
-            //     document.getElementById("cgi-output-rs").innerHTML = data;
-            // })
-            // .catch(error => console.error('Error: Rust interpreter not installed:', error));
-            
         }
 
         window.onload = loadCGI;
@@ -80,28 +71,6 @@
                     int main() {
                         printf("Content-Type: text/html\n\n");
                         printf("&lt;h1&gt;Hello, World!&lt;/h1&gt;\n");
-                        return 0;
-                    }
-                </pre>
-            </div>
-            <h1>/</h1>
-        </div>
-
-        <div class="cgi_container">
-            <h1>/</h1>
-            <h1>C++</h1>
-            <div class="exec_container">
-                <h2>C++ CGI execution:</h2>
-                <div id="cgi-output-cpp"></div>
-            </div>
-            <div class="code_container">
-                <h2>C++ Code:</h2>
-                <pre>
-                    #include &lt;iostream&gt;
-
-                    int main() {
-                        std::cout &lt;&lt; "Content-Type: text/html\n\n";
-                        std::cout &lt;&lt; "&lt;h1&gt;Hello, World!&lt;/h1&gt;\n";
                         return 0;
                     }
                 </pre>
