@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 18:44:07 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:06:41 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ class Response
 		std::map<std::string, std::string>	createMimePath();
 		std::string							firstHeader();
 		void								filePathFinder();
-		// void								cgiExecution();
+		std::map<std::string, std::string>	createEnvCgi();
+		std::string							cgiExecution();
 	public:
 											Response(Client *client);
 											~Response();
@@ -64,7 +65,6 @@ class Response
 		std::string							getRoot() const;
 		std::string							getIndex() const;
 		std::string							getFilePath() const;
-		std::string							getServerName() const;
 		std::map<std::string, int>			getAllowedMethodsTab() const;
 		std::map<int, std::string>			getErrorPage() const;
 		std::map<int, std::string>			getRedirection() const;

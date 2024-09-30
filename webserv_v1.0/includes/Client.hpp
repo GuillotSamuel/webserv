@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:44 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/27 12:11:16 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:01:03 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ class Client
 		std::string	_host;
 		std::string	_path; // path with the '/' at start
 		int			_currentFd; // fd of the current socketclient
+		std::string	_ipAdressConnexion;
+		std::string	_portConnexion;
 		
 
 	public:
@@ -63,6 +65,8 @@ class Client
 		std::string getBoundary() const;
 		std::string	getHost() const;
 		std::string	getPath() const;
+		std::string	getIpAdressConnexion() const;
+		std::string	getPortStr() const;
 		int			getCurrentFd() const;
 
 		/*---------------------------------------------------------------*/
@@ -79,6 +83,8 @@ class Client
 		void		setBoundary(std::string boundary);
 		void		setHost(std::string host);
 		void		setCurrentFd(int currentFd);
+		void		setIpAdressConnexion(std::string ipadress);
+		void		setPortStr(std::string port);
 
 };
 

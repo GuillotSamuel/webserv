@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/26 13:44:14 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:01:37 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ Client::Client()
 	this->_path = "";
 	this->_host = ""; // contient le nom du domaine -> (server_name);
 	this->_currentFd = -1;
+	this->_ipAdressConnexion = "";
+	this->_portConnexion = "";
 }
 
 Client::~Client()
@@ -198,6 +200,16 @@ std::string Client::getPath() const
 	return (this->_path);
 }
 
+std::string Client::getIpAdressConnexion() const
+{
+    return (this->_ipAdressConnexion);
+}
+
+std::string Client::getPortStr() const
+{
+    return (this->_portConnexion);
+}
+
 /*----------------------------------------------------------------------------*/
 
 void	Client::setMethod(std::string method) {
@@ -244,6 +256,16 @@ void	Client::setHost(std::string host)
 void Client::setCurrentFd(int currentFd)
 {
 	this->_currentFd = currentFd;
+}
+
+void Client::setIpAdressConnexion(std::string ipadress)
+{
+	this->_ipAdressConnexion = ipadress;
+}
+
+void Client::setPortStr(std::string port)
+{
+	this->_portConnexion = port;
 }
 
 /*----------------------------------------------------------------------------*/

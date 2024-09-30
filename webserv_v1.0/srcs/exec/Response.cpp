@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 18:39:40 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:08:51 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ std::string	Response::generateResponse()
 				{
 					if (_extension == it->first)
 					{
-						std::cout << "c'est un cgi" << std::endl;
+						cgiExecution();
 					}
 				}
 			}
@@ -169,6 +169,62 @@ std::string	Response::firstHeader()
 	return ("HTTP/1.1 200 OK\r\n");
 }
 
+std::map<std::string, std::string>	Response::createEnvCgi()
+{
+	std::map<std::string, std::string> env;
+	if (_client->getMethod() == "POST")
+	{
+		env["CONTENT_TYPE"] = _client->getContentType(); // only for post
+		env["CONTENT_LENGTH"] = _client->getContentLength(); // only for post
+	}
+	//SERVEUR_VAR
+	env["SERVER_SOFTWARE"] = std::string("Webserv/1.0");
+	env["SERVER_NAME"] = *this->_serverName.begin();
+	env["GATEWAY_INTERFACE"] = std::string("CGI/1.1");
+
+	//REQUEST_VAR
+	env["SERVER_PROTOCOL"] = std::string("HTTP/1.1");
+	env["SERVER_PORT"] = _client->getPortStr();
+	env["REQUEST_METHOD"] = _client->getMethod();
+	env["PATH_INFO"] = _client->getPath();
+	env["PATH_TRANSLATED"] = _filePath;
+	env["SCRIPT_NAME"] = _filePath;
+	env["QUERY_STRING"] = std::string(""); // ???
+	env["REMOTE_HOST"] = std::string("");
+	env["REMOTE_ADDR"] = _client->getIpAdress();
+
+	//CLIENT_VAR
+	env["HTTP_ACCEPT"] = _client->getAcceptMime();
+	env["HTTP_ACCEPT_LANGUAGE"] = _client->getAcceptLanguage();
+	env["HTTP_USER_AGENT"] = _client->getUserAgent();
+	env["HTTP_COOKIE"] = std::string("");
+	env["HTTP_REFERER"] = _client->getReferer();
+	return (env);
+}
+
+std::string	Response::cgiExecution()
+{
+	Cgi *cgi = new Cgi();
+	// cgi->setExecuter(this->_executer_cgi);
+	cgi->setPath(_filePath.c_str());
+	cgi->setEnv(createEnvCgi()); 
+	std::string content = cgi->executeCgi();
+
+	std::string mimeType = getMimeType();
+
+	std::string response = "HTTP/1.1 200 OK\r\n";
+	response += "Content-Type: " + mimeType + "\r\n";
+	std::ostringstream oss;
+	oss << content.size();
+	response += "Content-Length: " + oss.str() + "\r\n";
+	response += "Connection: close\r\n";
+	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+	response += content;
+
+	delete cgi;
+	return (response);
+}
+
 void	Response::filePathFinder()
 {
 	if (this->_locationType != "" && this->_locationType == "equal")
@@ -198,9 +254,7 @@ void	Response::filePathFinder()
 	{
 		_code = "200";
 		if (_index != "")
-		{
 			_filePath = this->_root + this->_index;
-		}
 		else if (_autoIndex == 1)
 		{
 			_autoIndexUse = 1;
@@ -415,28 +469,7 @@ std::map<std::string, std::string>	Response::createMimePath()
 	return (mimePath);
 }
 
-// void	Response::cgiExecution()
-// {
-// 	Cgi *cgi = new Cgi();
-// 	// cgi->setExecuter(this->_executer_cgi);
-// 	cgi->setPath(_filePath.c_str());
-// 	cgi->setEnv(); 
-// 	std::string content = cgi->executeCgi();
 
-// 	std::string mimeType = getMimeType();
-
-// 	std::string response = "HTTP/1.1 200 OK\r\n";
-// 	response += "Content-Type: " + mimeType + "\r\n";
-// 	std::ostringstream oss;
-// 	oss << content.size();
-// 	response += "Content-Length: " + oss.str() + "\r\n";
-// 	response += "Connection: close\r\n";
-// 	response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
-// 	response += content;
-
-// 	this->_response = response;
-// 	delete cgi;
-// }
 
 /*----------------------------------------------------------------------------*/
 /*                                   SETTER                                   */
