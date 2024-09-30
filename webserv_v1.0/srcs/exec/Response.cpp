@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 18:14:20 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 18:26:13 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,18 @@ std::string	Response::generateResponse()
 	else if (this->_client->getPath() == "/")
 	{
 		_code = "200";
-		_filePath = this->_root + this->_index;
+		if (_index != "")
+		{
+			_filePath = this->_root + this->_index;
+		}
+		else if (_autoIndex == 1)
+		{
+			return (autoIndex());
+		}
+		else
+		{
+			_filePath = "";
+		}
 	}
 	else
 	{

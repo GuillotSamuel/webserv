@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 17:12:04 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 17:41:10 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 18:24:32 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 std::string Response::autoIndex()
 {
 	std::stringstream html;
+	std::string response;
 	std::string alias = getAlias();
 	std::string root = getRoot();
 	std::string filePath = getFilePath();
@@ -46,6 +47,7 @@ std::string Response::autoIndex()
 	dir = opendir(this->_filePath.c_str());
 	if (!dir)
 	{
+		_code = "403";
 		return (ft_forbidden());
 	}
 
@@ -63,5 +65,14 @@ std::string Response::autoIndex()
 
 	html << "</ul>\n</div>\n</div>\n</main>\n</body>\n</html>\n";
 
-	return (html.str());
+	response = firstHeader();
+	response += "Content-Type: text/html \r\n";
+	std::ostringstream oss;
+	oss << html.str().size();
+	response += "Content-Length: " + oss.str() + "\r\n";
+	response += "Connection: close\r\n";
+	response += "Server: " + *this->_serverName.begin() += "\r\n\r\n";
+	response += html.str();
+
+	return (response);
 }
