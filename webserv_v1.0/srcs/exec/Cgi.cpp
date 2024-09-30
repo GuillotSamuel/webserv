@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:25:35 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/25 12:26:47 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:52:02 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,41 +31,9 @@ Cgi::~Cgi()
 /*                              METHOD/SERVER                                 */
 /*----------------------------------------------------------------------------*/
 
-void		Cgi::setEnv(ServerConfiguration *server, Client client)
+void		Cgi::setEnv(std::map<std::string, std::string> env)
 {
-	char *actudir = getcwd(NULL, 0);
-	std::string here(actudir, strlen(actudir));
-	free(actudir);
-	std::string absolutepath = here + this->_path;
-
-	if (client.getMethod() == "POST")
-	{
-		this->_env["CONTENT_TYPE"] = client.getContentType(); // only for post
-		this->_env["CONTENT_LENGTH"] = client.getContentLength(); // only for post
-	}
-
-	//SERVEUR_VAR
-	this->_env["SERVER_SOFTWARE"] = std::string("Webserv/1.0");
-	this->_env["SERVER_NAME"] = *server->getServerName().begin();
-	this->_env["GATEWAY_INTERFACE"] = std::string("CGI/1.1");
-
-	//REQUEST_VAR
-	this->_env["SERVER_PROTOCOL"] = std::string("HTTP/1.1");
-	this->_env["SERVER_PORT"] = server->getStrPort();
-	this->_env["REQUEST_METHOD"] = client.getMethod();
-	this->_env["PATH_INFO"] = this->_path;
-	this->_env["PATH_TRANSLATED"] = absolutepath;
-	this->_env["SCRIPT_NAME"] = this->_path; //le chemin vers le script executer
-	this->_env["QUERY_STRING"] = std::string("");
-	this->_env["REMOTE_HOST"] = std::string(""); // laisse vide si inconnu
-	this->_env["REMOTE_ADDR"] = client.getIpAdress();
-
-	//CLIENT_VAR
-	this->_env["HTTP_ACCEPT"] = client.getAcceptMime();
-	this->_env["HTTP_ACCEPT_LANGUAGE"] = client.getAcceptLanguage();
-	this->_env["HTTP_USER_AGENT"] = client.getUserAgent();
-	this->_env["HTTP_COOKIE"] = std::string("");
-	this->_env["HTTP_REFERER"] = client.getReferer();
+	this->_env = env;
 }
 
 
@@ -126,7 +94,7 @@ std::string	Cgi::executeCgi()
 	}
 	close(pipefd[0]);
 	waitpid(pid, NULL, 0);
-	std::string getContent(buffer);
+	std::string getContent(buffer, strlen(buffer));
 	return (getContent);
 }
 

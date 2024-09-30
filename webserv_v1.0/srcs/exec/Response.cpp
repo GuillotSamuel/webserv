@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 18:26:13 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:47:13 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ Response::Response(Client *client)
 	this->_client = client;
 	this->_mimePath = createMimePath();
 	this->_code = "";
+	this->_autoIndexUse = 0;
 }
 
 Response::~Response()
@@ -115,60 +116,11 @@ std::string	Response::generateResponse()
 		_code = "403";
 		return (ft_forbidden());
 	}
-	if (this->_locationType != "" && this->_locationType == "equal")
-	{
-		_code = "200";
-		_filePath = this->_root + this->_client->getPath();
-	}
-	if (this->_alias != "")
-	{
-		_code = "200";
-		size_t stBlock = this->_client->getPath().find(this->_blockName);
-		
-		std::string path_tmp = this->_client->getPath();
-		if (stBlock != std::string::npos)
-			path_tmp.replace(stBlock, this->_blockName.size(), this->_alias);
-		_filePath = this->_root + path_tmp;
-	}
-	else if (!this->_redirection.empty() && this->_client->getPath() == this->_blockName)
-	{
-		std::stringstream ss;
-		ss << this->_redirection.begin()->first;
-		std::string str = ss.str();
-		_code = str;
-		_filePath = this->_redirection.begin()->second;
-	}
-	else if (this->_client->getPath() == "/")
-	{
-		_code = "200";
-		if (_index != "")
-		{
-			_filePath = this->_root + this->_index;
-		}
-		else if (_autoIndex == 1)
-		{
-			return (autoIndex());
-		}
-		else
-		{
-			_filePath = "";
-		}
-	}
-	else
-	{
-		_code = "200";
-		std::vector<std::string>::iterator it = this->_serverName.begin();
-		for (; it != _serverName.end(); it++)
-		{
-			if (_client->getPath() == "/" + *it)
-				_filePath = this->_root + this->_index;
-		}
-		if (_filePath == "")
-			_filePath = this->_root + this->_client->getPath();
-	}
+	filePathFinder();
+	if (_autoIndexUse == 1)
+		return (autoIndex());
 	if (access(_filePath.c_str(), F_OK) == 0)
 	{
-		std::cout << this->_filePath << std::endl;
 		if (!this->_interpreterMap.empty())
 		{
 			
@@ -180,9 +132,7 @@ std::string	Response::generateResponse()
 				for (; it != this->_interpreterMap.end(); it++)
 				{
 					if (_extension == it->first)
-					{
-						std::cout << "c'est un cgi" << std::endl;
-					}
+						return (cgiExecution(it->second));
 				}
 			}
 		}
@@ -214,10 +164,132 @@ std::string	Response::firstHeader()
 	return ("HTTP/1.1 200 OK\r\n");
 }
 
+std::map<std::string, std::string>	Response::createEnvCgi()
+{
+	std::map<std::string, std::string> env;
+	if (_client->getMethod() == "POST")
+	{
+		env["CONTENT_TYPE"] = _client->getContentType(); // only for post
+		env["CONTENT_LENGTH"] = _client->getContentLength(); // only for post
+	}
+	//SERVEUR_VAR
+	env["SERVER_SOFTWARE"] = std::string("Webserv/1.0");
+	env["SERVER_NAME"] = *this->_serverName.begin();
+	env["GATEWAY_INTERFACE"] = std::string("CGI/1.1");
+
+	//REQUEST_VAR
+	env["SERVER_PROTOCOL"] = std::string("HTTP/1.1");
+	env["SERVER_PORT"] = _client->getPortStr();
+	env["REQUEST_METHOD"] = _client->getMethod();
+	env["PATH_INFO"] = _client->getPath();
+	env["PATH_TRANSLATED"] = _filePath;
+	env["SCRIPT_NAME"] = _filePath;
+	env["QUERY_STRING"] = std::string(""); // ???
+	env["REMOTE_HOST"] = std::string("");
+	env["REMOTE_ADDR"] = _client->getIpAdress();
+
+	//CLIENT_VAR
+	env["HTTP_ACCEPT"] = _client->getAcceptMime();
+	env["HTTP_ACCEPT_LANGUAGE"] = _client->getAcceptLanguage();
+	env["HTTP_USER_AGENT"] = _client->getUserAgent();
+	env["HTTP_COOKIE"] = std::string("");
+	env["HTTP_REFERER"] = _client->getReferer();
+	return (env);
+}
+
+std::string	Response::cgiExecution(std::string executer)
+{
+	Cgi *cgi = new Cgi();
+	cgi->setExecuter(executer);
+	cgi->setPath(_filePath.c_str());
+	cgi->setEnv(createEnvCgi());
+	std::string content = cgi->executeCgi();
+
+	std::string mimeType = getMimeType();
+
+	std::string response = "HTTP/1.1 200 OK\r\n";
+	response += "Content-Type: " + mimeType + "\r\n";
+	std::ostringstream oss;
+	oss << content.size();
+	response += "Content-Length: " + oss.str() + "\r\n";
+	response += "Connection: close\r\n";
+	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+	response += content;
+
+	delete cgi;
+	return (response);
+}
+
+void	Response::filePathFinder()
+{
+	if (this->_locationType != "" && this->_locationType == "equal")
+	{
+		_code = "200";
+		_filePath = this->_root + this->_client->getPath();
+	}
+	else if (this->_alias != "")
+	{
+		_code = "200";
+		size_t stBlock = this->_client->getPath().find(this->_blockName);
+		
+		std::string path_tmp = this->_client->getPath();
+		if (stBlock != std::string::npos)
+			path_tmp.replace(stBlock, this->_blockName.size(), this->_alias);
+		_filePath = this->_root + path_tmp;
+	}
+	else if (!this->_redirection.empty() && this->_client->getPath() == this->_blockName)
+	{
+		std::stringstream ss;
+		ss << this->_redirection.begin()->first;
+		std::string str = ss.str();
+		_code = str;
+		_filePath = this->_redirection.begin()->second;
+	}
+	else if (this->_client->getPath() == "/")
+	{
+		_code = "200";
+		if (_index != "")
+			_filePath = this->_root + this->_index;
+		else if (_autoIndex == 1)
+		{
+			_autoIndexUse = 1;
+			return ;
+		}
+		else
+			_filePath = "";
+	}
+	else
+	{
+		_code = "200";
+		if (this->_index != "")
+		{
+			std::vector<std::string>::iterator it = this->_serverName.begin();
+			for (; it != _serverName.end(); it++)
+			{
+				if (_client->getPath() == "/" + *it)
+					_filePath = this->_root + this->_index;
+			}
+		}
+		else if (_autoIndex == 1)
+		{
+			std::vector<std::string>::iterator it = this->_serverName.begin();
+			for (; it != _serverName.end(); it++)
+			{
+				if (_client->getPath() == "/" + *it)
+				{
+					_autoIndexUse = 1;
+					return ;
+				}
+			}
+		}
+		if (_filePath == "")
+			_filePath = this->_root + this->_client->getPath();
+	}
+}
+
 std::string Response::ft_get() // a revoir
 {
 	Server::log("Server's receive a GET request.", 1);
-	std::cout << this->_filePath << std::endl;
 	std::string content = readFileContent(this->_filePath);
 	std::string response = "";
 	Server::log("The file requested \"" + this->_filePath + "\" was found.", 1);
@@ -291,12 +363,15 @@ std::string Response::ft_delete()
 /*response to a bad request*/
 std::string Response::ft_badRequest()
 {
+	char *tmp = getcwd(NULL, 0);
+	std::string root(tmp, strlen(tmp));
+	free(tmp);
 	std::string content;
 	if (!this->_errorPages.empty() && (this->_errorPages.find(404) != this->_errorPages.end()))
 	{
 		content = readFileContent(this->_root + this->_errorPages.find(404)->second);
 	} else {
-		content = readFileContent("/home/mmahfoud/ecole_42/webserv/webserv_v1.0/www/error_pages/404.html");	
+		content = readFileContent(root + "/www/error_pages/404.html");
 	}
 
 	std::string response = "HTTP/1.1 400 Bad Request\r\n";
@@ -313,7 +388,10 @@ std::string Response::ft_badRequest()
 
 std::string Response::ft_forbidden()
 {
-	std::string content = readFileContent("/home/mmahfoud/ecole_42/webserv/webserv_v1.0/www/error_pages/403.html");
+	char *tmp = getcwd(NULL, 0);
+	std::string root(tmp, strlen(tmp));
+	free(tmp);
+	std::string content = readFileContent(root + "/www/error_pages/403.html");
 
 	std::string response = "HTTP/1.1 403 Bad Request\r\n";
 	response += "Content-Type: text/html\r\n";
@@ -350,7 +428,6 @@ std::string	Response::getMimeType()
 	if (ext != std::string::npos)
 	{
 		std::string extension = this->_filePath.substr(ext);
-		std::cout << extension << std::endl;
 		if (this->_mimePath.find(extension) != this->_mimePath.end())
 		{
 			return (this->_mimePath[extension]);
@@ -391,28 +468,7 @@ std::map<std::string, std::string>	Response::createMimePath()
 	return (mimePath);
 }
 
-// void	Response::cgiExecution()
-// {
-// 	Cgi *cgi = new Cgi();
-// 	// cgi->setExecuter(this->_executer_cgi);
-// 	cgi->setPath(_filePath.c_str());
-// 	cgi->setEnv(); 
-// 	std::string content = cgi->executeCgi();
 
-// 	std::string mimeType = getMimeType();
-
-// 	std::string response = "HTTP/1.1 200 OK\r\n";
-// 	response += "Content-Type: " + mimeType + "\r\n";
-// 	std::ostringstream oss;
-// 	oss << content.size();
-// 	response += "Content-Length: " + oss.str() + "\r\n";
-// 	response += "Connection: close\r\n";
-// 	response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
-// 	response += content;
-
-// 	this->_response = response;
-// 	delete cgi;
-// }
 
 /*----------------------------------------------------------------------------*/
 /*                                   SETTER                                   */
