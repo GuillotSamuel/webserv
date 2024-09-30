@@ -14,7 +14,7 @@
         rel="stylesheet">
     <script>
         function loadCGI() {
-            fetch('/hello.c', {
+            fetch('/cgi-bin/hello.c', {
                 method: 'POST'
             })
             .then(response => response.text())
@@ -23,7 +23,7 @@
             })
             .catch(error => console.error('Error: C interpreter not installed:', error));
 
-            fetch('/hello.cpp', {
+            fetch('/cgi-bin/hello.cpp', {
                 method: 'POST'
             })
             .then(response => response.text())
@@ -32,7 +32,7 @@
             })
             .catch(error => console.error('Error: C++ interpreter not installed:', error));
 
-            fetch('/hello.py', {
+            fetch('/cgi-bin/hello.py', {
                 method: 'POST'
             })
             .then(response => response.text())
@@ -41,7 +41,7 @@
             })
             .catch(error => console.error('Error: Python interpreter not installed:', error));
 
-            fetch('/hello.rs', {
+            fetch('/cgi-bin/hello.rs', {
                 method: 'POST'
             })
             .then(response => response.text())
