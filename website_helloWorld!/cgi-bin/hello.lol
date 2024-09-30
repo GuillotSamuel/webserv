@@ -1,3 +1,0 @@
-HAIOWORLD
-  VISIBLE "Hello, World!"
-KTHXBYE
