@@ -6,11 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/09/30 15:44:49 by mmahfoud         ###   ########.fr       */
-=======
-/*   Updated: 2024/09/30 15:51:04 by sguillot         ###   ########.fr       */
->>>>>>> cc53ce0aec0438c6cbc2c4f2f16c63a3030b7134
+/*   Updated: 2024/09/30 17:07:20 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,18 +78,12 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, 
 	{
 		new_location.setRedirection(atoi(current_param[1].c_str()), current_param[2]);
 	}
-<<<<<<< HEAD
-	else if (*current_param_it == "cgi" && current_param.size() == 3 && !current_param[1].empty() && !current_param[2].empty())
-	{
-		new_location.setCgi(current_param[1], current_param[2]);
-=======
 	else if (*current_param_it == "cgi" && (current_param.size() % 2 == 1) && current_param.size() >= 3 && !current_param[1].empty() && !current_param[2].empty())
 	{
 		for (size_t i = 0; (i + 2) < current_param.size(); i += 2)
 		{
 			new_location.setCgi(current_param[1 + i], current_param[2 + i]);
 		}
->>>>>>> cc53ce0aec0438c6cbc2c4f2f16c63a3030b7134
 	}
 	else
 	{
