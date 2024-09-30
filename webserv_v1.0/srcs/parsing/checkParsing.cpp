@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 12:54:32 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 14:38:18 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -477,6 +477,7 @@ void Server::check_listen_duplicate()
         }
     }
 }
+
 
 
 /* Main checking function */
