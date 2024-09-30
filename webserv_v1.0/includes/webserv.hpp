@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 18:57:56 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 20:13:14 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,10 @@ extern int g_signal;
 #include "Location.hpp"
 #include "Server.hpp"
 #include "ServerConfiguration.hpp"
+#include "Response.hpp"
 #include "listeningSocket.hpp"
 #include "Client.hpp"
 #include "Cgi.hpp"
-#include "Response.hpp"
 
 /* -------------------------------------------------------------------------- */
 /*                                    UTILS                                   */

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 19:46:39 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 21:11:45 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,6 @@ void	Server::outConnexionServer(int connexionFD)
 	{
 		log("Epoll_ctl failed.", 2);
 	}
-	this->_response.clear();
 	close(connexionFD);
 	log("Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.", 1);
 }
@@ -251,6 +250,7 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 
 	Response *response = new Response(client);
 	response->setInfo(this->currentConfig, this->_currentLocation);
+	this->_response.clear();
 	this->_response = response->generateResponse();
 	delete client;
 	delete response;
@@ -259,7 +259,6 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 
 void	Server::getLocationBlock(Client *client)
 {
-	//gerer la correspondance exacte
 	std::vector<Location> tab = currentConfig->getLocation();
 	std::vector<Location>::iterator it = tab.begin();
 	for (; it != tab.end(); it++)
@@ -288,8 +287,6 @@ void	Server::getLocationBlock(Client *client)
 			}
 		}
 	}
-
-	// Si une correspondance par préfixe a été trouvée
 	if (bestMatch.getBlockName() != "")
 	{
 		this->_currentLocation = bestMatch;
@@ -401,6 +398,7 @@ void	Server::closeServer()
 	log("Shutting down the server properly.", 1);
 	_log->close();
 	delete _log;
+	this->_currentLocation.~Location();
 	std::vector<ListeningSocket*>::iterator itList = this->_listSockets.begin();
 	for (; itList < this->_listSockets.end(); itList++)
 	{
@@ -418,7 +416,9 @@ void	Server::closeServer()
 	this->_connexion_fd.clear();
 	std::vector<uint32_t>().swap(this->_connexion_fd);
 	close(this->_epoll_fd);
-	exit(EXIT_SUCCESS);
+	this->_response.clear();
+	this->_response.~basic_string();
+	std::exit(EXIT_SUCCESS);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -470,7 +470,6 @@ void	Server::dlFile(std::string *receivedLine, Client *client)
 		log("Filename cannot be found.", 2);
 }
 
-
 void	Server::saveFile(const std::string &filename, const std::string &data) // POST UPLOAD
 {
     std::ofstream file(filename.c_str(), std::ios::binary);
@@ -485,8 +484,6 @@ void	Server::saveFile(const std::string &filename, const std::string &data) // P
 		log("Failed to open file " + filename + ".", 2);
     }
 }
-
-
 
 void   	Server::log(std::string error, int type)
 {
@@ -538,6 +535,7 @@ void 	Server::set_nonblocking(int sockfd)
 
 void	Server::error(std::string errorType)
 {
+	delete this->_log;
 	throw(std::runtime_error(errorType));
 }
 

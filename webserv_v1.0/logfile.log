@@ -1,103 +1,103 @@
-	[INFO][19:52:28] : Getprotobyname Succed.
-	[INFO][19:52:28] : Socket_fd in now created.
-	[INFO][19:52:28] : Socket_fd in now set.
-	[INFO][19:52:28] : Socket_fd is binded.
-	[INFO][19:52:28] : Socket_fd is non blocking fd.
-	[INFO][19:52:28] : Socket_fd is now listening every attemp of connection.
-	[INFO][19:52:28] : Getprotobyname Succed.
-	[INFO][19:52:28] : Socket_fd in now created.
-	[INFO][19:52:28] : Socket_fd in now set.
-	[INFO][19:52:28] : Socket_fd is binded.
-	[INFO][19:52:28] : Socket_fd is non blocking fd.
-	[INFO][19:52:28] : Socket_fd is now listening every attemp of connection.
-	[INFO][19:52:28] : Getprotobyname Succed.
-	[INFO][19:52:28] : Socket_fd in now created.
-	[INFO][19:52:28] : Socket_fd in now set.
-	[INFO][19:52:28] : Socket_fd is binded.
-	[INFO][19:52:28] : Socket_fd is non blocking fd.
-	[INFO][19:52:28] : Socket_fd is now listening every attemp of connection.
-	[INFO][19:52:28] : Getprotobyname Succed.
-	[INFO][19:52:28] : Socket_fd in now created.
-	[INFO][19:52:28] : Socket_fd in now set.
-	[INFO][19:52:28] : Socket_fd is binded.
-	[INFO][19:52:28] : Socket_fd is non blocking fd.
-	[INFO][19:52:28] : Socket_fd is now listening every attemp of connection.
-	[INFO][19:52:28] : Getprotobyname Succed.
-	[INFO][19:52:28] : Socket_fd in now created.
-	[INFO][19:52:28] : Socket_fd in now set.
-	[INFO][19:52:28] : Socket_fd is binded.
-	[INFO][19:52:28] : Socket_fd is non blocking fd.
-	[INFO][19:52:28] : Socket_fd is now listening every attemp of connection.
-	[INFO][19:52:28] : Getprotobyname Succed.
-	[INFO][19:52:28] : Socket_fd in now created.
-	[INFO][19:52:28] : Socket_fd in now set.
-	[INFO][19:52:28] : Socket_fd is binded.
-	[INFO][19:52:28] : Socket_fd is non blocking fd.
-	[INFO][19:52:28] : Socket_fd is now listening every attemp of connection.
-	[INFO][19:52:28] : Getprotobyname Succed.
-	[INFO][19:52:28] : Socket_fd in now created.
-	[INFO][19:52:28] : Socket_fd in now set.
-	[INFO][19:52:28] : Socket_fd is binded.
-	[INFO][19:52:28] : Socket_fd is non blocking fd.
-	[INFO][19:52:28] : Socket_fd is now listening every attemp of connection.
-	[INFO][19:52:28] : Getprotobyname Succed.
-	[INFO][19:52:28] : Socket_fd in now created.
-	[INFO][19:52:28] : Socket_fd in now set.
-	[INFO][19:52:28] : Socket_fd is binded.
-	[INFO][19:52:28] : Socket_fd is non blocking fd.
-	[INFO][19:52:28] : Socket_fd is now listening every attemp of connection.
-	[INFO][19:52:28] : Getprotobyname Succed.
-	[INFO][19:52:28] : Socket_fd in now created.
-	[INFO][19:52:28] : Socket_fd in now set.
-	[INFO][19:52:28] : Socket_fd is binded.
-	[INFO][19:52:28] : Socket_fd is non blocking fd.
-	[INFO][19:52:28] : Socket_fd is now listening every attemp of connection.
-	[INFO][19:52:28] : Getprotobyname Succed.
-	[INFO][19:52:28] : Socket_fd in now created.
-	[INFO][19:52:28] : Socket_fd in now set.
-	[INFO][19:52:28] : Socket_fd is binded.
-	[INFO][19:52:28] : Socket_fd is non blocking fd.
-	[INFO][19:52:28] : Socket_fd is now listening every attemp of connection.
-	[INFO][19:52:28] : Getprotobyname Succed.
-	[INFO][19:52:28] : Socket_fd in now created.
-	[INFO][19:52:28] : Socket_fd in now set.
-	[INFO][19:52:28] : Socket_fd is binded.
-	[INFO][19:52:28] : Socket_fd is non blocking fd.
-	[INFO][19:52:28] : Socket_fd is now listening every attemp of connection.
-[INFO][19:52:28] : Starting Server.
-	[INFO][19:52:28] : Epoll instance successfully created.
-	[INFO][19:52:28] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][19:52:28] : The server construction is now complete. The server is ready to accept incoming connections.
-[INFO][19:52:32] : [NEW REQUEST]
-	[INFO][19:52:32] : Server did accept the connection.
-	[INFO][19:52:32] : Server's receive a GET request.
-	[INFO][19:52:32] : The file requested "/home/mmahfoud/ecole_42/webserv/website_helloWorld!/html/index.html" was found.
-	[INFO][19:52:32] : End of the request.
-	[INFO][19:52:32] : Got a EPOLLIN attempt.
-	[INFO][19:52:32] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-[INFO][19:52:32] : [NEW REQUEST]
-	[INFO][19:52:32] : Server did accept the connection.
-	[INFO][19:52:32] : Server's receive a GET request.
-	[INFO][19:52:32] : The file requested "/home/mmahfoud/ecole_42/webserv/website_helloWorld!/styles/styles.css" was found.
-	[INFO][19:52:32] : End of the request.
-	[INFO][19:52:32] : Got a EPOLLIN attempt.
-	[INFO][19:52:32] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-[INFO][19:52:32] : [NEW REQUEST]
-	[INFO][19:52:32] : Server did accept the connection.
-[INFO][19:52:32] : [NEW REQUEST]
-	[INFO][19:52:32] : Server did accept the connection.
-[INFO][19:52:32] : [NEW REQUEST]
-	[INFO][19:52:32] : Server did accept the connection.
-	[INFO][19:52:32] : End of the request.
-	[INFO][19:52:32] : Got a EPOLLIN attempt.
-	[INFO][19:52:32] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-	[INFO][19:52:32] : Extension of the files was not recognize.
-	[INFO][19:52:32] : End of the request.
-	[INFO][19:52:32] : Got a EPOLLIN attempt.
-	[INFO][19:52:32] : Extension of the files was not recognize.
-	[INFO][19:52:32] : End of the request.
-	[INFO][19:52:32] : Got a EPOLLIN attempt.
-	[INFO][19:52:32] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-	[INFO][19:52:32] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-	[ERROR][19:52:36] : The call to epoll_wait failed.
-	[INFO][19:52:36] : Shutting down the server properly.
+	[INFO][21:12:03] : Getprotobyname Succed.
+	[INFO][21:12:03] : Socket_fd in now created.
+	[INFO][21:12:03] : Socket_fd in now set.
+	[INFO][21:12:03] : Socket_fd is binded.
+	[INFO][21:12:03] : Socket_fd is non blocking fd.
+	[INFO][21:12:03] : Socket_fd is now listening every attemp of connection.
+	[INFO][21:12:03] : Getprotobyname Succed.
+	[INFO][21:12:03] : Socket_fd in now created.
+	[INFO][21:12:03] : Socket_fd in now set.
+	[INFO][21:12:03] : Socket_fd is binded.
+	[INFO][21:12:03] : Socket_fd is non blocking fd.
+	[INFO][21:12:03] : Socket_fd is now listening every attemp of connection.
+	[INFO][21:12:03] : Getprotobyname Succed.
+	[INFO][21:12:03] : Socket_fd in now created.
+	[INFO][21:12:03] : Socket_fd in now set.
+	[INFO][21:12:03] : Socket_fd is binded.
+	[INFO][21:12:03] : Socket_fd is non blocking fd.
+	[INFO][21:12:03] : Socket_fd is now listening every attemp of connection.
+	[INFO][21:12:03] : Getprotobyname Succed.
+	[INFO][21:12:03] : Socket_fd in now created.
+	[INFO][21:12:03] : Socket_fd in now set.
+	[INFO][21:12:03] : Socket_fd is binded.
+	[INFO][21:12:03] : Socket_fd is non blocking fd.
+	[INFO][21:12:03] : Socket_fd is now listening every attemp of connection.
+	[INFO][21:12:03] : Getprotobyname Succed.
+	[INFO][21:12:03] : Socket_fd in now created.
+	[INFO][21:12:03] : Socket_fd in now set.
+	[INFO][21:12:03] : Socket_fd is binded.
+	[INFO][21:12:03] : Socket_fd is non blocking fd.
+	[INFO][21:12:03] : Socket_fd is now listening every attemp of connection.
+	[INFO][21:12:03] : Getprotobyname Succed.
+	[INFO][21:12:03] : Socket_fd in now created.
+	[INFO][21:12:03] : Socket_fd in now set.
+	[INFO][21:12:03] : Socket_fd is binded.
+	[INFO][21:12:03] : Socket_fd is non blocking fd.
+	[INFO][21:12:03] : Socket_fd is now listening every attemp of connection.
+	[INFO][21:12:03] : Getprotobyname Succed.
+	[INFO][21:12:03] : Socket_fd in now created.
+	[INFO][21:12:03] : Socket_fd in now set.
+	[INFO][21:12:03] : Socket_fd is binded.
+	[INFO][21:12:03] : Socket_fd is non blocking fd.
+	[INFO][21:12:03] : Socket_fd is now listening every attemp of connection.
+	[INFO][21:12:03] : Getprotobyname Succed.
+	[INFO][21:12:03] : Socket_fd in now created.
+	[INFO][21:12:03] : Socket_fd in now set.
+	[INFO][21:12:03] : Socket_fd is binded.
+	[INFO][21:12:03] : Socket_fd is non blocking fd.
+	[INFO][21:12:03] : Socket_fd is now listening every attemp of connection.
+	[INFO][21:12:03] : Getprotobyname Succed.
+	[INFO][21:12:03] : Socket_fd in now created.
+	[INFO][21:12:03] : Socket_fd in now set.
+	[INFO][21:12:03] : Socket_fd is binded.
+	[INFO][21:12:03] : Socket_fd is non blocking fd.
+	[INFO][21:12:03] : Socket_fd is now listening every attemp of connection.
+	[INFO][21:12:03] : Getprotobyname Succed.
+	[INFO][21:12:03] : Socket_fd in now created.
+	[INFO][21:12:03] : Socket_fd in now set.
+	[INFO][21:12:03] : Socket_fd is binded.
+	[INFO][21:12:03] : Socket_fd is non blocking fd.
+	[INFO][21:12:03] : Socket_fd is now listening every attemp of connection.
+	[INFO][21:12:03] : Getprotobyname Succed.
+	[INFO][21:12:03] : Socket_fd in now created.
+	[INFO][21:12:03] : Socket_fd in now set.
+	[INFO][21:12:03] : Socket_fd is binded.
+	[INFO][21:12:03] : Socket_fd is non blocking fd.
+	[INFO][21:12:03] : Socket_fd is now listening every attemp of connection.
+[INFO][21:12:03] : Starting Server.
+	[INFO][21:12:03] : Epoll instance successfully created.
+	[INFO][21:12:03] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][21:12:03] : The server construction is now complete. The server is ready to accept incoming connections.
+[INFO][21:12:08] : [NEW REQUEST]
+	[INFO][21:12:08] : Server did accept the connection.
+	[INFO][21:12:08] : Server's receive a GET request.
+	[INFO][21:12:08] : The file requested "/home/mmahfoud/ecole_42/webserv/website_helloWorld!/html/index.html" was found.
+	[INFO][21:12:08] : End of the request.
+	[INFO][21:12:08] : Got a EPOLLIN attempt.
+	[INFO][21:12:08] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][21:12:08] : [NEW REQUEST]
+	[INFO][21:12:08] : Server did accept the connection.
+	[INFO][21:12:08] : Server's receive a GET request.
+	[INFO][21:12:08] : The file requested "/home/mmahfoud/ecole_42/webserv/website_helloWorld!/styles/styles.css" was found.
+	[INFO][21:12:08] : End of the request.
+	[INFO][21:12:08] : Got a EPOLLIN attempt.
+	[INFO][21:12:08] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][21:12:08] : [NEW REQUEST]
+	[INFO][21:12:08] : Server did accept the connection.
+[INFO][21:12:08] : [NEW REQUEST]
+	[INFO][21:12:08] : Server did accept the connection.
+	[INFO][21:12:08] : Extension of the files was not recognize.
+	[INFO][21:12:08] : End of the request.
+	[INFO][21:12:08] : Got a EPOLLIN attempt.
+[INFO][21:12:08] : [NEW REQUEST]
+	[INFO][21:12:08] : Server did accept the connection.
+	[INFO][21:12:08] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+	[INFO][21:12:08] : End of the request.
+	[INFO][21:12:08] : Got a EPOLLIN attempt.
+	[INFO][21:12:08] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+	[INFO][21:12:08] : Extension of the files was not recognize.
+	[INFO][21:12:08] : End of the request.
+	[INFO][21:12:08] : Got a EPOLLIN attempt.
+	[INFO][21:12:08] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+	[ERROR][21:12:10] : The call to epoll_wait failed.
+	[INFO][21:12:10] : Shutting down the server properly.
