@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 12:11:27 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 12:57:40 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ Response::Response(Client *client)
 	this->_index = "";
 	this->_blockName = "";
 	this->_client = client;
-	createMimePath();
+	this->_mimePath = createMimePath();
 }
 
 Response::~Response()
@@ -106,8 +106,11 @@ void	Response::setInfo(ServerConfiguration *serv, Location location)
 
 std::string	Response::generateResponse()
 {
-	// if (this->_allowed_methods[this->_client->getMethod()] == 0)
-	// 	return (ft_forbidden());
+	if (this->_allowed_methods[this->_client->getMethod()] == 0)
+	{
+		return (ft_forbidden());
+	}
+	std::cout << this->_client->getPath() << std::endl;
 	if (this->_locationType != "" && this->_locationType == "equal")
 	{
 		_filePath = this->_root + this->_client->getPath();
@@ -125,6 +128,11 @@ std::string	Response::generateResponse()
 	{
 		_filePath = this->_redirection.begin()->second;
 	}
+	else if (this->_client->getPath() == "/")
+	{
+		_filePath = this->_root + this->_index;
+		std::cout << _filePath << std::endl;
+	}
 	else 
 	{
 		_filePath = this->_root + this->_client->getPath();
@@ -132,17 +140,19 @@ std::string	Response::generateResponse()
 
 	if (access(_filePath.c_str(), F_OK) == 0) // trouver le fichier en question si tu trouve pas le fichier
 	{
-
 		if (!this->_interpreterMap.empty())//comparer avec l'extension 
 		{
 			size_t ext = this->_filePath.rfind(".");
-			std::string extension = this->_filePath.substr(ext);
-			std::map<std::string, std::string>::iterator it = this->_interpreterMap.begin();
-			for (; it != this->_interpreterMap.end(); it++)
+			if (ext != std::string::npos)
 			{
-				if (extension == it->first)
+				std::string _extension = this->_filePath.substr(ext);
+				std::map<std::string, std::string>::iterator it = this->_interpreterMap.begin();
+				for (; it != this->_interpreterMap.end(); it++)
 				{
-					std::cout << "c'est un cgi" << std::endl;
+					if (_extension == it->first)
+					{
+						std::cout << "c'est un cgi" << std::endl;
+					}
 				}
 			}
 		}
@@ -229,6 +239,7 @@ std::string Response::ft_get() // a revoir
 	// {
 		Server::log("The file requested \"" + this->_filePath + "\" was found.", 1);
 		std::string mimeType = getMimeType();
+		std::cout << mimeType << std::endl;
 
 		response = "HTTP/1.1 200 OK\r\n";
 		response += "Content-Type: " + mimeType + "\r\n";
@@ -239,7 +250,7 @@ std::string Response::ft_get() // a revoir
 		response += "Server: " + this->_serverName + "\r\n\r\n";
 		response += content;
 	// }
-	std::cout << response << std::endl; // TEST
+	// std::cout << response << std::endl; // TEST
 	return (response);
 }
 
@@ -352,11 +363,19 @@ std::string	Response::readFileContent(std::string path)
 
 std::string	Response::getMimeType()
 {
-	if (getFilePath() == "/" )
+	if (this->_filePath == this->_root + "/")
 		return ("text/html");
-	
-	
 
+	size_t ext = this->_filePath.rfind(".");
+	if (ext != std::string::npos)
+	{
+		std::string extension = this->_filePath.substr(ext);
+		if (this->_mimePath.find(extension) != this->_mimePath.end())
+		{
+			return (this->_mimePath[extension]);
+		}
+	}
+	Server::log("Extension of the files was not recognize.", 1);
 	return ("application/octet-stream");
 }
 

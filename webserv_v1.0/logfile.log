@@ -1,89 +1,708 @@
-	[INFO][12:03:06] : Getprotobyname Succed.
-	[INFO][12:03:06] : Socket_fd in now created.
-	[INFO][12:03:06] : Socket_fd in now set.
-	[INFO][12:03:06] : Socket_fd is binded.
-	[INFO][12:03:06] : Socket_fd is non blocking fd.
-	[INFO][12:03:06] : Socket_fd is now listening every attemp of connection.
-	[INFO][12:03:06] : Getprotobyname Succed.
-	[INFO][12:03:06] : Socket_fd in now created.
-	[INFO][12:03:06] : Socket_fd in now set.
-	[INFO][12:03:06] : Socket_fd is binded.
-	[INFO][12:03:06] : Socket_fd is non blocking fd.
-	[INFO][12:03:06] : Socket_fd is now listening every attemp of connection.
-	[INFO][12:03:06] : Getprotobyname Succed.
-	[INFO][12:03:06] : Socket_fd in now created.
-	[INFO][12:03:06] : Socket_fd in now set.
-	[INFO][12:03:06] : Socket_fd is binded.
-	[INFO][12:03:06] : Socket_fd is non blocking fd.
-	[INFO][12:03:06] : Socket_fd is now listening every attemp of connection.
-	[INFO][12:03:06] : Getprotobyname Succed.
-	[INFO][12:03:06] : Socket_fd in now created.
-	[INFO][12:03:06] : Socket_fd in now set.
-	[INFO][12:03:06] : Socket_fd is binded.
-	[INFO][12:03:06] : Socket_fd is non blocking fd.
-	[INFO][12:03:06] : Socket_fd is now listening every attemp of connection.
-	[INFO][12:03:06] : Getprotobyname Succed.
-	[INFO][12:03:06] : Socket_fd in now created.
-	[INFO][12:03:06] : Socket_fd in now set.
-	[INFO][12:03:06] : Socket_fd is binded.
-	[INFO][12:03:06] : Socket_fd is non blocking fd.
-	[INFO][12:03:06] : Socket_fd is now listening every attemp of connection.
-	[INFO][12:03:06] : Getprotobyname Succed.
-	[INFO][12:03:06] : Socket_fd in now created.
-	[INFO][12:03:06] : Socket_fd in now set.
-	[INFO][12:03:06] : Socket_fd is binded.
-	[INFO][12:03:06] : Socket_fd is non blocking fd.
-	[INFO][12:03:06] : Socket_fd is now listening every attemp of connection.
-	[INFO][12:03:06] : Getprotobyname Succed.
-	[INFO][12:03:06] : Socket_fd in now created.
-	[INFO][12:03:06] : Socket_fd in now set.
-	[INFO][12:03:06] : Socket_fd is binded.
-	[INFO][12:03:06] : Socket_fd is non blocking fd.
-	[INFO][12:03:06] : Socket_fd is now listening every attemp of connection.
-	[INFO][12:03:06] : Getprotobyname Succed.
-	[INFO][12:03:06] : Socket_fd in now created.
-	[INFO][12:03:06] : Socket_fd in now set.
-	[INFO][12:03:06] : Socket_fd is binded.
-	[INFO][12:03:06] : Socket_fd is non blocking fd.
-	[INFO][12:03:06] : Socket_fd is now listening every attemp of connection.
-	[INFO][12:03:06] : Getprotobyname Succed.
-	[INFO][12:03:06] : Socket_fd in now created.
-	[INFO][12:03:06] : Socket_fd in now set.
-	[INFO][12:03:06] : Socket_fd is binded.
-	[INFO][12:03:06] : Socket_fd is non blocking fd.
-	[INFO][12:03:06] : Socket_fd is now listening every attemp of connection.
-	[INFO][12:03:06] : Getprotobyname Succed.
-	[INFO][12:03:06] : Socket_fd in now created.
-	[INFO][12:03:06] : Socket_fd in now set.
-	[INFO][12:03:06] : Socket_fd is binded.
-	[INFO][12:03:06] : Socket_fd is non blocking fd.
-	[INFO][12:03:06] : Socket_fd is now listening every attemp of connection.
-	[INFO][12:03:06] : Getprotobyname Succed.
-	[INFO][12:03:06] : Socket_fd in now created.
-	[INFO][12:03:06] : Socket_fd in now set.
-	[INFO][12:03:06] : Socket_fd is binded.
-	[INFO][12:03:06] : Socket_fd is non blocking fd.
-	[INFO][12:03:06] : Socket_fd is now listening every attemp of connection.
-[INFO][12:03:06] : Starting Server.
-	[INFO][12:03:06] : Epoll instance successfully created.
-	[INFO][12:03:06] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][12:03:06] : The server construction is now complete. The server is ready to accept incoming connections.
-[INFO][12:03:09] : [NEW REQUEST]
-	[INFO][12:03:09] : Server did accept the connection.
-	[INFO][12:03:09] : Server's receive a GET request.
-	[INFO][12:03:09] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/index.html" was found.
-	[INFO][12:03:09] : End of the request.
-	[INFO][12:03:09] : Got a EPOLLIN attempt.
-	[INFO][12:03:09] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-[INFO][12:03:09] : [NEW REQUEST]
-	[INFO][12:03:09] : Server did accept the connection.
-	[INFO][12:03:09] : End of the request.
-	[INFO][12:03:09] : Got a EPOLLIN attempt.
-	[INFO][12:03:09] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-[INFO][12:03:10] : [NEW REQUEST]
-	[INFO][12:03:10] : Server did accept the connection.
-	[INFO][12:03:10] : End of the request.
-	[INFO][12:03:10] : Got a EPOLLIN attempt.
-	[INFO][12:03:10] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-	[ERROR][12:03:13] : The call to epoll_wait failed.
-	[INFO][12:03:13] : Shutting down the server properly.
+	[INFO][12:54:39] : Getprotobyname Succed.
+	[INFO][12:54:39] : Socket_fd in now created.
+	[INFO][12:54:39] : Socket_fd in now set.
+	[INFO][12:54:39] : Socket_fd is binded.
+	[INFO][12:54:39] : Socket_fd is non blocking fd.
+	[INFO][12:54:39] : Socket_fd is now listening every attemp of connection.
+	[INFO][12:54:39] : Getprotobyname Succed.
+	[INFO][12:54:39] : Socket_fd in now created.
+	[INFO][12:54:39] : Socket_fd in now set.
+	[INFO][12:54:39] : Socket_fd is binded.
+	[INFO][12:54:39] : Socket_fd is non blocking fd.
+	[INFO][12:54:39] : Socket_fd is now listening every attemp of connection.
+	[INFO][12:54:39] : Getprotobyname Succed.
+	[INFO][12:54:39] : Socket_fd in now created.
+	[INFO][12:54:39] : Socket_fd in now set.
+	[INFO][12:54:39] : Socket_fd is binded.
+	[INFO][12:54:39] : Socket_fd is non blocking fd.
+	[INFO][12:54:39] : Socket_fd is now listening every attemp of connection.
+	[INFO][12:54:39] : Getprotobyname Succed.
+	[INFO][12:54:39] : Socket_fd in now created.
+	[INFO][12:54:39] : Socket_fd in now set.
+	[INFO][12:54:39] : Socket_fd is binded.
+	[INFO][12:54:39] : Socket_fd is non blocking fd.
+	[INFO][12:54:39] : Socket_fd is now listening every attemp of connection.
+	[INFO][12:54:39] : Getprotobyname Succed.
+	[INFO][12:54:39] : Socket_fd in now created.
+	[INFO][12:54:39] : Socket_fd in now set.
+	[INFO][12:54:39] : Socket_fd is binded.
+	[INFO][12:54:39] : Socket_fd is non blocking fd.
+	[INFO][12:54:39] : Socket_fd is now listening every attemp of connection.
+	[INFO][12:54:39] : Getprotobyname Succed.
+	[INFO][12:54:39] : Socket_fd in now created.
+	[INFO][12:54:39] : Socket_fd in now set.
+	[INFO][12:54:39] : Socket_fd is binded.
+	[INFO][12:54:39] : Socket_fd is non blocking fd.
+	[INFO][12:54:39] : Socket_fd is now listening every attemp of connection.
+	[INFO][12:54:39] : Getprotobyname Succed.
+	[INFO][12:54:39] : Socket_fd in now created.
+	[INFO][12:54:39] : Socket_fd in now set.
+	[INFO][12:54:39] : Socket_fd is binded.
+	[INFO][12:54:39] : Socket_fd is non blocking fd.
+	[INFO][12:54:39] : Socket_fd is now listening every attemp of connection.
+	[INFO][12:54:39] : Getprotobyname Succed.
+	[INFO][12:54:39] : Socket_fd in now created.
+	[INFO][12:54:39] : Socket_fd in now set.
+	[INFO][12:54:39] : Socket_fd is binded.
+	[INFO][12:54:39] : Socket_fd is non blocking fd.
+	[INFO][12:54:39] : Socket_fd is now listening every attemp of connection.
+	[INFO][12:54:39] : Getprotobyname Succed.
+	[INFO][12:54:39] : Socket_fd in now created.
+	[INFO][12:54:39] : Socket_fd in now set.
+	[INFO][12:54:39] : Socket_fd is binded.
+	[INFO][12:54:39] : Socket_fd is non blocking fd.
+	[INFO][12:54:39] : Socket_fd is now listening every attemp of connection.
+	[INFO][12:54:39] : Getprotobyname Succed.
+	[INFO][12:54:39] : Socket_fd in now created.
+	[INFO][12:54:39] : Socket_fd in now set.
+	[INFO][12:54:39] : Socket_fd is binded.
+	[INFO][12:54:39] : Socket_fd is non blocking fd.
+	[INFO][12:54:39] : Socket_fd is now listening every attemp of connection.
+	[INFO][12:54:39] : Getprotobyname Succed.
+	[INFO][12:54:39] : Socket_fd in now created.
+	[INFO][12:54:39] : Socket_fd in now set.
+	[INFO][12:54:39] : Socket_fd is binded.
+	[INFO][12:54:39] : Socket_fd is non blocking fd.
+	[INFO][12:54:39] : Socket_fd is now listening every attemp of connection.
+[INFO][12:54:39] : Starting Server.
+	[INFO][12:54:39] : Epoll instance successfully created.
+	[INFO][12:54:39] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][12:54:39] : The server construction is now complete. The server is ready to accept incoming connections.
+[INFO][12:54:47] : [NEW REQUEST]
+	[INFO][12:54:47] : Server did accept the connection.
+	[INFO][12:54:47] : Server's receive a GET request.
+	[INFO][12:54:47] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/index.html" was found.
+	[INFO][12:54:47] : End of the request.
+	[INFO][12:54:47] : Got a EPOLLIN attempt.
+	[INFO][12:54:47] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:47] : [NEW REQUEST]
+	[INFO][12:54:47] : Server did accept the connection.
+	[INFO][12:54:47] : Server's receive a GET request.
+	[INFO][12:54:47] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:54:47] : End of the request.
+	[INFO][12:54:47] : Got a EPOLLIN attempt.
+	[INFO][12:54:47] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:47] : [NEW REQUEST]
+	[INFO][12:54:47] : Server did accept the connection.
+	[INFO][12:54:47] : Server's receive a GET request.
+	[INFO][12:54:47] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:54:47] : End of the request.
+	[INFO][12:54:47] : Got a EPOLLIN attempt.
+	[INFO][12:54:47] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:49] : [NEW REQUEST]
+	[INFO][12:54:49] : Server did accept the connection.
+	[INFO][12:54:49] : Server's receive a GET request.
+	[INFO][12:54:49] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/form.html" was found.
+	[INFO][12:54:49] : End of the request.
+	[INFO][12:54:49] : Got a EPOLLIN attempt.
+	[INFO][12:54:49] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:49] : [NEW REQUEST]
+	[INFO][12:54:49] : Server did accept the connection.
+	[INFO][12:54:49] : Server's receive a GET request.
+	[INFO][12:54:49] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:54:49] : End of the request.
+	[INFO][12:54:49] : Got a EPOLLIN attempt.
+	[INFO][12:54:49] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:49] : [NEW REQUEST]
+	[INFO][12:54:49] : Server did accept the connection.
+	[INFO][12:54:49] : Server's receive a GET request.
+	[INFO][12:54:49] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:54:49] : End of the request.
+	[INFO][12:54:49] : Got a EPOLLIN attempt.
+	[INFO][12:54:49] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:49] : [NEW REQUEST]
+	[INFO][12:54:49] : Server did accept the connection.
+	[INFO][12:54:49] : End of the request.
+	[INFO][12:54:49] : Got a EPOLLIN attempt.
+	[INFO][12:54:49] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:50] : [NEW REQUEST]
+	[INFO][12:54:50] : Server did accept the connection.
+	[INFO][12:54:50] : Server's receive a GET request.
+	[INFO][12:54:50] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:54:50] : End of the request.
+	[INFO][12:54:50] : Got a EPOLLIN attempt.
+	[INFO][12:54:50] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:50] : [NEW REQUEST]
+	[INFO][12:54:50] : Server did accept the connection.
+	[INFO][12:54:50] : Server's receive a GET request.
+	[INFO][12:54:50] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/upload.html" was found.
+	[INFO][12:54:50] : End of the request.
+	[INFO][12:54:50] : Got a EPOLLIN attempt.
+	[INFO][12:54:50] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:50] : [NEW REQUEST]
+	[INFO][12:54:50] : Server did accept the connection.
+	[INFO][12:54:50] : End of the request.
+	[INFO][12:54:50] : Got a EPOLLIN attempt.
+	[INFO][12:54:50] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:51] : [NEW REQUEST]
+	[INFO][12:54:51] : Server did accept the connection.
+	[INFO][12:54:51] : End of the request.
+	[INFO][12:54:51] : Got a EPOLLIN attempt.
+	[INFO][12:54:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:51] : [NEW REQUEST]
+	[INFO][12:54:51] : Server did accept the connection.
+	[INFO][12:54:51] : Server's receive a GET request.
+	[INFO][12:54:51] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:54:51] : End of the request.
+	[INFO][12:54:51] : Got a EPOLLIN attempt.
+	[INFO][12:54:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:52] : [NEW REQUEST]
+	[INFO][12:54:52] : Server did accept the connection.
+	[INFO][12:54:52] : Server's receive a GET request.
+	[INFO][12:54:52] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/list.html" was found.
+	[INFO][12:54:52] : End of the request.
+	[INFO][12:54:52] : Got a EPOLLIN attempt.
+	[INFO][12:54:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:52] : [NEW REQUEST]
+	[INFO][12:54:52] : Server did accept the connection.
+	[INFO][12:54:52] : Server's receive a GET request.
+	[INFO][12:54:52] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:54:52] : End of the request.
+	[INFO][12:54:52] : Got a EPOLLIN attempt.
+	[INFO][12:54:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:52] : [NEW REQUEST]
+	[INFO][12:54:52] : Server did accept the connection.
+	[INFO][12:54:52] : Server's receive a GET request.
+	[INFO][12:54:52] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:54:52] : End of the request.
+	[INFO][12:54:52] : Got a EPOLLIN attempt.
+	[INFO][12:54:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:53] : [NEW REQUEST]
+	[INFO][12:54:53] : Server did accept the connection.
+	[INFO][12:54:53] : End of the request.
+	[INFO][12:54:53] : Got a EPOLLIN attempt.
+	[INFO][12:54:53] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:53] : [NEW REQUEST]
+	[INFO][12:54:53] : Server did accept the connection.
+	[INFO][12:54:53] : Server's receive a GET request.
+	[INFO][12:54:53] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:54:53] : End of the request.
+	[INFO][12:54:53] : Got a EPOLLIN attempt.
+	[INFO][12:54:53] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:54] : [NEW REQUEST]
+	[INFO][12:54:54] : Server did accept the connection.
+	[INFO][12:54:54] : Server's receive a GET request.
+	[INFO][12:54:54] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/delete.html" was found.
+	[INFO][12:54:54] : End of the request.
+	[INFO][12:54:54] : Got a EPOLLIN attempt.
+	[INFO][12:54:54] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:54] : [NEW REQUEST]
+	[INFO][12:54:54] : Server did accept the connection.
+	[INFO][12:54:54] : Server's receive a GET request.
+	[INFO][12:54:54] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:54:54] : End of the request.
+	[INFO][12:54:54] : Got a EPOLLIN attempt.
+	[INFO][12:54:54] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:54] : [NEW REQUEST]
+	[INFO][12:54:54] : Server did accept the connection.
+	[INFO][12:54:54] : Server's receive a GET request.
+	[INFO][12:54:54] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:54:54] : End of the request.
+	[INFO][12:54:54] : Got a EPOLLIN attempt.
+	[INFO][12:54:54] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:55] : [NEW REQUEST]
+	[INFO][12:54:55] : Server did accept the connection.
+	[INFO][12:54:55] : End of the request.
+	[INFO][12:54:55] : Got a EPOLLIN attempt.
+	[INFO][12:54:55] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:54:55] : [NEW REQUEST]
+	[INFO][12:54:55] : Server did accept the connection.
+	[INFO][12:54:55] : Server's receive a GET request.
+	[INFO][12:54:55] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:54:55] : End of the request.
+	[INFO][12:54:55] : Got a EPOLLIN attempt.
+	[INFO][12:54:55] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:02] : [NEW REQUEST]
+	[INFO][12:55:02] : Server did accept the connection.
+	[INFO][12:55:02] : Server's receive a GET request.
+	[INFO][12:55:02] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/form.html" was found.
+	[INFO][12:55:02] : End of the request.
+	[INFO][12:55:02] : Got a EPOLLIN attempt.
+	[INFO][12:55:02] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:02] : [NEW REQUEST]
+	[INFO][12:55:02] : Server did accept the connection.
+	[INFO][12:55:02] : Server's receive a GET request.
+	[INFO][12:55:02] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:55:02] : End of the request.
+	[INFO][12:55:02] : Got a EPOLLIN attempt.
+	[INFO][12:55:02] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:02] : [NEW REQUEST]
+	[INFO][12:55:02] : Server did accept the connection.
+	[INFO][12:55:02] : Server's receive a GET request.
+	[INFO][12:55:02] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:02] : End of the request.
+	[INFO][12:55:02] : Got a EPOLLIN attempt.
+	[INFO][12:55:02] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:03] : [NEW REQUEST]
+	[INFO][12:55:03] : Server did accept the connection.
+	[INFO][12:55:03] : Server's receive a GET request.
+	[INFO][12:55:03] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/index.html" was found.
+	[INFO][12:55:03] : End of the request.
+	[INFO][12:55:03] : Got a EPOLLIN attempt.
+	[INFO][12:55:03] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:03] : [NEW REQUEST]
+	[INFO][12:55:03] : Server did accept the connection.
+	[INFO][12:55:03] : Server's receive a GET request.
+	[INFO][12:55:03] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:55:03] : End of the request.
+	[INFO][12:55:03] : Got a EPOLLIN attempt.
+	[INFO][12:55:03] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:03] : [NEW REQUEST]
+	[INFO][12:55:03] : Server did accept the connection.
+	[INFO][12:55:03] : Server's receive a GET request.
+	[INFO][12:55:03] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:03] : End of the request.
+	[INFO][12:55:03] : Got a EPOLLIN attempt.
+	[INFO][12:55:03] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:04] : [NEW REQUEST]
+	[INFO][12:55:04] : Server did accept the connection.
+	[INFO][12:55:04] : Server's receive a GET request.
+	[INFO][12:55:04] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/upload.html" was found.
+	[INFO][12:55:04] : End of the request.
+	[INFO][12:55:04] : Got a EPOLLIN attempt.
+	[INFO][12:55:04] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:04] : [NEW REQUEST]
+	[INFO][12:55:04] : Server did accept the connection.
+	[INFO][12:55:04] : End of the request.
+	[INFO][12:55:04] : Got a EPOLLIN attempt.
+	[INFO][12:55:04] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:05] : [NEW REQUEST]
+	[INFO][12:55:05] : Server did accept the connection.
+	[INFO][12:55:05] : End of the request.
+	[INFO][12:55:05] : Got a EPOLLIN attempt.
+	[INFO][12:55:05] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:05] : [NEW REQUEST]
+	[INFO][12:55:05] : Server did accept the connection.
+	[INFO][12:55:05] : Server's receive a GET request.
+	[INFO][12:55:05] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:05] : End of the request.
+	[INFO][12:55:05] : Got a EPOLLIN attempt.
+	[INFO][12:55:05] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:06] : [NEW REQUEST]
+	[INFO][12:55:06] : Server did accept the connection.
+	[INFO][12:55:06] : Server's receive a GET request.
+	[INFO][12:55:06] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/list.html" was found.
+	[INFO][12:55:06] : End of the request.
+	[INFO][12:55:06] : Got a EPOLLIN attempt.
+	[INFO][12:55:06] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:06] : [NEW REQUEST]
+	[INFO][12:55:06] : Server did accept the connection.
+	[INFO][12:55:06] : Server's receive a GET request.
+	[INFO][12:55:06] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:55:06] : End of the request.
+	[INFO][12:55:06] : Got a EPOLLIN attempt.
+	[INFO][12:55:06] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:06] : [NEW REQUEST]
+	[INFO][12:55:06] : Server did accept the connection.
+	[INFO][12:55:06] : Server's receive a GET request.
+	[INFO][12:55:06] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:06] : End of the request.
+	[INFO][12:55:06] : Got a EPOLLIN attempt.
+	[INFO][12:55:06] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:07] : [NEW REQUEST]
+	[INFO][12:55:07] : Server did accept the connection.
+	[INFO][12:55:07] : End of the request.
+	[INFO][12:55:07] : Got a EPOLLIN attempt.
+	[INFO][12:55:07] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:07] : [NEW REQUEST]
+	[INFO][12:55:07] : Server did accept the connection.
+	[INFO][12:55:07] : Server's receive a GET request.
+	[INFO][12:55:07] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:07] : End of the request.
+	[INFO][12:55:07] : Got a EPOLLIN attempt.
+	[INFO][12:55:07] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:07] : [NEW REQUEST]
+	[INFO][12:55:07] : Server did accept the connection.
+	[INFO][12:55:07] : Server's receive a GET request.
+	[INFO][12:55:07] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/form.html" was found.
+	[INFO][12:55:07] : End of the request.
+	[INFO][12:55:07] : Got a EPOLLIN attempt.
+	[INFO][12:55:07] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:07] : [NEW REQUEST]
+	[INFO][12:55:07] : Server did accept the connection.
+	[INFO][12:55:07] : Server's receive a GET request.
+	[INFO][12:55:07] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:55:07] : End of the request.
+	[INFO][12:55:07] : Got a EPOLLIN attempt.
+	[INFO][12:55:07] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:07] : [NEW REQUEST]
+	[INFO][12:55:07] : Server did accept the connection.
+	[INFO][12:55:07] : Server's receive a GET request.
+	[INFO][12:55:07] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:07] : End of the request.
+	[INFO][12:55:07] : Got a EPOLLIN attempt.
+	[INFO][12:55:07] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:17] : [NEW REQUEST]
+	[INFO][12:55:17] : Server did accept the connection.
+	[INFO][12:55:17] : Server's receive a POST request.
+	[INFO][12:55:17] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/cgi-bin/test_cgi.py" was found.
+	[INFO][12:55:17] : End of the request.
+	[INFO][12:55:17] : Got a EPOLLIN attempt.
+	[INFO][12:55:17] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:17] : [NEW REQUEST]
+	[INFO][12:55:17] : Server did accept the connection.
+	[INFO][12:55:17] : End of the request.
+	[INFO][12:55:17] : Got a EPOLLIN attempt.
+	[INFO][12:55:17] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:47] : [NEW REQUEST]
+	[INFO][12:55:47] : Server did accept the connection.
+	[INFO][12:55:47] : End of the request.
+	[INFO][12:55:47] : Got a EPOLLIN attempt.
+	[INFO][12:55:47] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:47] : [NEW REQUEST]
+	[INFO][12:55:47] : Server did accept the connection.
+	[INFO][12:55:47] : Server's receive a GET request.
+	[INFO][12:55:47] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:47] : End of the request.
+	[INFO][12:55:47] : Got a EPOLLIN attempt.
+	[INFO][12:55:47] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:48] : [NEW REQUEST]
+	[INFO][12:55:48] : Server did accept the connection.
+	[INFO][12:55:48] : End of the request.
+	[INFO][12:55:48] : Got a EPOLLIN attempt.
+	[INFO][12:55:48] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:48] : [NEW REQUEST]
+	[INFO][12:55:48] : Server did accept the connection.
+	[INFO][12:55:48] : Server's receive a GET request.
+	[INFO][12:55:48] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:48] : End of the request.
+	[INFO][12:55:48] : Got a EPOLLIN attempt.
+	[INFO][12:55:48] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:49] : [NEW REQUEST]
+	[INFO][12:55:49] : Server did accept the connection.
+	[INFO][12:55:49] : Server's receive a GET request.
+	[INFO][12:55:49] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/form.html" was found.
+	[INFO][12:55:49] : End of the request.
+	[INFO][12:55:49] : Got a EPOLLIN attempt.
+	[INFO][12:55:49] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:49] : [NEW REQUEST]
+	[INFO][12:55:49] : Server did accept the connection.
+	[INFO][12:55:49] : Server's receive a GET request.
+	[INFO][12:55:49] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:55:49] : End of the request.
+	[INFO][12:55:49] : Got a EPOLLIN attempt.
+	[INFO][12:55:49] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:49] : [NEW REQUEST]
+	[INFO][12:55:49] : Server did accept the connection.
+	[INFO][12:55:49] : Server's receive a GET request.
+	[INFO][12:55:49] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:49] : End of the request.
+	[INFO][12:55:49] : Got a EPOLLIN attempt.
+	[INFO][12:55:49] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:50] : [NEW REQUEST]
+	[INFO][12:55:50] : Server did accept the connection.
+	[INFO][12:55:50] : End of the request.
+	[INFO][12:55:50] : Got a EPOLLIN attempt.
+	[INFO][12:55:50] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:50] : [NEW REQUEST]
+	[INFO][12:55:50] : Server did accept the connection.
+	[INFO][12:55:50] : Server's receive a GET request.
+	[INFO][12:55:50] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:50] : End of the request.
+	[INFO][12:55:50] : Got a EPOLLIN attempt.
+	[INFO][12:55:50] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:51] : [NEW REQUEST]
+	[INFO][12:55:51] : Server did accept the connection.
+	[INFO][12:55:51] : End of the request.
+	[INFO][12:55:51] : Got a EPOLLIN attempt.
+	[INFO][12:55:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:51] : [NEW REQUEST]
+	[INFO][12:55:51] : Server did accept the connection.
+	[INFO][12:55:51] : Server's receive a GET request.
+	[INFO][12:55:51] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:51] : End of the request.
+	[INFO][12:55:51] : Got a EPOLLIN attempt.
+	[INFO][12:55:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:51] : [NEW REQUEST]
+	[INFO][12:55:51] : Server did accept the connection.
+	[INFO][12:55:51] : Server's receive a GET request.
+	[INFO][12:55:51] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/index.html" was found.
+	[INFO][12:55:51] : End of the request.
+	[INFO][12:55:51] : Got a EPOLLIN attempt.
+	[INFO][12:55:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:52] : [NEW REQUEST]
+	[INFO][12:55:52] : Server did accept the connection.
+	[INFO][12:55:52] : Server's receive a GET request.
+	[INFO][12:55:52] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:55:52] : End of the request.
+	[INFO][12:55:52] : Got a EPOLLIN attempt.
+	[INFO][12:55:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:52] : [NEW REQUEST]
+	[INFO][12:55:52] : Server did accept the connection.
+	[INFO][12:55:52] : Server's receive a GET request.
+	[INFO][12:55:52] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:52] : End of the request.
+	[INFO][12:55:52] : Got a EPOLLIN attempt.
+	[INFO][12:55:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:52] : [NEW REQUEST]
+	[INFO][12:55:52] : Server did accept the connection.
+	[INFO][12:55:52] : Server's receive a GET request.
+	[INFO][12:55:52] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/form.html" was found.
+	[INFO][12:55:52] : End of the request.
+	[INFO][12:55:52] : Got a EPOLLIN attempt.
+	[INFO][12:55:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:52] : [NEW REQUEST]
+	[INFO][12:55:52] : Server did accept the connection.
+	[INFO][12:55:52] : Server's receive a GET request.
+	[INFO][12:55:52] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:55:52] : End of the request.
+	[INFO][12:55:52] : Got a EPOLLIN attempt.
+	[INFO][12:55:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:52] : [NEW REQUEST]
+	[INFO][12:55:52] : Server did accept the connection.
+	[INFO][12:55:52] : Server's receive a GET request.
+	[INFO][12:55:52] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:52] : End of the request.
+	[INFO][12:55:52] : Got a EPOLLIN attempt.
+	[INFO][12:55:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:53] : [NEW REQUEST]
+	[INFO][12:55:53] : Server did accept the connection.
+	[INFO][12:55:53] : End of the request.
+	[INFO][12:55:53] : Got a EPOLLIN attempt.
+	[INFO][12:55:53] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:53] : [NEW REQUEST]
+	[INFO][12:55:53] : Server did accept the connection.
+	[INFO][12:55:53] : Server's receive a GET request.
+	[INFO][12:55:53] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:53] : End of the request.
+	[INFO][12:55:53] : Got a EPOLLIN attempt.
+	[INFO][12:55:53] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:53] : [NEW REQUEST]
+	[INFO][12:55:53] : Server did accept the connection.
+	[INFO][12:55:53] : Server's receive a GET request.
+	[INFO][12:55:53] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/upload.html" was found.
+	[INFO][12:55:53] : End of the request.
+	[INFO][12:55:53] : Got a EPOLLIN attempt.
+	[INFO][12:55:53] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:53] : [NEW REQUEST]
+	[INFO][12:55:53] : Server did accept the connection.
+	[INFO][12:55:53] : End of the request.
+	[INFO][12:55:53] : Got a EPOLLIN attempt.
+	[INFO][12:55:53] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:54] : [NEW REQUEST]
+	[INFO][12:55:54] : Server did accept the connection.
+	[INFO][12:55:54] : End of the request.
+	[INFO][12:55:54] : Got a EPOLLIN attempt.
+	[INFO][12:55:54] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:54] : [NEW REQUEST]
+	[INFO][12:55:54] : Server did accept the connection.
+	[INFO][12:55:54] : Server's receive a GET request.
+	[INFO][12:55:54] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:54] : End of the request.
+	[INFO][12:55:54] : Got a EPOLLIN attempt.
+	[INFO][12:55:54] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:55] : [NEW REQUEST]
+	[INFO][12:55:55] : Server did accept the connection.
+	[INFO][12:55:55] : Server's receive a GET request.
+	[INFO][12:55:55] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/list.html" was found.
+	[INFO][12:55:55] : End of the request.
+	[INFO][12:55:55] : Got a EPOLLIN attempt.
+	[INFO][12:55:55] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:55] : [NEW REQUEST]
+	[INFO][12:55:55] : Server did accept the connection.
+	[INFO][12:55:55] : Server's receive a GET request.
+	[INFO][12:55:55] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:55:55] : End of the request.
+	[INFO][12:55:55] : Got a EPOLLIN attempt.
+	[INFO][12:55:55] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:55] : [NEW REQUEST]
+	[INFO][12:55:55] : Server did accept the connection.
+	[INFO][12:55:55] : Server's receive a GET request.
+	[INFO][12:55:55] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:55] : End of the request.
+	[INFO][12:55:55] : Got a EPOLLIN attempt.
+	[INFO][12:55:55] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:55] : [NEW REQUEST]
+	[INFO][12:55:55] : Server did accept the connection.
+	[INFO][12:55:55] : End of the request.
+	[INFO][12:55:55] : Got a EPOLLIN attempt.
+	[INFO][12:55:55] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:55] : [NEW REQUEST]
+	[INFO][12:55:55] : Server did accept the connection.
+	[INFO][12:55:55] : Server's receive a GET request.
+	[INFO][12:55:55] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:55] : End of the request.
+	[INFO][12:55:55] : Got a EPOLLIN attempt.
+	[INFO][12:55:55] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:56] : [NEW REQUEST]
+	[INFO][12:55:56] : Server did accept the connection.
+	[INFO][12:55:56] : Server's receive a GET request.
+	[INFO][12:55:56] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/delete.html" was found.
+	[INFO][12:55:56] : End of the request.
+	[INFO][12:55:56] : Got a EPOLLIN attempt.
+	[INFO][12:55:56] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:56] : [NEW REQUEST]
+	[INFO][12:55:56] : Server did accept the connection.
+	[INFO][12:55:56] : Server's receive a GET request.
+	[INFO][12:55:56] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:55:56] : End of the request.
+	[INFO][12:55:56] : Got a EPOLLIN attempt.
+	[INFO][12:55:56] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:56] : [NEW REQUEST]
+	[INFO][12:55:56] : Server did accept the connection.
+	[INFO][12:55:56] : Server's receive a GET request.
+	[INFO][12:55:56] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:56] : End of the request.
+	[INFO][12:55:56] : Got a EPOLLIN attempt.
+	[INFO][12:55:56] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:56] : [NEW REQUEST]
+	[INFO][12:55:56] : Server did accept the connection.
+	[INFO][12:55:56] : End of the request.
+	[INFO][12:55:56] : Got a EPOLLIN attempt.
+	[INFO][12:55:56] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:55:56] : [NEW REQUEST]
+	[INFO][12:55:56] : Server did accept the connection.
+	[INFO][12:55:56] : Server's receive a GET request.
+	[INFO][12:55:56] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:55:56] : End of the request.
+	[INFO][12:55:56] : Got a EPOLLIN attempt.
+	[INFO][12:55:56] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:49] : [NEW REQUEST]
+	[INFO][12:56:49] : Server did accept the connection.
+	[INFO][12:56:49] : Server's receive a GET request.
+	[INFO][12:56:49] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/form.html" was found.
+	[INFO][12:56:49] : End of the request.
+	[INFO][12:56:49] : Got a EPOLLIN attempt.
+	[INFO][12:56:49] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:49] : [NEW REQUEST]
+	[INFO][12:56:49] : Server did accept the connection.
+	[INFO][12:56:49] : Server's receive a GET request.
+	[INFO][12:56:49] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:56:49] : End of the request.
+	[INFO][12:56:49] : Got a EPOLLIN attempt.
+	[INFO][12:56:49] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:49] : [NEW REQUEST]
+	[INFO][12:56:49] : Server did accept the connection.
+	[INFO][12:56:49] : Server's receive a GET request.
+	[INFO][12:56:49] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:56:49] : End of the request.
+	[INFO][12:56:49] : Got a EPOLLIN attempt.
+	[INFO][12:56:49] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:50] : [NEW REQUEST]
+	[INFO][12:56:50] : Server did accept the connection.
+	[INFO][12:56:50] : End of the request.
+	[INFO][12:56:50] : Got a EPOLLIN attempt.
+	[INFO][12:56:50] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:50] : [NEW REQUEST]
+	[INFO][12:56:50] : Server did accept the connection.
+	[INFO][12:56:50] : Server's receive a GET request.
+	[INFO][12:56:50] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:56:50] : End of the request.
+	[INFO][12:56:50] : Got a EPOLLIN attempt.
+	[INFO][12:56:50] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:50] : [NEW REQUEST]
+	[INFO][12:56:50] : Server did accept the connection.
+	[INFO][12:56:50] : Server's receive a GET request.
+	[INFO][12:56:50] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/upload.html" was found.
+	[INFO][12:56:50] : End of the request.
+	[INFO][12:56:50] : Got a EPOLLIN attempt.
+	[INFO][12:56:50] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:50] : [NEW REQUEST]
+	[INFO][12:56:50] : Server did accept the connection.
+	[INFO][12:56:50] : End of the request.
+	[INFO][12:56:50] : Got a EPOLLIN attempt.
+	[INFO][12:56:50] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:51] : [NEW REQUEST]
+	[INFO][12:56:51] : Server did accept the connection.
+	[INFO][12:56:51] : End of the request.
+	[INFO][12:56:51] : Got a EPOLLIN attempt.
+	[INFO][12:56:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:51] : [NEW REQUEST]
+	[INFO][12:56:51] : Server did accept the connection.
+	[INFO][12:56:51] : Server's receive a GET request.
+	[INFO][12:56:51] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:56:51] : End of the request.
+	[INFO][12:56:51] : Got a EPOLLIN attempt.
+	[INFO][12:56:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:51] : [NEW REQUEST]
+	[INFO][12:56:51] : Server did accept the connection.
+	[INFO][12:56:51] : Server's receive a GET request.
+	[INFO][12:56:51] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/list.html" was found.
+	[INFO][12:56:51] : End of the request.
+	[INFO][12:56:51] : Got a EPOLLIN attempt.
+	[INFO][12:56:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:51] : [NEW REQUEST]
+	[INFO][12:56:51] : Server did accept the connection.
+	[INFO][12:56:51] : Server's receive a GET request.
+	[INFO][12:56:51] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:56:51] : End of the request.
+	[INFO][12:56:51] : Got a EPOLLIN attempt.
+	[INFO][12:56:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:51] : [NEW REQUEST]
+	[INFO][12:56:51] : Server did accept the connection.
+	[INFO][12:56:51] : Server's receive a GET request.
+	[INFO][12:56:51] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:56:51] : End of the request.
+	[INFO][12:56:51] : Got a EPOLLIN attempt.
+	[INFO][12:56:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:52] : [NEW REQUEST]
+	[INFO][12:56:52] : Server did accept the connection.
+	[INFO][12:56:52] : End of the request.
+	[INFO][12:56:52] : Got a EPOLLIN attempt.
+	[INFO][12:56:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:52] : [NEW REQUEST]
+	[INFO][12:56:52] : Server did accept the connection.
+	[INFO][12:56:52] : Server's receive a GET request.
+	[INFO][12:56:52] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:56:52] : End of the request.
+	[INFO][12:56:52] : Got a EPOLLIN attempt.
+	[INFO][12:56:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:53] : [NEW REQUEST]
+	[INFO][12:56:53] : Server did accept the connection.
+	[INFO][12:56:53] : Server's receive a GET request.
+	[INFO][12:56:53] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/delete.html" was found.
+	[INFO][12:56:53] : End of the request.
+	[INFO][12:56:53] : Got a EPOLLIN attempt.
+	[INFO][12:56:53] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:53] : [NEW REQUEST]
+	[INFO][12:56:53] : Server did accept the connection.
+	[INFO][12:56:53] : Server's receive a GET request.
+	[INFO][12:56:53] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/styles/styles.css" was found.
+	[INFO][12:56:53] : End of the request.
+	[INFO][12:56:53] : Got a EPOLLIN attempt.
+	[INFO][12:56:53] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:53] : [NEW REQUEST]
+	[INFO][12:56:53] : Server did accept the connection.
+	[INFO][12:56:53] : Server's receive a GET request.
+	[INFO][12:56:53] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:56:53] : End of the request.
+	[INFO][12:56:53] : Got a EPOLLIN attempt.
+	[INFO][12:56:53] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:53] : [NEW REQUEST]
+	[INFO][12:56:53] : Server did accept the connection.
+	[INFO][12:56:53] : End of the request.
+	[INFO][12:56:53] : Got a EPOLLIN attempt.
+	[INFO][12:56:53] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:53] : [NEW REQUEST]
+	[INFO][12:56:53] : Server did accept the connection.
+	[INFO][12:56:53] : Server's receive a GET request.
+	[INFO][12:56:53] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:56:53] : End of the request.
+	[INFO][12:56:53] : Got a EPOLLIN attempt.
+	[INFO][12:56:53] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:56] : [NEW REQUEST]
+	[INFO][12:56:56] : Server did accept the connection.
+	[INFO][12:56:56] : Server's receive a GET request.
+	[INFO][12:56:56] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/html/upload.html" was found.
+	[INFO][12:56:56] : End of the request.
+	[INFO][12:56:56] : Got a EPOLLIN attempt.
+	[INFO][12:56:56] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:56:56] : [NEW REQUEST]
+	[INFO][12:56:56] : Server did accept the connection.
+	[INFO][12:56:56] : End of the request.
+	[INFO][12:56:56] : Got a EPOLLIN attempt.
+	[INFO][12:56:56] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:57:03] : [NEW REQUEST]
+	[INFO][12:57:03] : Server did accept the connection.
+	[INFO][12:57:03] : End of the request.
+	[INFO][12:57:03] : Got a EPOLLIN attempt.
+	[INFO][12:57:03] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][12:57:03] : [NEW REQUEST]
+	[INFO][12:57:03] : Server did accept the connection.
+	[INFO][12:57:03] : Server's receive a GET request.
+	[INFO][12:57:03] : The file requested "/home/mmahfoud/ecole_42/webserv/website_gallery/images/icons/favicon.ico" was found.
+	[INFO][12:57:03] : End of the request.
+	[INFO][12:57:03] : Got a EPOLLIN attempt.
+	[INFO][12:57:03] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+	[ERROR][12:57:26] : The call to epoll_wait failed.
+	[INFO][12:57:26] : Shutting down the server properly.
