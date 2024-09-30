@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 16:04:42 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 17:04:20 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ class Server
 		char												socket_buffer[BUFFER_SIZE];
 		ServerConfiguration									*currentConfig;
 		Location											_currentLocation;
+		int													fd_config;
 
 					/*-------------PARSING HANDLING-------------*/		
 		bool												insideServerBlock;

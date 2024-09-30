@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 14:52:13 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 17:05:20 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,10 +135,10 @@ void Server::serverExecution()
 					inConnexion(list, *confd);
 				} else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP)) {
 					outConnexionClient(*confd);
-					list = NULL;
+					// list = NULL;
 				} else if (this->_events[i].events & EPOLLOUT) {
 					outConnexionServer(*confd);
-					list = NULL;
+					// list = NULL;
 				} else
 					log("Inexpected event has been detected.", 2);
 			} else {
@@ -175,6 +175,7 @@ void	Server::outConnexionServer(int connexionFD)
 	{
 		log("Epoll_ctl failed.", 2);
 	}
+	this->_response.clear();
 	close(connexionFD);
 	log("Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.", 1);
 }
@@ -316,10 +317,10 @@ std::string	Server::readHead(Client *client)
 }
 
 /*
-	-Adresse IP - Port de la requete
-	-le nom de Domaine
-	-Block par default
-	*/
+-Adresse IP - Port de la requete
+-le nom de Domaine
+-Block par default
+*/
 void	Server::getServBlock(Client *client, ListeningSocket *list)
 {
 	this->currentConfig = NULL;
@@ -351,7 +352,6 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 			}
 		}
 	}
-	//bloc par default
 	this->currentConfig = NULL;
 }
 
@@ -394,28 +394,6 @@ std::string	Server::readBody(Client *client, std::string *receivedLine)
 		log("Unable to open file.", 2);
 	return (*receivedLine);
 }
-void	Server::cgiExecution(std::string filePath, Client client)
-{
-	Cgi *cgi = new Cgi();
-	// cgi->setExecuter(this->_executer_cgi);
-	cgi->setPath(filePath.c_str());
-	cgi->setEnv(this->currentConfig, client); 
-	std::string content = cgi->executeCgi();
-
-	// std::string mimeType = getMimeType(&client);
-
-	std::string response = "HTTP/1.1 200 OK\r\n";
-	response += "Content-Type: text/html\r\n";
-	std::ostringstream oss;
-	oss << content.size();
-	response += "Content-Length: " + oss.str() + "\r\n";
-	response += "Connection: close\r\n";
-	response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
-	response += content;
-
-	this->_response = response;
-	delete cgi;
-}
 
 //Closing The server using key CTRL /C.
 void	Server::closeServer()
@@ -431,8 +409,14 @@ void	Server::closeServer()
 	this->_listSockets.clear();
 	this->tab_serv.clear();
 	std::vector<ListeningSocket*>().swap(_listSockets);
+	std::vector<ServerConfiguration>::iterator itServ = this->tab_serv.begin();
+	for (; itServ < this->tab_serv.end(); itServ++)
+	{
+		itServ->getLocation().clear();
+	}
 	std::vector<ServerConfiguration>().swap(tab_serv);
 	this->_connexion_fd.clear();
+	std::vector<uint32_t>().swap(this->_connexion_fd);
 	close(this->_epoll_fd);
 	exit(EXIT_SUCCESS);
 }
