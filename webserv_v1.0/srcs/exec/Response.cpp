@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 12:57:40 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:58:29 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ Response::Response(Client *client)
 	this->_blockName = "";
 	this->_client = client;
 	this->_mimePath = createMimePath();
+	this->_code = "";
 }
 
 Response::~Response()
@@ -108,15 +109,17 @@ std::string	Response::generateResponse()
 {
 	if (this->_allowed_methods[this->_client->getMethod()] == 0)
 	{
+		_code = "403";
 		return (ft_forbidden());
 	}
-	std::cout << this->_client->getPath() << std::endl;
 	if (this->_locationType != "" && this->_locationType == "equal")
 	{
+		_code = "200";
 		_filePath = this->_root + this->_client->getPath();
 	}
 	if (this->_alias != "")
 	{
+		_code = "200";
 		size_t stBlock = this->_client->getPath().find(this->_blockName);
 		
 		std::string path_tmp = this->_client->getPath();
@@ -126,18 +129,18 @@ std::string	Response::generateResponse()
 	}
 	else if (!this->_redirection.empty())
 	{
+		_code = this->_redirection.begin()->first;
 		_filePath = this->_redirection.begin()->second;
 	}
 	else if (this->_client->getPath() == "/")
 	{
+		_code = "200";
 		_filePath = this->_root + this->_index;
-		std::cout << _filePath << std::endl;
 	}
-	else 
+	else
 	{
 		_filePath = this->_root + this->_client->getPath();
 	}
-
 	if (access(_filePath.c_str(), F_OK) == 0) // trouver le fichier en question si tu trouve pas le fichier
 	{
 		if (!this->_interpreterMap.empty())//comparer avec l'extension 
@@ -157,21 +160,12 @@ std::string	Response::generateResponse()
 			}
 		}
 	} else {
+		
 		return (ft_badRequest()); // not found
 	}
-
 	
 	
 	// -> la methods requested -> content length ?
-	/*2
-	->regarder si cest une redirection 
-	->renvoye un status 3XX
-	*/
-
-	/* 3
-	->regarder si c'est un cgi
-	->executer CGI en lui donnant toutes les infos interessante
-	*/
 
 	/* 4
 	->servir un fichier static
@@ -187,23 +181,9 @@ std::string	Response::generateResponse()
 	serve an appropriate error page from _errorPages.
 	*/
 
-	/*	6. Headers
+	/*7. Autoindex
+    ->If _autoIndex is enabled for a directory, generate an index page listing the files and directories if no _index file is found.*/
 
-    ->Add necessary response headers based on the client’s request
-	(e.g., Content-Type, Content-Length, Connection).
-    ->Ensure Content-Length is calculated for the body being sent.
-    ->Handle Accept-Language (_httpAcceptLanguage) and User-Agent
-	(_httpUserAgent) if you want to customize the response based on them.
-
-	7. Autoindex
-    ->If _autoIndex is enabled for a directory, generate an index page listing the files and directories if no _index file is found.
-
-	8. Send Response
-    ->Compose the response with the proper HTTP status code
-	(e.g., 200 for success, 404 for not found), headers, and the body
-	content (file content, CGI output, or error page).
-    ->Write the response to _currentFd, ensuring the socket is ready
-	for writing.*/
 	if (this->_client->getMethod() == "GET")
 		return (ft_get());
 	else if (this->_client->getMethod() == "POST")
@@ -221,36 +201,17 @@ std::string Response::ft_get() // a revoir
 	std::string content = readFileContent(this->_filePath);
 	std::string response = "";
 	std::stringstream ss;
-	// if (this->_status_code != 0)
-	// {
-	// 	Server::log("The file requested \"" + getFilePath() + "\" was found empty.", 1);
-	// 	content = readFileContent(getFilePath());
+	Server::log("The file requested \"" + this->_filePath + "\" was found.", 1);
+	std::string mimeType = getMimeType();
 
-	// 	response = "HTTP/1.1 200 Bad Request\r\n"; /* + _code + */
-	// 	response += "Content-Type: text/html\r\n";
-	// 	std::ostringstream oss;
-	// 	oss << content.size();
-	// 	response += "Content-Length: " + oss.str() + "\r\n";
-	// 	response += "Connection: close\r\n";
-	// 	response += "Server: webserv/1.0\r\n\r\n";
-	// 	response += content;
-	// }
-	// else
-	// {
-		Server::log("The file requested \"" + this->_filePath + "\" was found.", 1);
-		std::string mimeType = getMimeType();
-		std::cout << mimeType << std::endl;
-
-		response = "HTTP/1.1 200 OK\r\n";
-		response += "Content-Type: " + mimeType + "\r\n";
-		std::ostringstream oss;
-		oss << content.size();
-		response += "Content-Length: " + oss.str() + "\r\n";
-		response += "Connection: close\r\n";
-		response += "Server: " + this->_serverName + "\r\n\r\n";
-		response += content;
-	// }
-	// std::cout << response << std::endl; // TEST
+	response = "HTTP/1.1 " + _code + " OK\r\n";
+	response += "Content-Type: " + mimeType + "\r\n";
+	std::ostringstream oss;
+	oss << content.size();
+	response += "Content-Length: " + oss.str() + "\r\n";
+	response += "Connection: close\r\n";
+	response += "Server: " + this->_serverName + "\r\n\r\n";
+	response += content;
 	return (response);
 }
 
@@ -261,10 +222,9 @@ std::string Response::ft_post()
 	std::string content = readFileContent(this->_filePath);
 	std::string response = "";
 
-	Server::log("The file requested \"" + this->_filePath + "\" was found.", 1);
 	std::string mimeType = getMimeType();
 
-	response = "HTTP/1.1 200 OK\r\n";
+	response = "HTTP/1.1 " + _code + " OK\r\n";
 	response += "Content-Type: " + mimeType + "\r\n";
 	std::ostringstream oss;
 	oss << content.size();
@@ -313,10 +273,11 @@ std::string Response::ft_delete()
 std::string Response::ft_badRequest()
 {
 	std::string content;
-	if (this->_errorPages.find(404) != this->_errorPages.end()) {
+	if (!this->_errorPages.empty() && (this->_errorPages.find(404) != this->_errorPages.end()))
+	{
 		content = readFileContent(this->_root + this->_errorPages.find(404)->second);
 	} else {
-		content = readFileContent("/home/user/ecole_42/webserv/webserv_v1.0/www/error_pages/404.html");	
+		content = readFileContent("/home/mmahfoud/ecole_42/webserv/webserv_v1.0/www/error_pages/404.html");	
 	}
 
 	std::string response = "HTTP/1.1 400 Bad Request\r\n";
@@ -333,9 +294,9 @@ std::string Response::ft_badRequest()
 
 std::string Response::ft_forbidden()
 {
-	std::string content = readFileContent("");
+	std::string content = readFileContent("/home/mmahfoud/ecole_42/webserv/webserv_v1.0/www/error_pages/403.html");
 
-	std::string response = "HTTP/1.1 400 Bad Request\r\n";
+	std::string response = "HTTP/1.1 403 Bad Request\r\n";
 	response += "Content-Type: text/html\r\n";
 	std::ostringstream oss;
     oss << content.size();
@@ -410,6 +371,28 @@ std::map<std::string, std::string>	Response::createMimePath()
 	return (mimePath);
 }
 
+// void	Response::cgiExecution()
+// {
+// 	Cgi *cgi = new Cgi();
+// 	// cgi->setExecuter(this->_executer_cgi);
+// 	cgi->setPath(_filePath.c_str());
+// 	cgi->setEnv(); 
+// 	std::string content = cgi->executeCgi();
+
+// 	std::string mimeType = getMimeType();
+
+// 	std::string response = "HTTP/1.1 200 OK\r\n";
+// 	response += "Content-Type: " + mimeType + "\r\n";
+// 	std::ostringstream oss;
+// 	oss << content.size();
+// 	response += "Content-Length: " + oss.str() + "\r\n";
+// 	response += "Connection: close\r\n";
+// 	response += "Server: " + *this->currentConfig->getServerName().begin() + "\r\n\r\n";
+// 	response += content;
+
+// 	this->_response = response;
+// 	delete cgi;
+// }
 
 /*----------------------------------------------------------------------------*/
 /*                                   SETTER                                   */

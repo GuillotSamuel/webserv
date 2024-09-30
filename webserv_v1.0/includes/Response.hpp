@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 12:21:47 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:53:55 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class Response
 		int									_status;
 		Client								*_client;
 		std::map<std::string, std::string>	_mimePath;
+		std::string							_code;
 
 		/*---------------------------------------------------------------*/
 		/*                   FONCTION GENERATE RESPONSE            		 */
@@ -49,6 +50,7 @@ class Response
 		std::string							getMimeType();
 		void								setFilePath(std::string root, std::string fileRequested);
 		std::map<std::string, std::string>	createMimePath();
+		// void								cgiExecution();
 	public:
 											Response(Client *client);
 											~Response();

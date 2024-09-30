@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:40:40 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 11:36:05 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:04:39 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@ Location::Location(/* args */)
 	this->_autoindex = 0;
 	this->_path_info = "";
 	this->_index = "";
-	this->_allowed_methods["GET"] = -1;
-	this->_allowed_methods["POST"] = -1;
-	this->_allowed_methods["DELETE"] = -1;
 }
 
 Location::~Location()

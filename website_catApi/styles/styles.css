@@ -23,7 +23,7 @@ body {
 
 header {
     padding: 20px;
-    background-image: url('../panther.webp');
+    background-image: url('../images/panther.webp');
     text-shadow:
         1px 1px 0 #fff,
         -1px -1px 0 #fff,
@@ -115,7 +115,7 @@ button:hover {
 
 footer {
     padding: 30px;
-    background-image: url('../hearts.jpg');
+    background-image: url('../images/hearts.jpg');
     text-shadow:
         1px 1px 0 #fff,
         -1px -1px 0 #fff,
