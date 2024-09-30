@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   autoIndex.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 17:12:04 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 18:43:09 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 20:01:15 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ std::string Response::autoIndex()
 		std::string item = entry->d_name;
 		if (item != "." && item != "..")
 		{
-			html << "<li><a href=\"" << this->_alias << "/" << item << "\">" << item << "</a></li>";
+			html << "<li><a href=\"" << this->_root << "/" << item << "/\">" << item << "</a></li>";
 		}
 	}
 
