@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setTokens.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 21:06:16 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 15:15:22 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 18:32:48 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ void Server::ft_set_tokens(std::vector<std::string> tokens)
 
 void Server::ft_param_set_tokens(std::vector<std::string> tokens)
 {
-    const int nb_param = 8;
+    const int nb_param = 9;
     
     const char* param_array[nb_param] = {"listen", "server_name", "error_page",
                                          "client_max_body_size", "location", "index", "root",
-                                         "allow_methods"};
+                                         "allow_methods", "auto_index"};
     void (Server::*param_functions[nb_param])(std::vector<std::string>) = {
         &Server::ft_set_listen_param,
         &Server::ft_set_server_name_param,
@@ -50,7 +50,8 @@ void Server::ft_param_set_tokens(std::vector<std::string> tokens)
         &Server::ft_set_location_param,
         &Server::ft_set_index_param,
         &Server::ft_set_root_param,
-        &Server::ft_set_allowed_methods
+        &Server::ft_set_allowed_methods,
+        &Server::ft_set_auto_index
     };
 
     for (int i = 0; i < nb_param; i++)

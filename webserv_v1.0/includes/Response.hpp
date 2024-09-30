@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 18:13:52 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 18:44:07 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class Response
 		Client								*_client;
 		std::map<std::string, std::string>	_mimePath;
 		std::string							_code;
+		int									_autoIndexUse;
 
 		/*---------------------------------------------------------------*/
 		/*                   FONCTION GENERATE RESPONSE            		 */
@@ -51,6 +52,7 @@ class Response
 		void								setFilePath(std::string root, std::string fileRequested);
 		std::map<std::string, std::string>	createMimePath();
 		std::string							firstHeader();
+		void								filePathFinder();
 		// void								cgiExecution();
 	public:
 											Response(Client *client);

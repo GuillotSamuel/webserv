@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 18:26:13 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 18:39:40 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ Response::Response(Client *client)
 	this->_client = client;
 	this->_mimePath = createMimePath();
 	this->_code = "";
+	this->_autoIndexUse = 0;
 }
 
 Response::~Response()
@@ -115,57 +116,11 @@ std::string	Response::generateResponse()
 		_code = "403";
 		return (ft_forbidden());
 	}
-	if (this->_locationType != "" && this->_locationType == "equal")
-	{
-		_code = "200";
-		_filePath = this->_root + this->_client->getPath();
-	}
-	if (this->_alias != "")
-	{
-		_code = "200";
-		size_t stBlock = this->_client->getPath().find(this->_blockName);
-		
-		std::string path_tmp = this->_client->getPath();
-		if (stBlock != std::string::npos)
-			path_tmp.replace(stBlock, this->_blockName.size(), this->_alias);
-		_filePath = this->_root + path_tmp;
-	}
-	else if (!this->_redirection.empty() && this->_client->getPath() == this->_blockName)
-	{
-		std::stringstream ss;
-		ss << this->_redirection.begin()->first;
-		std::string str = ss.str();
-		_code = str;
-		_filePath = this->_redirection.begin()->second;
-	}
-	else if (this->_client->getPath() == "/")
-	{
-		_code = "200";
-		if (_index != "")
-		{
-			_filePath = this->_root + this->_index;
-		}
-		else if (_autoIndex == 1)
-		{
-			return (autoIndex());
-		}
-		else
-		{
-			_filePath = "";
-		}
-	}
-	else
-	{
-		_code = "200";
-		std::vector<std::string>::iterator it = this->_serverName.begin();
-		for (; it != _serverName.end(); it++)
-		{
-			if (_client->getPath() == "/" + *it)
-				_filePath = this->_root + this->_index;
-		}
-		if (_filePath == "")
-			_filePath = this->_root + this->_client->getPath();
-	}
+	filePathFinder();
+	if (_autoIndexUse == 1)
+		return (autoIndex());
+	std::cout << _filePath << std::endl;
+
 	if (access(_filePath.c_str(), F_OK) == 0)
 	{
 		std::cout << this->_filePath << std::endl;
@@ -212,6 +167,75 @@ std::string	Response::firstHeader()
 	else if (_code == "302")
 		return ("HTTP/1.1 302 Moved Temporarily\r\n");
 	return ("HTTP/1.1 200 OK\r\n");
+}
+
+void	Response::filePathFinder()
+{
+	if (this->_locationType != "" && this->_locationType == "equal")
+	{
+		_code = "200";
+		_filePath = this->_root + this->_client->getPath();
+	}
+	else if (this->_alias != "")
+	{
+		_code = "200";
+		size_t stBlock = this->_client->getPath().find(this->_blockName);
+		
+		std::string path_tmp = this->_client->getPath();
+		if (stBlock != std::string::npos)
+			path_tmp.replace(stBlock, this->_blockName.size(), this->_alias);
+		_filePath = this->_root + path_tmp;
+	}
+	else if (!this->_redirection.empty() && this->_client->getPath() == this->_blockName)
+	{
+		std::stringstream ss;
+		ss << this->_redirection.begin()->first;
+		std::string str = ss.str();
+		_code = str;
+		_filePath = this->_redirection.begin()->second;
+	}
+	else if (this->_client->getPath() == "/")
+	{
+		_code = "200";
+		if (_index != "")
+		{
+			_filePath = this->_root + this->_index;
+		}
+		else if (_autoIndex == 1)
+		{
+			_autoIndexUse = 1;
+			return ;
+		}
+		else
+			_filePath = "";
+	}
+	else
+	{
+		_code = "200";
+		if (this->_index != "")
+		{
+			std::vector<std::string>::iterator it = this->_serverName.begin();
+			for (; it != _serverName.end(); it++)
+			{
+				if (_client->getPath() == "/" + *it)
+					_filePath = this->_root + this->_index;
+			}
+		}
+		else if (_autoIndex == 1)
+		{
+			std::vector<std::string>::iterator it = this->_serverName.begin();
+			for (; it != _serverName.end(); it++)
+			{
+				if (_client->getPath() == "/" + *it)
+				{
+					_autoIndexUse = 1;
+					return ;
+				}
+			}
+		}
+		if (_filePath == "")
+			_filePath = this->_root + this->_client->getPath();
+	}
 }
 
 std::string Response::ft_get() // a revoir
