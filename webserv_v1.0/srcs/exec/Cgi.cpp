@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:25:35 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 19:48:23 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:52:02 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ std::string	Cgi::executeCgi()
 	}
 	close(pipefd[0]);
 	waitpid(pid, NULL, 0);
-	std::string getContent(buffer.);
+	std::string getContent(buffer, strlen(buffer));
 	return (getContent);
 }
 
