@@ -6,7 +6,7 @@
 /*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/27 10:24:29 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/09/30 12:54:32 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -427,6 +427,58 @@ void Server::check_location(ServerConfiguration server_conf)
 	}
 }
 
+/* Checking duplicates */
+
+void Server::check_server_name_duplicate()
+{
+    std::vector<std::string> unique_server_names;
+
+    std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
+    for (; it != this->tab_serv.end(); it++)
+    {
+        const std::vector<std::string>& server_names = it->getServerName();
+
+        std::vector<std::string>::const_iterator server_name_it = server_names.begin();
+        for (; server_name_it != server_names.end(); server_name_it++)
+        {
+            if (std::find(unique_server_names.begin(), unique_server_names.end(), *server_name_it) != unique_server_names.end())
+            {
+                error("Error: Multiple servers have the same name: " + *server_name_it);
+            }
+            else
+            {
+                unique_server_names.push_back(*server_name_it);
+            }
+        }
+    }
+}
+
+void Server::check_listen_duplicate()
+{
+    std::vector<std::string> unique_listen;
+
+    std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
+    for (; it != this->tab_serv.end(); it++)
+    {
+        const std::multimap<std::string, std::string>& port_list = it->getPortList();
+
+        std::multimap<std::string, std::string>::const_iterator listen_it = port_list.begin();
+        for (; listen_it != port_list.end(); listen_it++)
+        {
+            std::string concat_listen = listen_it->first + listen_it->second;
+            if (std::find(unique_listen.begin(), unique_listen.end(), concat_listen) != unique_listen.end())
+            {
+                error("Error: Multiple servers have the listen parameter: " + concat_listen);
+            }
+            else
+            {
+                unique_listen.push_back(concat_listen);
+            }
+        }
+    }
+}
+
+
 /* Main checking function */
 
 void Server::check_parsing()
@@ -446,4 +498,7 @@ void Server::check_parsing()
 		check_interpreter_map(*iterator_tab_serv);
 		check_location(*iterator_tab_serv);
 	}
+
+	check_server_name_duplicate();
+	check_listen_duplicate();
 }
