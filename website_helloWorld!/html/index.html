@@ -12,6 +12,47 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=VT323&display=swap"
         rel="stylesheet">
+    <script>
+        function loadCGI() {
+            fetch('/hello.c', {
+                method: 'POST'
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output-c").innerHTML = data;
+            })
+            .catch(error => console.error('Error: C interpreter not installed:', error));
+
+            fetch('/hello.cpp', {
+                method: 'POST'
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output-cpp").innerHTML = data;
+            })
+            .catch(error => console.error('Error: C++ interpreter not installed:', error));
+
+            fetch('/hello.py', {
+                method: 'POST'
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output-py").innerHTML = data;
+            })
+            .catch(error => console.error('Error: Python interpreter not installed:', error));
+
+            fetch('/hello.rs', {
+                method: 'POST'
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("cgi-output-rs").innerHTML = data;
+            })
+            .catch(error => console.error('Error: Rust interpreter not installed:', error));
+        }
+
+        window.onload = loadCGI;
+    </script>
 </head>
 
 <body>
@@ -20,32 +61,92 @@
     </header>
     <main>
         <div class="presentation">
-            <p>Click on Execute buttons to print "Hello World!".</p>
+            <p>The page automatically displays "Hello World!" using CGI.</p>
+        </div>
+
+        <div class="cgi_container">
+            <h1>/</h1>
+            <h1>C</h1>
+            <div class="exec_container">
+                <h2>C CGI execution:</h2>
+                <div id="cgi-output-c"></div>
+            </div>
+            <div class="code_container">
+                <h2>C Code:</h2>
+                <pre>
+                    #include &lt;stdio.h&gt;
+
+                    int main() {
+                        printf("Content-Type: text/html\n\n");
+                        printf("&lt;h1&gt;Hello, World!&lt;/h1&gt;\n");
+                        return 0;
+                    }
+                </pre>
+            </div>
+            <h1>/</h1>
+        </div>
+
+        <div class="cgi_container">
+            <h1>/</h1>
+            <h1>C++</h1>
+            <div class="exec_container">
+                <h2>C++ CGI execution:</h2>
+                <div id="cgi-output-cpp"></div>
+            </div>
+            <div class="code_container">
+                <h2>C++ Code:</h2>
+                <pre>
+                    #include &lt;iostream&gt;
+
+                    int main() {
+                        std::cout &lt;&lt; "Content-Type: text/html\n\n";
+                        std::cout &lt;&lt; "&lt;h1&gt;Hello, World!&lt;/h1&gt;\n";
+                        return 0;
+                    }
+                </pre>
+            </div>
+            <h1>/</h1>
         </div>
 
         <div class="cgi_container">
             <h1>/</h1>
             <h1>Python</h1>
             <div class="exec_container">
-                <h2>Python CGI execution :</h2>
-                <form action="/hello.py" method="post">
-                    <button type="submit">Execute hello.py</button>
-                </form>
+                <h2>Python CGI execution:</h2>
+                <div id="cgi-output-py"></div>
             </div>
             <div class="code_container">
-                <h2>Python Code :</h2>
+                <h2>Python Code:</h2>
                 <pre>
                     import cgi
 
                     print("Content-Type: text/html\n")
-
                     print("&lt;h1&gt;Hello, World!&lt;/h1&gt;")
                 </pre>
             </div>
             <h1>/</h1>
         </div>
-        
+
+        <div class="cgi_container">
+            <h1>/</h1>
+            <h1>Rust</h1>
+            <div class="exec_container">
+                <h2>Rust CGI execution:</h2>
+                <div id="cgi-output-rs"></div>
+            </div>
+            <div class="code_container">
+                <h2>Rust Code:</h2>
+                <pre>
+                    fn main() {
+                        println!("Content-Type: text/html\n");
+                        println!("&lt;h1&gt;Hello, World!&lt;/h1&gt;");
+                    }
+                </pre>
+            </div>
+            <h1>/</h1>
+        </div>
     </main>
+
     <footer>
         <div class="footer-credits">Project made by sguillot and mmahfoud</div>
     </footer>
