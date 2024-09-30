@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/29 00:27:49 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 11:37:56 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ class Response
 	public:
 											Response(Client *client);
 											~Response();
-		void								setInfo(ServerConfiguration *serv, Location *location);
+		void								setInfo(ServerConfiguration *serv, Location location);
 		std::string							generateResponse();
 		std::string							getAlias() const;
 		std::string							getRoot() const;

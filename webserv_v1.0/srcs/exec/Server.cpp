@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/29 14:35:27 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 11:44:47 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,11 +265,11 @@ void	Server::getLocationBlock(Client *client)
 	{
 		if (client->getPath() == it->getBlockName() && it->getBlockType() == "equal")
 		{
-			this->_currentLocation = &(*it);
+			this->_currentLocation = *it;
 			return ;
 		}
 	}
-	Location	*bestMatch = NULL;
+	Location	bestMatch;
 	size_t		longestPrefix = 0;
 	it = tab.begin();
 	for (; it != tab.end(); ++it)
@@ -282,19 +282,18 @@ void	Server::getLocationBlock(Client *client)
 				if (blockName.length() > longestPrefix)
 				{
 					longestPrefix = blockName.length();
-					bestMatch = &(*it);
+					bestMatch = *it;
 				}
 			}
 		}
 	}
 
 	// Si une correspondance par préfixe a été trouvée
-	if (bestMatch != NULL)
+	if (bestMatch.getBlockName() != "")
 	{
 		this->_currentLocation = bestMatch;
 		return;
 	}
-	this->_currentLocation = NULL;
 }
 
 std::string	Server::readHead(Client *client)

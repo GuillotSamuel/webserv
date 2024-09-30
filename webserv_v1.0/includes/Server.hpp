@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/28 17:14:10 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 11:37:11 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ class Server
 		char												received_line[BUFFER_SIZE];
 		char												socket_buffer[BUFFER_SIZE];
 		ServerConfiguration									*currentConfig;
-		Location											*_currentLocation;
+		Location											_currentLocation;
 		int													fd_config;
 
 					/*-------------PARSING HANDLING-------------*/		

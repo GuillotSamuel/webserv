@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/29 15:03:56 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 12:03:30 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,57 +42,56 @@ Response::~Response()
 /*                              METHOD/SERVER                                 */
 /*----------------------------------------------------------------------------*/
 
-void	Response::setInfo(ServerConfiguration *serv, Location *location)
+void	Response::setInfo(ServerConfiguration *serv, Location location)
 {
 	this->_serverName = *serv->getServerName().begin();
-	if (location)
+	if (location.getBlockName() != "")
 	{
-		this->_locationType = location->getBlockType();
-		this->_blockName = location->getBlockName();
-		std::cout << location->getAlias();
-		this->_alias = location->getAlias();
+		this->_locationType = location.getBlockType();
+		this->_blockName = location.getBlockName();
+		this->_alias = location.getAlias();
 		
-		if (location->getRoot() != "")
-			this->_root = location->getRoot();
+		if (location.getRoot() != "")
+			this->_root = location.getRoot();
 		else
 			this->_root = serv->getRoot();
 			
-		if (location->getIndex() != "")
-			this->_index = location->getIndex();
+		if (location.getIndex() != "")
+			this->_index = location.getIndex();
 		else
 			this->_index= serv->getIndex();
 			
-		if (location->getClientMaxBodySize() != -1)
-			this->_clientMaxBodySize = location->getClientMaxBodySize();
+		if (location.getClientMaxBodySize() != -1)
+			this->_clientMaxBodySize = location.getClientMaxBodySize();
 		else
 			this->_clientMaxBodySize = serv->getClientMaxBodySize();
 			
-		if (!location->getCgi().empty())
-			this->_interpreterMap = location->getCgi();
+		if (!location.getCgi().empty())
+			this->_interpreterMap = location.getCgi();
 		else
 			this->_interpreterMap = serv->getInterpreterMap();
 			
-		if (location->getAllowedMethods("GET") != -1
-			&& location->getAllowedMethods("POST") != -1)
+		if (location.getAllowedMethods("GET") != -1
+			&& location.getAllowedMethods("POST") != -1)
 		{
-			this->_allowed_methods["GET"] = location->getAllowedMethods("GET");
-			this->_allowed_methods["POST"] = location->getAllowedMethods("POST");
+			this->_allowed_methods["GET"] = location.getAllowedMethods("GET");
+			this->_allowed_methods["POST"] = location.getAllowedMethods("POST");
 		}
 		else
 			this->_allowed_methods = serv->getAllowedMethods();
 			
-		if (!location->getErrorPage().empty())
-			this->_errorPages = location->getErrorPage();
+		if (!location.getErrorPage().empty())
+			this->_errorPages = location.getErrorPage();
 		else
 			this->_errorPages = serv->getErrorPages();
 			
-		if (location->getAutoIndex() != -1)
-			this->_autoIndex = location->getAutoIndex();
+		if (location.getAutoIndex() != -1)
+			this->_autoIndex = location.getAutoIndex();
 		else
 			this->_autoIndex = serv->getAutoIndex();
 			
-		if (!location->getRedirection().empty())
-			this->_redirection = location->getRedirection();
+		if (!location.getRedirection().empty())
+			this->_redirection = location.getRedirection();
 	} else {
 		this->_root = serv->getRoot();
 		this->_index = serv->getIndex();
@@ -114,15 +113,12 @@ std::string	Response::generateResponse()
 	}
 	if (this->_alias != "")
 	{
-		std::cout << _blockName << std::endl;
-		std::cout << this->_client->getPath() << std::endl;
 		size_t stBlock = this->_client->getPath().find(this->_blockName);
-		std::cout << this->_alias <<  stBlock << " et " << this->_blockName.size() << std::endl;
 		
-		this->_client->getPath().replace(stBlock, this->_blockName.size(), this->_alias);
-		std::cout << this->_client->getPath() << std::endl;
-		_filePath = this->_root + this->_client->getPath();
-		std::cout << _filePath << std::endl;
+		std::string path_tmp = this->_client->getPath();
+		if (stBlock != std::string::npos)
+			path_tmp.replace(stBlock, this->_blockName.size(), this->_alias);
+		_filePath = this->_root + path_tmp;
 	}
 	else if (!this->_redirection.empty())
 	{
@@ -133,9 +129,9 @@ std::string	Response::generateResponse()
 		_filePath = this->_root + this->_client->getPath();
 	}
 
-	// std::cout << _filePath << std::endl; // TEST
-	if (access(_filePath.c_str(), F_OK | X_OK) == 0) // trouver le fichier en question si tu trouve pas le fichier
+	if (access(_filePath.c_str(), F_OK) == 0) // trouver le fichier en question si tu trouve pas le fichier
 	{
+
 		if (!this->_interpreterMap.empty())//comparer avec l'extension 
 		{
 			size_t ext = this->_filePath.rfind(".");
@@ -197,7 +193,6 @@ std::string	Response::generateResponse()
 	content (file content, CGI output, or error page).
     ->Write the response to _currentFd, ensuring the socket is ready
 	for writing.*/
-	
 	if (this->_client->getMethod() == "GET")
 		return (ft_get());
 	else if (this->_client->getMethod() == "POST")
@@ -243,6 +238,7 @@ std::string Response::ft_get() // a revoir
 		response += "Server: " + this->_serverName + "\r\n\r\n";
 		response += content;
 	// }
+	std::cout << response << std::endl; // TEST
 	return (response);
 }
 
@@ -357,6 +353,8 @@ std::string	Response::getMimeType()
 {
 	if (getFilePath() == "/" )
 		return ("text/html");
+	
+	
 
 	return ("application/octet-stream");
 }

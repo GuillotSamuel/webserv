@@ -31,7 +31,9 @@ class Location
 	public:
 		Location(/* args */);
 		~Location();
-		
+
+
+		Location							&operator=(Location const &obj);
 		void								setBlockName(std::string blockName);
 		void								setBlockType(std::string blockType);
 		void								setAlias(std::string alias);

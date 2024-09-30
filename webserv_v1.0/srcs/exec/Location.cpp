@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:40:40 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/28 16:43:55 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 11:36:05 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,26 @@ Location::~Location()
 /*                                   SETTER                                   */
 /*----------------------------------------------------------------------------*/
 
-void Location::setBlockName(std::string blockName) {
-	this->_blockName = blockName;
+Location &Location::operator=(Location const &obj)
+{
+    this->_blockName = obj._blockName;
+	this->_blockType = obj._blockType;
+	this->_alias = obj._alias;
+	this->_root = obj._root;
+	this->_clientMaxBodySize = obj._clientMaxBodySize;
+	this->_autoindex = obj._autoindex;
+	this->_path_info = obj._path_info;
+	this->_index = obj._index;
+	this->_cgi = obj._cgi;
+	this->_error_page = obj._error_page;
+	this->_redirection = obj._redirection;
+	this->_allowed_methods = obj._allowed_methods;
+	return (*this);
+}
+
+void Location::setBlockName(std::string blockName)
+{
+    this->_blockName = blockName;
 }
 
 void Location::setBlockType(std::string blockType) {
