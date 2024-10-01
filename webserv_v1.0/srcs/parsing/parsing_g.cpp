@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_g.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:44:12 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 14:52:34 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 23:02:45 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void Server::parsing_g(int argc, char **argv)
 {
     if (argc == 2 && !ft_strcmp((const char *)argv[1], (const char *)"--help"))
     {
-        error(HELP_INFOS);
+        man(HELP_INFOS);
     }
     else if (argc == 1)
     {

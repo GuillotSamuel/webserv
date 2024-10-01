@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 17:41:27 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/28 17:04:46 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 23:56:04 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ class ServerConfiguration
 		std::map<int, std::string>				_errorPages;
 		int										_autoIndex;
 		std::vector<Location>					_location;
-
 		std::map<std::string, std::string>		_pathInfoMime;
 		std::string								_strPort;
 

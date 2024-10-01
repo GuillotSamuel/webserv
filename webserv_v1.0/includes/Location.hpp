@@ -17,9 +17,9 @@ class Location
 {
 	private:
 		std::string							_blockName;
-		std::string							_blockType; // equal / prefixe
-		std::string                 		_alias; // remplace l'URI par cette variable
-		std::string                 		_root; // permet de trouver le path qui mene a ce fichier
+		std::string							_blockType;
+		std::string                 		_alias;
+		std::string                 		_root;
 		int                 				_clientMaxBodySize;
 		int                         		_autoindex;
 		std::string                 		_path_info;
@@ -28,12 +28,16 @@ class Location
 		std::map<int, std::string>			_error_page;
 		std::map<int, std::string>			_redirection;
 		std::map<std::string, int>  		_allowed_methods;
+
 	public:
 		Location(/* args */);
 		~Location();
 
-
 		Location							&operator=(Location const &obj);
+
+		/*---------------------------------------------------------------*/
+		/*                            SETTER                             */
+		/*---------------------------------------------------------------*/
 		void								setBlockName(std::string blockName);
 		void								setBlockType(std::string blockType);
 		void								setAlias(std::string alias);
@@ -46,6 +50,10 @@ class Location
 		void								setRedirection(int code, std::string to);
 		void								setAllowedMethods(std::string whichOne, int allow);
 
+
+		/*---------------------------------------------------------------*/
+		/*                            GETTER                             */
+		/*---------------------------------------------------------------*/
 		std::string							getBlockName() const;
 		std::string							getBlockType() const;
 		std::string							getAlias() const;

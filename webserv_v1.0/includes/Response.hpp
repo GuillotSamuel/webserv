@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 11:57:25 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 23:55:32 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ class Response
 		std::vector<std::string>			_serverName;
 		std::string							_blockName;
 		std::string							_locationType;
-		std::string							_alias; // vrai root vers mais ne remplace le root du serveur
+		std::string							_alias;
 		std::string							_root;
 		std::string							_index;
 		std::string							_cgiPath;
-		std::string							_filePath; // absolute path to file requested
+		std::string							_filePath;
 		std::string							_code;
 		std::string							_receivedLine;
 		std::map<std::string, int>			_allowed_methods;
@@ -63,11 +63,22 @@ class Response
 		void								saveFile(const std::string &filename, const std::string &data);
 
 	public:
-											Response(Client *client);
-											~Response();
+		/*---------------------------------------------------------------*/
+		/*                    CONSTRUCTOR/DESTRUCTOR                     */
+		/*---------------------------------------------------------------*/
+		Response(Client *client);
+		~Response();
+		
+		std::string							generateResponse();
+		/*---------------------------------------------------------------*/
+		/*                            SETTER                             */
+		/*---------------------------------------------------------------*/
 		void								setInfo(ServerConfiguration *serv, Location location);
 		void								setReceivedLine(std::string received);
-		std::string							generateResponse();
+
+		/*---------------------------------------------------------------*/
+		/*                            GETTER                             */
+		/*---------------------------------------------------------------*/
 		std::string							getAlias() const;
 		std::string							getRoot() const;
 		std::string							getIndex() const;
@@ -79,4 +90,5 @@ class Response
 		int									getAutoIndex() const;
 		int									getClientMaxBodySize() const;
 };
-		std::ostream						&operator<<(std::ostream &Cout, Response const &response);
+
+std::ostream						&operator<<(std::ostream &Cout, Response const &response);
