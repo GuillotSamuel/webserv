@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/28 17:02:50 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:59:20 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ ServerConfiguration::ServerConfiguration()
 	this->_strPort = "";
 	this->_root = "";
 	this->_index = "";
+	this->_autoIndex = 0;
+	this->_clientMaxBodySize = 0;
 	this->_allowed_methods["GET"] = -1;
 	this->_allowed_methods["POST"] = -1;
 	this->_allowed_methods["DELETE"] = -1;

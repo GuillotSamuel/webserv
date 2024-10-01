@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:25:35 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 19:52:02 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 21:22:13 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ std::string	Cgi::executeCgi()
 	}
 	close(pipefd[1]);
 	char buffer[BUFFER_SIZE];
+	memset(buffer, 0, BUFFER_SIZE);
 	int n = 0;
 	while ((n = read(pipefd[0], buffer, sizeof(buffer) - 1)) > 0)
 	{

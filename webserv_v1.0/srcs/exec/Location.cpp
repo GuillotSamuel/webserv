@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:40:40 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 17:04:36 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 20:27:50 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,24 @@ Location &Location::operator=(Location const &obj)
 	this->_autoindex = obj._autoindex;
 	this->_path_info = obj._path_info;
 	this->_index = obj._index;
-	this->_cgi = obj._cgi;
+	this->_cgi.clear();
+	std::map<std::string, std::string> tmp = obj.getCgi();
+	std::map<std::string, std::string>::iterator it = tmp.begin();
+	for (; it != tmp.end(); it++)
+	{
+		this->_cgi[it->first] = it->second;
+	}
+	this->_error_page.clear();
 	this->_error_page = obj._error_page;
+	this->_redirection.clear();
 	this->_redirection = obj._redirection;
-	this->_allowed_methods = obj._allowed_methods;
+	this->_allowed_methods.clear();
+	std::map<std::string, int> tmp2 = obj.getAllowedMethodsTab();
+	std::map<std::string, int>::iterator it2 = tmp2.begin();
+	for (; it2 != tmp2.end(); it2++)
+	{
+		this->_cgi[it2->first] = it2->second;
+	}
 	return (*this);
 }
 
