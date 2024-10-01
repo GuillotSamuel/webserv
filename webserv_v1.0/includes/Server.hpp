@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 23:53:31 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 16:05:56 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ class Server
 		bool												insideServerBlock;
 		bool												insideParamBlock;
 		bool												location_started;
-		std::string											_response;
+		std::multimap<int, std::string>						response_tab;
 		
 		/*---------------------------------------------------------------*/
 		/*                            METHOD                             */
@@ -63,7 +63,7 @@ class Server
 		void												inConnexion(ListeningSocket *list, int connexionFD);
 		void												outConnexionClient(int connexionFD);
 		void												outConnexionServer(int connexionFD);
-		void												handle_client(ListeningSocket *list, int current_fd);
+		std::string											handle_client(ListeningSocket *list, int current_fd);
 		void												getServBlock(Client *client, ListeningSocket *list);
 		void												getLocationBlock(Client *client);
 		void												closeServer();
