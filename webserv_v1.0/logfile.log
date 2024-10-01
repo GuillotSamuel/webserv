@@ -1,124 +1,263 @@
-	[INFO][15:23:26] : Getprotobyname Succed.
-	[INFO][15:23:26] : Socket_fd in now created.
-	[INFO][15:23:26] : Socket_fd in now set.
-	[INFO][15:23:26] : Socket_fd is binded.
-	[INFO][15:23:26] : Socket_fd is non blocking fd.
-	[INFO][15:23:26] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:23:26] : Getprotobyname Succed.
-	[INFO][15:23:26] : Socket_fd in now created.
-	[INFO][15:23:26] : Socket_fd in now set.
-	[INFO][15:23:26] : Socket_fd is binded.
-	[INFO][15:23:26] : Socket_fd is non blocking fd.
-	[INFO][15:23:26] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:23:26] : Getprotobyname Succed.
-	[INFO][15:23:26] : Socket_fd in now created.
-	[INFO][15:23:26] : Socket_fd in now set.
-	[INFO][15:23:26] : Socket_fd is binded.
-	[INFO][15:23:26] : Socket_fd is non blocking fd.
-	[INFO][15:23:26] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:23:26] : Getprotobyname Succed.
-	[INFO][15:23:26] : Socket_fd in now created.
-	[INFO][15:23:26] : Socket_fd in now set.
-	[INFO][15:23:26] : Socket_fd is binded.
-	[INFO][15:23:26] : Socket_fd is non blocking fd.
-	[INFO][15:23:26] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:23:26] : Getprotobyname Succed.
-	[INFO][15:23:26] : Socket_fd in now created.
-	[INFO][15:23:26] : Socket_fd in now set.
-	[INFO][15:23:26] : Socket_fd is binded.
-	[INFO][15:23:26] : Socket_fd is non blocking fd.
-	[INFO][15:23:26] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:23:26] : Getprotobyname Succed.
-	[INFO][15:23:26] : Socket_fd in now created.
-	[INFO][15:23:26] : Socket_fd in now set.
-	[INFO][15:23:26] : Socket_fd is binded.
-	[INFO][15:23:26] : Socket_fd is non blocking fd.
-	[INFO][15:23:26] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:23:26] : Getprotobyname Succed.
-	[INFO][15:23:26] : Socket_fd in now created.
-	[INFO][15:23:26] : Socket_fd in now set.
-	[INFO][15:23:26] : Socket_fd is binded.
-	[INFO][15:23:26] : Socket_fd is non blocking fd.
-	[INFO][15:23:26] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:23:26] : Getprotobyname Succed.
-	[INFO][15:23:26] : Socket_fd in now created.
-	[INFO][15:23:26] : Socket_fd in now set.
-	[INFO][15:23:26] : Socket_fd is binded.
-	[INFO][15:23:26] : Socket_fd is non blocking fd.
-	[INFO][15:23:26] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:23:26] : Getprotobyname Succed.
-	[INFO][15:23:26] : Socket_fd in now created.
-	[INFO][15:23:26] : Socket_fd in now set.
-	[INFO][15:23:26] : Socket_fd is binded.
-	[INFO][15:23:26] : Socket_fd is non blocking fd.
-	[INFO][15:23:26] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:23:26] : Getprotobyname Succed.
-	[INFO][15:23:26] : Socket_fd in now created.
-	[INFO][15:23:26] : Socket_fd in now set.
-	[INFO][15:23:26] : Socket_fd is binded.
-	[INFO][15:23:26] : Socket_fd is non blocking fd.
-	[INFO][15:23:26] : Socket_fd is now listening every attemp of connection.
-	[INFO][15:23:26] : Getprotobyname Succed.
-	[INFO][15:23:26] : Socket_fd in now created.
-	[INFO][15:23:26] : Socket_fd in now set.
-	[INFO][15:23:26] : Socket_fd is binded.
-	[INFO][15:23:26] : Socket_fd is non blocking fd.
-	[INFO][15:23:26] : Socket_fd is now listening every attemp of connection.
-[INFO][15:23:26] : Starting Server.
-	[INFO][15:23:26] : Epoll instance successfully created.
-	[INFO][15:23:26] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
-	[INFO][15:23:26] : The server construction is now complete. The server is ready to accept incoming connections.
-[INFO][15:23:29] : [NEW REQUEST]
-	[INFO][15:23:29] : Server did accept the connection.
-	[INFO][15:23:29] : Server's receive a GET request.
-	[INFO][15:23:29] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/html/index.html" was found.
-	[INFO][15:23:29] : End of the request.
-	[INFO][15:23:29] : Got a EPOLLIN attempt.
-	[INFO][15:23:29] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-[INFO][15:23:29] : [NEW REQUEST]
-	[INFO][15:23:29] : Server did accept the connection.
-	[INFO][15:23:29] : Server's receive a GET request.
-	[INFO][15:23:29] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/styles/styles.css" was found.
-	[INFO][15:23:29] : End of the request.
-	[INFO][15:23:29] : Got a EPOLLIN attempt.
-	[INFO][15:23:29] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-[INFO][15:23:29] : [NEW REQUEST]
-	[INFO][15:23:29] : Server did accept the connection.
-	[INFO][15:23:29] : Cgi Execution.
-	[INFO][15:23:29] : End of the request.
-	[INFO][15:23:29] : Got a EPOLLIN attempt.
-	[INFO][15:23:29] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-[INFO][15:23:29] : [NEW REQUEST]
-	[INFO][15:23:29] : Server did accept the connection.
-	[INFO][15:23:29] : Server's receive a POST request.
-	[INFO][15:23:29] : End of the request.
-	[INFO][15:23:29] : Got a EPOLLIN attempt.
-	[INFO][15:23:29] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-[INFO][15:23:30] : [NEW REQUEST]
-	[INFO][15:23:30] : Server did accept the connection.
-	[INFO][15:23:30] : Server's receive a GET request.
-	[INFO][15:23:30] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/html/index.html" was found.
-	[INFO][15:23:30] : End of the request.
-	[INFO][15:23:30] : Got a EPOLLIN attempt.
-	[INFO][15:23:30] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-[INFO][15:23:30] : [NEW REQUEST]
-	[INFO][15:23:30] : Server did accept the connection.
-	[INFO][15:23:30] : Server's receive a GET request.
-	[INFO][15:23:30] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/styles/styles.css" was found.
-	[INFO][15:23:30] : End of the request.
-	[INFO][15:23:30] : Got a EPOLLIN attempt.
-	[INFO][15:23:30] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-[INFO][15:23:30] : [NEW REQUEST]
-	[INFO][15:23:30] : Server did accept the connection.
-	[INFO][15:23:30] : Cgi Execution.
-	[INFO][15:23:30] : End of the request.
-	[INFO][15:23:30] : Got a EPOLLIN attempt.
-	[INFO][15:23:30] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-[INFO][15:23:30] : [NEW REQUEST]
-	[INFO][15:23:30] : Server did accept the connection.
-	[INFO][15:23:30] : Server's receive a POST request.
-	[INFO][15:23:30] : End of the request.
-	[INFO][15:23:30] : Got a EPOLLIN attempt.
-	[INFO][15:23:30] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
-	[ERROR][15:23:33] : The call to epoll_wait failed.
-	[INFO][15:23:33] : Shutting down the server properly.
+	[INFO][15:26:52] : Getprotobyname Succed.
+	[INFO][15:26:52] : Socket_fd in now created.
+	[INFO][15:26:52] : Socket_fd in now set.
+	[INFO][15:26:52] : Socket_fd is binded.
+	[INFO][15:26:52] : Socket_fd is non blocking fd.
+	[INFO][15:26:52] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:26:52] : Getprotobyname Succed.
+	[INFO][15:26:52] : Socket_fd in now created.
+	[INFO][15:26:52] : Socket_fd in now set.
+	[INFO][15:26:52] : Socket_fd is binded.
+	[INFO][15:26:52] : Socket_fd is non blocking fd.
+	[INFO][15:26:52] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:26:52] : Getprotobyname Succed.
+	[INFO][15:26:52] : Socket_fd in now created.
+	[INFO][15:26:52] : Socket_fd in now set.
+	[INFO][15:26:52] : Socket_fd is binded.
+	[INFO][15:26:52] : Socket_fd is non blocking fd.
+	[INFO][15:26:52] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:26:52] : Getprotobyname Succed.
+	[INFO][15:26:52] : Socket_fd in now created.
+	[INFO][15:26:52] : Socket_fd in now set.
+	[INFO][15:26:52] : Socket_fd is binded.
+	[INFO][15:26:52] : Socket_fd is non blocking fd.
+	[INFO][15:26:52] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:26:52] : Getprotobyname Succed.
+	[INFO][15:26:52] : Socket_fd in now created.
+	[INFO][15:26:52] : Socket_fd in now set.
+	[INFO][15:26:52] : Socket_fd is binded.
+	[INFO][15:26:52] : Socket_fd is non blocking fd.
+	[INFO][15:26:52] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:26:52] : Getprotobyname Succed.
+	[INFO][15:26:52] : Socket_fd in now created.
+	[INFO][15:26:52] : Socket_fd in now set.
+	[INFO][15:26:52] : Socket_fd is binded.
+	[INFO][15:26:52] : Socket_fd is non blocking fd.
+	[INFO][15:26:52] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:26:52] : Getprotobyname Succed.
+	[INFO][15:26:52] : Socket_fd in now created.
+	[INFO][15:26:52] : Socket_fd in now set.
+	[INFO][15:26:52] : Socket_fd is binded.
+	[INFO][15:26:52] : Socket_fd is non blocking fd.
+	[INFO][15:26:52] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:26:52] : Getprotobyname Succed.
+	[INFO][15:26:52] : Socket_fd in now created.
+	[INFO][15:26:52] : Socket_fd in now set.
+	[INFO][15:26:52] : Socket_fd is binded.
+	[INFO][15:26:52] : Socket_fd is non blocking fd.
+	[INFO][15:26:52] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:26:52] : Getprotobyname Succed.
+	[INFO][15:26:52] : Socket_fd in now created.
+	[INFO][15:26:52] : Socket_fd in now set.
+	[INFO][15:26:52] : Socket_fd is binded.
+	[INFO][15:26:52] : Socket_fd is non blocking fd.
+	[INFO][15:26:52] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:26:52] : Getprotobyname Succed.
+	[INFO][15:26:52] : Socket_fd in now created.
+	[INFO][15:26:52] : Socket_fd in now set.
+	[INFO][15:26:52] : Socket_fd is binded.
+	[INFO][15:26:52] : Socket_fd is non blocking fd.
+	[INFO][15:26:52] : Socket_fd is now listening every attemp of connection.
+	[INFO][15:26:52] : Getprotobyname Succed.
+	[INFO][15:26:52] : Socket_fd in now created.
+	[INFO][15:26:52] : Socket_fd in now set.
+	[INFO][15:26:52] : Socket_fd is binded.
+	[INFO][15:26:52] : Socket_fd is non blocking fd.
+	[INFO][15:26:52] : Socket_fd is now listening every attemp of connection.
+[INFO][15:26:52] : Starting Server.
+	[INFO][15:26:52] : Epoll instance successfully created.
+	[INFO][15:26:52] : Epoll_ctl successfully add the socket file descriptor to Epoll instance.
+	[INFO][15:26:52] : The server construction is now complete. The server is ready to accept incoming connections.
+[INFO][15:26:54] : [NEW REQUEST]
+	[INFO][15:26:54] : Server did accept the connection.
+	[INFO][15:26:54] : Server's receive a GET request.
+	[INFO][15:26:54] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/html/index.html" was found.
+	[INFO][15:26:54] : End of the request.
+	[INFO][15:26:54] : Got a EPOLLIN attempt.
+	[INFO][15:26:54] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:26:54] : [NEW REQUEST]
+	[INFO][15:26:54] : Server did accept the connection.
+	[INFO][15:26:54] : Server's receive a GET request.
+	[INFO][15:26:54] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/styles/styles.css" was found.
+	[INFO][15:26:54] : End of the request.
+	[INFO][15:26:54] : Got a EPOLLIN attempt.
+	[INFO][15:26:54] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:26:54] : [NEW REQUEST]
+	[INFO][15:26:54] : Server did accept the connection.
+	[INFO][15:26:54] : Cgi Execution.
+	[INFO][15:26:54] : End of the request.
+	[INFO][15:26:54] : Got a EPOLLIN attempt.
+	[INFO][15:26:54] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:26:54] : [NEW REQUEST]
+	[INFO][15:26:54] : Server did accept the connection.
+	[INFO][15:26:54] : Server's receive a POST request.
+	[INFO][15:26:54] : End of the request.
+	[INFO][15:26:54] : Got a EPOLLIN attempt.
+	[INFO][15:26:54] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:34:47] : [NEW REQUEST]
+	[INFO][15:34:47] : Server did accept the connection.
+	[INFO][15:34:47] : Server's receive a GET request.
+	[INFO][15:34:47] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/html/index.html" was found.
+	[INFO][15:34:47] : End of the request.
+	[INFO][15:34:47] : Got a EPOLLIN attempt.
+	[INFO][15:34:47] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:34:48] : [NEW REQUEST]
+	[INFO][15:34:48] : Server did accept the connection.
+	[INFO][15:34:48] : Server's receive a GET request.
+	[INFO][15:34:48] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/styles/styles.css" was found.
+	[INFO][15:34:48] : End of the request.
+	[INFO][15:34:48] : Got a EPOLLIN attempt.
+	[INFO][15:34:48] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:34:48] : [NEW REQUEST]
+	[INFO][15:34:48] : Server did accept the connection.
+	[INFO][15:34:48] : Cgi Execution.
+	[INFO][15:34:48] : End of the request.
+	[INFO][15:34:48] : Got a EPOLLIN attempt.
+	[INFO][15:34:48] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:34:48] : [NEW REQUEST]
+	[INFO][15:34:48] : Server did accept the connection.
+	[INFO][15:34:48] : Server's receive a POST request.
+	[INFO][15:34:48] : End of the request.
+	[INFO][15:34:48] : Got a EPOLLIN attempt.
+	[INFO][15:34:48] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:34:52] : [NEW REQUEST]
+	[INFO][15:34:52] : Server did accept the connection.
+	[INFO][15:34:52] : Server's receive a GET request.
+	[INFO][15:34:52] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/html/index.html" was found.
+	[INFO][15:34:52] : End of the request.
+	[INFO][15:34:52] : Got a EPOLLIN attempt.
+	[INFO][15:34:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:34:52] : [NEW REQUEST]
+	[INFO][15:34:52] : Server did accept the connection.
+	[INFO][15:34:52] : Server's receive a GET request.
+	[INFO][15:34:52] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/styles/styles.css" was found.
+	[INFO][15:34:52] : End of the request.
+	[INFO][15:34:52] : Got a EPOLLIN attempt.
+	[INFO][15:34:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:34:52] : [NEW REQUEST]
+	[INFO][15:34:52] : Server did accept the connection.
+	[INFO][15:34:52] : Cgi Execution.
+	[INFO][15:34:52] : End of the request.
+	[INFO][15:34:52] : Got a EPOLLIN attempt.
+	[INFO][15:34:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:34:52] : [NEW REQUEST]
+	[INFO][15:34:52] : Server did accept the connection.
+	[INFO][15:34:52] : Server's receive a POST request.
+	[INFO][15:34:52] : End of the request.
+	[INFO][15:34:52] : Got a EPOLLIN attempt.
+	[INFO][15:34:52] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:41:48] : [NEW REQUEST]
+	[INFO][15:41:48] : Server did accept the connection.
+	[INFO][15:41:48] : Server's receive a GET request.
+	[INFO][15:41:48] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/html/index.html" was found.
+	[INFO][15:41:48] : End of the request.
+	[INFO][15:41:48] : Got a EPOLLIN attempt.
+	[INFO][15:41:48] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:41:48] : [NEW REQUEST]
+	[INFO][15:41:48] : Server did accept the connection.
+	[INFO][15:41:48] : Server's receive a GET request.
+	[INFO][15:41:48] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/styles/styles.css" was found.
+	[INFO][15:41:48] : End of the request.
+	[INFO][15:41:48] : Got a EPOLLIN attempt.
+	[INFO][15:41:48] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:41:48] : [NEW REQUEST]
+	[INFO][15:41:48] : Server did accept the connection.
+	[INFO][15:41:48] : Cgi Execution.
+	[INFO][15:41:48] : End of the request.
+	[INFO][15:41:48] : Got a EPOLLIN attempt.
+	[INFO][15:41:48] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:41:48] : [NEW REQUEST]
+	[INFO][15:41:48] : Server did accept the connection.
+	[INFO][15:41:48] : Cgi Execution.
+	[INFO][15:41:51] : Extension of the files was not recognize.
+	[INFO][15:41:51] : End of the request.
+	[INFO][15:41:51] : Got a EPOLLIN attempt.
+	[INFO][15:41:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:41:51] : [NEW REQUEST]
+	[INFO][15:41:51] : Server did accept the connection.
+	[INFO][15:41:51] : Server's receive a GET request.
+	[INFO][15:41:51] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/html/index.html" was found.
+	[INFO][15:41:51] : End of the request.
+	[INFO][15:41:51] : Got a EPOLLIN attempt.
+	[INFO][15:41:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:41:51] : [NEW REQUEST]
+	[INFO][15:41:51] : Server did accept the connection.
+	[INFO][15:41:51] : Server's receive a GET request.
+	[INFO][15:41:51] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/html/index.html" was found.
+	[INFO][15:41:51] : End of the request.
+	[INFO][15:41:51] : Got a EPOLLIN attempt.
+	[INFO][15:41:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:41:51] : [NEW REQUEST]
+	[INFO][15:41:51] : Server did accept the connection.
+	[INFO][15:41:51] : Server's receive a GET request.
+	[INFO][15:41:51] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/styles/styles.css" was found.
+	[INFO][15:41:51] : End of the request.
+	[INFO][15:41:51] : Got a EPOLLIN attempt.
+	[INFO][15:41:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:41:51] : [NEW REQUEST]
+	[INFO][15:41:51] : Server did accept the connection.
+	[INFO][15:41:51] : Cgi Execution.
+	[INFO][15:41:51] : End of the request.
+	[INFO][15:41:51] : Got a EPOLLIN attempt.
+	[INFO][15:41:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:41:51] : [NEW REQUEST]
+	[INFO][15:41:51] : Server did accept the connection.
+	[INFO][15:41:51] : Cgi Execution.
+	[INFO][15:41:51] : Extension of the files was not recognize.
+	[INFO][15:41:51] : End of the request.
+	[INFO][15:41:51] : Got a EPOLLIN attempt.
+	[INFO][15:41:51] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:42:07] : [NEW REQUEST]
+	[INFO][15:42:07] : Server did accept the connection.
+	[INFO][15:42:07] : Server's receive a GET request.
+	[INFO][15:42:07] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/html/index.html" was found.
+	[INFO][15:42:07] : End of the request.
+	[INFO][15:42:07] : Got a EPOLLIN attempt.
+	[INFO][15:42:07] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:42:07] : [NEW REQUEST]
+	[INFO][15:42:07] : Server did accept the connection.
+	[INFO][15:42:07] : Server's receive a GET request.
+	[INFO][15:42:07] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/styles/styles.css" was found.
+	[INFO][15:42:07] : End of the request.
+	[INFO][15:42:07] : Got a EPOLLIN attempt.
+	[INFO][15:42:07] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:42:07] : [NEW REQUEST]
+	[INFO][15:42:07] : Server did accept the connection.
+	[INFO][15:42:07] : Cgi Execution.
+	[INFO][15:42:07] : End of the request.
+	[INFO][15:42:07] : Got a EPOLLIN attempt.
+	[INFO][15:42:07] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:42:07] : [NEW REQUEST]
+	[INFO][15:42:07] : Server did accept the connection.
+	[INFO][15:42:07] : Server's receive a POST request.
+	[INFO][15:42:07] : End of the request.
+	[INFO][15:42:07] : Got a EPOLLIN attempt.
+	[INFO][15:42:07] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:43:11] : [NEW REQUEST]
+	[INFO][15:43:11] : Server did accept the connection.
+	[INFO][15:43:11] : Server's receive a GET request.
+	[INFO][15:43:11] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/html/index.html" was found.
+	[INFO][15:43:11] : End of the request.
+	[INFO][15:43:11] : Got a EPOLLIN attempt.
+	[INFO][15:43:11] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:43:11] : [NEW REQUEST]
+	[INFO][15:43:11] : Server did accept the connection.
+	[INFO][15:43:11] : Server's receive a GET request.
+	[INFO][15:43:11] : The file requested "/home/sguillot/travail/webserv/website_helloWorld!/styles/styles.css" was found.
+	[INFO][15:43:11] : End of the request.
+	[INFO][15:43:11] : Got a EPOLLIN attempt.
+	[INFO][15:43:11] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:43:11] : [NEW REQUEST]
+	[INFO][15:43:11] : Server did accept the connection.
+	[INFO][15:43:11] : Cgi Execution.
+	[INFO][15:43:11] : End of the request.
+	[INFO][15:43:11] : Got a EPOLLIN attempt.
+	[INFO][15:43:11] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+[INFO][15:43:11] : [NEW REQUEST]
+	[INFO][15:43:11] : Server did accept the connection.
+	[INFO][15:43:11] : Server's receive a POST request.
+	[INFO][15:43:11] : End of the request.
+	[INFO][15:43:11] : Got a EPOLLIN attempt.
+	[INFO][15:43:11] : Connexion has been successfuly closed. ConnexionFD removed from Epoll Instance.
+	[ERROR][15:43:18] : The call to epoll_wait failed.
+	[INFO][15:43:18] : Shutting down the server properly.
