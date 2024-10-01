@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 23:45:37 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 00:01:11 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ void Server::creatAllListeningSockets()
 /*                              METHOD/SERVER                                 */
 /*----------------------------------------------------------------------------*/
 
-// /* STARTING SERVER
-// - Creat Epoll Instance
-// - Add Socket_fd to Epoll Instance
-// - Watching state : EPOLLIN
-// */
+/* STARTING SERVER
+- Creat Epoll Instance
+- Add Socket_fd to Epoll Instance
+- Watching state : EPOLLIN
+*/
 void Server::startingServer()
 {
 	if ((this->_epoll_fd = epoll_create(1)) == -1)
@@ -303,13 +303,10 @@ void Server::getLocationBlock(Client *client)
 			std::string blockName = it->getBlockName();
 			std::string clientPath = client->getPath();
 
-			// Vérifie si la longueur du chemin du client est suffisante pour comparer
 			if (clientPath.length() >= blockName.length())
 			{
-				// Compare le préfixe
 				if (clientPath.compare(0, blockName.length(), blockName) == 0)
 				{
-					// Vérifie que le caractère suivant dans le chemin est soit '/', soit la fin de la chaîne
 					if (clientPath.length() == blockName.length() || clientPath.at(blockName.length()) == '/')
 					{
 						if (blockName.length() > longestPrefix)
@@ -387,7 +384,7 @@ void Server::getServBlock(Client *client, ListeningSocket *list)
 	this->currentConfig = NULL;
 }
 
-// Closing The server using key CTRL /C.
+/*Closing The server using key CTRL /C.*/
 void Server::closeServer()
 {
 	log("Shutting down the server properly.", 1);

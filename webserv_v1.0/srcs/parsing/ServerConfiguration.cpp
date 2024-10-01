@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 19:59:20 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 00:01:36 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,6 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		Cout << CYAN << *server_name_it << RESET << "\n";
 	Cout << "\n";
 
-	// Cout << WHITE << "Host name : " << RESET << CYAN << sc.getHostName() << RESET << "\n\n";
-
 	Cout << WHITE << "Port vector : \n"
 		 << RESET;
 	std::multimap<std::string, std::string> port_tab = sc.getPortList();
@@ -210,14 +208,6 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 	for (; path_info_it != path_info_tab.end(); path_info_it++)
 		Cout << CYAN << path_info_it->first << " : " << path_info_it->second << RESET << "\n";
 	Cout << "\n";
-
-	// Cout << WHITE << "Path info mime map : \n" << RESET;
-	// std::map<std::string, std::string> info_mime_tab = sc.getInfoMime();
-	// std::map<std::string, std::string>::iterator info_mime_it = info_mime_tab.begin();
-	// for (; info_mime_it != info_mime_tab.end(); info_mime_it++)
-	// 	Cout << CYAN << info_mime_it->first << " : " << info_mime_it->second << RESET << "\n";
-	// Cout << "\n";
-
 	Cout << WHITE << "Allowed methods map : \n"
 		 << RESET;
 	std::map<std::string, int> allowed_methods_tab = sc.getAllowedMethods();
@@ -256,7 +246,6 @@ std::ostream &operator<<(std::ostream &Cout, ServerConfiguration const &sc)
 		Cout << "Root : " << GREEN << location_it->getRoot() << RESET << "\n";
 		Cout << "Client Max Body Size : " << GREEN << location_it->getClientMaxBodySize() << RESET << "\n";
 		Cout << "Auto index : " << GREEN << location_it->getAutoIndex() << RESET << "\n";
-		// Cout << "Path Info : " << GREEN << location_it->getPathInfo() << RESET << "\n";
 		Cout << "Index : " << GREEN << location_it->getIndex() << RESET << "\n";
 		Cout << WHITE << "Allowed methods map : \n"
 			 << RESET;

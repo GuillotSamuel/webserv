@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 19:01:37 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 23:59:48 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ Client::Client()
 	this->_contentType = "";
 	this->_boundary = "";
 	this->_path = "";
-	this->_host = ""; // contient le nom du domaine -> (server_name);
+	this->_host = "";
 	this->_currentFd = -1;
 	this->_ipAdressConnexion = "";
 	this->_portConnexion = "";
