@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_g.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:44:12 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 14:52:34 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 22:11:05 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void Server::parsing_g(int argc, char **argv)
     {
         error(HELP_INFOS);
     }
-    else if (argc == 1)
+/*     else if (argc == 1)
     {
         readConfigurationFile("./config/default.conf");
-    }
+    } */
     else if (argc == 2)
     {
         readConfigurationFile(argv[1]);

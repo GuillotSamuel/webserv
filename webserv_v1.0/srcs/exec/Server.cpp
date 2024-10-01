@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 17:56:49 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 22:09:16 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ Server::Server(int argc, char **argv)
     	std::cerr << "Failed to open log file" << std::endl;
 	}
 	this->_status_code = 0;
+	this->currentConfig = NULL;
+	this->_log = NULL;
 	parsing_g(argc, argv);
 	creatAllListeningSockets();
 	log("Starting Server.", 3);
@@ -452,9 +454,13 @@ void 	Server::set_nonblocking(int sockfd)
 
 void	Server::error(std::string errorType)
 {
+
 	if (this->currentConfig)
 		delete this->currentConfig;
-	delete this->_log;
+	
+	if (this->_log)
+		delete this->_log;
+
 	throw(std::runtime_error(errorType));
 }
 
