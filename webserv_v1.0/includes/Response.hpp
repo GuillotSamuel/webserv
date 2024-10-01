@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 19:31:40 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:57:25 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,18 @@ class Response
 		std::string							_index;
 		std::string							_cgiPath;
 		std::string							_filePath; // absolute path to file requested
+		std::string							_code;
+		std::string							_receivedLine;
 		std::map<std::string, int>			_allowed_methods;
 		std::map<int, std::string>			_errorPages;
 		std::map<int, std::string>			_redirection;
 		std::map<std::string, std::string>	_interpreterMap;
+		std::map<std::string, std::string>	_mimePath;
 		int									_clientMaxBodySize;
 		int									_autoIndex;
 		int									_status;
-		Client								*_client;
-		std::map<std::string, std::string>	_mimePath;
-		std::string							_code;
 		int									_autoIndexUse;
+		Client								*_client;
 
 		/*---------------------------------------------------------------*/
 		/*                   FONCTION GENERATE RESPONSE            		 */
@@ -49,17 +50,23 @@ class Response
 		std::string							ft_forbidden();
 		std::string							readFileContent(std::string path);
 		std::string							getMimeType();
-		void								setFilePath(std::string root, std::string fileRequested);
-		std::map<std::string, std::string>	createMimePath();
 		std::string							firstHeader();
-		void								filePathFinder();
-		std::map<std::string, std::string>	createEnvCgi();
 		std::string							cgiExecution(std::string executer);
+		std::string							dlSuccess();
+		std::string							autoIndex();
+		std::map<std::string, std::string>	createMimePath();
+		std::map<std::string, std::string>	createEnvCgi();
+		void								setFilePath(std::string root, std::string fileRequested);
+		void								filePathFinder();
+		void								readBody();
+		void								dlFile();
+		void								saveFile(const std::string &filename, const std::string &data);
+
 	public:
 											Response(Client *client);
 											~Response();
 		void								setInfo(ServerConfiguration *serv, Location location);
-		std::string							autoIndex();
+		void								setReceivedLine(std::string received);
 		std::string							generateResponse();
 		std::string							getAlias() const;
 		std::string							getRoot() const;

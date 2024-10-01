@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkParsing.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 17:07:45 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:38:45 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void Server::check_listen(ServerConfiguration server_conf)
 void Server::check_max_body(ServerConfiguration server_conf)
 {
 	long maxBodySize = server_conf.getClientMaxBodySize();
-
+	
 	if (maxBodySize < 0)
 	{
 		error("Error: Invalid max body size. Must be a positive value. / server name -> " + server_conf.getServerName()[0]);
@@ -295,7 +295,7 @@ void Server::location_check_maxBodySize(Location location_conf, ServerConfigurat
 	(void)server_conf;
 	long maxBodySize = location_conf.getClientMaxBodySize();
 
-	if (maxBodySize < 0)
+	if (maxBodySize < -1)
 	{
 		error("Error: Invalid max body size. Must be a positive value. / server name -> " + server_conf.getServerName()[0]);
 	}
