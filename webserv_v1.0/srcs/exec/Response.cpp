@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 11:15:03 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:19:25 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,128 +378,6 @@ void	Response::filePathFinder()
 	}
 }
 
-std::map<std::string, std::string>	Response::createEnvCgi()
-{
-	std::map<std::string, std::string> env;
-	if (_client->getMethod() == "POST")
-	{
-		env["CONTENT_TYPE"] = _client->getContentType(); // only for post
-		env["CONTENT_LENGTH"] = _client->getContentLength(); // only for post
-	}
-	//SERVEUR_VAR
-	env["SERVER_SOFTWARE"] = std::string("Webserv/1.0");
-	env["SERVER_NAME"] = *this->_serverName.begin();
-	env["GATEWAY_INTERFACE"] = std::string("CGI/1.1");
-
-	//REQUEST_VAR
-	env["SERVER_PROTOCOL"] = std::string("HTTP/1.1");
-	env["SERVER_PORT"] = _client->getPortStr();
-	env["REQUEST_METHOD"] = _client->getMethod();
-	env["PATH_INFO"] = _client->getPath();
-	env["PATH_TRANSLATED"] = _filePath;
-	env["SCRIPT_NAME"] = _filePath;
-	env["QUERY_STRING"] = std::string(""); // ???
-	env["REMOTE_HOST"] = std::string("");
-	env["REMOTE_ADDR"] = _client->getIpAdress();
-
-	//CLIENT_VAR
-	env["HTTP_ACCEPT"] = _client->getAcceptMime();
-	env["HTTP_ACCEPT_LANGUAGE"] = _client->getAcceptLanguage();
-	env["HTTP_USER_AGENT"] = _client->getUserAgent();
-	env["HTTP_COOKIE"] = std::string("");
-	env["HTTP_REFERER"] = _client->getReferer();
-	return (env);
-}
-
-std::string	Response::cgiExecution(std::string executer)
-{
-	Cgi *cgi = new Cgi();
-	cgi->setExecuter(executer);
-	cgi->setPath(_filePath.c_str());
-	cgi->setEnv(createEnvCgi());
-	std::string content = cgi->executeCgi();
-
-	std::string mimeType = getMimeType();
-
-	std::string response = "HTTP/1.1 200 OK\r\n";
-	response += "Content-Type: " + mimeType + "\r\n";
-	std::ostringstream oss;
-	oss << content.size();
-	response += "Content-Length: " + oss.str() + "\r\n";
-	response += "Connection: close\r\n";
-	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
-	response += content;
-
-	delete cgi;
-	return (response);
-}
-
-void	Response::filePathFinder()
-{
-	if (this->_locationType != "" && this->_locationType == "equal")
-	{
-		_code = "200";
-		_filePath = this->_root + this->_client->getPath();
-	}
-	else if (this->_alias != "")
-	{
-		_code = "200";
-		size_t stBlock = this->_client->getPath().find(this->_blockName);
-		
-		std::string path_tmp = this->_client->getPath();
-		if (stBlock != std::string::npos)
-			path_tmp.replace(stBlock, this->_blockName.size(), this->_alias);
-		_filePath = this->_root + path_tmp;
-	}
-	else if (!this->_redirection.empty() && this->_client->getPath() == this->_blockName)
-	{
-		std::stringstream ss;
-		ss << this->_redirection.begin()->first;
-		std::string str = ss.str();
-		_code = str;
-		_filePath = this->_redirection.begin()->second;
-	}
-	else if (this->_client->getPath() == "/")
-	{
-		_code = "200";
-		if (_index != "")
-			_filePath = this->_root + this->_index;
-		else if (_autoIndex == 1)
-		{
-			_autoIndexUse = 1;
-			return ;
-		}
-		else
-			_filePath = "";
-	}
-	else
-	{
-		_code = "200";
-		if (this->_index != "")
-		{
-			std::vector<std::string>::iterator it = this->_serverName.begin();
-			for (; it != _serverName.end(); it++)
-			{
-				if (_client->getPath() == "/" + *it)
-					_filePath = this->_root + this->_index;
-			}
-		}
-		else if (_autoIndex == 1)
-		{
-			std::vector<std::string>::iterator it = this->_serverName.begin();
-			for (; it != _serverName.end(); it++)
-			{
-				if (_client->getPath() == "/" + *it)
-				{
-					_autoIndexUse = 1;
-					return ;
-				}
-			}
-		}
-		if (_filePath == "")
-			_filePath = this->_root + this->_client->getPath();
-	}
-}
 
 std::string Response::ft_get() // a revoir
 {
