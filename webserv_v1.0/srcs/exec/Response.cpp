@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 11:19:25 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 14:13:14 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ Response::Response(Client *client)
 	this->_locationType = "";
 	this->_alias = "";
 	this->_root = "";
-	this->_clientMaxBodySize = 0;
+	this->_clientMaxBodySize = -1;
 	this->_autoIndex = -1;
 	this->_index = "";
 	this->_blockName = "";
@@ -45,7 +45,7 @@ Response::~Response()
 /*                              METHOD/SERVER                                 */
 /*----------------------------------------------------------------------------*/
 
-void	Response::setInfo(ServerConfiguration *serv, Location location)
+void Response::setInfo(ServerConfiguration *serv, Location location)
 {
 	std::vector<std::string> tab = serv->getServerName();
 	std::vector<std::string>::iterator it = tab.begin();
@@ -58,27 +58,27 @@ void	Response::setInfo(ServerConfiguration *serv, Location location)
 		this->_locationType = location.getBlockType();
 		this->_blockName = location.getBlockName();
 		this->_alias = location.getAlias();
-		
+
 		if (location.getRoot() != "")
 			this->_root = location.getRoot();
 		else
 			this->_root = serv->getRoot();
-			
+
 		if (location.getIndex() != "")
 			this->_index = location.getIndex();
 		else
-			this->_index= serv->getIndex();
-			
+			this->_index = serv->getIndex();
+
 		if (location.getClientMaxBodySize() != -1)
 			this->_clientMaxBodySize = location.getClientMaxBodySize();
 		else
 			this->_clientMaxBodySize = serv->getClientMaxBodySize();
-			
+
 		if (!location.getCgi().empty())
 			this->_interpreterMap = location.getCgi();
 		else
 			this->_interpreterMap = serv->getInterpreterMap();
-			
+
 		if (!location.getAllowedMethodsTab().empty())
 		{
 			this->_allowed_methods["GET"] = location.getAllowedMethods("GET");
@@ -86,20 +86,22 @@ void	Response::setInfo(ServerConfiguration *serv, Location location)
 		}
 		else
 			this->_allowed_methods = serv->getAllowedMethods();
-			
+
 		if (!location.getErrorPage().empty())
 			this->_errorPages = location.getErrorPage();
 		else
 			this->_errorPages = serv->getErrorPages();
-			
+
 		if (location.getAutoIndex() != -1)
 			this->_autoIndex = location.getAutoIndex();
 		else
 			this->_autoIndex = serv->getAutoIndex();
-			
+
 		if (!location.getRedirection().empty())
 			this->_redirection = location.getRedirection();
-	} else {
+	}
+	else
+	{
 		this->_root = serv->getRoot();
 		this->_index = serv->getIndex();
 		this->_clientMaxBodySize = serv->getClientMaxBodySize();
@@ -115,7 +117,7 @@ void Response::setReceivedLine(std::string received)
 	this->_receivedLine = received;
 }
 
-std::string	Response::generateResponse()
+std::string Response::generateResponse()
 {
 	if (this->_allowed_methods[this->_client->getMethod()] != 1)
 	{
@@ -124,15 +126,25 @@ std::string	Response::generateResponse()
 	}
 	filePathFinder();
 	if (_autoIndexUse == 1)
+	{
+		Server::log("Auto Index Mode activated.", 1);
+		this->_filePath = this->_root;
 		return (autoIndex());
-	
+	}
 	if (_client->getContentLength() != "" && this->_interpreterMap.empty())
 	{
-		readBody();
+		if (atoi(_client->getContentLength().c_str()) <= _clientMaxBodySize)
+		{
+			readBody();
+			return (dlSuccess());
+		}
+		else
+			Server::log("Content-Length Higher than Max Body Size.", 2);
 	}
-	if (access(_filePath.c_str(), F_OK) == 0)
+	struct stat buf;
+	if (stat(_filePath.c_str(), &buf) == 0)
 	{
-		if (!this->_interpreterMap.empty())
+		if (S_ISREG(buf.st_mode) && access(_filePath.c_str(), F_OK) == 0 && !this->_interpreterMap.empty())
 		{
 			size_t ext = this->_filePath.rfind(".");
 			if (ext != std::string::npos)
@@ -142,12 +154,22 @@ std::string	Response::generateResponse()
 				for (; it != this->_interpreterMap.end(); it++)
 				{
 					if (_extension == it->first)
+					{
+						Server::log("Cgi Execution.", 1);
 						return (cgiExecution(it->second));
+					}
 				}
 			}
 		}
-	} else {
+		else if (S_ISDIR(buf.st_mode) && this->_autoIndex == 1)
+		{
+			return (autoIndex());
+		}
+	}
+	else
+	{
 		_code = "404";
+		Server::log("URI not Found.", 1);
 		return (ft_badRequest());
 	}
 
@@ -161,38 +183,52 @@ std::string	Response::generateResponse()
 		return (ft_badRequest());
 }
 
-void	Response::readBody()
+std::string Response::dlSuccess()
+{
+	std::string content = "<h1>Upload File Success</h1>";
+	std::string response = "HTTP/1.1 200 OK\r\n";
+	response += "Content-Type: text/html\r\n";
+	std::ostringstream oss;
+	oss << content.size();
+	response += "Content-Length: " + oss.str() + "\r\n";
+	response += "Connection: close\r\n";
+	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+	response += content;
+	return (response);
+}
+
+void Response::readBody()
 {
 	if (_client->getContentLength() != "")
 	{
 		int len = atoi(_client->getContentLength().c_str());
 
-        char *buffer = new char[len + 1];
-        memset(buffer, 0, len + 1);
-        int total_read = 0;
+		char *buffer = new char[len + 1];
+		memset(buffer, 0, len + 1);
+		int total_read = 0;
 		while (total_read < len)
-        {
-            int read = recv(_client->getCurrentFd(), buffer + total_read, len - total_read, 0);
-            if (read < 0)
-            {
-                Server::log("Recv failed.", 2);
-                break ;
-            }
-            if (read == 0)
-            {
-                Server::log("The connection has been interrupted.", 2);
-                break ;
-            }
-            total_read += read;
-        }
+		{
+			int read = recv(_client->getCurrentFd(), buffer + total_read, len - total_read, 0);
+			if (read < 0)
+			{
+				Server::log("Recv failed.", 2);
+				break;
+			}
+			if (read == 0)
+			{
+				Server::log("The connection has been interrupted.", 2);
+				break;
+			}
+			total_read += read;
+		}
 
 		(this->_receivedLine).append(buffer, total_read);
-    	delete[] buffer;
+		delete[] buffer;
 		dlFile();
 	}
 }
 
-void	Response::dlFile()
+void Response::dlFile()
 {
 	std::string file_name;
 	std::string body_content;
@@ -200,11 +236,11 @@ void	Response::dlFile()
 	if (filename != std::string::npos)
 	{
 		filename += 10;
-		size_t endFilename  = (this->_receivedLine).find("\"", filename);
+		size_t endFilename = (this->_receivedLine).find("\"", filename);
 		if (endFilename != std::string::npos)
 		{
 			file_name = (this->_receivedLine).substr(filename, (endFilename - filename));
-		
+
 			size_t body = (this->_receivedLine).find("\r\n\r\n", endFilename);
 			if (body != std::string::npos)
 			{
@@ -221,7 +257,6 @@ void	Response::dlFile()
 			}
 			else
 				Server::log("The request body cannot be found.", 2);
-
 		}
 		else
 			Server::log("Filename cannot be found.", 2);
@@ -230,23 +265,22 @@ void	Response::dlFile()
 		Server::log("Filename cannot be found.", 2);
 }
 
-void	Response::saveFile(const std::string &filename, const std::string &data)
+void Response::saveFile(const std::string &filename, const std::string &data)
 {
-	std::cout << filename << std::endl;
-    std::ofstream file(filename.c_str(), std::ios::binary);
-    if (file.is_open()) 
+	std::ofstream file(filename.c_str(), std::ios::binary);
+	if (file.is_open())
 	{
-        file.write(data.c_str(), data.size());
-        file.close();
+		file.write(data.c_str(), data.size());
+		file.close();
 		Server::log("File " + filename + " saved successfully.", 1);
-    }
-	else 
+	}
+	else
 	{
 		Server::log("Failed to open file " + filename + ".", 2);
-    }
+	}
 }
 
-std::string	Response::firstHeader()
+std::string Response::firstHeader()
 {
 	if (_code == "301")
 		return ("HTTP/1.1 301 Moved Permanently\r\n");
@@ -255,20 +289,20 @@ std::string	Response::firstHeader()
 	return ("HTTP/1.1 200 OK\r\n");
 }
 
-std::map<std::string, std::string>	Response::createEnvCgi()
+std::map<std::string, std::string> Response::createEnvCgi()
 {
 	std::map<std::string, std::string> env;
 	if (_client->getMethod() == "POST")
 	{
-		env["CONTENT_TYPE"] = _client->getContentType(); // only for post
+		env["CONTENT_TYPE"] = _client->getContentType();	 // only for post
 		env["CONTENT_LENGTH"] = _client->getContentLength(); // only for post
 	}
-	//SERVEUR_VAR
+	// SERVEUR_VAR
 	env["SERVER_SOFTWARE"] = std::string("Webserv/1.0");
 	env["SERVER_NAME"] = *this->_serverName.begin();
 	env["GATEWAY_INTERFACE"] = std::string("CGI/1.1");
 
-	//REQUEST_VAR
+	// REQUEST_VAR
 	env["SERVER_PROTOCOL"] = std::string("HTTP/1.1");
 	env["SERVER_PORT"] = _client->getPortStr();
 	env["REQUEST_METHOD"] = _client->getMethod();
@@ -279,7 +313,7 @@ std::map<std::string, std::string>	Response::createEnvCgi()
 	env["REMOTE_HOST"] = std::string("");
 	env["REMOTE_ADDR"] = _client->getIpAdress();
 
-	//CLIENT_VAR
+	// CLIENT_VAR
 	env["HTTP_ACCEPT"] = _client->getAcceptMime();
 	env["HTTP_ACCEPT_LANGUAGE"] = _client->getAcceptLanguage();
 	env["HTTP_USER_AGENT"] = _client->getUserAgent();
@@ -288,7 +322,7 @@ std::map<std::string, std::string>	Response::createEnvCgi()
 	return (env);
 }
 
-std::string	Response::cgiExecution(std::string executer)
+std::string Response::cgiExecution(std::string executer)
 {
 	Cgi *cgi = new Cgi();
 	cgi->setExecuter(executer);
@@ -311,18 +345,18 @@ std::string	Response::cgiExecution(std::string executer)
 	return (response);
 }
 
-void	Response::filePathFinder()
+void Response::filePathFinder()
 {
 	if (this->_locationType != "" && this->_locationType == "equal")
 	{
 		_code = "200";
 		_filePath = this->_root + this->_client->getPath();
 	}
-	else if (this->_alias != "")
+	else if (this->_alias != "" && this->_client->getPath() == this->_blockName)
 	{
 		_code = "200";
 		size_t stBlock = this->_client->getPath().find(this->_blockName);
-		
+
 		std::string path_tmp = this->_client->getPath();
 		if (stBlock != std::string::npos)
 			path_tmp.replace(stBlock, this->_blockName.size(), this->_alias);
@@ -344,7 +378,7 @@ void	Response::filePathFinder()
 		else if (_autoIndex == 1)
 		{
 			_autoIndexUse = 1;
-			return ;
+			return;
 		}
 		else
 			_filePath = "";
@@ -352,32 +386,38 @@ void	Response::filePathFinder()
 	else
 	{
 		_code = "200";
-		if (this->_index != "")
+		std::string tmp = this->_root + this->_client->getPath();
+		if (access(tmp.c_str(), F_OK) != 0)
 		{
-			std::vector<std::string>::iterator it = this->_serverName.begin();
-			for (; it != _serverName.end(); it++)
+			if (this->_index != "")
 			{
-				if (_client->getPath() == "/" + *it)
-					_filePath = this->_root + this->_index;
-			}
-		}
-		else if (_autoIndex == 1)
-		{
-			std::vector<std::string>::iterator it = this->_serverName.begin();
-			for (; it != _serverName.end(); it++)
-			{
-				if (_client->getPath() == "/" + *it)
+				std::vector<std::string>::iterator it = this->_serverName.begin();
+				for (; it != _serverName.end(); it++)
 				{
-					_autoIndexUse = 1;
-					return ;
+					if (_client->getPath() == "/" + *it)
+						_filePath = this->_root + this->_index;
 				}
+			}
+			else if (_autoIndex == 1)
+			{
+				std::vector<std::string>::iterator it = this->_serverName.begin();
+				for (; it != _serverName.end(); it++)
+				{
+					if (_client->getPath() == "/" + *it)
+					{
+						_autoIndexUse = 1;
+						return;
+					}
+				}
+				this->_filePath = _client->getPath();
 			}
 		}
 		if (_filePath == "")
+		{
 			_filePath = this->_root + this->_client->getPath();
+		}
 	}
 }
-
 
 std::string Response::ft_get() // a revoir
 {
@@ -424,7 +464,8 @@ std::string Response::ft_delete()
 {
 	Server::log("Server's receive a DELETE request.", 1);
 
-	if (access(getFilePath().c_str(), F_OK) != 0) {
+	if (access(getFilePath().c_str(), F_OK) != 0)
+	{
 		std::string response = "HTTP/1.1 404 Not Found\r\n";
 		response += "Content-Type: text/html\r\n";
 		std::string content = "File not found";
@@ -438,7 +479,8 @@ std::string Response::ft_delete()
 		return (response);
 	}
 
-	if (unlink(getFilePath().c_str()) == 0) {
+	if (unlink(getFilePath().c_str()) == 0)
+	{
 		std::string response = "HTTP/1.1 204 No Content\r\n";
 		response += "Connection: close\r\n";
 		response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
@@ -457,21 +499,24 @@ std::string Response::ft_badRequest()
 	std::string root(tmp, strlen(tmp));
 	free(tmp);
 	std::string content;
-	if (!this->_errorPages.empty() && (this->_errorPages.find(404) != this->_errorPages.end())) {
+	if (!this->_errorPages.empty() && (this->_errorPages.find(404) != this->_errorPages.end()))
+	{
 		content = readFileContent(this->_root + this->_errorPages.find(404)->second);
-	} else {
+	}
+	else
+	{
 		content = readFileContent(root + "/www/error_pages/404.html");
 	}
 
 	std::string response = "HTTP/1.1 400 Bad Request\r\n";
 	response += "Content-Type: text/html\r\n";
 	std::ostringstream oss;
-    oss << content.size();
-    response += "Content-Length: " + oss.str() + "\r\n";
+	oss << content.size();
+	response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
 	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
 	response += content;
-	
+
 	return (response);
 }
 
@@ -485,15 +530,15 @@ std::string Response::ft_forbidden()
 	std::string response = "HTTP/1.1 403 Bad Request\r\n";
 	response += "Content-Type: text/html\r\n";
 	std::ostringstream oss;
-    oss << content.size();
-    response += "Content-Length: " + oss.str() + "\r\n";
+	oss << content.size();
+	response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
 	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
 	response += content;
 	return (response);
 }
 
-std::string	Response::readFileContent(std::string path)
+std::string Response::readFileContent(std::string path)
 {
 	std::ifstream file(path.c_str());
 
@@ -509,7 +554,7 @@ std::string	Response::readFileContent(std::string path)
 	return (oss.str());
 }
 
-std::string	Response::getMimeType()
+std::string Response::getMimeType()
 {
 	if (this->_filePath == this->_root + "/")
 		return ("text/html");
@@ -527,7 +572,7 @@ std::string	Response::getMimeType()
 	return ("application/octet-stream");
 }
 
-std::map<std::string, std::string>	Response::createMimePath()
+std::map<std::string, std::string> Response::createMimePath()
 {
 	std::map<std::string, std::string> mimePath;
 
@@ -558,8 +603,6 @@ std::map<std::string, std::string>	Response::createMimePath()
 	return (mimePath);
 }
 
-
-
 /*----------------------------------------------------------------------------*/
 /*                                   SETTER                                   */
 /*----------------------------------------------------------------------------*/
@@ -573,27 +616,27 @@ void Response::setFilePath(std::string root, std::string fileRequested)
 /*                                   GETTER                                   */
 /*----------------------------------------------------------------------------*/
 
-std::string	Response::getAlias() const
+std::string Response::getAlias() const
 {
 	return (this->_alias);
 }
 
-std::string	Response::getRoot() const
+std::string Response::getRoot() const
 {
 	return (this->_root);
 }
 
-std::string	Response::getIndex() const
+std::string Response::getIndex() const
 {
 	return (this->_index);
 }
 
-int	Response::getClientMaxBodySize() const
+int Response::getClientMaxBodySize() const
 {
 	return (this->_clientMaxBodySize);
 }
 
-std::map<std::string, std::string>	Response::getCgi() const
+std::map<std::string, std::string> Response::getCgi() const
 {
 	return (this->_interpreterMap);
 }
@@ -603,12 +646,12 @@ std::map<std::string, std::string>	Response::getCgi() const
 // 	//?
 // }
 
-std::map<std::string, int>	Response::getAllowedMethodsTab() const
+std::map<std::string, int> Response::getAllowedMethodsTab() const
 {
 	return (this->_allowed_methods);
 }
 
-int	Response::getAutoIndex() const
+int Response::getAutoIndex() const
 {
 	return (this->_autoIndex);
 }
@@ -618,12 +661,12 @@ std::string Response::getFilePath() const
 	return (this->_filePath);
 }
 
-std::map<int, std::string>	Response::getErrorPage() const
+std::map<int, std::string> Response::getErrorPage() const
 {
 	return (this->_errorPages);
 }
 
-std::map<int, std::string>	Response::getRedirection() const
+std::map<int, std::string> Response::getRedirection() const
 {
 	return (this->_redirection);
 }

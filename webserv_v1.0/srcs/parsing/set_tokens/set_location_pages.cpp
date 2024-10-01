@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_location_pages.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 15:15:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 17:07:20 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 13:40:20 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void Server::ft_location_pages_dispatch(std::vector<std::string> current_param, 
 
 	if (*current_param_it == "alias" && current_param.size() == 2 && !current_param[1].empty())
 	{
-		std::cout << current_param[1] << std::endl;
 		new_location.setAlias(current_param[1]);
 	}
 	else if (*current_param_it == "root" && current_param.size() == 2 && !current_param[1].empty())

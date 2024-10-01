@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:40:40 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 20:27:50 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:33:07 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ Location::Location(/* args */)
 	this->_blockType = "";
 	this->_alias = "";
 	this->_root = "";
-	this->_clientMaxBodySize = 0;
+	this->_clientMaxBodySize = -1;
 	this->_autoindex = 0;
 	this->_path_info = "";
 	this->_index = "";

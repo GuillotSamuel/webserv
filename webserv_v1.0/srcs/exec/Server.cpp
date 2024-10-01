@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 11:15:09 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 14:09:01 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,10 +135,8 @@ void Server::serverExecution()
 					inConnexion(list, *confd);
 				} else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP)) {
 					outConnexionClient(*confd);
-					// list = NULL;
 				} else if (this->_events[i].events & EPOLLOUT) {
 					outConnexionServer(*confd);
-					// list = NULL;
 				} else
 					log("Inexpected event has been detected.", 2);
 			} else {
@@ -246,6 +244,7 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 	client->setPortStr(list->getPortStr());
 	getServBlock(client, list);
 	getLocationBlock(client);
+
 
 	Response *response = new Response(client);
 	response->setReceivedLine(receivedLine);
@@ -442,6 +441,8 @@ void 	Server::set_nonblocking(int sockfd)
 
 void	Server::error(std::string errorType)
 {
+	if (this->currentConfig)
+		delete this->currentConfig;
 	delete this->_log;
 	throw(std::runtime_error(errorType));
 }

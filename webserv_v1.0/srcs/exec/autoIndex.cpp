@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 17:12:04 by sguillot          #+#    #+#             */
-/*   Updated: 2024/10/01 11:14:15 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 13:54:00 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ std::string Response::autoIndex()
 
 	html << "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n";
 	html << "<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
-	html << "<title>Index of " << this->_root << "</title>\n";
+	html << "<title>Index of " << this->_filePath << "</title>\n";
 	html << "<style>\n";
 	html << "body {font-family: 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, rgb(0, 5, 71), rgb(81, 0, 87));";
 	html << "background-size: 200% 200%; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;";
@@ -37,11 +37,11 @@ std::string Response::autoIndex()
 	html << "a:hover {color: #ffedc5; text-shadow: 0 0 10px rgba(255, 253, 237, 0.658);}\n";
 	html << "</style>\n</head>\n<body>\n";
 	html << "<main>\n<div class=\"card\">\n<div class=\"card_background\">\n";
-	html << "<h1>Index of " << this->_root << "</h1>\n";
+	html << "<h1>Index of " << this->_filePath << "</h1>\n";
 	html << "<ul>\n";
 
 	DIR *dir;
-	dir = opendir(this->_root.c_str());
+	dir = opendir(this->_filePath.c_str());
 	if (!dir)
 	{
 		_code = "403";
@@ -52,9 +52,9 @@ std::string Response::autoIndex()
 	while ((entry = readdir(dir)) != NULL)
 	{
 		std::string item = entry->d_name;
-		if (item != "." && item != "..")
+		if (item != ".")
 		{
-			html << "<li><a href=\"" << this->_root << "/" << item << "/\">" << item << "</a></li>";
+			html << "<li><a href=\"" << this->_filePath << "/" << item << "\">" << item << "</a></li>";
 		}
 	}
 
