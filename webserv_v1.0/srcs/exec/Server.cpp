@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 16:06:13 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 16:11:25 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,6 +253,7 @@ std::string Server::handle_client(ListeningSocket *list, int current_fd)
 	client->setPortStr(list->getPortStr());
 	getServBlock(client, list);
 	getLocationBlock(client);
+
 
 	Response *response = new Response(client);
 	response->setReceivedLine(receivedLine);
