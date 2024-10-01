@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 19:31:40 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 23:51:21 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ class Response
 		std::map<std::string, std::string>	_mimePath;
 		std::string							_code;
 		int									_autoIndexUse;
+		std::string							_receivedLine;
 
 		/*---------------------------------------------------------------*/
 		/*                   FONCTION GENERATE RESPONSE            		 */
@@ -55,10 +56,15 @@ class Response
 		void								filePathFinder();
 		std::map<std::string, std::string>	createEnvCgi();
 		std::string							cgiExecution(std::string executer);
+		void								readBody();
+		void								dlFile();
+		void								saveFile(const std::string &filename, const std::string &data);
+
 	public:
 											Response(Client *client);
 											~Response();
 		void								setInfo(ServerConfiguration *serv, Location location);
+		void								setReceivedLine(std::string received);
 		std::string							autoIndex();
 		std::string							generateResponse();
 		std::string							getAlias() const;

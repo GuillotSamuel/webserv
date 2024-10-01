@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 21:11:45 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 00:01:03 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,6 @@ and chose what method to use
 void Server::handle_client(ListeningSocket *list, int current_fd)
 {
 	Client *client = new Client();
-	//recuperation de toute les donnes possible et recherche de server block/location block
 	char client_ip[INET_ADDRSTRLEN];
 	memset(client_ip, 0, INET_ADDRSTRLEN);
     inet_ntop(AF_INET, &this->_address.sin_addr, client_ip, INET_ADDRSTRLEN);
@@ -249,6 +248,7 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 	getLocationBlock(client);
 
 	Response *response = new Response(client);
+	response->setReceivedLine(receivedLine);
 	response->setInfo(this->currentConfig, this->_currentLocation);
 	this->_response.clear();
 	this->_response = response->generateResponse();
@@ -352,46 +352,6 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 	this->currentConfig = NULL;
 }
 
-std::string	Server::readBody(Client *client, std::string *receivedLine)
-{
-	if (client->getContentLength() != "")
-	{
-		int len = atoi(client->getContentLength().c_str());
-
-        char *buffer = new char[len + 1];
-        memset(buffer, 0, len + 1);
-        int total_read = 0;
-		while (total_read < len)
-        {
-            int read = recv(client->getCurrentFd(), buffer + total_read, len - total_read, 0);
-            if (read < 0)
-            {
-                log("Recv failed.", 2);
-                break ;
-            }
-            if (read == 0)
-            {
-                log("The connection has been interrupted.", 2);
-                break ;
-            }
-            total_read += read;
-        }
-
-		(*receivedLine).append(buffer, total_read);
-    	delete[] buffer;
-		dlFile(receivedLine, client);
-	}
-
-	std::ofstream file("request.txt");
-	if (file.is_open()) {
-		file << *receivedLine;
-		file.close();
-		log("File is created.", 1);	} 
-	else
-		log("Unable to open file.", 2);
-	return (*receivedLine);
-}
-
 //Closing The server using key CTRL /C.
 void	Server::closeServer()
 {
@@ -431,59 +391,6 @@ Server::~Server()
 /*----------------------------------------------------------------------------*/
 /*                                  UTILS                                     */
 /*----------------------------------------------------------------------------*/
-
-void	Server::dlFile(std::string *receivedLine, Client *client)
-{
-	std::string file_name;
-	std::string body_content;
-	size_t filename = (*receivedLine).find("filename=\"");
-	if (filename != std::string::npos)
-	{
-		filename += 10;
-		size_t endFilename  = (*receivedLine).find("\"", filename);
-		if (endFilename != std::string::npos)
-		{
-			file_name = (*receivedLine).substr(filename, (endFilename - filename));
-		
-			size_t body = (*receivedLine).find("\r\n\r\n", endFilename);
-			if (body != std::string::npos)
-			{
-				body += 4;
-				size_t endbody = (*receivedLine).find(client->getBoundary(), body);
-				if (endbody != std::string::npos)
-				{
-					body_content = (*receivedLine).substr(body, (endbody - body));
-					(*receivedLine).erase(body, (endbody - body));
-					// saveFile(this->currentConfig->getUploadLocation() + file_name, body_content);
-				}
-				else
-					log("The request body cannot be found.", 2);
-			}
-			else
-				log("The request body cannot be found.", 2);
-
-		}
-		else
-			log("Filename cannot be found.", 2);
-	}
-	else
-		log("Filename cannot be found.", 2);
-}
-
-void	Server::saveFile(const std::string &filename, const std::string &data) // POST UPLOAD
-{
-    std::ofstream file(filename.c_str(), std::ios::binary);
-    if (file.is_open()) 
-	{
-        file.write(data.c_str(), data.size());
-        file.close();
-		log("File " + filename + " saved successfully.", 1);
-    }
-	else 
-	{
-		log("Failed to open file " + filename + ".", 2);
-    }
-}
 
 void   	Server::log(std::string error, int type)
 {

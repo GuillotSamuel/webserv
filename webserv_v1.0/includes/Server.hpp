@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 20:14:35 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/09/30 23:53:31 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,7 @@ class Server
 		void												getServBlock(Client *client, ListeningSocket *list);
 		void												getLocationBlock(Client *client);
 		void												closeServer();
-		
 		std::string											readHead(Client *client);
-		// std::string 										getMimeType(Client *client);
-		void												saveFile(const std::string &filename, const std::string &data);
-		void												cgiExecution(std::string filePath, Client client);
-		std::string											readBody(Client *client, std::string *receivedLine);
-		void												dlFile(std::string *receivedLine, Client *client);
 
 					/*-------------PARSING HANDLING-------------*/
 		void												parsing_g(int argc, char **argv);

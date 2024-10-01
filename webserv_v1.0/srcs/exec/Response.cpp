@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/30 19:47:13 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:07:22 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ Response::Response(Client *client)
 	this->_mimePath = createMimePath();
 	this->_code = "";
 	this->_autoIndexUse = 0;
+	this->_receivedLine = "";
 }
 
 Response::~Response()
@@ -109,6 +110,11 @@ void	Response::setInfo(ServerConfiguration *serv, Location location)
 	}
 }
 
+void Response::setReceivedLine(std::string received)
+{
+	this->_receivedLine = received;
+}
+
 std::string	Response::generateResponse()
 {
 	if (this->_allowed_methods[this->_client->getMethod()] != 1)
@@ -119,11 +125,15 @@ std::string	Response::generateResponse()
 	filePathFinder();
 	if (_autoIndexUse == 1)
 		return (autoIndex());
+	
+	if (_client->getContentLength() != "" && this->_interpreterMap.empty())
+	{
+		readBody();
+	}
 	if (access(_filePath.c_str(), F_OK) == 0)
 	{
 		if (!this->_interpreterMap.empty())
 		{
-			
 			size_t ext = this->_filePath.rfind(".");
 			if (ext != std::string::npos)
 			{
@@ -140,10 +150,6 @@ std::string	Response::generateResponse()
 		_code = "404";
 		return (ft_badRequest());
 	}
-	
-	// -> la methods requested -> content length ?
-	/*7. Autoindex
-    ->If _autoIndex is enabled for a directory, generate an index page listing the files and directories if no _index file is found.*/
 
 	if (this->_client->getMethod() == "GET")
 		return (ft_get());
@@ -153,6 +159,91 @@ std::string	Response::generateResponse()
 		return (ft_delete());
 	else
 		return (ft_badRequest());
+}
+
+void	Response::readBody()
+{
+	if (_client->getContentLength() != "")
+	{
+		int len = atoi(_client->getContentLength().c_str());
+
+        char *buffer = new char[len + 1];
+        memset(buffer, 0, len + 1);
+        int total_read = 0;
+		while (total_read < len)
+        {
+            int read = recv(_client->getCurrentFd(), buffer + total_read, len - total_read, 0);
+            if (read < 0)
+            {
+                Server::log("Recv failed.", 2);
+                break ;
+            }
+            if (read == 0)
+            {
+                Server::log("The connection has been interrupted.", 2);
+                break ;
+            }
+            total_read += read;
+        }
+
+		(this->_receivedLine).append(buffer, total_read);
+    	delete[] buffer;
+		dlFile();
+	}
+}
+
+void	Response::dlFile()
+{
+	std::string file_name;
+	std::string body_content;
+	size_t filename = (this->_receivedLine).find("filename=\"");
+	if (filename != std::string::npos)
+	{
+		filename += 10;
+		size_t endFilename  = (this->_receivedLine).find("\"", filename);
+		if (endFilename != std::string::npos)
+		{
+			file_name = (this->_receivedLine).substr(filename, (endFilename - filename));
+		
+			size_t body = (this->_receivedLine).find("\r\n\r\n", endFilename);
+			if (body != std::string::npos)
+			{
+				body += 4;
+				size_t endbody = (this->_receivedLine).find(_client->getBoundary(), body);
+				if (endbody != std::string::npos)
+				{
+					body_content = (this->_receivedLine).substr(body, (endbody - body));
+					(this->_receivedLine).erase(body, (endbody - body));
+					saveFile(this->_root + "/" + file_name, body_content);
+				}
+				else
+					Server::log("The request body cannot be found.", 2);
+			}
+			else
+				Server::log("The request body cannot be found.", 2);
+
+		}
+		else
+			Server::log("Filename cannot be found.", 2);
+	}
+	else
+		Server::log("Filename cannot be found.", 2);
+}
+
+void	Response::saveFile(const std::string &filename, const std::string &data)
+{
+	std::cout << filename << std::endl;
+    std::ofstream file(filename.c_str(), std::ios::binary);
+    if (file.is_open()) 
+	{
+        file.write(data.c_str(), data.size());
+        file.close();
+		Server::log("File " + filename + " saved successfully.", 1);
+    }
+	else 
+	{
+		Server::log("Failed to open file " + filename + ".", 2);
+    }
 }
 
 std::string	Response::firstHeader()
@@ -332,8 +423,7 @@ std::string Response::ft_delete()
 {
 	Server::log("Server's receive a DELETE request.", 1);
 
-	if (access(getFilePath().c_str(), F_OK) != 0)
-	{
+	if (access(getFilePath().c_str(), F_OK) != 0) {
 		std::string response = "HTTP/1.1 404 Not Found\r\n";
 		response += "Content-Type: text/html\r\n";
 		std::string content = "File not found";
@@ -347,8 +437,7 @@ std::string Response::ft_delete()
 		return (response);
 	}
 
-	if (unlink(getFilePath().c_str()) == 0)
-	{
+	if (unlink(getFilePath().c_str()) == 0) {
 		std::string response = "HTTP/1.1 204 No Content\r\n";
 		response += "Connection: close\r\n";
 		response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
@@ -367,8 +456,7 @@ std::string Response::ft_badRequest()
 	std::string root(tmp, strlen(tmp));
 	free(tmp);
 	std::string content;
-	if (!this->_errorPages.empty() && (this->_errorPages.find(404) != this->_errorPages.end()))
-	{
+	if (!this->_errorPages.empty() && (this->_errorPages.find(404) != this->_errorPages.end())) {
 		content = readFileContent(this->_root + this->_errorPages.find(404)->second);
 	} else {
 		content = readFileContent(root + "/www/error_pages/404.html");
@@ -401,7 +489,6 @@ std::string Response::ft_forbidden()
 	response += "Connection: close\r\n";
 	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
 	response += content;
-	
 	return (response);
 }
 
@@ -411,9 +498,11 @@ std::string	Response::readFileContent(std::string path)
 
 	if (!file.is_open())
 	{
-		return ("");
+		char *tmp = getcwd(NULL, 0);
+		std::string root(tmp, strlen(tmp));
+		free(tmp);
+		return (readFileContent(root + "/www/error_pages/404.html"));
 	}
-
 	std::ostringstream oss;
 	oss << file.rdbuf();
 	return (oss.str());
