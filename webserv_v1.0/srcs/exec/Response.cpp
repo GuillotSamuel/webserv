@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/02 00:31:51 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 00:43:34 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,6 @@ std::string Response::generateResponse()
 		else
 			Server::log("Content-Length Higher than Max Body Size.", 2);
 	}
-	std::cout << _filePath << std::endl;
 	struct stat buf;
 	if (stat(_filePath.c_str(), &buf) == 0)
 	{
@@ -166,7 +165,7 @@ std::string Response::generateResponse()
 				}
 			}
 		}
-		else if (S_ISDIR(buf.st_mode) && this->_autoIndex == 1 && _client->getMethod() == "DELETE")
+		else if (S_ISDIR(buf.st_mode) && this->_autoIndex == 1 && _client->getMethod() != "DELETE")
 			return (autoIndex());
 	}
 	else
