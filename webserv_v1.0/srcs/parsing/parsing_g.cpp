@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 19:44:12 by sguillot          #+#    #+#             */
-/*   Updated: 2024/10/01 23:02:45 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 00:31:02 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void Server::parsing_g(int argc, char **argv)
     {
         man(HELP_INFOS);
     }
-    else if (argc == 1)
+/*     else if (argc == 1)
     {
         readConfigurationFile("./config/default.conf");
-    }
+    } */
     else if (argc == 2)
     {
         readConfigurationFile(argv[1]);

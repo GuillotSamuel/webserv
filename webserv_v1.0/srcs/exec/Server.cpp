@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/02 00:01:11 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 00:34:07 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@ std::ofstream *Server::_log = NULL;
 
 Server::Server(int argc, char **argv)
 {
+	this->_log = NULL;
 	_log = new std::ofstream("logfile.log", std::ios::out);
 	if (!_log->is_open())
 	{
 		std::cerr << "Failed to open log file" << std::endl;
 	}
 	this->_status_code = 0;
+	this->currentConfig = NULL;
 	parsing_g(argc, argv);
 	creatAllListeningSockets();
 	log("Starting Server.", 3);
@@ -283,6 +285,7 @@ std::string Server::handle_client(ListeningSocket *list, int current_fd)
 
 void Server::getLocationBlock(Client *client)
 {
+	
 	std::vector<Location> tab = currentConfig->getLocation();
 	std::vector<Location>::iterator it = tab.begin();
 	for (; it != tab.end(); it++)
@@ -476,6 +479,7 @@ void Server::set_nonblocking(int sockfd)
 
 void Server::error(std::string errorType)
 {
+
 	if (this->currentConfig)
 		delete this->currentConfig;
 	if (this->_log)
