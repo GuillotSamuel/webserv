@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 14:09:01 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:56:49 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ std::ofstream* Server::_log = NULL;
 
 Server::Server(int argc, char **argv)
 {
-	this->_response = "";
 	_log = new std::ofstream("logfile.log", std::ios::out);
 	if (!_log->is_open())
 	{		
@@ -168,7 +167,10 @@ void	Server::outConnexionClient(int connexionFD)
 */
 void	Server::outConnexionServer(int connexionFD)
 {
-	send(connexionFD, this->_response.c_str(), this->_response.size(), 0);
+	std::multimap<int, std::string>::iterator it = this->response_tab.find(connexionFD);
+	if (it != this->response_tab.end()) {
+		send(connexionFD, (it->second).c_str(), (it->second).size(), 0);
+	}
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, connexionFD, &this->_event) == -1)
 	{
 		log("Epoll_ctl failed.", 2);
@@ -184,7 +186,14 @@ void	Server::outConnexionServer(int connexionFD)
 */
 void	Server::inConnexion(ListeningSocket *list, int connexionFD)
 {
-	handle_client(list, connexionFD);
+	
+	std::string rep = handle_client(list, connexionFD);
+	std::multimap<int, std::string>::iterator it = this->response_tab.find(connexionFD);
+	if (it != this->response_tab.end()) {
+		it->second = rep;
+	} else {
+		this->response_tab.insert(std::make_pair(connexionFD, rep));
+	}
 	this->_event.events = EPOLLOUT | EPOLLRDHUP | EPOLLHUP;
 	this->_event.data.fd = connexionFD;
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_MOD, connexionFD, &this->_event) == -1)
@@ -224,7 +233,7 @@ void	Server::acceptConnexion(int sock)
 -Parsing request, download file if needed 
 and chose what method to use
 */
-void Server::handle_client(ListeningSocket *list, int current_fd)
+std::string Server::handle_client(ListeningSocket *list, int current_fd)
 {
 	Client *client = new Client();
 	char client_ip[INET_ADDRSTRLEN];
@@ -238,26 +247,29 @@ void Server::handle_client(ListeningSocket *list, int current_fd)
 	{
 		delete client;
 		log("Server could not read anything from client. The client will be remove.", 2);
-		return ;
+		return ("");
 	}
 	client->setIpAdressConnexion(list->getIpAddress());
 	client->setPortStr(list->getPortStr());
 	getServBlock(client, list);
+	this->_currentLocation = Location();
 	getLocationBlock(client);
 
 
+	
 	Response *response = new Response(client);
 	response->setReceivedLine(receivedLine);
 	response->setInfo(this->currentConfig, this->_currentLocation);
-	this->_response.clear();
-	this->_response = response->generateResponse();
+	std::string rep = response->generateResponse();
 	delete client;
 	delete response;
 	log("End of the request.", 1);
+	return (rep);
 }
 
 void	Server::getLocationBlock(Client *client)
 {
+	
 	std::vector<Location> tab = currentConfig->getLocation();
 	std::vector<Location>::iterator it = tab.begin();
 	for (; it != tab.end(); it++)
@@ -375,8 +387,7 @@ void	Server::closeServer()
 	this->_connexion_fd.clear();
 	std::vector<uint32_t>().swap(this->_connexion_fd);
 	close(this->_epoll_fd);
-	this->_response.clear();
-	this->_response.~basic_string();
+	response_tab.clear();
 	std::exit(EXIT_SUCCESS);
 }
 
