@@ -1,25 +1,106 @@
-<!-- TEST -->
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload File</title>
+    <title>website_gallery</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="icon" href="../images/icons/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
 
-<h2>Upload a File</h2>
-
-<!-- Form to upload file -->
-<form action="/uploads" method="POST" enctype="multipart/form-data">
-    <label for="file">Choose a file:</label>
-    <input type="file" id="file" name="file" required><br><br>
+    <header>
+        <a class="header-title" href="index.html">Webserv</a>
+    </header>
+    <main>
+        <div class="form-container">
+            <h1>Upload a File</h1>
+            <form action="/uploads" method="POST" enctype="multipart/form-data">
+                <label for="file">Choose a file:</label>
+                <input type="file" id="file" name="file" required><br><br>
+                <input type="submit" value="Upload File">
+            </form>
+        </div>
+        <button onclick="location.href='index.html';" class="button_all">Go Back to Home</button>
+    </main>
+    <footer>
+        <div class="footer-credits">Project made by sguillot and mmahfoud</div>
+    </footer>
     
-    <label for="description">File Description:</label>
-    <input type="text" id="description" name="description" placeholder="Enter a description"><br><br>
-    
-    <input type="submit" value="Upload File">
-</form>
-
 </body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>website_gallery</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="icon" href="../images/icons/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <a class="header-title" href="index.html">Webserv</a>
+    </header>
+    <main>
+        <div class="form-container">
+            <h1>Upload a File</h1>
+            <form id="uploadForm" action="/pu" method="POST" enctype="multipart/form-data">
+                <label for="file">Choose a file:</label>
+                <input type="file" id="file" name="file" required><br><br>
+                <input type="submit" value="Upload File">
+            </form>
+        </div>
+        <button onclick="location.href='index.html';" class="button_all">Go Back to Home</button>
+    </main>
+    <footer>
+        <div class="footer-credits">Project made by sguillot and mmahfoud</div>
+    </footer>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Empêche le rechargement de la page
+
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: this.method,
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text(); // Ou response.json() si le serveur renvoie du JSON
+                } else {
+                    throw new Error('Erreur lors du téléchargement : ' + response.statusText);
+                }
+            })
+            .then(data => {
+                alert('Fichier téléchargé avec succès !'); // Affiche un message de succès
+                console.log(data); // Affiche la réponse du serveur dans la console (optionnel)
+            })
+            .catch(error => {
+                console.error('Erreur :', error);
+                alert('Erreur lors du téléchargement du fichier.');
+            });
+        });
+    </script>
+</body>
+
 </html>

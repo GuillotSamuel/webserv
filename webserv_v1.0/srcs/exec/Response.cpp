@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 14:13:14 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:56:46 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,13 @@ void Response::setInfo(ServerConfiguration *serv, Location location)
 		this->_alias = location.getAlias();
 
 		if (location.getRoot() != "")
+		{
 			this->_root = location.getRoot();
+		}
 		else
+		{
 			this->_root = serv->getRoot();
+		}
 
 		if (location.getIndex() != "")
 			this->_index = location.getIndex();
@@ -141,6 +145,7 @@ std::string Response::generateResponse()
 		else
 			Server::log("Content-Length Higher than Max Body Size.", 2);
 	}
+	std::cout << _filePath << std::endl;
 	struct stat buf;
 	if (stat(_filePath.c_str(), &buf) == 0)
 	{
@@ -161,10 +166,8 @@ std::string Response::generateResponse()
 				}
 			}
 		}
-		else if (S_ISDIR(buf.st_mode) && this->_autoIndex == 1)
-		{
+		else if (S_ISDIR(buf.st_mode) && this->_autoIndex == 1 && _client->getMethod() == "DELETE")
 			return (autoIndex());
-		}
 	}
 	else
 	{
@@ -185,15 +188,10 @@ std::string Response::generateResponse()
 
 std::string Response::dlSuccess()
 {
-	std::string content = "<h1>Upload File Success</h1>";
 	std::string response = "HTTP/1.1 200 OK\r\n";
 	response += "Content-Type: text/html\r\n";
-	std::ostringstream oss;
-	oss << content.size();
-	response += "Content-Length: " + oss.str() + "\r\n";
 	response += "Connection: close\r\n";
 	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
-	response += content;
 	return (response);
 }
 
