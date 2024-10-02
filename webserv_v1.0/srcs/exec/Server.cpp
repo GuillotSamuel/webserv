@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 22:09:16 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/10/02 00:34:07 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 
-std::ofstream* Server::_log = NULL;
+std::ofstream *Server::_log = NULL;
 
 /*----------------------------------------------------------------------------*/
 /*                               CONSTRUCTOR                                  */
@@ -20,14 +20,14 @@ std::ofstream* Server::_log = NULL;
 
 Server::Server(int argc, char **argv)
 {
+	this->_log = NULL;
 	_log = new std::ofstream("logfile.log", std::ios::out);
 	if (!_log->is_open())
-	{		
-    	std::cerr << "Failed to open log file" << std::endl;
+	{
+		std::cerr << "Failed to open log file" << std::endl;
 	}
 	this->_status_code = 0;
 	this->currentConfig = NULL;
-	this->_log = NULL;
 	parsing_g(argc, argv);
 	creatAllListeningSockets();
 	log("Starting Server.", 3);
@@ -35,7 +35,7 @@ Server::Server(int argc, char **argv)
 	memset(&_address, 0, sizeof(struct sockaddr_in));
 	memset(&_clientAdress, 0, sizeof(struct sockaddr));
 	memset(&_event, 0, sizeof(struct epoll_event));
- 	memset(received_line, 0, BUFFER_SIZE);
+	memset(received_line, 0, BUFFER_SIZE);
 	memset(socket_buffer, 0, BUFFER_SIZE);
 }
 
@@ -43,7 +43,7 @@ Server::Server(int argc, char **argv)
 - Creat all our listening socket
 - Making care to never try to creat socket with the same port twice
 */
-void	Server::creatAllListeningSockets()
+void Server::creatAllListeningSockets()
 {
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
 	for (; it < this->tab_serv.end(); it++)
@@ -53,11 +53,10 @@ void	Server::creatAllListeningSockets()
 		std::multimap<std::string, std::string>::iterator itTabPort = port.begin();
 		for (; itTabPort != port.end(); itTabPort++)
 		{
-			std::vector<ListeningSocket*>::iterator itList = _listSockets.begin();
+			std::vector<ListeningSocket *>::iterator itList = _listSockets.begin();
 			for (int i = 0; itList < _listSockets.end(); itList++, i++)
 			{
-				if ((*itList)->getIpAddress() == itTabPort->first
-					&& (*itList)->getPortStr() == itTabPort->second)
+				if ((*itList)->getIpAddress() == itTabPort->first && (*itList)->getPortStr() == itTabPort->second)
 				{
 					boul = 1;
 					break;
@@ -75,19 +74,19 @@ void	Server::creatAllListeningSockets()
 /*                              METHOD/SERVER                                 */
 /*----------------------------------------------------------------------------*/
 
-// /* STARTING SERVER
-// - Creat Epoll Instance 
-// - Add Socket_fd to Epoll Instance
-// - Watching state : EPOLLIN
-// */
-void	Server::startingServer()
+/* STARTING SERVER
+- Creat Epoll Instance
+- Add Socket_fd to Epoll Instance
+- Watching state : EPOLLIN
+*/
+void Server::startingServer()
 {
 	if ((this->_epoll_fd = epoll_create(1)) == -1)
 		log("Epoll instance creation failed.", 2);
-	
+
 	log("Epoll instance successfully created.", 1);
-	std::vector<ListeningSocket*>::iterator itTab = this->_listSockets.begin();
-	for(; itTab != this->_listSockets.end(); itTab++)
+	std::vector<ListeningSocket *>::iterator itTab = this->_listSockets.begin();
+	for (; itTab != this->_listSockets.end(); itTab++)
 	{
 		this->_event.events = EPOLLIN;
 		this->_event.data.fd = (*itTab)->getSocket_fd();
@@ -117,31 +116,44 @@ void Server::serverExecution()
 			closeServer();
 		for (int i = 0; i < nfds; i++)
 		{
-			int	sock = 0;
-			std::vector<ListeningSocket*>::iterator it = _listSockets.begin();
-			for (; it != _listSockets.end(); it++) {
-				if (this->_events[i].data.fd == (*it)->getSocket_fd()) {
+			int sock = 0;
+			std::vector<ListeningSocket *>::iterator it = _listSockets.begin();
+			for (; it != _listSockets.end(); it++)
+			{
+				if (this->_events[i].data.fd == (*it)->getSocket_fd())
+				{
 					sock = (*it)->getSocket_fd();
 					list = (*it);
 					break;
 				}
 			}
-			if (sock == 0) {
+			if (sock == 0)
+			{
 				std::vector<uint32_t>::iterator confd = this->_connexion_fd.begin();
-				for(; confd != this->_connexion_fd.end(); confd++) {
+				for (; confd != this->_connexion_fd.end(); confd++)
+				{
 					if (*confd == (uint32_t)this->_events[i].data.fd)
 						break;
 				}
-				if (this->_events[i].events & EPOLLIN) {
+				if (this->_events[i].events & EPOLLIN)
+				{
 					inConnexion(list, *confd);
-				} else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP)) {
+				}
+				else if (this->_events[i].events & (EPOLLRDHUP | EPOLLHUP))
+				{
 					outConnexionClient(*confd);
-				} else if (this->_events[i].events & EPOLLOUT) {
+				}
+				else if (this->_events[i].events & EPOLLOUT)
+				{
 					outConnexionServer(*confd);
-				} else
+				}
+				else
 					log("Inexpected event has been detected.", 2);
-			} else {
-				if (this->_events[i].data.fd == sock) {
+			}
+			else
+			{
+				if (this->_events[i].data.fd == sock)
+				{
 					acceptConnexion(sock);
 				}
 			}
@@ -153,7 +165,7 @@ void Server::serverExecution()
 -Client close the connexion from his side
 -Deleting connexionFD from Epoll Instance
 */
-void	Server::outConnexionClient(int connexionFD)
+void Server::outConnexionClient(int connexionFD)
 {
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, connexionFD, &this->_event) == -1)
 	{
@@ -167,10 +179,11 @@ void	Server::outConnexionClient(int connexionFD)
 -Sending response
 -Deleting connexionFD from Epoll Instance
 */
-void	Server::outConnexionServer(int connexionFD)
+void Server::outConnexionServer(int connexionFD)
 {
 	std::multimap<int, std::string>::iterator it = this->response_tab.find(connexionFD);
-	if (it != this->response_tab.end()) {
+	if (it != this->response_tab.end())
+	{
 		send(connexionFD, (it->second).c_str(), (it->second).size(), 0);
 	}
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, connexionFD, &this->_event) == -1)
@@ -186,14 +199,17 @@ void	Server::outConnexionServer(int connexionFD)
 -Modif of watching state on connexionDF
 -Watching state : EPOLLOUT / EPOLLRDHUP / EPOLLHUP
 */
-void	Server::inConnexion(ListeningSocket *list, int connexionFD)
+void Server::inConnexion(ListeningSocket *list, int connexionFD)
 {
-	
+
 	std::string rep = handle_client(list, connexionFD);
 	std::multimap<int, std::string>::iterator it = this->response_tab.find(connexionFD);
-	if (it != this->response_tab.end()) {
+	if (it != this->response_tab.end())
+	{
 		it->second = rep;
-	} else {
+	}
+	else
+	{
 		this->response_tab.insert(std::make_pair(connexionFD, rep));
 	}
 	this->_event.events = EPOLLOUT | EPOLLRDHUP | EPOLLHUP;
@@ -210,7 +226,7 @@ void	Server::inConnexion(ListeningSocket *list, int connexionFD)
 -Adding the ConnexionFD to instance Epoll
 -Watching state : EPOLLIN
 */
-void	Server::acceptConnexion(int sock)
+void Server::acceptConnexion(int sock)
 {
 	socklen_t client_addrlen = sizeof(this->_clientAdress);
 	this->_connexion_fd.push_back(accept(sock, (struct sockaddr *)&this->_clientAdress, &client_addrlen));
@@ -232,7 +248,7 @@ void	Server::acceptConnexion(int sock)
 }
 
 /*
--Parsing request, download file if needed 
+-Parsing request, download file if needed
 and chose what method to use
 */
 std::string Server::handle_client(ListeningSocket *list, int current_fd)
@@ -240,7 +256,7 @@ std::string Server::handle_client(ListeningSocket *list, int current_fd)
 	Client *client = new Client();
 	char client_ip[INET_ADDRSTRLEN];
 	memset(client_ip, 0, INET_ADDRSTRLEN);
-    inet_ntop(AF_INET, &this->_address.sin_addr, client_ip, INET_ADDRSTRLEN);
+	inet_ntop(AF_INET, &this->_address.sin_addr, client_ip, INET_ADDRSTRLEN);
 	std::string ipAdress(client_ip);
 	client->setIpAddress(ipAdress);
 	client->setCurrentFd(current_fd);
@@ -257,8 +273,6 @@ std::string Server::handle_client(ListeningSocket *list, int current_fd)
 	this->_currentLocation = Location();
 	getLocationBlock(client);
 
-
-	
 	Response *response = new Response(client);
 	response->setReceivedLine(receivedLine);
 	response->setInfo(this->currentConfig, this->_currentLocation);
@@ -269,7 +283,7 @@ std::string Server::handle_client(ListeningSocket *list, int current_fd)
 	return (rep);
 }
 
-void	Server::getLocationBlock(Client *client)
+void Server::getLocationBlock(Client *client)
 {
 	
 	std::vector<Location> tab = currentConfig->getLocation();
@@ -279,23 +293,31 @@ void	Server::getLocationBlock(Client *client)
 		if (client->getPath() == it->getBlockName() && it->getBlockType() == "equal")
 		{
 			this->_currentLocation = *it;
-			return ;
+			return;
 		}
 	}
-	Location	bestMatch;
-	size_t		longestPrefix = 0;
+	Location bestMatch;
+	size_t longestPrefix = 0;
 	it = tab.begin();
 	for (; it != tab.end(); ++it)
 	{
 		if (it->getBlockType() == "prefixe")
 		{
 			std::string blockName = it->getBlockName();
-			if (client->getPath().compare(0, blockName.length(), blockName) == 0)
+			std::string clientPath = client->getPath();
+
+			if (clientPath.length() >= blockName.length())
 			{
-				if (blockName.length() > longestPrefix)
+				if (clientPath.compare(0, blockName.length(), blockName) == 0)
 				{
-					longestPrefix = blockName.length();
-					bestMatch = *it;
+					if (clientPath.length() == blockName.length() || clientPath.at(blockName.length()) == '/')
+					{
+						if (blockName.length() > longestPrefix)
+						{
+							longestPrefix = blockName.length();
+							bestMatch = *it;
+						}
+					}
 				}
 			}
 		}
@@ -307,7 +329,7 @@ void	Server::getLocationBlock(Client *client)
 	}
 }
 
-std::string	Server::readHead(Client *client)
+std::string Server::readHead(Client *client)
 {
 	int n = recv(client->getCurrentFd(), this->received_line, 4096, 0);
 	if (n < 0)
@@ -331,7 +353,7 @@ std::string	Server::readHead(Client *client)
 -le nom de Domaine
 -Block par default
 */
-void	Server::getServBlock(Client *client, ListeningSocket *list)
+void Server::getServBlock(Client *client, ListeningSocket *list)
 {
 	this->currentConfig = NULL;
 	std::vector<ServerConfiguration>::iterator it = this->tab_serv.begin();
@@ -344,7 +366,7 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 			if (it2->first == list->getIpAddress() && it2->second == list->getPortStr())
 			{
 				this->currentConfig = &(*it);
-				return ;
+				return;
 			}
 		}
 	}
@@ -358,28 +380,28 @@ void	Server::getServBlock(Client *client, ListeningSocket *list)
 			if (*itServ == client->getPath())
 			{
 				this->currentConfig = &(*it);
-				return ;
+				return;
 			}
 		}
 	}
 	this->currentConfig = NULL;
 }
 
-//Closing The server using key CTRL /C.
-void	Server::closeServer()
+/*Closing The server using key CTRL /C.*/
+void Server::closeServer()
 {
 	log("Shutting down the server properly.", 1);
 	_log->close();
 	delete _log;
 	this->_currentLocation.~Location();
-	std::vector<ListeningSocket*>::iterator itList = this->_listSockets.begin();
+	std::vector<ListeningSocket *>::iterator itList = this->_listSockets.begin();
 	for (; itList < this->_listSockets.end(); itList++)
 	{
 		delete (*itList);
 	}
 	this->_listSockets.clear();
 	this->tab_serv.clear();
-	std::vector<ListeningSocket*>().swap(_listSockets);
+	std::vector<ListeningSocket *>().swap(_listSockets);
 	std::vector<ServerConfiguration>::iterator itServ = this->tab_serv.begin();
 	for (; itServ < this->tab_serv.end(); itServ++)
 	{
@@ -404,10 +426,10 @@ Server::~Server()
 /*                                  UTILS                                     */
 /*----------------------------------------------------------------------------*/
 
-void   	Server::log(std::string error, int type)
+void Server::log(std::string error, int type)
 {
 	std::time_t t = std::time(NULL);
-    std::tm* local_time = std::localtime(&t);
+	std::tm *local_time = std::localtime(&t);
 	std::stringstream ss;
 
 	if (local_time->tm_hour < 10)
@@ -421,46 +443,62 @@ void   	Server::log(std::string error, int type)
 	if (local_time->tm_sec < 10)
 		ss << "0" << local_time->tm_sec;
 	else
-    	ss << local_time->tm_sec;
+		ss << local_time->tm_sec;
 
 	std::string hour(ss.str());
-    if (_log && _log->is_open()) {
-        if (type == 1)
+	if (_log && _log->is_open())
+	{
+		if (type == 1)
 			*_log << "\t[INFO][" << hour << "] : " << error << std::endl;
-	else if (type == 2)
-		*_log << "\t[ERROR][" << hour << "] : " << error << std::endl;
-	else if (type == 3)
-		*_log << "[INFO][" << hour << "] : " << error << std::endl;
-    } else {
-        std::cerr << "Log error: Log stream is null or not open." << std::endl;
-    }
+		else if (type == 2)
+			*_log << "\t[ERROR][" << hour << "] : " << error << std::endl;
+		else if (type == 3)
+			*_log << "[INFO][" << hour << "] : " << error << std::endl;
+	}
+	else
+	{
+		std::cerr << "Log error: Log stream is null or not open." << std::endl;
+	}
 }
 
-void 	Server::set_nonblocking(int sockfd) 
+void Server::set_nonblocking(int sockfd)
 {
-    int flags = fcntl(sockfd, F_GETFL, 0);
-    if (flags == -1)
+	int flags = fcntl(sockfd, F_GETFL, 0);
+	if (flags == -1)
 	{
 		log("fnctl failed.", 2);
-		return ;
-    }
-    flags |= O_NONBLOCK;
-    if (fcntl(sockfd, F_SETFL, flags) == -1) 
+		return;
+	}
+	flags |= O_NONBLOCK;
+	if (fcntl(sockfd, F_SETFL, flags) == -1)
 	{
 		log("fnctl failed.", 2);
-		return ;
-    }
+		return;
+	}
 }
 
-void	Server::error(std::string errorType)
+void Server::error(std::string errorType)
 {
 
 	if (this->currentConfig)
 		delete this->currentConfig;
-	
 	if (this->_log)
+	{
+		_log->close();
 		delete this->_log;
-
+	}
 	throw(std::runtime_error(errorType));
 }
 
+void Server::man(std::string man)
+{
+	if (this->_log)
+	{
+		_log->close();
+		delete this->_log;
+	}
+	std::cout << man << std::endl;
+	man.clear();
+	man.~basic_string();
+	std::exit(EXIT_SUCCESS);
+}

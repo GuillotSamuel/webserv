@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 16:11:18 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 00:31:27 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ class Server
 		void 												readConfigurationFile(const char *arg);
 		void												ft_tokenizer(std::string line);
 		void												error(std::string errorType);
+		void												man(std::string man);
 		void												ft_param_set_tokens(std::vector<std::string> tokens);
 		void												ft_invalid_line(std::vector<std::string> tokens);
 		void 												ft_set_tokens(std::vector<std::string> tokens);

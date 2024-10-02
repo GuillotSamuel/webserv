@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:00:46 by sguillot          #+#    #+#             */
-/*   Updated: 2024/08/29 18:44:29 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 00:00:02 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,5 @@
 bool    exec_g(ServerConfiguration *inf)
 {
 	(void)inf;
-	// (void)data;
     return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:29 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/09/28 17:24:08 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/01 23:59:58 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,9 @@
 class ListeningSocket
 {
 	private:
-	
 		/*---------------------------------------------------------------*/
 		/*                            ATTRIBUT                           */
 		/*---------------------------------------------------------------*/
-		// ServerConfiguration	&_serv;
 		int					port;
 		std::string			_portStr;
 		struct sockaddr_in	_server_address;
@@ -30,11 +28,9 @@ class ListeningSocket
 		std::string			ipAddress;
 
 	public:
-
 		/*---------------------------------------------------------------*/
 		/*                    CONSTRUCTOR/DESTRUCTOR                     */
 		/*---------------------------------------------------------------*/
-		ListeningSocket(int port);
 		ListeningSocket(std::string address, std::string port);
 		~ListeningSocket();
 

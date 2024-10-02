@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 21:52:04 by sguillot         ###   ########.fr       */
+/*   Updated: 2024/10/02 00:43:34 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,6 @@ std::string Response::generateResponse()
 		else
 			Server::log("Content-Length Higher than Max Body Size.", 2);
 	}
-	std::cout << _filePath << std::endl;
 	struct stat buf;
 	if (stat(_filePath.c_str(), &buf) == 0)
 	{
@@ -166,7 +165,7 @@ std::string Response::generateResponse()
 				}
 			}
 		}
-		else if (S_ISDIR(buf.st_mode) && this->_autoIndex == 1 && _client->getMethod() == "DELETE")
+		else if (S_ISDIR(buf.st_mode) && this->_autoIndex == 1 && _client->getMethod() != "DELETE")
 			return (autoIndex());
 	}
 	else
@@ -292,8 +291,8 @@ std::map<std::string, std::string> Response::createEnvCgi()
 	std::map<std::string, std::string> env;
 	if (_client->getMethod() == "POST")
 	{
-		env["CONTENT_TYPE"] = _client->getContentType();	 // only for post
-		env["CONTENT_LENGTH"] = _client->getContentLength(); // only for post
+		env["CONTENT_TYPE"] = _client->getContentType(); 
+		env["CONTENT_LENGTH"] = _client->getContentLength();
 	}
 	// SERVEUR_VAR
 	env["SERVER_SOFTWARE"] = std::string("Webserv/1.0");
@@ -307,7 +306,7 @@ std::map<std::string, std::string> Response::createEnvCgi()
 	env["PATH_INFO"] = _client->getPath();
 	env["PATH_TRANSLATED"] = _filePath;
 	env["SCRIPT_NAME"] = _filePath;
-	env["QUERY_STRING"] = std::string(""); // ???
+	env["QUERY_STRING"] = std::string("");
 	env["REMOTE_HOST"] = std::string("");
 	env["REMOTE_ADDR"] = _client->getIpAdress();
 
@@ -417,7 +416,7 @@ void Response::filePathFinder()
 	}
 }
 
-std::string Response::ft_get() // a revoir
+std::string Response::ft_get()
 {
 	Server::log("Server's receive a GET request.", 1);
 	std::string content = readFileContent(this->_filePath);
@@ -639,11 +638,6 @@ std::map<std::string, std::string> Response::getCgi() const
 	return (this->_interpreterMap);
 }
 
-// int	Response::getAllowedMethods(std::string wichOne)const
-// {
-// 	//?
-// }
-
 std::map<std::string, int> Response::getAllowedMethodsTab() const
 {
 	return (this->_allowed_methods);
@@ -675,7 +669,6 @@ std::map<int, std::string> Response::getRedirection() const
 
 std::ostream &operator<<(std::ostream &Cout, Response const &response)
 {
-	// Cout << "server name	:" << response.getServerName() << std::endl;
 	Cout << "alias			:" << response.getAlias() << std::endl;
 	Cout << "root			:" << response.getRoot() << std::endl;
 	Cout << "index			:" << response.getIndex() << std::endl;
@@ -702,12 +695,5 @@ std::ostream &operator<<(std::ostream &Cout, Response const &response)
 	{
 		Cout << it3->first << " | " << it3->second << std::endl;
 	}
-	// Cout << "redirection map		: " << std::endl;
-	// std::map<int, std::string> redir = response.getRedirection();
-	// std::map<int, std::string>::iterator it4 = redir.begin();
-	// for (; it4 != error.end(); it4++)
-	// {
-	// 	Cout << it4->first << " | " << it4->second << std::endl;
-	// }
 	return (Cout);
 }
