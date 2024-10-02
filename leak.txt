@@ -1,3 +1,0 @@
-test a l'ouverture avec mauvais fichier de conf : check
-test a l'ouverture avec fichiers de conf fermeture direct : check
-test a l'ouverture sans argument : pas check : check

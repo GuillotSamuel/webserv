@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerConfiguration.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 19:33:39 by sguillot          #+#    #+#             */
-/*   Updated: 2024/10/02 00:01:36 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:00:16 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,15 @@ void ServerConfiguration::setClientMaxBodySize(std::string str)
 {
 	int n;
 	std::istringstream(str) >> n;
-	this->_clientMaxBodySize = n;
+
+	if (n > std::numeric_limits<int>::max())
+	{
+		error("Errror : max_body_size exceeds limits");
+	}
+	else
+	{
+		this->_clientMaxBodySize = n;
+	}
 }
 
 void ServerConfiguration::setRoot(std::string str)
