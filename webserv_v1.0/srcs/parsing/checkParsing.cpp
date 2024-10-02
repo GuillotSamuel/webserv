@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   checkParsing.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:09 by sguillot          #+#    #+#             */
-/*   Updated: 2024/10/01 11:38:45 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 11:53:31 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
-
-#include <sys/stat.h>
-#include <errno.h>
 
 /* Check utils */
 

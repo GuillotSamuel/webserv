@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sguillot <sguillot@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 13:51:56 by sguillot          #+#    #+#             */
-/*   Updated: 2024/09/30 20:13:14 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:59:01 by sguillot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
-#include <functional>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -27,27 +26,18 @@
 #include <algorithm>
 #include <list>
 #include <map>
-#include <string_view>
 #include <ctime>
 #include <set>
+#include <limits>
 
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/wait.h>
 #include <sys/epoll.h>
-#include <stdio.h>
-#include <string.h>
 #include <sys/stat.h>
-#include <sys/time.h>
-#include <signal.h>
-#include <limits.h>
 #include <netdb.h>
-#include <sys/types.h>
-#include <stdlib.h>
 #include <fcntl.h>
-#include <unistd.h>
 #include <dirent.h>
+#include <errno.h>
 
 /* -------------------------------------------------------------------------- */
 /*                                    DEFINE                                  */

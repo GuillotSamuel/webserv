@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/02 13:02:09 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:09:13 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -388,7 +388,7 @@ void Response::filePathFinder()
 
 std::string Response::ft_get()
 {
-	Server::log("Server's receive a GET request.", 1);
+	/* Server::log("Server's receive a GET request.", 1);
 	std::string content = readFileContent(this->_filePath);
 	std::string response = "";
 	Server::log("The file requested \"" + this->_filePath + "\" was found.", 1);
@@ -402,13 +402,60 @@ std::string Response::ft_get()
 	response += "Connection: close\r\n";
 	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
 	response += content;
+	return (response); */
+
+	Server::log("Server's received a GET request.", 1);
+
+	if (access(this->_filePath.c_str(), F_OK) != 0)
+	{
+		std::string response = "HTTP/1.1 404 Not Found\r\n";
+		response += "Content-Type: text/html\r\n";
+		std::string content = "File not found";
+		std::ostringstream oss;
+		oss << content.size();
+		response += "Content-Length: " + oss.str() + "\r\n";
+		response += "Connection: close\r\n";
+		response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+		response += content;
+		return (response);
+	}
+
+	std::string content = readFileContent(this->_filePath);
+
+	if (content.empty())
+	{
+		std::string response = "HTTP/1.1 500 Internal Server Error\r\n";
+		response += "Content-Type: text/html\r\n";
+		std::string error_content = "Error reading file content";
+		std::ostringstream oss;
+		oss << error_content.size();
+		response += "Content-Length: " + oss.str() + "\r\n";
+		response += "Connection: close\r\n";
+		response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+		response += error_content;
+		return (response);
+	}
+
+	Server::log("The file requested \"" + this->_filePath + "\" was found.", 1);
+
+	std::string mimeType = getMimeType();
+	std::string response = firstHeader();
+	response += "Content-Type: " + mimeType + "\r\n";
+
+	std::ostringstream oss;
+	oss << content.size();
+	response += "Content-Length: " + oss.str() + "\r\n";
+	response += "Connection: close\r\n";
+	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+	response += content;
+
 	return (response);
 }
 
 /*response to a POST request*/
 std::string Response::ft_post()
 {
-	Server::log("Server's receive a POST request.", 1);
+/* 	Server::log("Server's receive a POST request.", 1);
 	std::string content = readFileContent(this->_filePath);
 	std::string response = "";
 
@@ -416,6 +463,53 @@ std::string Response::ft_post()
 
 	response = firstHeader();
 	response += "Content-Type: " + mimeType + "\r\n";
+	std::ostringstream oss;
+	oss << content.size();
+	response += "Content-Length: " + oss.str() + "\r\n";
+	response += "Connection: close\r\n";
+	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+	response += content;
+
+	return (response); */
+
+	Server::log("Server's received a POST request.", 1);
+
+	if (access(this->_filePath.c_str(), F_OK) != 0)
+	{
+		std::string response = "HTTP/1.1 404 Not Found\r\n";
+		response += "Content-Type: text/html\r\n";
+		std::string content = "File not found";
+		std::ostringstream oss;
+		oss << content.size();
+		response += "Content-Length: " + oss.str() + "\r\n";
+		response += "Connection: close\r\n";
+		response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+		response += content;
+		return (response);
+	}
+
+	std::string content = readFileContent(this->_filePath);
+
+	if (content.empty())
+	{
+		std::string response = "HTTP/1.1 500 Internal Server Error\r\n";
+		response += "Content-Type: text/html\r\n";
+		std::string error_content = "Error reading file content";
+		std::ostringstream oss;
+		oss << error_content.size();
+		response += "Content-Length: " + oss.str() + "\r\n";
+		response += "Connection: close\r\n";
+		response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+		response += error_content;
+		return (response);
+	}
+
+	std::string mimeType = getMimeType();
+	std::string response = firstHeader();
+
+	response += "HTTP/1.1 201 Created\r\n";
+	response += "Content-Type: " + mimeType + "\r\n";
+
 	std::ostringstream oss;
 	oss << content.size();
 	response += "Content-Length: " + oss.str() + "\r\n";
@@ -446,6 +540,21 @@ std::string Response::ft_delete()
 		return (response);
 	}
 
+	if (access(getFilePath().c_str(), W_OK) != 0)
+	{
+		std::string response = "HTTP/1.1 403 Forbidden\r\n";
+		response += "Content-Type: text/html\r\n";
+		std::string content = "Permission denied";
+		std::ostringstream oss;
+		oss << content.size();
+		response += "Content-Length: " + oss.str() + "\r\n";
+		response += "Connection: close\r\n";
+		response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+		response += content;
+
+		return (response);
+	}
+
 	if (unlink(getFilePath().c_str()) == 0)
 	{
 		std::string response = "HTTP/1.1 204 No Content\r\n";
@@ -455,8 +564,20 @@ std::string Response::ft_delete()
 		return (response);
 	}
 	else
+	{
 		Server::log("Server failed to respond at the DELETE request.", 2);
-	return ("");
+		std::string response = "HTTP/1.1 500 Internal Server Error\r\n";
+		response += "Content-Type: text/html\r\n";
+		std::string content = "Internal server error";
+		std::ostringstream oss;
+		oss << content.size();
+		response += "Content-Length: " + oss.str() + "\r\n";
+		response += "Connection: close\r\n";
+		response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+		response += content;
+
+		return (response);
+	}
 }
 
 /*response to a bad request*/

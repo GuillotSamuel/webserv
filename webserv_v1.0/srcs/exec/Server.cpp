@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/02 13:03:48 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:23:37 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,12 @@ void Server::serverExecution()
 */
 void Server::outConnexionClient(int connexionFD)
 {
+	std::multimap<int, Client *>::iterator it1 = tabClient.find(connexionFD);
+	if (it1 != tabClient.end())
+	{
+		delete it1->second;
+		tabClient.erase(it1);
+	}
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_DEL, connexionFD, &this->_event) == -1)
 	{
 		log("Epoll_ctl failed.", 2);
@@ -463,6 +469,7 @@ void Server::closeServer()
 	_log->close();
 	delete _log;
 	this->_currentLocation.~Location();
+	tabClient.clear();
 	std::vector<ListeningSocket *>::iterator itList = this->_listSockets.begin();
 	for (; itList < this->_listSockets.end(); itList++)
 	{
