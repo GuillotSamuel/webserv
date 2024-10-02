@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 23:55:32 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:48:33 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ class Response
 		std::map<std::string, std::string>	createEnvCgi();
 		void								setFilePath(std::string root, std::string fileRequested);
 		void								filePathFinder();
-		void								readBody();
 		void								dlFile();
 		void								saveFile(const std::string &filename, const std::string &data);
 

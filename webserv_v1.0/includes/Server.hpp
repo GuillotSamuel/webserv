@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:32 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/02 00:31:27 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:34:43 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ class Server
 		bool												insideParamBlock;
 		bool												location_started;
 		std::multimap<int, std::string>						response_tab;
+		std::multimap<int, Client *>						tabClient;
 		
 		/*---------------------------------------------------------------*/
 		/*                            METHOD                             */
@@ -63,11 +64,12 @@ class Server
 		void												inConnexion(ListeningSocket *list, int connexionFD);
 		void												outConnexionClient(int connexionFD);
 		void												outConnexionServer(int connexionFD);
-		std::string											handle_client(ListeningSocket *list, int current_fd);
+		std::string											handle_client(ListeningSocket *list, int current_fd, Client *client);
 		void												getServBlock(Client *client, ListeningSocket *list);
 		void												getLocationBlock(Client *client);
 		void												closeServer();
-		std::string											readHead(Client *client);
+		int													readHead(Client *client);
+		void												readBody(Client *client);
 
 					/*-------------PARSING HANDLING-------------*/
 		void												parsing_g(int argc, char **argv);

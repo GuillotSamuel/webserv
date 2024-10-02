@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/02 00:43:34 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:02:09 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ std::string Response::generateResponse()
 	{
 		if (atoi(_client->getContentLength().c_str()) <= _clientMaxBodySize)
 		{
-			readBody();
+			dlFile();
 			return (dlSuccess());
 		}
 		else
@@ -194,41 +194,11 @@ std::string Response::dlSuccess()
 	return (response);
 }
 
-void Response::readBody()
-{
-	if (_client->getContentLength() != "")
-	{
-		int len = atoi(_client->getContentLength().c_str());
-
-		char *buffer = new char[len + 1];
-		memset(buffer, 0, len + 1);
-		int total_read = 0;
-		while (total_read < len)
-		{
-			int read = recv(_client->getCurrentFd(), buffer + total_read, len - total_read, 0);
-			if (read < 0)
-			{
-				Server::log("Recv failed.", 2);
-				break;
-			}
-			if (read == 0)
-			{
-				Server::log("The connection has been interrupted.", 2);
-				break;
-			}
-			total_read += read;
-		}
-
-		(this->_receivedLine).append(buffer, total_read);
-		delete[] buffer;
-		dlFile();
-	}
-}
-
 void Response::dlFile()
 {
 	std::string file_name;
 	std::string body_content;
+	this->_receivedLine = _client->getRequest();
 	size_t filename = (this->_receivedLine).find("filename=\"");
 	if (filename != std::string::npos)
 	{

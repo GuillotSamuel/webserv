@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:29:58 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 23:59:48 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:30:57 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ Client::Client()
 	this->_currentFd = -1;
 	this->_ipAdressConnexion = "";
 	this->_portConnexion = "";
+	this->_request = "";
+	this->_headerComplete = false;
+	this->_requestComplete = false;
+	this->_totalRead = 0;
 }
 
 Client::~Client()
@@ -195,6 +199,26 @@ int Client::getCurrentFd() const
 	return (this->_currentFd);
 }
 
+std::string Client::getRequest() const
+{
+    return (this->_request);
+}
+
+bool Client::getHeaderComplete() const
+{
+    return (this->_headerComplete);
+}
+
+bool Client::getRequestComplete() const
+{
+    return (this->_requestComplete);
+}
+
+int Client::getTotalRead() const
+{
+    return (this->_totalRead);
+}
+
 std::string Client::getPath() const
 {
 	return (this->_path);
@@ -266,6 +290,26 @@ void Client::setIpAdressConnexion(std::string ipadress)
 void Client::setPortStr(std::string port)
 {
 	this->_portConnexion = port;
+}
+
+void Client::setRequest(std::string toAppend)
+{
+	this->_request += toAppend;
+}
+
+void Client::setHeaderComplete(bool value)
+{
+	this->_headerComplete = value;
+}
+
+void Client::setRequestComplete(bool value)
+{
+	this->_requestComplete = value;
+}
+
+void Client::setTotalRead(int n)
+{
+	_totalRead += n;
 }
 
 /*----------------------------------------------------------------------------*/

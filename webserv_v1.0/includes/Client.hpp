@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:32:44 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/01 23:55:47 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 12:09:56 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ class Client
 		int			_currentFd;
 		std::string	_ipAdressConnexion;
 		std::string	_portConnexion;
+		std::string	_request;
+		bool		_headerComplete;
+		bool		_requestComplete;
+		int			_totalRead;
 		
 	public:
 		/*---------------------------------------------------------------*/
@@ -65,6 +69,10 @@ class Client
 		std::string	getIpAdressConnexion() const;
 		std::string	getPortStr() const;
 		int			getCurrentFd() const;
+		std::string	getRequest() const;
+		bool		getHeaderComplete() const;
+		bool		getRequestComplete() const;
+		int			getTotalRead() const;
 
 		/*---------------------------------------------------------------*/
 		/*                            SETTER                             */
@@ -82,6 +90,10 @@ class Client
 		void		setCurrentFd(int currentFd);
 		void		setIpAdressConnexion(std::string ipadress);
 		void		setPortStr(std::string port);
+		void		setRequest(std::string toAppend);
+		void		setHeaderComplete(bool value);
+		void		setRequestComplete(bool value);
+		void		setTotalRead(int n);
 };
 
 std::ostream	&operator<<(std::ostream &Cout, Client const &i);

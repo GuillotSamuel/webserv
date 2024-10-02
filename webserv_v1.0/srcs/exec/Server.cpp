@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmahfoud <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 13:27:50 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/02 00:34:07 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:03:48 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,8 +201,18 @@ void Server::outConnexionServer(int connexionFD)
 */
 void Server::inConnexion(ListeningSocket *list, int connexionFD)
 {
-
-	std::string rep = handle_client(list, connexionFD);
+	std::string rep = "";
+	std::multimap<int, Client *>::iterator it1 = tabClient.find(connexionFD);
+	if (it1 != tabClient.end())
+	{
+		rep = handle_client(list, connexionFD, it1->second);
+	}
+	if (rep == "-1" || rep == "0")
+	{
+		outConnexionClient(connexionFD);
+	}
+	if (rep == "1")
+		return;
 	std::multimap<int, std::string>::iterator it = this->response_tab.find(connexionFD);
 	if (it != this->response_tab.end())
 	{
@@ -228,17 +238,29 @@ void Server::inConnexion(ListeningSocket *list, int connexionFD)
 */
 void Server::acceptConnexion(int sock)
 {
+	int confd;
 	socklen_t client_addrlen = sizeof(this->_clientAdress);
-	this->_connexion_fd.push_back(accept(sock, (struct sockaddr *)&this->_clientAdress, &client_addrlen));
-	if ((int)(this->_connexion_fd.back()) == -1)
+	confd = accept(sock, (struct sockaddr *)&this->_clientAdress, &client_addrlen);
+	if (confd == -1)
 	{
 		log("The call to accept function failed for unknown reason.", 2);
 	}
+	this->_connexion_fd.push_back(confd);
 	log("[NEW REQUEST]", 3);
 	log("Server did accept the connection.", 1);
 
+	Client *client = new Client();
+	client->setCurrentFd(confd);
+	std::multimap<int, Client *>::iterator it = this->tabClient.find(confd);
+	if (it != tabClient.end())
+	{
+		it->second = client;
+	}
+	else
+	{
+		this->tabClient.insert(std::make_pair(confd, client));
+	}
 	set_nonblocking(this->_connexion_fd.back());
-
 	this->_event.events = EPOLLIN;
 	this->_event.data.fd = this->_connexion_fd.back();
 	if (epoll_ctl(this->_epoll_fd, EPOLL_CTL_ADD, this->_connexion_fd.back(), &this->_event) == -1)
@@ -251,21 +273,32 @@ void Server::acceptConnexion(int sock)
 -Parsing request, download file if needed
 and chose what method to use
 */
-std::string Server::handle_client(ListeningSocket *list, int current_fd)
+std::string Server::handle_client(ListeningSocket *list, int current_fd, Client *client)
 {
-	Client *client = new Client();
 	char client_ip[INET_ADDRSTRLEN];
 	memset(client_ip, 0, INET_ADDRSTRLEN);
 	inet_ntop(AF_INET, &this->_address.sin_addr, client_ip, INET_ADDRSTRLEN);
 	std::string ipAdress(client_ip);
 	client->setIpAddress(ipAdress);
 	client->setCurrentFd(current_fd);
-	std::string receivedLine = readHead(client);
-	if (receivedLine == "")
+	if (client->getHeaderComplete() == false)
 	{
-		delete client;
-		log("Server could not read anything from client. The client will be remove.", 2);
-		return ("");
+		int status = readHead(client);
+		if (status == -1)
+			return ("-1");
+		if (status == 0)
+			return ("0");
+		if (status == 2)
+			return ("1");
+	}
+	client->setInfo(client->getRequest());
+	if (client->getRequestComplete() == false)
+	{
+		size_t tmp = client->getRequest().find("Content-Length: ");
+		if (tmp == std::string::npos)
+			client->setRequestComplete(true);
+		else
+			readBody(client);
 	}
 	client->setIpAdressConnexion(list->getIpAddress());
 	client->setPortStr(list->getPortStr());
@@ -274,7 +307,7 @@ std::string Server::handle_client(ListeningSocket *list, int current_fd)
 	getLocationBlock(client);
 
 	Response *response = new Response(client);
-	response->setReceivedLine(receivedLine);
+	response->setReceivedLine(client->getRequest());
 	response->setInfo(this->currentConfig, this->_currentLocation);
 	std::string rep = response->generateResponse();
 	delete client;
@@ -283,9 +316,65 @@ std::string Server::handle_client(ListeningSocket *list, int current_fd)
 	return (rep);
 }
 
+void Server::readBody(Client *client)
+{
+	int len = atoi(client->getContentLength().c_str());
+	char *buffer = new char[len + 1];
+	memset(buffer, 0, len + 1);
+	int total_read = 0;
+	while (total_read < len)
+	{
+		int read = recv(client->getCurrentFd(), buffer + total_read, len - total_read, 0);
+		if (read < 0)
+		{
+			Server::log("Recv failed.", 2);
+			break;
+		}
+		if (read == 0)
+		{
+			Server::log("The connection has been interrupted.", 2);
+			break;
+		}
+		total_read += read;
+	}
+	std::string toAppend(buffer, total_read);
+	client->setRequest(toAppend);
+	delete[] buffer;
+	if (client->getTotalRead() >= len)
+	{
+		client->setRequestComplete(true);
+	}
+}
+
+int Server::readHead(Client *client)
+{
+	int n = recv(client->getCurrentFd(), this->received_line, sizeof(this->received_line) - 1, 0);
+	if (n < 0)
+	{
+		log("The call recv failed.", 2);
+		return (-1);
+	}
+	if (n == 0)
+	{
+		log("The connection has been interrupted.", 3);
+		return (0);
+	}
+	if (n > 0 && client->getHeaderComplete() == false)
+	{
+		std::string receivedData(this->received_line, n);
+		client->setRequest(receivedData);
+
+		if (client->getRequest().find("\r\n\r\n") != std::string::npos)
+		{
+			client->setHeaderComplete(true);
+			return (1);
+		}
+	}
+	return (2);
+}
+
 void Server::getLocationBlock(Client *client)
 {
-	
 	std::vector<Location> tab = currentConfig->getLocation();
 	std::vector<Location>::iterator it = tab.begin();
 	for (; it != tab.end(); it++)
@@ -328,26 +417,6 @@ void Server::getLocationBlock(Client *client)
 		return;
 	}
 }
-
-std::string Server::readHead(Client *client)
-{
-	int n = recv(client->getCurrentFd(), this->received_line, 4096, 0);
-	if (n < 0)
-	{
-		log("The call recv failed.", 2);
-		return ("");
-	}
-	if (n == 0)
-	{
-		log("The connexion has been interrupted.", 3);
-		return ("");
-	}
-	std::string receivedLine(this->received_line, 4096);
-
-	client->setInfo(receivedLine);
-	return (receivedLine);
-}
-
 /*
 -Adresse IP - Port de la requete
 -le nom de Domaine
