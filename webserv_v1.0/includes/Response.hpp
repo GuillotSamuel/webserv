@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:07:42 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/02 13:08:37 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:31:15 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ class Response
 		void								setFilePath(std::string root, std::string fileRequested);
 		void								filePathFinder();
 		void								dlFile();
+		std::string							ft_notAllowed();
 		void								saveFile(const std::string &filename, const std::string &data);
 
 	public:

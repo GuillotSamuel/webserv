@@ -6,7 +6,7 @@
 /*   By: mmahfoud <mmahfoud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 22:12:59 by mmahfoud          #+#    #+#             */
-/*   Updated: 2024/10/02 13:09:13 by mmahfoud         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:32:18 by mmahfoud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,12 +121,30 @@ void Response::setReceivedLine(std::string received)
 	this->_receivedLine = received;
 }
 
+std::string Response::ft_notAllowed()
+{
+	char *tmp = getcwd(NULL, 0);
+	std::string root(tmp, strlen(tmp));
+	free(tmp);
+	std::string content = readFileContent(root + "/www/error_pages/405.html");
+
+	std::string response = "HTTP/1.1 405 Method Not Allowed\r\n";
+	response += "Content-Type: text/html\r\n";
+	std::ostringstream oss;
+	oss << content.size();
+	response += "Content-Length: " + oss.str() + "\r\n";
+	response += "Connection: close\r\n";
+	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
+	response += content;
+	return (response);
+}
+
 std::string Response::generateResponse()
 {
 	if (this->_allowed_methods[this->_client->getMethod()] != 1)
 	{
 		_code = "403";
-		return (ft_forbidden());
+		return (ft_notAllowed());
 	}
 	filePathFinder();
 	if (_autoIndexUse == 1)
@@ -388,22 +406,6 @@ void Response::filePathFinder()
 
 std::string Response::ft_get()
 {
-	/* Server::log("Server's receive a GET request.", 1);
-	std::string content = readFileContent(this->_filePath);
-	std::string response = "";
-	Server::log("The file requested \"" + this->_filePath + "\" was found.", 1);
-	std::string mimeType = getMimeType();
-
-	response = firstHeader();
-	response += "Content-Type: " + mimeType + "\r\n";
-	std::ostringstream oss;
-	oss << content.size();
-	response += "Content-Length: " + oss.str() + "\r\n";
-	response += "Connection: close\r\n";
-	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
-	response += content;
-	return (response); */
-
 	Server::log("Server's received a GET request.", 1);
 
 	if (access(this->_filePath.c_str(), F_OK) != 0)
@@ -455,23 +457,6 @@ std::string Response::ft_get()
 /*response to a POST request*/
 std::string Response::ft_post()
 {
-/* 	Server::log("Server's receive a POST request.", 1);
-	std::string content = readFileContent(this->_filePath);
-	std::string response = "";
-
-	std::string mimeType = getMimeType();
-
-	response = firstHeader();
-	response += "Content-Type: " + mimeType + "\r\n";
-	std::ostringstream oss;
-	oss << content.size();
-	response += "Content-Length: " + oss.str() + "\r\n";
-	response += "Connection: close\r\n";
-	response += "Server: " + *this->_serverName.begin() + "\r\n\r\n";
-	response += content;
-
-	return (response); */
-
 	Server::log("Server's received a POST request.", 1);
 
 	if (access(this->_filePath.c_str(), F_OK) != 0)
@@ -596,7 +581,7 @@ std::string Response::ft_badRequest()
 		content = readFileContent(root + "/www/error_pages/404.html");
 	}
 
-	std::string response = "HTTP/1.1 400 Bad Request\r\n";
+	std::string response = "HTTP/1.1 404 Not Found\r\n";
 	response += "Content-Type: text/html\r\n";
 	std::ostringstream oss;
 	oss << content.size();
